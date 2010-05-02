@@ -1,0 +1,32 @@
+/*
+ This file is part of Moodle - http://moodle.org/
+ Moodle is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ Moodle is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.*//*
+*/
+
+#page-admin-local-hub-admin-register .buttoncenter {text-align: center}
+#page-admin-local-registration-index .centeredbutton {text-align: center}
+#page-admin-local-registration-index .cell {border-width: 0 1px;}
+#page-admin-local-registration-index .justifytext {text-align: justify}
+#page-admin-local-hub-admin-managesites .trustedtr {background-color: #ffe1c3;}
+#page-admin-local-hub-admin-managesites .prioritisetr {background-color: #ffd4ff;}
+#page-admin-local-hub-admin-managesites .additionaldesc {font-size: 80%; color: purple;}
+#page-admin-local-hub-admin-managesites .additionaladmindesc {font-size: 80%; color: #6666ff;}
+#page-admin-local-hub-admin-managecourses .trustedtr {background-color: #ffe1c3;}
+#page-admin-local-hub-admin-managecourses .prioritisetr {background-color: #ffd4ff;}
+#page-admin-local-hub-admin-managecourses .additionaldesc {font-size: 80%; color: purple;}
+#page-admin-local-hub-admin-managecourses .additionaladmindesc {font-size: 80%; color: #6666ff;}
+#page-local-hub-index .trustedtr {background-color: #ffe1c3;}
+#page-local-hub-index .prioritisetr {background-color: #ffd4ff;}
+#page-local-hub-index .additionaldesc {font-size: 80%; color: purple;}
+#page-local-hub-index .additionaladmindesc {font-size: 80%; color: #6666ff;}
