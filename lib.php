@@ -541,6 +541,10 @@ class local_hub {
                 throw new moodle_exception('errorbadimageheightwidth', 'local_hub',
                 new moodle_url('/local/hub/index.php'), $sizestrings);
             }
+
+            //TODO we do not record image yet, it could be a security issue
+            $siteinfo->imageurl = '';
+
         }
 
         //Add or update the site into the site directory (hub)
