@@ -151,14 +151,14 @@ class local_hub {
     /**
      * Add a course into the course directory
      * @param object $
-     * @return object course
+     * @return integer course id
      * @throws dml_exception if error
      */
     public function add_course($course) {
         global $DB;
         $course->timemodified = time();
-        $course->id = $DB->insert_record('hub_course_directory', $course);
-        return $course;
+        $id = $DB->insert_record('hub_course_directory', $course);
+        return $id;
     }
 
     /**
@@ -435,7 +435,8 @@ class local_hub {
         $course->privacy = 0;
         $course->trusted = 0;
 
-        $this->add_course($course);
+        $courseid = $this->add_course($course);
+        return $courseid;
 
     }
 
@@ -725,7 +726,7 @@ class local_hub {
      * @param <type> $courseshortname
      * @param <type> $siteurl
      */
-    public function add_screenshot($file, $filename, $course) {
+    public function add_screenshot($file, $course) {
 
     }
 
@@ -736,16 +737,16 @@ class local_hub {
      * @param <type> $filename
      * @param <type> $course
      */
-    public function add_backup($file, $filename, $course) {
-        $context = get_system_context();
-        $record->contextid = $context->id;
-        $record->filearea = 'hub_backup';
-        $record->itemid = $course->id;
-        $record->filename = $filename;
-        $record->filepath = '/';
-        $fs = get_file_storage();
-        $fs->create_file_from_pathname($record, $file['tmp_name']);
+    public function add_backup($file, $courseid) {
 
+        // Generate a two-level path for the userid. First level groups them by slices of 1000 users, second level is userid
+        $level1 = floor($courseid / 1000) * 1000;
+
+        $userdir = "hub/$level1/$courseid";
+
+        $directory = make_upload_directory($userdir);
+
+        move_uploaded_file($file['tmp_name'], $directory.'/backup_'.$courseid.".zip");
     }
 
     /**
@@ -754,12 +755,14 @@ class local_hub {
      * @param <type> $filename
      * @param <type> $course
      */
-    public function get_backup($filename, $courseid) {
-        $context = get_system_context();
-        $browser = get_file_browser();
-        $fileinfo = $browser->get_file_info($context, 'hub_backup',
-                $courseid, '/', $filename);
-        return $fileinfo;
+    public function backup_exits($courseid) {
+      global $CFG;
+        $level1 = floor($courseid / 1000) * 1000;
+
+        $directory = "hub/$level1/$courseid";
+        return file_exists($CFG->dataroot. '/' . $directory.'/backup_'.$courseid.".zip");
+
+        
     }
 
 }

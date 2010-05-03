@@ -29,29 +29,27 @@ require_once($CFG->dirroot.'/local/hub/lib.php');
 require_once($CFG->dirroot.'/lib/hublib.php'); //SCREENSHOT_FILE_TYPE and BACKUP_FILE_TYPE
 
 
-$filename  = optional_param('filename', '', PARAM_ALPHANUMEXT);
-$courseshortname = optional_param('courseshortname', '', PARAM_ALPHANUMEXT);
 $token = optional_param('token', '', PARAM_ALPHANUM);
 $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, backup, ...
+$courseid = optional_param('courseid', '', PARAM_ALPHANUM);
 
 // check the communication token
 $hub = new local_hub();
 $communication = $hub->get_communication(WSSERVER, REGISTEREDSITE, '', $token);
 if (!empty($communication) and get_config('local_hub', 'hubenabled')) {
-    // (course unique ref not used)
-    $sql = 'SELECT *
-            FROM {hub_site_directory} as sd, {hub_course_directory} as cd
-            WHERE sd.id = cd.siteid AND cd.shortname = :courseshortname
-                  AND sd.url = :siteurl';
-    $params = array('siteurl' => $communication->remoteurl, 'courseshortname' => $courseshortname);
-    $course = $DB->get_record_sql($sql, $params);
-    if (!empty($_FILES)) {
+    //check that the course exist
+    $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
+    if (!empty($course) && !empty($_FILES)) {
         switch ($filetype) {
             case BACKUP_FILE_TYPE:
-                $hub->add_backup($_FILES['file'], $filename, $course);
+                //check that the backup doesn't already exist
+                $backup = $hub->backup_exits($courseid);
+                if (empty($backup)) {
+                    $hub->add_backup($_FILES['file'], $courseid);
+                }
             break;
             case SCREENSHOT_FILE_TYPE:
-                $hub->add_screenshot($_FILES['file'], $filename, $course);
+                $hub->add_screenshot($_FILES['file'], $courseid);
             break;
         }
     }

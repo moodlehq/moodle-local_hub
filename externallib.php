@@ -211,12 +211,13 @@ class local_hub_external extends external_api {
         $hub = new local_hub();
         $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
 
+        $courseids = array();
         foreach ($params['courses'] as $course) {
-            $hub->register_course($course, $siteurl); //'true' indicates registration update mode
+            $courseids[] = $hub->register_course($course, $siteurl); //'true' indicates registration update mode
         }
 
         $transaction->allow_commit();
-        return 1;
+        return $courseids;
     }
 
     /**
@@ -224,7 +225,7 @@ class local_hub_external extends external_api {
      * @return boolean
      */
     public static function register_courses_returns() {
-        return new external_value(PARAM_BOOL, '1 if all went well');
+        return new external_multiple_structure(new external_value(PARAM_INTEGER, 'new id from the course directory table'));
     }
 
 

@@ -25,21 +25,19 @@
  */
 
 require('../../../config.php');
-require_once($CFG->dirroot.'/local/hub/lib.php');
 require_once($CFG->dirroot.'/lib/hublib.php'); //SCREENSHOT_FILE_TYPE and BACKUP_FILE_TYPE
+require_once($CFG->dirroot.'/lib/filelib.php');
 
-
-$filename  = optional_param('filename', 'backupzip', PARAM_ALPHANUMEXT);
 $courseid = optional_param('courseid', '', PARAM_INTEGER);
 $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, backup, ...
 
-if (!empty($courseid) and !empty($filename) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
-    $hub = new local_hub();
+if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
     switch ($filetype) {
         case BACKUP_FILE_TYPE:
-            $fileinfo = $hub->get_backup($filename, $courseid);
-            //return the backup
-            $fileinfo->readfile();
+            $level1 = floor($courseid / 1000) * 1000;
+            $userdir = "hub/$level1/$courseid";
+            send_file($CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip", 'backup_'.$courseid.".zip",
+                    'default', 0, false, true, '', false);
             break;
     }
 
