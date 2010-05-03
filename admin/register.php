@@ -38,18 +38,6 @@ require_once($CFG->dirroot.'/lib/hublib.php'); //HUBDIRECTORYURL
 
 admin_externalpage_setup('hubregistration');
 
-/* communication DB table
------------------------------------------------------------------------------
-Local Type | Token | Local WS | Remote Type | Remote URL        | Confirmed
------------------------------------------------------------------------------
-  HUB        4er4e   server    HUB-DIRECTORY  http...moodle.org      Yes
-  HUB        73j53   client    HUB-DIRECTORY  http...moodle.org      Yes
-  SITE       fd8fd   client    HUB            http...hub             Yes
-  HUB        ds78s   server    SITE           http...site.com        Yes
-  HUB-DIR.   d7d8s   server    HUB            http...hub             Yes
------------------------------------------------------------------------------
-*/
-
 $hub = new local_hub();
 
 $directorytohubcommunication = $hub->get_communication(WSSERVER, HUBDIRECTORY, HUBDIRECTORYURL);
