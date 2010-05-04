@@ -34,10 +34,14 @@ $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, b
 if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
     switch ($filetype) {
         case BACKUP_FILE_TYPE:
-            $level1 = floor($courseid / 1000) * 1000;
-            $userdir = "hub/$level1/$courseid";
-            send_file($CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip", 'backup_'.$courseid.".zip",
-                    'default', 0, false, true, '', false);
+            //check that the file is downloadable
+            $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
+            if (!empty($course) && $course->privacy) {
+                $level1 = floor($courseid / 1000) * 1000;
+                $userdir = "hub/$level1/$courseid";
+                send_file($CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip", 'backup_'.$courseid.".zip",
+                        'default', 0, false, true, '', false);
+            }
             break;
     }
 
