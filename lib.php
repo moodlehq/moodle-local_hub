@@ -249,10 +249,24 @@ class local_hub {
 
         if (!empty($options['subject'])) {
             if (!empty($wheresql)) {
-                $wheresql .= " AND";
+                        $wheresql .= " AND";
             }
-            $wheresql .= " subject = :subject";
-            $sqlparams['subject'] = $options['subject'];
+            //search subject and all sub-subjects
+            $edufields = get_string_manager()->load_component_strings('edufields', 'en');
+            $topsubject = true;
+            foreach($edufields as $key => $value) {
+                if (strpos($key, $options['subject']) !==false) {
+                    if ($topsubject) {
+                        $wheresql .= " (";
+                        $topsubject = false;
+                    } else {
+                        $wheresql .= " OR";
+                    }
+                    $wheresql .= " subject = :".$key;
+                    $sqlparams[$key] = $key;
+                }
+            }
+            $wheresql .= ")";      
         }
 
         if (!empty($options['educationallevel'])) {
