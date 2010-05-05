@@ -196,11 +196,11 @@ class local_hub {
     /**
      * Return course found against some parameters, by default it returns all visible courses
      * @param string $search String that will be compared to course name and site description
-     * @param string $language language code to compare (has to be exact)
+     * @param string $options language, license, audience, subject...
      * @param boolean $onlyvisible - set to false to return full list
      * @return array of courses
      */
-    public function get_courses($search =null, $language =null, $onlyvisible = true, $downloadable = true, $enrollable = true) {
+    public function get_courses($search =null, $options = array(), $onlyvisible = true, $downloadable = true, $enrollable = true) {
         global $DB;
 
         $sqlparams = array();
@@ -215,7 +215,7 @@ class local_hub {
         }
 
         if (!empty($search)) {
-            if (!empty($onlyvisible)) {
+            if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             $wheresql .= " (fullname ".$DB->sql_ilike()." :namesearch OR description ".$DB->sql_ilike()." :descsearch)";
@@ -223,16 +223,48 @@ class local_hub {
             $sqlparams['descsearch'] = '%'.$search.'%';
         }
 
-        if (!empty($language)) {
-            if (!empty($onlyvisible) || !empty($search) ) {
+        if (!empty($options['language'])) {
+            if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             $wheresql .= " language = :language";
-            $sqlparams['language'] = $language;
+            $sqlparams['language'] = $options['language'];
+        }
+
+        if (!empty($options['audience'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " audience = :audience";
+            $sqlparams['audience'] = $options['audience'];
+        }
+
+        if (!empty($options['licenceshortname'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " licenceshortname = :licenceshortname";
+            $sqlparams['licenceshortname'] = $options['licenceshortname'];
+        }
+
+        if (!empty($options['subject'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " subject = :subject";
+            $sqlparams['subject'] = $options['subject'];
+        }
+
+        if (!empty($options['educationallevel'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " educationallevel = :educationallevel";
+            $sqlparams['educationallevel'] = $options['educationallevel'];
         }
 
         if (!($downloadable and $enrollable)) {
-            if (!empty($onlyvisible) || !empty($search) || !empty($language)) {
+            if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             if ($downloadable) {

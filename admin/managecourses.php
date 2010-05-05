@@ -69,7 +69,7 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $course = $hub->get_course($delete);
     $contenthtml = $renderer->delete_course_confirmation($course);
 } else { //all other cases we go back to site list page (no need confirmation)
-    $sites = $hub->get_courses($search, null, false); //return list of all sites
+    $sites = $hub->get_courses($search, array(), false); //return list of all sites
     //(search, none language, no onlyvisible)
     $contenthtml = $renderer->searchable_course_list($sites, $search, true);
 }

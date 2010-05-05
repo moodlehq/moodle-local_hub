@@ -238,7 +238,15 @@ class local_hub_external extends external_api {
                 array(
                         'search' => new external_value(PARAM_TEXT, 'string to search'),
                         'downloadable' => new external_value(PARAM_BOOL, 'is the course downloadable'),
-                        'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_DEFAULT, 'en')
+                        'options' => new external_single_structure(
+                            array(
+                                    'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
+                                    'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name', VALUE_OPTIONAL),
+                                    'subject' => new external_value(PARAM_ALPHANUM, 'subject', VALUE_OPTIONAL),
+                                    'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
+                                    'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
+                                    'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
+                            ), 'course info')
                 )
         );
     }
@@ -247,7 +255,7 @@ class local_hub_external extends external_api {
      * Get courses
      * @return array courses
      */
-    public static function get_courses($search, $downloadable = 0, $language = 'en') {
+    public static function get_courses($search, $downloadable = 0, $options = array()) {
         global $DB;
 
         // Ensure the current user is allowed to run this function
@@ -256,13 +264,12 @@ class local_hub_external extends external_api {
         require_capability('moodle/hub:view', $context);
 
         $params = self::validate_parameters(self::get_courses_parameters(),
-                array('search' => $search, 'downloadable' => $downloadable, 'language' => $language));
+                array('search' => $search, 'downloadable' => $downloadable, 'options' => $options));
 
         $hub = new local_hub();
-        //TODO find out why validate params change 0 into '' !!! bug !!!
 
         $courses = $hub->get_courses($params['search'],
-                $params['language'], true, $params['downloadable'], !$params['downloadable']);
+               $options , true, $params['downloadable'], !$params['downloadable']);
 
         //create result
         $result = array();
