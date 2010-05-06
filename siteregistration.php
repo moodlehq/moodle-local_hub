@@ -71,11 +71,16 @@ $participantnumberaverage   = optional_param('participantnumberaverage', '', PAR
 $modulenumberaverage        = optional_param('modulenumberaverage', '', PARAM_FLOAT);
 $moodleversion              = optional_param('moodleversion', '', PARAM_INT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
-
+$password                   = optional_param('password', '', PARAM_TEXT);
 
 $siteheaders = get_headers($url);
 if ( strpos($url, 'http://localhost') !== false or strpos($url, 'http://127.0.0.1') !== false or $siteheaders === false) {
     throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', $url);
+}
+
+$hubpassword = get_config('local_hub', 'password');
+if (!empty($hubpassword) and $hubpassword != $password) {
+    throw new moodle_exception('wronghubpassword', 'local_hub', $url.'/admin/registration/hubselector.php');
 }
 
 
@@ -105,7 +110,8 @@ $sitevalues = array('name' => $name,
         'participantnumberaverage' => $participantnumberaverage,
         'modulenumberaverage' => $modulenumberaverage,
         'moodleversion' => $moodleversion,
-        'moodlerelease' => $moodlerelease);
+        'moodlerelease' => $moodlerelease,
+        'password' => $password);
 $siteconfirmationform = new site_registration_confirmation_form('', $sitevalues);
 
 $fromform = $siteconfirmationform->get_data();

@@ -41,6 +41,10 @@ echo $OUTPUT->header();
 
 if (!empty($fromform)) {
 
+    if ($fromform->privacy != HUBPRIVATE and !empty($fromform->password)) {
+        throw new moodle_exception('cannotsetpasswordforpublichub', 'local_hub', new moodle_url('/local/hub/admin/settings.php'));
+    }
+
     //Save settings
     set_config('name', $fromform->name ,'local_hub');
     set_config('hubenabled', $fromform->enabled ,'local_hub');
@@ -50,6 +54,7 @@ if (!empty($fromform)) {
     //set_config('imageurl', $fromform->imageurl ,'local_hub');
     set_config('privacy', $fromform->privacy ,'local_hub');
     set_config('language', $fromform->lang ,'local_hub');
+    set_config('password', $fromform->password ,'local_hub');
 
     //display confirmation
     echo $OUTPUT->notification(get_string('settingsupdated', 'local_hub'), 'notifysuccess');

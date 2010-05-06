@@ -66,6 +66,9 @@ class site_registration_confirmation_form extends moodleform {
         $mform->addElement('hidden', 'posts',   $this->_customdata['posts']);
         $mform->addElement('hidden', 'questions',   $this->_customdata['questions']);
         $mform->addElement('hidden', 'resources',   $this->_customdata['resources']);
+        if (!empty($this->_customdata['password'])) {
+            $mform->addElement('hidden', 'password',   $this->_customdata['password']);
+        }
         $mform->addElement('hidden', 'participantnumberaverage',   $this->_customdata['participantnumberaverage']);
         $mform->addElement('hidden', 'modulenumberaverage',   $this->_customdata['modulenumberaverage']);
         $mform->addElement('hidden', 'moodleversion',   $this->_customdata['moodleversion']);

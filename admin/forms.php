@@ -73,6 +73,7 @@ class hub_registration_form extends moodleform {
 //            $imagetag = html_writer::empty_tag('img', array('src' => $imageurl, 'alt' => $hubname));
 //            $mform->addElement('static', 'logourlstring', get_string('imageurl', 'local_hub'), $imagetag);
 //            $mform->addElement('hidden', 'imageurl', $imageurl);
+//
 //        }
         $mform->addElement('hidden', 'imageurl', ''); //TODO: temporary
         $mform->addElement('static', 'urlstring', get_string('url', 'local_hub'), $CFG->wwwroot."/local/hub");
@@ -144,6 +145,9 @@ class hub_settings_form extends moodleform {
             $hublanguage = current_language();
         }
 
+         //language (default) value
+        $password = get_config('local_hub', 'password');
+
         $enabled = get_config('local_hub', 'hubenabled');
 
         $languages = get_string_manager()->get_list_of_languages();
@@ -176,6 +180,11 @@ class hub_settings_form extends moodleform {
         $mform->addRule('contactemail', get_string('required'), 'required');
 //        $mform->addElement('text', 'imageurl', get_string('imageurl', 'local_hub'));
 //        $mform->setDefault('imageurl', $imageurl);
+        $mform->addElement('text', 'password', get_string('password', 'local_hub'));
+        $mform->setDefault('password', $password);
+        $mform->addHelpButton('password', 'password', 'local_hub');
+        $mform->disabledIf('password', 'privacy', 'eq', HUBALLOWPUBLICSEARCH);
+        $mform->disabledIf('password', 'privacy', 'eq', HUBALLOWGLOBALSEARCH);
 
         $this->add_action_buttons(false, get_string('update'));
 
