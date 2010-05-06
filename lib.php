@@ -557,8 +557,8 @@ class local_hub {
                 $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
                 $contactuser->lastname = '';
                 $contactuser->maildisplay = true;
-//                email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteurlchanged', 'local_hub', $siteinfo->name),
-//                        get_string('emailmessagesiteurlchanged', 'local_hub', $siteinfo));
+                email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteurlchanged', 'local_hub', $siteinfo->name),
+                        get_string('emailmessagesiteurlchanged', 'local_hub', $siteinfo));
             }
 
 
@@ -625,13 +625,13 @@ class local_hub {
         $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
         $contactuser->lastname = '';
         $contactuser->maildisplay = true;
-//        if (!empty($siteurltoupdate)) {
-//            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteupdated', 'local_hub', $siteinfo->name),
-//                    get_string('emailmessagesiteupdated', 'local_hub', $siteinfo));
-//        } else {
-//            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteadded', 'local_hub', $siteinfo->name),
-//                    get_string('emailmessagesiteadded', 'local_hub', $siteinfo));
-//        }
+        if (!empty($siteurltoupdate)) {
+            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteupdated', 'local_hub', $siteinfo->name),
+                    get_string('emailmessagesiteupdated', 'local_hub', $siteinfo));
+        } else {
+            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteadded', 'local_hub', $siteinfo->name),
+                    get_string('emailmessagesiteadded', 'local_hub', $siteinfo));
+        }
 
         return $sitetohubcommunication->token;
     }
