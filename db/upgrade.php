@@ -37,6 +37,21 @@ function xmldb_local_hub_upgrade($oldversion) {
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
     //INSERT YOUR UPDATE SCRIPT HERE
+     if ($result && $oldversion < 2010031610) {
+
+    /// Define field sitecourseid to be added to hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('sitecourseid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, 'siteid');
+
+    /// Conditionally launch add field sitecourseid
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010031610, 'local', 'hub');
+    }
+
 
     return $result;
 }

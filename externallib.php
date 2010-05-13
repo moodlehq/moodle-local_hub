@@ -165,6 +165,7 @@ class local_hub_external extends external_api {
                         'courses' => new external_multiple_structure(
                         new external_single_structure(
                         array(
+                                'sitecourseid' => new external_value(PARAM_INT, 'the id of the course on the publishing site'),
                                 'fullname' => new external_value(PARAM_TEXT, 'course name'),
                                 'shortname' => new external_value(PARAM_ALPHANUMEXT, 'course short name'),
                                 'description' => new external_value(PARAM_TEXT, 'course description'),
@@ -180,7 +181,6 @@ class local_hub_external extends external_api {
                                 'creatornotes' => new external_value(PARAM_RAW, 'creator notes'),
                                 'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
                                 'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
-                                'downloadable' => new external_value(PARAM_BOOL, 'is the course downloadable', VALUE_DEFAULT, 0),
                                 'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                                 'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable', VALUE_DEFAULT, 0),
                                 'screenshotsids' => new external_value(PARAM_TEXT, 'screenshotsids', VALUE_OPTIONAL),
@@ -238,14 +238,20 @@ class local_hub_external extends external_api {
                 array(
                         'search' => new external_value(PARAM_TEXT, 'string to search'),
                         'downloadable' => new external_value(PARAM_BOOL, 'is the course downloadable'),
+                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
                         'options' => new external_single_structure(
                             array(
+                                    'ids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the hub course directory'), 'ids of course', VALUE_OPTIONAL),
+                                    'sitecourseids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the site'), 'ids of course in the site', VALUE_OPTIONAL),
                                     'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
                                     'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name', VALUE_OPTIONAL),
                                     'subject' => new external_value(PARAM_ALPHANUM, 'subject', VALUE_OPTIONAL),
                                     'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
                                     'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
                                     'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
+                                    'allsitecourses' => new external_value(PARAM_INTEGER,
+                                            'if 1 return all not visible and visible courses whose siteid is the site
+                                                matching token. And course of this site only. In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
                             ), 'course info')
                 )
         );
@@ -255,7 +261,7 @@ class local_hub_external extends external_api {
      * Get courses
      * @return array courses
      */
-    public static function get_courses($search, $downloadable = 0, $options = array()) {
+    public static function get_courses($search, $downloadable = 0, $enrollable = 0, $options = array()) {
         global $DB;
 
         // Ensure the current user is allowed to run this function
@@ -264,12 +270,28 @@ class local_hub_external extends external_api {
         require_capability('moodle/hub:view', $context);
 
         $params = self::validate_parameters(self::get_courses_parameters(),
-                array('search' => $search, 'downloadable' => $downloadable, 'options' => $options));
+                array('search' => $search, 'downloadable' => $downloadable, 'enrollable' => $enrollable, 'options' => $options));
+
+        $onlyvisible = true;
+        if (!empty($params['options']['allsitecourses'])) {
+           
+            //retieve siteid
+            $token = optional_param('wstoken', '', PARAM_ALPHANUM);
+            $localhub = new local_hub();
+            $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+            if (!empty($siteurl)) {
+                $site = $localhub->get_site_by_url($siteurl);
+                if (!empty($site)) { //should always pass, just an extra protection
+                    $params['options']['siteid'] = $site->id;
+                    $onlyvisible = false;
+                }
+            }
+        }
 
         $hub = new local_hub();
 
         $courses = $hub->get_courses($params['search'],
-               $options , true, $params['downloadable'], !$params['downloadable']);
+               $params['options'] , $onlyvisible, $params['downloadable'], $params['enrollable']);
 
         //create result
         $result = array();

@@ -171,6 +171,17 @@ class local_hub {
         return $DB->get_record('hub_course_directory', array('id'=>$id));
     }
 
+      /**
+     * Return a enrollable course for a given site id and course id
+     * @param integer $id
+     * @return object course, false if null
+     */
+    public function get_enrollable_course_by_site($siteid, $sitecourseid) {
+        global $DB;
+        return $DB->get_record('hub_course_directory',
+                array('siteid'=>$siteid, 'sitecourseid' => $sitecourseid, 'enrollable' => 1));
+    }
+
     /**
      * Remove a course from the directory (delete the row from DB)
      * @param integer $id - id of the course to remove from the directory
@@ -277,6 +288,38 @@ class local_hub {
             $sqlparams['educationallevel'] = $options['educationallevel'];
         }
 
+        if (!empty($options['ids'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $idlist = '(';
+            foreach($options['ids'] as $id) {
+                if ($idlist == '(') {
+                    $idlist .= $id;
+                } else {
+                    $idlist .= ','.$id;
+                }
+            }
+            $idlist .= ')';
+            $wheresql .= " id IN ". $idlist;
+        }
+
+        if (!empty($options['sitecourseids'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $idlist = '(';
+            foreach($options['sitecourseids'] as $sitecourseid) {
+                if ($idlist == '(') {
+                    $idlist .= $sitecourseid;
+                } else {
+                    $idlist .= ','.$sitecourseid;
+                }
+            }
+            $idlist .= ')';
+            $wheresql .= " sitecourseid IN ". $idlist;
+        }
+
         if (!($downloadable and $enrollable)) {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
@@ -286,6 +329,17 @@ class local_hub {
             } else {
                 $wheresql .= " enrollable = 1";
             }
+        }
+
+        if (!empty($options['allsitecourses'])) {
+            $siteid = $options['siteid'];
+             if (!empty($siteid)) {
+                if (!empty($wheresql)) {
+                    $wheresql .= " AND";
+                }
+                $wheresql .= " siteid = :siteid";
+                $sqlparams['siteid'] = $siteid;
+             }
         }
 
         $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams, $ordersql);
@@ -481,7 +535,15 @@ class local_hub {
         $course->privacy = 0;
         $course->trusted = 0;
 
-        $courseid = $this->add_course($course);
+        //if the course is enrollable and is already registered, update it
+        $existingenrollablecourse= $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
+        if (!empty($existingenrollablecourse)) {
+            $course->id = $existingenrollablecourse->id;
+            $courseid = $existingenrollablecourse->id;
+            $this->update_course($course);
+        } else {
+            $courseid = $this->add_course($course);
+        }
         return $courseid;
 
     }
@@ -605,7 +667,7 @@ class local_hub {
         $sitetohubcommunication = $this->get_communication(WSSERVER, REGISTEREDSITE, $siteinfo->url);
         if (empty($sitetohubcommunication)) {
             //create token for the hub
-            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse');
+            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse', 'moodle/hub:view');
             $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site', $siteinfo->url.'_registered_site_user',
                     $capabilities);
 
