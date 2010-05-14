@@ -873,4 +873,61 @@ class local_hub {
         
     }
 
+    public function display_homepage() {
+        global $PAGE, $SITE, $OUTPUT, $CFG;
+
+        require_once($CFG->dirroot. "/local/hub/forms.php");
+
+        $PAGE->set_url('/');
+        $PAGE->set_pagetype('site-index');
+        $PAGE->set_docs_path('');
+        $PAGE->set_pagelayout('frontpage');
+        $PAGE->set_title($SITE->fullname);
+        $PAGE->set_heading($SITE->fullname);
+
+        $search  = optional_param('search', '', PARAM_TEXT);
+
+        $courses = $this->get_courses($search);
+
+        $renderer = $PAGE->get_renderer('local_hub');
+
+        //forms
+        $coursesearchform = new course_search_form('', array('search' => $search));
+        $fromform = $coursesearchform->get_data();
+
+        //Retrieve courses by web service
+        $courses = array();
+        if (!empty($fromform)) {
+            $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
+
+            $options = array();
+            if (!empty($fromform->coverage)) {
+                $options['coverage'] = $fromform->coverage;
+            }
+            if ($fromform->licence != 'all') {
+                $options['licenceshortname'] = $fromform->licence;
+            }
+            if ($fromform->subject != 'all') {
+                $options['subject'] = $fromform->subject;
+            }
+            if ($fromform->audience != 'all') {
+                $options['audience'] = $fromform->audience;
+            }
+            if ($fromform->educationallevel != 'all') {
+                $options['educationallevel'] = $fromform->educationallevel;
+            }
+            if ($fromform->language != 'all') {
+                $options['language'] = $fromform->language;
+            }
+
+            //get courses
+            $courses = $this->get_courses($search, $options, true, $downloadable, !$downloadable);
+        }
+
+        echo $OUTPUT->header();
+        $coursesearchform->display();
+        echo $renderer->course_list($courses);
+        echo $OUTPUT->footer();
+    }
+
 }

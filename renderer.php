@@ -146,7 +146,7 @@ class local_hub_renderer extends plugin_renderer_base {
             $table->align = array('left', 'left', 'center', 'center', 'center', 'center');
             $table->size = array('25%', '40%', '5%', '%5');
         } else {
-            $table->head  = array('', get_string('coursename', 'local_hub'),
+            $table->head  = array(get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
                     get_string('courselang', 'local_hub'));
 
@@ -179,6 +179,15 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //create description to display
+                $course->subject = get_string($course->subject, 'edufields');
+                $course->audience = get_string('audience'.$course->audience, 'hub');
+                $course->educationallevel = get_string('edulevel'.$course->educationallevel, 'hub');
+                if (!empty($course->contributornames)) {
+                    $course->contributorname = get_string('contributors', 'block_community', $course->contributorname);
+                }
+                if (empty($course->coverage)) {
+                    $course->coverage = '';
+                }
                 $deschtml = $course->description; //the description
                 /// courses and sites number display under the description, in smaller
                 $deschtml .= html_writer::empty_tag('br');
