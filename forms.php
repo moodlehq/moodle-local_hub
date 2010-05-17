@@ -120,7 +120,7 @@ class course_search_form extends moodleform {
         $mform->addElement('select', 'audience', get_string('audience', 'hub'), $options);
         $mform->setDefault('audience', 'all');
         unset($options);
-        $mform->addHelpButton('audience', 'audience', 'hub');
+        $mform->addHelpButton('audience', 'audience', 'local_hub');
 
         $options = array();
         $options['all'] = get_string('any');
@@ -134,7 +134,7 @@ class course_search_form extends moodleform {
         $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'hub'), $options);
         $mform->setDefault('educationallevel', 'all');
         unset($options);
-        $mform->addHelpButton('educationallevel', 'educationallevel', 'hub');
+        $mform->addHelpButton('educationallevel', 'educationallevel', 'local_hub');
 
         $options = get_string_manager()->load_component_strings('edufields', current_language());
         foreach ($options as $key => &$option) {
@@ -149,7 +149,7 @@ class course_search_form extends moodleform {
         $mform->addElement('select', 'subject', get_string('subject', 'hub'), $options);
         $mform->setDefault('subject', 'all');
         unset($options);
-        $mform->addHelpButton('subject', 'subject', 'hub');
+        $mform->addHelpButton('subject', 'subject', 'local_hub');
 
         require_once($CFG->dirroot."/lib/licenselib.php");
         $licensemanager = new license_manager();
@@ -162,7 +162,7 @@ class course_search_form extends moodleform {
         $mform->addElement('select', 'licence', get_string('license'), $options);
         $mform->setDefault('licence', 'cc');
         unset($options);
-        $mform->addHelpButton('licence', 'licence', 'hub');
+        $mform->addHelpButton('licence', 'licence', 'local_hub');
         $mform->setDefault('licence', 'all');
 
         $languages = get_string_manager()->get_list_of_languages();
