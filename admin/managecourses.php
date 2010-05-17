@@ -27,6 +27,7 @@ require('../../../config.php');
 
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
+require_once($CFG->dirroot. "/local/hub/forms.php");
 
 admin_externalpage_setup('managecourses');
 $hub = new local_hub();
@@ -58,14 +59,53 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $course = $hub->get_course($delete);
     $contenthtml = $renderer->delete_course_confirmation($course);
 } else { //all other cases we go back to site list page (no need confirmation)
-    $sites = $hub->get_courses($search, array(), false); //return list of all sites
+
+    //forms
+    $coursesearchform = new course_search_form('', array('search' => $search));
+    $fromform = $coursesearchform->get_data();
+
+    //Retrieve courses by web service
+    $courses = array();
+    if (!empty($fromform)) {
+        $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
+
+        $options = array();
+        if (!empty($fromform->coverage)) {
+            $options['coverage'] = $fromform->coverage;
+        }
+        if ($fromform->licence != 'all') {
+            $options['licenceshortname'] = $fromform->licence;
+        }
+        if ($fromform->subject != 'all') {
+            $options['subject'] = $fromform->subject;
+        }
+        if ($fromform->audience != 'all') {
+            $options['audience'] = $fromform->audience;
+        }
+        if ($fromform->educationallevel != 'all') {
+            $options['educationallevel'] = $fromform->educationallevel;
+        }
+        if ($fromform->language != 'all') {
+            $options['language'] = $fromform->language;
+        }
+
+        //get courses
+        $courses = $hub->get_courses($search, $options, true, $downloadable, !$downloadable);
+    }
+
+   
+
     //(search, none language, no onlyvisible)
-    $contenthtml = $renderer->searchable_course_list($sites, $search, true);
+    $contenthtml = $renderer->course_list($courses, true);
 }
+
 
 
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
+if (!($delete != -1 and !$confirm)) {
+    $coursesearchform->display();
+}
 echo $contenthtml;
 echo $OUTPUT->footer();
