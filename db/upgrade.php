@@ -36,12 +36,12 @@ function xmldb_local_hub_upgrade($oldversion) {
 
     $dbman = $DB->get_manager(); // loads ddl manager and xmldb classes
 
-    //INSERT YOUR UPDATE SCRIPT HERE
-     if ($result && $oldversion < 2010031610) {
+
+    if ($result && $oldversion < 2010031610) {
 
     /// Define field sitecourseid to be added to hub_course_directory
         $table = new xmldb_table('hub_course_directory');
-        $field = new xmldb_field('sitecourseid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, null, 'siteid');
+        $field = new xmldb_field('sitecourseid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, 0, 'siteid');
 
     /// Conditionally launch add field sitecourseid
         if (!$dbman->field_exists($table, $field)) {
@@ -52,19 +52,20 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010031610, 'local', 'hub');
     }
 
-    if ($result && $oldversion < 2010051700) {
 
-    /// Define field fullname to be dropped from hub_course_directory
+    if ($result && $oldversion < 2010051800) {
+
+    /// Field 'trusted' to be dropped from hub_course_directory
         $table = new xmldb_table('hub_course_directory');
         $field = new xmldb_field('trusted');
 
-    /// Conditionally launch drop field fullname
+    /// Conditionally launch drop field
         if ($dbman->field_exists($table, $field)) {
             $dbman->drop_field($table, $field);
         }
 
     /// hub savepoint reached
-        upgrade_plugin_savepoint($result, 2010051700, 'local', 'hub');
+        upgrade_plugin_savepoint($result, 2010051800, 'local', 'hub');
     }
 
 

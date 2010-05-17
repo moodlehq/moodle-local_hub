@@ -98,7 +98,7 @@ $string['hub'] = 'Hub';
 $string['hubdetails'] = 'Hub details';
 $string['hubregister'] = 'Register your hub on Moodle.org';
 $string['hubregisterupdate'] = 'Update your registration on Moodle.org';
-$string['hubregistrationcomment'] = 'You are about to register your hub on Moodle.org. Moogle.org will request automatically time to time this same information.';
+$string['hubregistrationcomment'] = 'You are about to register your hub with Moodle.org.  Moodle.org will periodically contact this hub to make sure it is still active and also to refresh this information.';
 $string['hubwsroledescription'] = 'WARNING: DO NOT DELETE OR MODIFY THIS ROLE. This role has been internally created for a registered site, a hub server or Moodle.org.';
 $string['hubwsuserdescription'] = 'WARNING: DO NOT DELETE OR MODIFY THIS USER. This user has been internally created for a registered site, a hub server or Moodle.org.';
 $string['imageurl'] = 'Image url';
@@ -109,15 +109,9 @@ $string['managecourses'] = 'Manage courses';
 $string['managesites'] = 'Manage sites';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
-$string['moodleorgpublicationdetail'] = 'Publish your course on Moodle.org. It will be found when doing a global search.';
-$string['moodleorgregistrationdetail'] = 'This option allows you to register your Moodle site with Moodle.org.  Registration is free.
-The main benefit of registering is that you will be added to a low-volume mailing list for important notifications such as security alerts and new releases of Moodle.
-By default, your information will be kept private, and will never be sold or passed on to anyone else.  The only reason for collecting this information is for support purposes, and to help build up a statistical picture of the Moodle community as a whole.
-If you choose, you can allow your site name, country and URL to be added to the public list of Moodle Sites.
-All new registrations are verified manually before they are added to the list, but once you are added you can update your registration (and your entry on the public list) at any time.';
 $string['name'] = 'Name';
 $string['no'] = 'No';
-$string['nocourse'] = 'No course';
+$string['nocourse'] = 'No courses match your search.';
 $string['nosearch'] = 'Don\'t publish hub or courses';
 $string['nosite'] = 'No sites have been registered yet or match the search.';
 $string['notregisteredonhub'] = 'You cannot publish this course on a hub  different from Moodle.org, because this site isn\'t registered on any different hub. Contact your administrator if you want to do so.';
@@ -155,7 +149,7 @@ $string['registrationupdatedfailed'] = 'Registration update failed.';
 $string['resourcesnumber'] = 'Number of resources ({$a})';
 $string['roleassignmentsnumber'] = 'Number of role assignments ({$a})';
 $string['screenshots'] = 'Screenshots';
-$string['search'] = 'Search';
+$string['search'] = 'Search for courses';
 $string['selecthub'] = 'Select hub';
 $string['sendfollowinginfo'] = 'Send the following information:';
 $string['settings'] = 'Settings';

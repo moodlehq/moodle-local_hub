@@ -105,10 +105,10 @@ class course_search_form extends moodleform {
         $strrequired = get_string('required');
         $mform =& $this->_form;
         $search = $this->_customdata['search'];
-        $mform->addElement('header', 'site', get_string('search', 'block_community'));
+        $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 
-        $options = array(0 => get_string('enrollable', 'block_community'),
-                1 => get_string('downloadable', 'block_community'));
+        $options = array(0 => get_string('enrollable', 'local_hub'),
+                1 => get_string('downloadable', 'local_hub'));
         $mform->addElement('select', 'downloadable', '',
                 $options);
 
@@ -172,9 +172,9 @@ class course_search_form extends moodleform {
         $mform->setDefault('language', 'all');
 
 
-        $mform->addElement('text','search' , get_string('search', 'block_community'));
+        $mform->addElement('text','search' , get_string('search', 'local_hub'));
 
-        $this->add_action_buttons(false, get_string('search', 'block_community'));
+        $this->add_action_buttons(false, get_string('search', 'local_hub'));
     }
 
 }

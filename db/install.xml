@@ -49,7 +49,7 @@
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="siteid"/>
         <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the site where the course come from" PREVIOUS="id" NEXT="sitecourseid"/>
-        <FIELD NAME="sitecourseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="course id on the site =&amp;gt; siteid + sitecourseid are the unique identifier of this table for enrollable type. Several downloadable type can have the same siteid+ sitecourseid" PREVIOUS="siteid" NEXT="contributornames"/>
+        <FIELD NAME="sitecourseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="course id on the site =&amp;gt; siteid + sitecourseid are the unique identifier of this table for enrollable type. Several downloadable type can have the same siteid+ sitecourseid" PREVIOUS="siteid" NEXT="contributornames"/>
         <FIELD NAME="contributornames" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="course manager names or whoever the publisher nominates, separated by commas" PREVIOUS="sitecourseid" NEXT="coverage"/>
         <FIELD NAME="coverage" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="user tags" PREVIOUS="contributornames" NEXT="creatorname"/>
         <FIELD NAME="creatorname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="main teacher name or copyright holder or whoever the publisher nominates" PREVIOUS="coverage" NEXT="timemodified"/>
