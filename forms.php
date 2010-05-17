@@ -172,7 +172,7 @@ class course_search_form extends moodleform {
         $mform->setDefault('language', 'all');
 
 
-        $mform->addElement('text','search' , get_string('search', 'local_hub'));
+        $mform->addElement('text','search' , get_string('keywords', 'local_hub'));
 
         $this->add_action_buttons(false, get_string('search', 'local_hub'));
     }

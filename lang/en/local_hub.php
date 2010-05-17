@@ -105,6 +105,7 @@ $string['hubwsroledescription'] = 'WARNING: DO NOT DELETE OR MODIFY THIS ROLE. T
 $string['hubwsuserdescription'] = 'WARNING: DO NOT DELETE OR MODIFY THIS USER. This user has been internally created for a registered site, a hub server or Moodle.org.';
 $string['imageurl'] = 'Image url';
 $string['information'] = 'Information';
+$string['keywords'] = 'Keywords';
 $string['language'] = 'Language';
 $string['licence'] = 'License';
 $string['licence_help'] = 'You can search for courses that are licensed in a particular way.';
