@@ -52,6 +52,21 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010031610, 'local', 'hub');
     }
 
+    if ($result && $oldversion < 2010051700) {
+
+    /// Define field fullname to be dropped from hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('trusted');
+
+    /// Conditionally launch drop field fullname
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010051700, 'local', 'hub');
+    }
+
 
     return $result;
 }

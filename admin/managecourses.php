@@ -16,7 +16,7 @@
 
 /**
  * Administrator can manage registered course on this page
- * Trust, Delete, Hide,...
+ * Delete, Hide,...
  * @package   localhub
  * @copyright 2010 Moodle Pty Ltd (http://moodle.com)
  * @author    Jerome Mouneyrac
@@ -31,24 +31,13 @@ require_once($CFG->dirroot.'/local/hub/lib.php');
 admin_externalpage_setup('managecourses');
 $hub = new local_hub();
 
-/// Check if the page has been called with trust argument
+/// Check if the page has been called with delete argument
 $delete  = optional_param('delete', -1, PARAM_INTEGER);
 $confirm  = optional_param('confirm', false, PARAM_INTEGER);
 if ($delete != -1 and $confirm and confirm_sesskey()) {
     $hub->delete_course($delete);
 }
 
-
-/// Check if the page has been called with trust argument
-$trust  = optional_param('trust', -1, PARAM_INTEGER);
-if ($trust != -1 and confirm_sesskey()) {
-    $id  = optional_param('id', '', PARAM_INTEGER);
-    $course = $hub->get_course($id);
-    if (!empty($course)) {
-        $course->trusted = $trust;
-        $hub->update_course($course);
-    }
-}
 
 /// Check if the page has been called by visible action
 $visible  = optional_param('visible', -1, PARAM_INTEGER);

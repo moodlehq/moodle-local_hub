@@ -123,7 +123,6 @@ class local_hub_renderer extends plugin_renderer_base {
     /**
      * Display a list of courses
      * If $withwriteaccess = true, we display visible field,
-     * trust button, and timecreated/modified information.
      * @param array $courses
      * @param boolean $withwriteaccess
      * @return string
@@ -140,11 +139,10 @@ class local_hub_renderer extends plugin_renderer_base {
                     get_string('coursedesc', 'local_hub'),
                     get_string('courselang', 'local_hub'),
                     get_string('visible'),
-                    '',
                     get_string('operation', 'local_hub'));
 
-            $table->align = array('left', 'left', 'center', 'center', 'center', 'center');
-            $table->size = array('25%', '40%', '5%', '%5');
+            $table->align = array('left', 'left', 'center', 'center', 'center');
+            $table->size = array('20%', '40%', '10%', '5%', '5%');
         } else {
             $table->head  = array(get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
@@ -216,20 +214,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 if ($withwriteaccess) {
-
-                    //create trust button
-                    if ($course->trusted) {
-                        $trustmsg = get_string('untrustme', 'local_hub');
-                        $trust = false;
-                    } else {
-                        $trustmsg = get_string('trustme', 'local_hub');
-                        $trust = true;
-                    }
-                    $trusturl = new moodle_url("/local/hub/admin/managecourses.php",
-                            array('sesskey' => sesskey(), 'trust' => $trust, 'id' => $course->id));
-                    $trustedbutton = new single_button($trusturl, $trustmsg);
-                    $trustbuttonhtml = $OUTPUT->render($trustedbutton);
-
+                
                     //visible
                     if ($course->privacy) {
                         $hideimgtag = html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('i/hide'),
@@ -254,7 +239,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
                     // add a row to the table
                     $cells = array($coursenamehtml, $deschtml, $language,
-                            $visiblehtml, $trustbuttonhtml, $deletelinkhtml);
+                            $visiblehtml, $deletelinkhtml);
 
                 } else {
                     // add a row to the table
@@ -262,10 +247,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
 
-                $row = new html_table_row($cells);
-                if ($course->trusted) {
-                    $row->attributes['class'] = 'trustedtr';
-                }
+                $row = new html_table_row($cells);              
 
                 $table->data[] = $row;
             }

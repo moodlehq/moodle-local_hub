@@ -220,9 +220,9 @@ class local_hub {
         if (!empty($onlyvisible)) {
             $wheresql .= " privacy = :visible";
             $sqlparams['visible'] = 1;
-            $ordersql = 'trusted DESC, fullname';
+            $ordersql = 'fullname';
         } else {
-            $ordersql = 'trusted DESC, privacy DESC, fullname';
+            $ordersql = 'privacy DESC, fullname';
         }
 
         if (!empty($search)) {
@@ -533,7 +533,6 @@ class local_hub {
         }
 
         $course->privacy = 0;
-        $course->trusted = 0;
 
         //if the course is enrollable and is already registered, update it
         $existingenrollablecourse= $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
