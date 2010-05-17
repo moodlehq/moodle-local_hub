@@ -107,10 +107,10 @@ class course_search_form extends moodleform {
         $search = $this->_customdata['search'];
         $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 
-        $options = array(0 => get_string('enrollable', 'local_hub'),
-                1 => get_string('downloadable', 'local_hub'));
-        $mform->addElement('select', 'downloadable', '',
-                $options);
+        $options = array(0 => get_string('enrollable', 'local_hub'), 
+                         1 => get_string('downloadable', 'local_hub'));
+        $mform->addElement('select', 'downloadable', get_string('enroldownload', 'local_hub'), $options);
+        $mform->addHelpButton('downloadable', 'enroldownload', 'local_hub');
 
         $options = array();
         $options['all'] = get_string('any');
@@ -170,9 +170,11 @@ class course_search_form extends moodleform {
         $languages = array_merge (array('all' => get_string('any')),$languages);
         $mform->addElement('select', 'language',get_string('language'), $languages);
         $mform->setDefault('language', 'all');
+        $mform->addHelpButton('language', 'language', 'local_hub');
 
 
-        $mform->addElement('text','search' , get_string('keywords', 'local_hub'));
+        $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
+        $mform->addHelpButton('search', 'keywords', 'local_hub');
 
         $this->add_action_buttons(false, get_string('search', 'local_hub'));
     }
