@@ -33,11 +33,11 @@ $string['additionalcourseadmindesc'] = 'Download URL: {$a->downloadurl} - Origin
     Short name: {$a->shortname}';
 $string['allowglobalsearch'] = 'Publish this hub and allow global search of all courses';
 $string['allowpublicsearch'] = 'Publish this hub so people can join it';
-$string['audience'] = 'Audience';
+$string['audience'] = 'Designed for';
 $string['audience_help'] = 'What kind of course are you looking for?  As well as traditional courses intended for students, you might search for communities of Educators or Moodle Administrators';
 $string['audienceeducators'] = 'Educators';
 $string['audiencestudents'] = 'Students';
-$string['audienceadmins'] = 'Moodle Administators';
+$string['audienceadmins'] = 'Moodle Administrators';
 $string['badurlformat'] = 'Bad URL format';
 $string['cannotregisternotavailablesite'] = 'This hub cannot access your web site.';
 $string['cannotregisterprivatehub'] = 'You cannot register your hub. Change the Privacy setting.';
@@ -63,7 +63,7 @@ $string['deletecourseconfirmation'] = 'Are you sure to delete the {$a} course ?'
 $string['demourl'] = 'Demo URL';
 $string['description'] = 'Description';
 $string['donotdeleteormodify'] = 'DO NOT DELETE OR MODIFY THIS USER !';
-$string['downloadable'] = 'Courses I can download';
+$string['downloadable'] = 'courses I can download';
 $string['educationallevel'] = 'Educational level';
 $string['educationallevel_help'] = 'What educational level are you searching for?  In the case of communities of educators, this level describes the level they are teaching.';
 $string['edulevelassociation'] = 'Association';
@@ -91,8 +91,8 @@ $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesiteupdated'] = '{$a} site has been updated on the hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his url (please check it).';
 $string['enabled'] = 'Enabled';
-$string['enrollable'] = 'Courses I can join';
-$string['enroldownload'] = 'Enrol/Download';
+$string['enrollable'] = 'courses I can enrol in';
+$string['enroldownload'] = 'Find';
 $string['enroldownload_help'] = 'Some courses listed in this directory are being advertised so that people can come and participate in them on the original site.
 
 Others are course templates provided for you to download and use on your own Moodle site.';

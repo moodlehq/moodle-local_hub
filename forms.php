@@ -117,7 +117,7 @@ class course_search_form extends moodleform {
         $options[AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'hub');
         $options[AUDIENCE_STUDENTS] = get_string('audiencestudents', 'hub');
         $options[AUDIENCE_ADMINS] = get_string('audienceadmins', 'hub');
-        $mform->addElement('select', 'audience', get_string('audience', 'hub'), $options);
+        $mform->addElement('select', 'audience', get_string('audience', 'local_hub'), $options);
         $mform->setDefault('audience', 'all');
         unset($options);
         $mform->addHelpButton('audience', 'audience', 'local_hub');
@@ -131,7 +131,7 @@ class course_search_form extends moodleform {
         $options[EDULEVEL_ASSOCIATION] = get_string('edulevelassociation', 'hub');
         $options[EDULEVEL_CORPORATE] = get_string('edulevelcorporate', 'hub');
         $options[EDULEVEL_OTHER] = get_string('edulevelother', 'hub');
-        $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'hub'), $options);
+        $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'local_hub'), $options);
         $mform->setDefault('educationallevel', 'all');
         unset($options);
         $mform->addHelpButton('educationallevel', 'educationallevel', 'local_hub');
