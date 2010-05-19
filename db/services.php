@@ -49,6 +49,14 @@ $functions = array(
                 'type'        => 'write',
         ),
 
+        'hub_unregister_courses' => array(
+                'classname'   => 'local_hub_external',
+                'methodname'  => 'unregister_courses',
+                'classpath'   => 'local/hub/externallib.php',
+                'description' => 'Unregister multiple courses',
+                'type'        => 'write',
+        ),
+
         'hub_get_courses' => array(
                 'classname'   => 'local_hub_external',
                 'methodname'  => 'get_courses',
@@ -65,7 +73,7 @@ $services = array(
         ),
 
         'Registered site' => array(
-                'functions' => array ('hub_update_site_info', 'hub_register_courses', 'hub_get_courses'),
+                'functions' => array ('hub_update_site_info', 'hub_register_courses', 'hub_get_courses', 'hub_unregister_courses'),
                 'enabled'=>1,
         ),
 

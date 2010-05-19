@@ -90,7 +90,7 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
         }
 
         //get courses
-        $courses = $hub->get_courses($search, $options, true, $downloadable, !$downloadable);
+        $courses = $hub->get_courses($search, $options, false, $downloadable, !$downloadable);
     }
 
    

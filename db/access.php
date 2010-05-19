@@ -58,4 +58,10 @@ $capabilities = array(
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_SYSTEM
         ),
+        'moodle/hub:unregistercourse' => array(
+                'captype' => 'write',
+                'contextlevel' => CONTEXT_SYSTEM
+        ),
+
+
 );

@@ -155,6 +155,57 @@ class local_hub_external extends external_api {
     }
 
 
+     /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
+    public static function unregister_courses_parameters() {
+        return new external_function_parameters(
+                array(
+                        'courseids' => new external_multiple_structure(
+                            new external_value(PARAM_INT, 'the id of the course to unregister')
+                        )
+                )
+        );
+    }
+
+    /**
+     * Unregister courses
+     * @return array 1 if unregistration was successfull
+     */
+    public static function unregister_courses($courseids) {
+        global $DB;
+        // Ensure the current user is allowed to run this function
+        $context = get_context_instance(CONTEXT_SYSTEM);
+        self::validate_context($context);
+        require_capability('moodle/hub:unregistercourse', $context);
+
+        $params = self::validate_parameters(self::unregister_courses_parameters(),
+                array('courseids' => $courseids));
+
+        $transaction = $DB->start_delegated_transaction();
+
+        //retieve site url
+        $token = optional_param('wstoken', '', PARAM_ALPHANUM);
+        $hub = new local_hub();
+        $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+
+        foreach ($params['courseids'] as $courseid) {
+            $hub->unregister_course($courseid, $siteurl); //'true' indicates registration update mode
+        }
+
+        $transaction->allow_commit();
+        return true;
+    }
+
+     /**
+     * Returns description of method result value
+     * @return boolean
+     */
+    public static function unregister_courses_returns() {
+        return new external_value(PARAM_INTEGER, '1 for successfull');
+    }
+
     /**
      * Returns description of method parameters
      * @return external_function_parameters
@@ -192,7 +243,7 @@ class local_hub_external extends external_api {
 
     /**
      * Register courses
-     * @return boolean 1 if registration was successfull
+     * @return array ids of created courses
      */
     public static function register_courses($courses) {
         global $DB;

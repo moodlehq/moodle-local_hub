@@ -506,7 +506,23 @@ class local_hub {
         return $privacystring;
     }
 
+    public function unregister_course($courseid, $siteurl) {
+        global $CFG;
 
+        $site = $this->get_site_by_url($siteurl);
+        $course = $this->get_course($courseid);
+
+        //check that the course match the site
+        if (empty($site) or ($course->siteid != $site->id)) {
+            throw new moodle_exception('triedtounregisteracourseforwrongsite');
+        }
+
+        $this->delete_course($courseid);
+
+        //TODO delete the back in case of downloadable course
+        //$CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip"
+
+    }
 
     public function register_course($course, $siteurl) {
         global $CFG;
@@ -666,7 +682,7 @@ class local_hub {
         $sitetohubcommunication = $this->get_communication(WSSERVER, REGISTEREDSITE, $siteinfo->url);
         if (empty($sitetohubcommunication)) {
             //create token for the hub
-            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse', 'moodle/hub:view');
+            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse', 'moodle/hub:view', 'moodle/hub:unregistercourse');
             $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site', $siteinfo->url.'_registered_site_user',
                     $capabilities);
 
