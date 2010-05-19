@@ -161,7 +161,8 @@ if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL 
 
     //Redirect to the site with the created token
     redirect(new moodle_url($url."/admin/registration/confirmregistration.php",
-            array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $fromform->token)));
+            array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $fromform->token,
+                'hubname' => get_config('local_hub', 'name'))));
 
 }
 
