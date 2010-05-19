@@ -222,6 +222,7 @@ class local_hub_external extends external_api {
                                 'description' => new external_value(PARAM_TEXT, 'course description'),
                                 'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
                                 'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
+                                'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email'),
                                 'contributornames' => new external_value(PARAM_TEXT, 'contributor names'),
                                 'coverage' => new external_value(PARAM_TEXT, 'coverage'),
                                 'creatorname' => new external_value(PARAM_TEXT, 'creator name'),

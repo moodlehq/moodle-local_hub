@@ -209,9 +209,13 @@ class local_hub {
      * @param string $search String that will be compared to course name and site description
      * @param string $options language, license, audience, subject...
      * @param boolean $onlyvisible - set to false to return full list
+     * @param boolean $downloadable - set to true to return downloadable course
+     * @param boolean $enrollable - set to true to return enrollable course
+     * @param boolean $deleted - set to true to return deleted course only, otherwise only undeleted
      * @return array of courses
      */
-    public function get_courses($search =null, $options = array(), $onlyvisible = true, $downloadable = true, $enrollable = true) {
+    public function get_courses($search =null, $options = array(), 
+            $onlyvisible = true, $downloadable = true, $enrollable = true, $deleted = false) {
         global $DB;
 
         $sqlparams = array();
@@ -340,6 +344,18 @@ class local_hub {
                 $wheresql .= " siteid = :siteid";
                 $sqlparams['siteid'] = $siteid;
              }
+        }
+
+        if (!$deleted) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " deleted = 0";
+        } else {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " deleted = 1";
         }
 
         $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams, $ordersql);
@@ -516,12 +532,8 @@ class local_hub {
         if (empty($site) or ($course->siteid != $site->id)) {
             throw new moodle_exception('triedtounregisteracourseforwrongsite');
         }
-
-        $this->delete_course($courseid);
-
-        //TODO delete the back in case of downloadable course
-        //$CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip"
-
+        $course->deleted = 0;
+        $this->update_course($course);
     }
 
     public function register_course($course, $siteurl) {

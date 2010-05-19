@@ -68,6 +68,30 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010051800, 'local', 'hub');
     }
 
+    if ($result && $oldversion < 2010051802) {
+
+    /// Define field publisheremail to be added to hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('publisheremail', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'downloadcostcurrency');
+
+    /// Conditionally launch add field publisheremail
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// Define field deleted to be added to hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('deleted', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'publisheremail');
+
+    /// Conditionally launch add field deleted
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010051802, 'local', 'hub');
+    }
+
 
     return $result;
 }
