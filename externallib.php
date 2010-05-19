@@ -218,7 +218,7 @@ class local_hub_external extends external_api {
                         array(
                                 'sitecourseid' => new external_value(PARAM_INT, 'the id of the course on the publishing site'),
                                 'fullname' => new external_value(PARAM_TEXT, 'course name'),
-                                'shortname' => new external_value(PARAM_ALPHANUMEXT, 'course short name'),
+                                'shortname' => new external_value(PARAM_TEXT, 'course short name'),
                                 'description' => new external_value(PARAM_TEXT, 'course description'),
                                 'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
                                 'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
@@ -390,7 +390,7 @@ class local_hub_external extends external_api {
                 array(
                         'id' => new external_value(PARAM_INTEGER, 'id'),
                         'fullname' => new external_value(PARAM_TEXT, 'course name'),
-                        'shortname' => new external_value(PARAM_ALPHANUMEXT, 'course short name'),
+                        'shortname' => new external_value(PARAM_TEXT, 'course short name'),
                         'description' => new external_value(PARAM_TEXT, 'course description'),
                         'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
                         'publishername' => new external_value(PARAM_TEXT, 'publisher name'),

@@ -912,9 +912,7 @@ class local_hub {
         $PAGE->set_title($SITE->fullname);
         $PAGE->set_heading($SITE->fullname);
 
-        $search  = optional_param('search', '', PARAM_TEXT);
-
-        $courses = $this->get_courses($search);
+        $search  = optional_param('search', null, PARAM_TEXT);
 
         $renderer = $PAGE->get_renderer('local_hub');
 
@@ -923,7 +921,6 @@ class local_hub {
         $fromform = $coursesearchform->get_data();
 
         //Retrieve courses by web service
-        $courses = array();
         if (!empty($fromform)) {
             $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
 

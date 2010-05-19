@@ -153,7 +153,9 @@ class local_hub_renderer extends plugin_renderer_base {
         }
 
         if (empty($courses)) {
-            $renderedhtml .= get_string('nocourse', 'local_hub');
+            if (isset($courses)) {
+                $renderedhtml .= get_string('nocourse', 'local_hub');
+            }
         } else {
 
             $table->width = '100%';
