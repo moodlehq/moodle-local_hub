@@ -150,7 +150,7 @@ class course_search_form extends moodleform {
         $mform->setDefault('subject', 'all');
         unset($options);
         $mform->addHelpButton('subject', 'subject', 'local_hub');
-        $this->init_javascript_enhancement('subject', 'smartselect', array('selectablecategories' => false, 'mode'=>'compact'));
+        $this->init_javascript_enhancement('subject', 'smartselect', array('selectablecategories' => true, 'mode'=>'compact'));
 
         require_once($CFG->dirroot."/lib/licenselib.php");
         $licensemanager = new license_manager();
