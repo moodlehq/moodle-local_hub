@@ -323,22 +323,20 @@ class local_hub_external extends external_api {
 
         $params = self::validate_parameters(self::get_courses_parameters(),
                 array('search' => $search, 'downloadable' => $downloadable, 'enrollable' => $enrollable, 'options' => $options));
-
+    
+        //retieve siteid
         $onlyvisible = true;
-        if (!empty($params['options']['allsitecourses'])) {
-           
-            //retieve siteid
-            $token = optional_param('wstoken', '', PARAM_ALPHANUM);
-            $localhub = new local_hub();
-            $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
-            if (!empty($siteurl)) {
-                $site = $localhub->get_site_by_url($siteurl);
-                if (!empty($site)) { //should always pass, just an extra protection
-                    $params['options']['siteid'] = $site->id;
-                    $onlyvisible = false;
-                }
+        $token = optional_param('wstoken', '', PARAM_ALPHANUM);
+        $localhub = new local_hub();
+        $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+        if (!empty($siteurl)) {
+            $site = $localhub->get_site_by_url($siteurl);
+            if (!empty($site) and !empty($params['options']['allsitecourses'])) {
+                $params['options']['siteid'] = $site->id;
+                $onlyvisible = false;
             }
         }
+        
 
         $hub = new local_hub();
 
@@ -355,6 +353,10 @@ class local_hub_external extends external_api {
             $courseinfo['description'] = $course->description;
             $courseinfo['language'] = $course->language;
             $courseinfo['publishername'] = $course->publishername;
+            //return publisher email only if the request has been done by the site
+            if (!empty($site) and $course->siteid == $site->id) {
+                $courseinfo['publisheremail'] = $course->publisheremail;
+            }
             $courseinfo['contributornames'] = $course->contributornames;
             $courseinfo['coverage'] = $course->coverage;
             $courseinfo['creatorname'] = $course->creatorname;
@@ -392,6 +394,7 @@ class local_hub_external extends external_api {
                         'description' => new external_value(PARAM_TEXT, 'course description'),
                         'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
                         'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
+                        'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email', VALUE_OPTIONAL),
                         'contributornames' => new external_value(PARAM_TEXT, 'contributor names', VALUE_OPTIONAL),
                         'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
                         'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
