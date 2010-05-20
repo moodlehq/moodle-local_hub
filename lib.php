@@ -919,7 +919,7 @@ class local_hub {
         //forms
         $coursesearchform = new course_search_form('', array('search' => $search));
         $fromform = $coursesearchform->get_data();
-
+        $courses = null;
         //Retrieve courses by web service
         if (!empty($fromform)) {
             $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
