@@ -91,6 +91,28 @@ define('WSSERVER', 'server');
  */
 define('WSCLIENT', 'client');
 
+
+
+//// Course visibility ////
+
+/**
+ * Course visibility: all
+ */
+define('COURSEVISIBILITY_ALL', '2');
+
+/**
+ * Course visibility: all
+ */
+define('COURSEVISIBILITY_VISIBLE', '1');
+
+/**
+ * Course visibility: all
+ */
+define('COURSEVISIBILITY_NOTVISIBLE', '0');
+
+
+
+
 require_once($CFG->dirroot.'/lib/hublib.php'); //get_site_privacy_string()
 
 
@@ -208,7 +230,7 @@ class local_hub {
      * Return course found against some parameters, by default it returns all visible courses
      * @param string $search String that will be compared to course name and site description
      * @param string $options language, license, audience, subject...
-     * @param boolean $onlyvisible - set to false to return full list
+     * @param boolean $onlyvisible - set to false to return full list 
      * @param boolean $downloadable - set to true to return downloadable course
      * @param boolean $enrollable - set to true to return enrollable course
      * @param boolean $deleted - set to true to return deleted course only, otherwise only undeleted
@@ -290,6 +312,21 @@ class local_hub {
             }
             $wheresql .= " educationallevel = :educationallevel";
             $sqlparams['educationallevel'] = $options['educationallevel'];
+        }
+
+        //this option should be only be called by admin script
+        //note that this option is overrided by the onlyvisible parameter
+        if (key_exists('visibility', $options) and $options['visibility'] != COURSEVISIBILITY_ALL) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            if ($options['visibility'] === COURSEVISIBILITY_VISIBLE) {
+                $privacy = 1;
+            } else {
+                $privacy = 0;
+            }
+            $wheresql .= " privacy = :visibility";
+            $sqlparams['visibility'] = $privacy;
         }
 
         if (!empty($options['ids'])) {

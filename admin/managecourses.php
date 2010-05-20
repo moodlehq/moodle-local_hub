@@ -53,21 +53,40 @@ if ($visible != -1 and confirm_sesskey()) {
 
 
 $search  = optional_param('search', '', PARAM_TEXT);
+
 $renderer = $PAGE->get_renderer('local_hub');
 $contenthtml = "";
 if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $course = $hub->get_course($delete);
     $contenthtml = $renderer->delete_course_confirmation($course);
 } else { //all other cases we go back to site list page (no need confirmation)
+    
+    $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
 
     //forms
-    $coursesearchform = new course_search_form('', array('search' => $search));
+    $coursesearchform = new course_search_form('', array('search' => $search, 'adminform' => 1));
     $fromform = $coursesearchform->get_data();
 
+    //if the page result from any action from the renderer, set data to the previous search in order to
+    //display the same result
+    if (($visible != -1 or ($delete != -1  and $confirm)) and confirm_sesskey()) {
+        $fromformdata['coverage']  = optional_param('coverage', 'all', PARAM_TEXT);
+        $fromformdata['licence']  = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['audience']  = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['language']  = optional_param('language', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['educationallevel']  = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['visibility']  = optional_param('visibility', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['downloadable']  = $downloadable;
+        $fromformdata['search'] = $search;
+        $coursesearchform->set_data($fromformdata);
+        $fromform = (object)$fromformdata;
+    }
+
+    
     //Retrieve courses by web service
-    $courses = array();
+    $courses = null;
     if (!empty($fromform)) {
-        $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
 
         $options = array();
         if (!empty($fromform->coverage)) {
@@ -89,14 +108,17 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
             $options['language'] = $fromform->language;
         }
 
+        $options['visibility'] = $fromform->visibility;
+
         //get courses
         $courses = $hub->get_courses($search, $options, false, $downloadable, !$downloadable);
     }
 
    
-
-    //(search, none language, no onlyvisible)
-    $contenthtml = $renderer->course_list($courses, true);
+/// (search, none language, no onlyvisible)
+    $options['search'] = $search;
+    $options['downloadable'] = $downloadable;
+    $contenthtml = $renderer->course_list($courses, true, $options);
 }
 
 

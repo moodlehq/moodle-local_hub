@@ -127,7 +127,7 @@ class local_hub_renderer extends plugin_renderer_base {
      * @param boolean $withwriteaccess
      * @return string
      */
-    public function course_list($courses,  $withwriteaccess=false) {
+    public function course_list($courses,  $withwriteaccess=false, $optionalurlparams = array()) {
         global $OUTPUT, $CFG;
 
         $renderedhtml = '';
@@ -227,24 +227,32 @@ class local_hub_renderer extends plugin_renderer_base {
                 
                     //visible
                     if ($course->privacy) {
-                        $hideimgtag = html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('i/hide'),
-                                'class' => 'siteimage', 'alt' => get_string('disable')));
+                        $imgparams = array('src' => $OUTPUT->pix_url('i/hide'),
+                                'class' => 'siteimage', 'alt' => get_string('disable'));
                         $makevisible = false;
                     } else {
-                        $hideimgtag = html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('i/show'),
-                                'class' => 'siteimage', 'alt' => get_string('enable')));
+                        $imgparams = array('src' => $OUTPUT->pix_url('i/show'),
+                                'class' => 'siteimage', 'alt' => get_string('enable'));                        
                         $makevisible = true;
+                    }                  
+                    $hideimgtag = html_writer::empty_tag('img', $imgparams);
+                    $visibleurlparams = array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $course->id);
+                    if (!empty($optionalurlparams)) {
+                            $visibleurlparams = array_merge($visibleurlparams, $optionalurlparams);
                     }
-
                     $visibleurl = new moodle_url("/local/hub/admin/managecourses.php",
-                            array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $course->id));
+                            $visibleurlparams);
                     $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));
 
 
 
                     //delete link
+                    $deleteurlparams = array('sesskey' => sesskey(), 'delete' => $course->id);
+                    if (!empty($optionalurlparams)) {
+                            $deleteurlparams = array_merge($deleteurlparams, $optionalurlparams);
+                    }
                     $deleteeurl = new moodle_url("/local/hub/admin/managecourses.php",
-                            array('sesskey' => sesskey(), 'delete' => $course->id));
+                           $deleteurlparams );
                     $deletelinkhtml = html_writer::tag('a', get_string('delete'), array('href' => $deleteeurl));
 
                     // add a row to the table

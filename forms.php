@@ -104,7 +104,50 @@ class course_search_form extends moodleform {
         global $CFG;
         $strrequired = get_string('required');
         $mform =& $this->_form;
+
+        //set default value
         $search = $this->_customdata['search'];
+        if (isset($this->_customdata['coverage'])) {
+            $coverage = $this->_customdata['coverage'];
+        } else {
+            $coverage = 'all';
+        }
+        if (isset($this->_customdata['licence'])) {
+            $licence = $this->_customdata['licence'];
+        } else {
+            $licence = 'all';
+        }
+        if (isset($this->_customdata['subject'])) {
+            $subject = $this->_customdata['subject'];
+        } else {
+            $subject = 'all';
+        }
+        if (isset($this->_customdata['audience'])) {
+            $audience = $this->_customdata['audience'];
+        } else {
+            $audience = 'all';
+        }
+        if (isset($this->_customdata['language'])) {
+            $language = $this->_customdata['language'];
+        } else {
+            $language = 'all';
+        }
+        if (isset($this->_customdata['educationallevel'])) {
+            $educationallevel = $this->_customdata['educationallevel'];
+        } else {
+            $educationallevel = 'all';
+        }
+        if (isset($this->_customdata['visibility'])) {
+            $visibility = $this->_customdata['visibility'];
+        } else {
+            $visibility = COURSEVISIBILITY_ALL;
+        }
+        if (isset($this->_customdata['downloadable'])) {
+            $downloadable = $this->_customdata['downloadable'];
+        } else {
+            $downloadable = 0;
+        }
+     
         $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 
         $options = array(0 => get_string('enrollable', 'local_hub'), 
@@ -112,13 +155,26 @@ class course_search_form extends moodleform {
         $mform->addElement('select', 'downloadable', get_string('enroldownload', 'local_hub'), $options);
         $mform->addHelpButton('downloadable', 'enroldownload', 'local_hub');
 
+        //visible field
+        //Note: doesn't matter if form html is hacked, index script does not return any invisible courses
+        if (key_exists('adminform', $this->_customdata)) {
+            $options = array();
+            $options[COURSEVISIBILITY_ALL] = get_string('visibilityall', 'local_hub');
+            $options[COURSEVISIBILITY_VISIBLE] = get_string('visibilityyes', 'local_hub');
+            $options[COURSEVISIBILITY_NOTVISIBLE] = get_string('visibilityno', 'local_hub');
+            $mform->addElement('select', 'visibility', get_string('visibility', 'local_hub'), $options);
+            $mform->setDefault('visibility', $visibility);
+            unset($options);
+            $mform->addHelpButton('visibility', 'visibility', 'local_hub');
+        }
+
         $options = array();
         $options['all'] = get_string('any');
         $options[AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'hub');
         $options[AUDIENCE_STUDENTS] = get_string('audiencestudents', 'hub');
         $options[AUDIENCE_ADMINS] = get_string('audienceadmins', 'hub');
         $mform->addElement('select', 'audience', get_string('audience', 'local_hub'), $options);
-        $mform->setDefault('audience', 'all');
+        $mform->setDefault('audience', $audience);
         unset($options);
         $mform->addHelpButton('audience', 'audience', 'local_hub');
 
@@ -132,7 +188,7 @@ class course_search_form extends moodleform {
         $options[EDULEVEL_CORPORATE] = get_string('edulevelcorporate', 'hub');
         $options[EDULEVEL_OTHER] = get_string('edulevelother', 'hub');
         $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'local_hub'), $options);
-        $mform->setDefault('educationallevel', 'all');
+        $mform->setDefault('educationallevel', $educationallevel);
         unset($options);
         $mform->addHelpButton('educationallevel', 'educationallevel', 'local_hub');
 
@@ -147,7 +203,7 @@ class course_search_form extends moodleform {
         }
         $options = array_merge (array('all' => get_string('any')),$options);
         $mform->addElement('select', 'subject', get_string('subject', 'hub'), $options);
-        $mform->setDefault('subject', 'all');
+        $mform->setDefault('subject', $subject);
         unset($options);
         $mform->addHelpButton('subject', 'subject', 'local_hub');
         $this->init_javascript_enhancement('subject', 'smartselect', array('selectablecategories' => true, 'mode'=>'compact'));
@@ -161,21 +217,21 @@ class course_search_form extends moodleform {
             $options[$license->shortname] = get_string($license->shortname, 'license');
         }
         $mform->addElement('select', 'licence', get_string('license'), $options);
-        $mform->setDefault('licence', 'cc');
         unset($options);
         $mform->addHelpButton('licence', 'licence', 'local_hub');
-        $mform->setDefault('licence', 'all');
+        $mform->setDefault('licence', $licence);
 
         $languages = get_string_manager()->get_list_of_languages();
         asort($languages, SORT_LOCALE_STRING);
         $languages = array_merge (array('all' => get_string('any')),$languages);
         $mform->addElement('select', 'language',get_string('language'), $languages);
-        $mform->setDefault('language', 'all');
+        $mform->setDefault('language', $language);
         $mform->addHelpButton('language', 'language', 'local_hub');
 
 
         $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
         $mform->addHelpButton('search', 'keywords', 'local_hub');
+         $mform->setDefault('search', $search);
 
         $this->add_action_buttons(false, get_string('search', 'local_hub'));
     }
