@@ -328,12 +328,15 @@ class local_hub_external extends external_api {
         $onlyvisible = true;
         $token = optional_param('wstoken', '', PARAM_ALPHANUM);
         $localhub = new local_hub();
-        $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
-        if (!empty($siteurl)) {
-            $site = $localhub->get_site_by_url($siteurl);
-            if (!empty($site) and !empty($params['options']['allsitecourses'])) {
-                $params['options']['siteid'] = $site->id;
-                $onlyvisible = false;
+        $communication = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token);
+        if (!empty($communication)) {
+            $siteurl = $communication->remoteurl;
+            if (!empty($siteurl)) {
+                $site = $localhub->get_site_by_url($siteurl);
+                if (!empty($site) and !empty($params['options']['allsitecourses'])) {
+                    $params['options']['siteid'] = $site->id;
+                    $onlyvisible = false;
+                }
             }
         }
         

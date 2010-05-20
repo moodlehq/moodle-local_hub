@@ -150,6 +150,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
             $table->align = array('left', 'left', 'center');
             $table->size = array('25%', '60%', '5%');
+
         }
 
         if (empty($courses)) {
@@ -215,6 +216,13 @@ class local_hub_renderer extends plugin_renderer_base {
                     $language= '';
                 }
 
+                if (!$course->enrollable) {
+                    $params['courseid'] = $course->id;
+                    $params['filetype'] = BACKUP_FILE_TYPE;
+                    $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
+                    $downloadlinkhtml = html_writer::tag('a', get_string('download', 'block_community'), array('href' => $addurl));
+                }
+
                 if ($withwriteaccess) {
                 
                     //visible
@@ -246,6 +254,9 @@ class local_hub_renderer extends plugin_renderer_base {
                 } else {
                     // add a row to the table
                     $cells = array($coursenamehtml, $deschtml, $languages[$course->language]);
+                    if (!$course->enrollable) {
+                        $cells[] = $downloadlinkhtml;
+                    }
                 }
 
 
