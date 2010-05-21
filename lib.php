@@ -569,7 +569,7 @@ class local_hub {
         if (empty($site) or ($course->siteid != $site->id)) {
             throw new moodle_exception('triedtounregisteracourseforwrongsite');
         }
-        $course->deleted = 0;
+        $course->deleted = 1;
         $this->update_course($course);
     }
 
@@ -598,6 +598,7 @@ class local_hub {
         }
 
         $course->privacy = 0;
+        $course->deleted = 0;
 
         //if the course is enrollable and is already registered, update it
         $existingenrollablecourse= $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
