@@ -356,9 +356,12 @@ class local_hub_external extends external_api {
             $courseinfo['description'] = $course->description;
             $courseinfo['language'] = $course->language;
             $courseinfo['publishername'] = $course->publishername;
-            //return publisher email only if the request has been done by the site
+            //return publisher email, privacy and site course id
+            // only if the request has been done by the site
             if (!empty($site) and $course->siteid == $site->id) {
                 $courseinfo['publisheremail'] = $course->publisheremail;
+                $courseinfo['privacy'] = $course->privacy;
+                $courseinfo['sitecourseid'] = $course->sitecourseid;
             }
             $courseinfo['contributornames'] = $course->contributornames;
             $courseinfo['coverage'] = $course->coverage;
@@ -398,6 +401,8 @@ class local_hub_external extends external_api {
                         'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
                         'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
                         'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email', VALUE_OPTIONAL),
+                        'privacy' => new external_value(PARAM_INT, 'privacy: published or not', VALUE_OPTIONAL),
+                        'sitecourseid' => new external_value(PARAM_INT, 'course id on the site', VALUE_OPTIONAL),
                         'contributornames' => new external_value(PARAM_TEXT, 'contributor names', VALUE_OPTIONAL),
                         'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
                         'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
