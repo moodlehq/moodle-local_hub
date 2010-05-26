@@ -36,7 +36,7 @@ $courseid = optional_param('courseid', '', PARAM_ALPHANUM);
 // check the communication token
 $hub = new local_hub();
 $communication = $hub->get_communication(WSSERVER, REGISTEREDSITE, '', $token);
-if (!empty($communication) and get_config('local_hub', 'hubenabled')) {
+if (!empty($token) && !empty($communication) and get_config('local_hub', 'hubenabled')) {
     //check that the course exist
     $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
     if (!empty($course) && !empty($_FILES)) {
