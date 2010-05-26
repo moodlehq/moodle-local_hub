@@ -559,20 +559,36 @@ class local_hub {
         return $privacystring;
     }
 
+    /**
+     * Unregister a course from the directory
+     * If the course doesn't exist do nothing - no error thrown
+     * If the course site id doesn't match the site url, throw an error
+     * @param int $courseid
+     * @param string $siteurl
+     */
     public function unregister_course($courseid, $siteurl) {
         global $CFG;
-
+        
         $site = $this->get_site_by_url($siteurl);
         $course = $this->get_course($courseid);
 
-        //check that the course match the site
-        if (empty($site) or ($course->siteid != $site->id)) {
-            throw new moodle_exception('triedtounregisteracourseforwrongsite');
+        //check that the course exist (otherwise unregister)
+        if (!empty($course)) {
+            //check that the course match the site
+            if (empty($site) or ($course->siteid != $site->id)) {
+                throw new moodle_exception('triedtounregisteracourseforwrongsite');
+            }
+            $course->deleted = 1;
+            $this->update_course($course);
         }
-        $course->deleted = 1;
-        $this->update_course($course);
     }
 
+    /**
+     * Register a course for a specific site
+     * @param object $course
+     * @param string $siteurl
+     * @return int course id
+     */
     public function register_course($course, $siteurl) {
         global $CFG;
 
