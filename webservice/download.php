@@ -36,7 +36,9 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
         case BACKUP_FILE_TYPE:
             //check that the file is downloadable
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
-            if (!empty($course) && $course->privacy) {
+            if (!empty($course) && 
+                    ($course->privacy or (!empty($USER) and is_siteadmin($USER->id)))) {
+
                 $level1 = floor($courseid / 1000) * 1000;
                 $userdir = "hub/$level1/$courseid";
                 send_file($CFG->dataroot . '/' . $userdir . '/backup_'.$courseid.".zip", 'backup_'.$courseid.".zip",

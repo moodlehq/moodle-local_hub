@@ -220,7 +220,9 @@ class local_hub_renderer extends plugin_renderer_base {
                     $params['courseid'] = $course->id;
                     $params['filetype'] = BACKUP_FILE_TYPE;
                     $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
-                    $downloadlinkhtml = html_writer::tag('a', get_string('download', 'block_community'), array('href' => $addurl));
+                    $downloadbutton = new single_button($addurl, get_string('download', 'block_community'));
+                    $downloadbutton->class = 'centeredbutton';
+                    $downloadbuttonhtml = $OUTPUT->render($downloadbutton);
                 }
 
                 if ($withwriteaccess) {
@@ -258,12 +260,15 @@ class local_hub_renderer extends plugin_renderer_base {
                     // add a row to the table
                     $cells = array($coursenamehtml, $deschtml, $language,
                             $visiblehtml, $deletelinkhtml);
+                    if (!$course->enrollable) {
+                        $cells[] = $downloadbuttonhtml;
+                    }
 
                 } else {
                     // add a row to the table
                     $cells = array($coursenamehtml, $deschtml, $languages[$course->language]);
                     if (!$course->enrollable) {
-                        $cells[] = $downloadlinkhtml;
+                        $cells[] = $downloadbuttonhtml;
                     }
                 }
 
