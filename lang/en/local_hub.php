@@ -22,7 +22,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+$string['activities'] = 'Activities';
 $string['additionaldesc'] = 'Courses: {$a->courses} - Users: {$a->users} - Enrolments: {$a->enrolments} - Resources: {$a->resources} - Posts: {$a->posts}
     - Questions: {$a->questions} - Average number of participants: {$a->participantnumberaverage} - Average number of course modules: {$a->modulenumberaverage}';
 $string['additionalcoursedesc'] = 'Contributors: {$a->contributornames} - Coverage: {$a->coverage} - Creator: {$a->creatorname} - Publisher: {$a->publishername} - Subject: {$a->subject}
@@ -39,6 +39,7 @@ $string['audienceeducators'] = 'Educators';
 $string['audiencestudents'] = 'Students';
 $string['audienceadmins'] = 'Moodle Administrators';
 $string['badurlformat'] = 'Bad URL format';
+$string['blocks'] = 'Blocks';
 $string['cannotregisternotavailablesite'] = 'This hub cannot access your web site.';
 $string['cannotregisterprivatehub'] = 'You cannot register your hub. Change the Privacy setting.';
 $string['cannotsetpasswordforpublichub'] = 'Cannot set a password for public hub. Either delete your password, either set the hub as private.';

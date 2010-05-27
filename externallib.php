@@ -214,31 +214,38 @@ class local_hub_external extends external_api {
         return new external_function_parameters(
                 array(
                         'courses' => new external_multiple_structure(
-                        new external_single_structure(
-                        array(
-                                'sitecourseid' => new external_value(PARAM_INT, 'the id of the course on the publishing site'),
-                                'fullname' => new external_value(PARAM_TEXT, 'course name'),
-                                'shortname' => new external_value(PARAM_TEXT, 'course short name'),
-                                'description' => new external_value(PARAM_TEXT, 'course description'),
-                                'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
-                                'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
-                                'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email'),
-                                'contributornames' => new external_value(PARAM_TEXT, 'contributor names'),
-                                'coverage' => new external_value(PARAM_TEXT, 'coverage'),
-                                'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
-                                'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name'),
-                                'subject' => new external_value(PARAM_ALPHANUM, 'subject'),
-                                'audience' => new external_value(PARAM_ALPHA, 'audience'),
-                                'educationallevel' => new external_value(PARAM_ALPHA, 'educational level'),
-                                'creatornotes' => new external_value(PARAM_RAW, 'creator notes'),
-                                'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
-                                'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
-                                'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
-                                'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable', VALUE_DEFAULT, 0),
-                                'screenshotsids' => new external_value(PARAM_TEXT, 'screenshotsids', VALUE_OPTIONAL),
-                        ), 'course info')
+                            new external_single_structure(
+                                array(
+                                        'sitecourseid' => new external_value(PARAM_INT, 'the id of the course on the publishing site'),
+                                        'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                                        'shortname' => new external_value(PARAM_TEXT, 'course short name'),
+                                        'description' => new external_value(PARAM_TEXT, 'course description'),
+                                        'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
+                                        'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
+                                        'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email'),
+                                        'contributornames' => new external_value(PARAM_TEXT, 'contributor names'),
+                                        'coverage' => new external_value(PARAM_TEXT, 'coverage'),
+                                        'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
+                                        'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name'),
+                                        'subject' => new external_value(PARAM_ALPHANUM, 'subject'),
+                                        'audience' => new external_value(PARAM_ALPHA, 'audience'),
+                                        'educationallevel' => new external_value(PARAM_ALPHA, 'educational level'),
+                                        'creatornotes' => new external_value(PARAM_RAW, 'creator notes'),
+                                        'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
+                                        'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
+                                        'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
+                                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable', VALUE_DEFAULT, 0),
+                                        'screenshotsids' => new external_value(PARAM_TEXT, 'screenshotsids', VALUE_OPTIONAL),
+                                        'contents' => new external_multiple_structure(new external_single_structure(
+                                                array(
+                                                        'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
+                                                        'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
+                                                        'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
+                                                )), 'contents', VALUE_OPTIONAL)
+                                     )
+                             )
                         )
-                )
+                    )
         );
     }
 
@@ -380,6 +387,19 @@ class local_hub_external extends external_api {
                 $courseinfo['courseurl'] = $course->courseurl;
             }
 
+            //get content
+             $contents = $hub->get_course_contents($course->id);
+             if (!empty($contents)) {
+                 foreach($contents as $content) {
+                    $tmpcontent = array();
+                    $tmpcontent['moduletype'] = $content->moduletype;
+                    $tmpcontent['modulename'] = $content->modulename;
+                    $tmpcontent['contentcount'] = $content->contentcount;
+                    $courseinfo['contents'][] = $tmpcontent;
+                 }
+             }
+
+
             $result[] = $courseinfo;
         }
 
@@ -414,7 +434,13 @@ class local_hub_external extends external_api {
                         'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
-                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable')
+                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
+                        'contents' => new external_multiple_structure(new external_single_structure(
+                                                array(
+                                                        'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
+                                                        'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
+                                                        'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
+                                                )), 'contents', VALUE_OPTIONAL)
                 ), 'course info')
         );
     }

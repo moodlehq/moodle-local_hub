@@ -112,6 +112,17 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
 
         //get courses
         $courses = $hub->get_courses($search, $options, false, $downloadable, !$downloadable);
+
+        //get courses content
+        foreach($courses as $course) {
+
+            $contents = $hub->get_course_contents($course->id);
+             if (!empty($contents)) {
+                 foreach($contents as $content) {
+                    $course->contents[] = $content;
+                 }
+             }
+        }
     }
 
    

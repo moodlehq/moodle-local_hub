@@ -125,7 +125,7 @@ if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL 
             empty($fromform->name) or empty($fromform->contactname)
             or empty($fromform->contactemail) or empty($fromform->description)
             or empty($fromform->language)) {
-        throw new moodle_exception('errorwrongdata', 'local_hub', new moodle_url('/local/hub/index.php'));
+        throw new moodle_exception('errorwrongdata', 'local_hub', new moodle_url('/index.php'));
     }
 
     $siteinfo = new stdClass();

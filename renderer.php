@@ -37,7 +37,7 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function registration_confirmation($confirmationmessage) {
         global $OUTPUT;
-        $linktositelist = html_writer::tag('a', get_string('sitelist','local_hub'), array('href' => new moodle_url('/local/hub/index.php')));
+        $linktositelist = html_writer::tag('a', get_string('sitelist','local_hub'), array('href' => new moodle_url('/index.php')));
         $message = $confirmationmessage.html_writer::empty_tag('br').$linktositelist;
         return $OUTPUT->box($message);
     }
@@ -205,6 +205,22 @@ class local_hub_renderer extends plugin_renderer_base {
                     $additionaladmindesc = html_writer::empty_tag('br');
                     $additionaladmindesc .= get_string('additionalcourseadmindesc', 'local_hub', $admindisplayedinfo);
                     $deschtml .= html_writer::tag('span', $additionaladmindesc, array('class' => 'additionaladmindesc'));
+                }
+                //add content to the course description
+                if (!empty($course->contents)) {
+                    $activitieshtml = '';
+                    $blockhtml = '';
+                    foreach ($course->contents as $content) {
+                        if ($content->moduletype == 'block') {
+                            $blockhtml .= ' - '. $content->modulename. " (".$content->contentcount.")";
+                        } else {
+                            $activitieshtml .= ' - '. $content->modulename. " (".$content->contentcount.")";
+                        }
+                    }
+                    $deschtml .= html_writer::empty_tag('br').html_writer::tag('span',
+                            get_string('blocks', 'local_hub')." : ".$blockhtml, array('class' => 'blockdescription'));
+                    $deschtml .= html_writer::empty_tag('br').html_writer::tag('span', 
+                            get_string('activities', 'local_hub')." : ".$activitieshtml, array('class' => 'activitiesdescription'));
                 }
 
                 //retrieve language string

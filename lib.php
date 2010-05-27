@@ -510,6 +510,21 @@ class local_hub {
     }
 
 
+    public function add_course_content($content) {
+        global $DB;
+        $DB->insert_record('hub_course_contents', $content);
+    }
+
+    public function delete_course_contents($courseid) {
+        global $DB;
+        $DB->delete_records('hub_course_contents', array('courseid' => $courseid));
+    }
+
+    public function get_course_contents($courseid) {
+        global $DB;
+        return $DB->get_records('hub_course_contents', array('courseid' => $courseid));
+    }
+
 ///////////////////////////
 /// Library functions   ///
 ///////////////////////////
@@ -622,9 +637,22 @@ class local_hub {
             $course->id = $existingenrollablecourse->id;
             $courseid = $existingenrollablecourse->id;
             $this->update_course($course);
+
+            //delete previous course content
+            $this->delete_course_contents($courseid);
+
         } else {
             $courseid = $this->add_course($course);
         }
+
+        //add new course contents
+        if (!empty($course->contents)) {
+            foreach ( $course->contents as $content) {
+                $content['courseid'] = $courseid;
+                $this->add_course_content($content);
+            }
+        }
+
         return $courseid;
 
     }
@@ -717,7 +745,7 @@ class local_hub {
         //Note: it should have been tested on client side
         $languages = get_string_manager()->get_list_of_languages();
         if (!key_exists($siteinfo->language, $languages)) {
-            throw new moodle_exception('errorlangnotrecognized', 'hub', new moodle_url('/local/hub/index.php'));
+            throw new moodle_exception('errorlangnotrecognized', 'hub', new moodle_url('/index.php'));
         }
 
         //check if the image (imageurl) has a correct size
@@ -729,7 +757,7 @@ class local_hub {
                 $sizestrings->width = HUBLOGOIMAGEWIDTH;
                 $sizestrings->height = HUBLOGOIMAGEHEIGHT;
                 throw new moodle_exception('errorbadimageheightwidth', 'local_hub',
-                new moodle_url('/local/hub/index.php'), $sizestrings);
+                new moodle_url('/index.php'), $sizestrings);
             }
 
             //TODO we do not record image yet, it could be a security issue
@@ -1000,6 +1028,17 @@ class local_hub {
 
             //get courses
             $courses = $this->get_courses($search, $options, true, $downloadable, !$downloadable);
+
+            //get courses content
+            foreach($courses as $course) {
+              
+                $contents = $this->get_course_contents($course->id);
+                 if (!empty($contents)) {
+                     foreach($contents as $content) {
+                        $course->contents[] = $content;
+                     }
+                 }
+            }
         }
 
         echo $OUTPUT->header();
