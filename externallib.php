@@ -380,6 +380,7 @@ class local_hub_external extends external_api {
             $courseinfo['creatornotes'] = $course->creatornotes;
             $courseinfo['creatornotesformat'] = $course->creatornotesformat;
             $courseinfo['enrollable'] = $course->enrollable;
+            $courseinfo['screenshotsids'] = $course->screenshotsids;
             if (!empty($course->demourl)) {
                 $courseinfo['demourl'] = $course->demourl;
             }
@@ -435,6 +436,7 @@ class local_hub_external extends external_api {
                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                         'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
+                        'screenshotsids' => new external_value(PARAM_INT, 'total number of screenshots'),
                         'contents' => new external_multiple_structure(new external_single_structure(
                                                 array(
                                                         'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),

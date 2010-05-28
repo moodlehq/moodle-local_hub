@@ -39,6 +39,12 @@ define('HUBLOGOIMAGEWIDTH', 150);
 define('HUBLOGOIMAGEHEIGHT', 150);
 
 
+/**
+ * maximum number of screenshot for a course
+ */
+define('MAXSCREENSHOTSNUMBER', 10);
+
+
 
 //// HUB PRIVACY
 
@@ -936,23 +942,55 @@ class local_hub {
     }
 
     /**
-     * TODO: temporary function till file upload design done (course unique ref not used)
+     * TODO: this is temporary till the way to send file by ws is defined
      * Add a screenshots to a course
-     * @param <type> $file
-     * @param <type> $filename
-     * @param <type> $courseshortname
-     * @param <type> $siteurl
+     * @param array $file
+     * @param integer $courseid
      */
-    public function add_screenshot($file, $course) {
+    public function add_screenshot($file, $courseid, $screenshotnumber) {
+
+        // Generate a two-level path for the userid. First level groups them by slices of 1000 users, second level is userid
+        $level1 = floor($courseid / 1000) * 1000;
+
+        $userdir = "hub/$level1/$courseid";
+
+        $directory = make_upload_directory($userdir);
+
+        //get the extension of this image in order to check that it is an image
+        $imageext = image_type_to_extension(exif_imagetype($file['tmp_name']));
+
+        if (!empty($imageext) and $screenshotnumber < MAXSCREENSHOTSNUMBER) {
+
+            //delete previously existing screenshot
+            if ($this->screenshot_exists($courseid, $screenshotnumber)) {
+                unlink($directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+            }
+
+            move_uploaded_file($file['tmp_name'], $directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+        }
 
     }
 
     /**
-     * TODO: temporary function till file upload design done  (course unique ref not used)
+     * TODO: temporary,  add_screenshot() function
+     * Check if a screenshot exists
+     * @param int $courseid
+     * @param int $screenshotnumber
+     * @return bool
+     */
+    public function screenshot_exists($courseid, $screenshotnumber) {
+        global $CFG;
+        $level1 = floor($courseid / 1000) * 1000;
+
+        $directory = "hub/$level1/$courseid";
+        return file_exists($CFG->dataroot. '/' . $directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+    }
+
+    /**
+     * TODO: this is temporary till the way to send file by ws is defined
      * Add a backup to a course
-     * @param <type> $file
-     * @param <type> $filename
-     * @param <type> $course
+     * @param array $file
+     * @param integer $courseid
      */
     public function add_backup($file, $courseid) {
 
@@ -968,12 +1006,11 @@ class local_hub {
 
     /**
      * TODO: temporary function till file download design done  (course unique ref not used)
-     * Get a backup
-     * @param <type> $filename
-     * @param <type> $course
+     * Check a backup exists
+     * @param int $courseid
      */
     public function backup_exits($courseid) {
-      global $CFG;
+        global $CFG;
         $level1 = floor($courseid / 1000) * 1000;
 
         $directory = "hub/$level1/$courseid";

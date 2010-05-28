@@ -31,6 +31,7 @@ require_once($CFG->dirroot.'/lib/hublib.php'); //SCREENSHOT_FILE_TYPE and BACKUP
 
 $token = optional_param('token', '', PARAM_ALPHANUM);
 $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, backup, ...
+$screenshotnumber = optional_param('screenshotnumber', 1, PARAM_INT); //the screenshot number of this course
 $courseid = optional_param('courseid', '', PARAM_ALPHANUM);
 
 // check the communication token
@@ -47,10 +48,10 @@ if (!empty($token) && !empty($communication) and get_config('local_hub', 'hubena
                 if (empty($backup)) {
                     $hub->add_backup($_FILES['file'], $courseid);
                 }
-            break;
+                break;
             case SCREENSHOT_FILE_TYPE:
-                $hub->add_screenshot($_FILES['file'], $courseid);
-            break;
+                $hub->add_screenshot($_FILES['file'], $courseid, $screenshotnumber);
+                break;
         }
     }
 }
