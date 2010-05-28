@@ -135,21 +135,21 @@ class local_hub_renderer extends plugin_renderer_base {
         $table = new html_table();
 
         if ($withwriteaccess) {
-            $table->head  = array(get_string('coursename', 'local_hub'),
+            $table->head  = array('', get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
                     get_string('courselang', 'local_hub'),
                     get_string('visible'),
                     get_string('operation', 'local_hub'));
 
-            $table->align = array('left', 'left', 'center', 'center', 'center');
-            $table->size = array('20%', '40%', '10%', '5%', '5%');
+            $table->align = array('center', 'left', 'left', 'center', 'center', 'center');
+            $table->size = array('10%', '20%', '40%', '10%', '5%', '5%');
         } else {
-            $table->head  = array(get_string('coursename', 'local_hub'),
+            $table->head  = array('', get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
                     get_string('courselang', 'local_hub'));
 
-            $table->align = array('left', 'left', 'center');
-            $table->size = array('25%', '60%', '5%');
+            $table->align = array('center', 'left', 'left', 'center');
+            $table->size = array('10%', '25%', '60%', '5%');
 
         }
 
@@ -241,6 +241,14 @@ class local_hub_renderer extends plugin_renderer_base {
                     $downloadbuttonhtml = $OUTPUT->render($downloadbutton);
                 }
 
+                  // add screenshots
+                $firstscreenshothtml = '';
+                if (!empty($course->screenshotsids)) {
+                    $params = array('courseid' => $course->id, 'filetype' => SCREENSHOT_FILE_TYPE);
+                    $imgurl = new moodle_url($huburl."/local/hub/webservice/download.php", $params);
+                    $firstscreenshothtml = html_writer::empty_tag('img', array('src' => $imgurl));
+                }
+
                 if ($withwriteaccess) {
                 
                     //visible
@@ -274,7 +282,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     $deletelinkhtml = html_writer::tag('a', get_string('delete'), array('href' => $deleteeurl));
 
                     // add a row to the table
-                    $cells = array($coursenamehtml, $deschtml, $language,
+                    $cells = array($firstscreenshothtml, $coursenamehtml, $deschtml, $language,
                             $visiblehtml, $deletelinkhtml);
                     if (!$course->enrollable) {
                         $cells[] = $downloadbuttonhtml;
@@ -282,7 +290,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 } else {
                     // add a row to the table
-                    $cells = array($coursenamehtml, $deschtml, $languages[$course->language]);
+                    $cells = array($firstscreenshothtml, $coursenamehtml, $deschtml, $languages[$course->language]);
                     if (!$course->enrollable) {
                         $cells[] = $downloadbuttonhtml;
                     }
