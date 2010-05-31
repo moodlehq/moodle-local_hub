@@ -123,6 +123,7 @@ $string['managecourses'] = 'Manage courses';
 $string['managesites'] = 'Manage sites';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
+$string['moredetails'] = 'More details';
 $string['name'] = 'Name';
 $string['no'] = 'No';
 $string['nocourse'] = 'No courses match your search.';

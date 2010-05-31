@@ -240,10 +240,13 @@ class local_hub_renderer extends plugin_renderer_base {
                             $activitieshtml .= get_string('modulename', $content->modulename). " (".$content->contentcount.")";
                         }
                     }
-                    $deschtml .= html_writer::empty_tag('br').html_writer::tag('span',
-                            get_string('blocks', 'local_hub')." : ".$blockhtml, array('class' => 'blockdescription'));
-                    $deschtml .= html_writer::empty_tag('br').html_writer::tag('span', 
-                            get_string('activities', 'local_hub')." : ".$activitieshtml, array('class' => 'activitiesdescription'));
+                    $blocksandactivities = html_writer::tag('span',
+                            get_string('blocks', 'local_hub')." : ".$blockhtml);
+                    $blocksandactivities .= html_writer::empty_tag('br').html_writer::tag('span',
+                            get_string('activities', 'local_hub')." : ".$activitieshtml);
+                
+                    $deschtml .= print_collapsible_region($blocksandactivities, 'blockdescription',
+                            'blocksandactivities', get_string('moredetails','local_hub'), '', false,true);
                 }
 
                 //retrieve language string
