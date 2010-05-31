@@ -30,6 +30,11 @@ require_once($CFG->dirroot. "/lib/hublib.php"); //SITENOTPUBLISHED, get_site_pri
  */
 class local_hub_renderer extends plugin_renderer_base {
 
+    public function __construct(moodle_page $page, $target) {
+        parent::__construct($page, $target);
+        $this->page->requires->css('/lib/gallery/assets/skins/sam/gallery-lightbox-skin.css');
+    }
+
     /**
      * Display a box message confirming a site registration (add or update)
      * @param string $confirmationmessage
@@ -135,21 +140,23 @@ class local_hub_renderer extends plugin_renderer_base {
         $table = new html_table();
 
         if ($withwriteaccess) {
-            $table->head  = array('', get_string('coursename', 'local_hub'),
+            $table->head  = array(get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
+                    get_string('screenshots', 'local_hub'),
                     get_string('courselang', 'local_hub'),
                     get_string('visible'),
                     get_string('operation', 'local_hub'));
 
             $table->align = array('center', 'left', 'left', 'center', 'center', 'center');
-            $table->size = array('10%', '20%', '40%', '10%', '5%', '5%');
+            $table->size = array('20%', '40%', '10%', '10%', '5%', '5%');
         } else {
-            $table->head  = array('', get_string('coursename', 'local_hub'),
+            $table->head  = array(get_string('coursename', 'local_hub'),
                     get_string('coursedesc', 'local_hub'),
+                    get_string('screenshots', 'local_hub'),
                     get_string('courselang', 'local_hub'));
 
             $table->align = array('center', 'left', 'left', 'center');
-            $table->size = array('10%', '25%', '60%', '5%');
+            $table->size = array('25%', '60%', '20%', '5%');
 
         }
 
@@ -241,12 +248,34 @@ class local_hub_renderer extends plugin_renderer_base {
                     $downloadbuttonhtml = $OUTPUT->render($downloadbutton);
                 }
 
-                  // add screenshots
-                $firstscreenshothtml = '';
+                // add screenshots
+                $screenshothtml = '';
                 if (!empty($course->screenshotsids)) {
-                    $params = array('courseid' => $course->id, 'filetype' => SCREENSHOT_FILE_TYPE);
-                    $imgurl = new moodle_url($huburl."/local/hub/webservice/download.php", $params);
-                    $firstscreenshothtml = html_writer::empty_tag('img', array('src' => $imgurl));
+
+                    //include gallery lightbox js
+                    $this->page->requires->js('/lib/gallery/gallery-lightbox-min.js');
+
+                    for ($i = 1; $i <= $course->screenshotsids; $i = $i + 1) {
+                        if ($i == 1) {
+                            $params = array('courseid' => $course->id,
+                                'filetype' => SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i);
+                            $imgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $params);
+                        } else {
+                            //empty image
+                            $imgurl = new moodle_url($CFG->wwwroot . "/pix/spacer.gif");
+                        }
+                        $ascreenshothtml = html_writer::empty_tag('img', array('src' => $imgurl, 'alt' => $course->fullname));
+                        $originalparams = array('courseid' => $course->id,
+                            'filetype' => SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i, 'imagewidth' => 'original');
+                        $originalimgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $originalparams);
+                        $screenshothtml .= html_writer::tag('a', $ascreenshothtml,
+                                        array('rel' => 'lightbox[' . $course->shortname . ']', 'title' => $course->fullname,
+                                            'href' => $originalimgurl));
+                    }
+
+                    // run the JS
+                    $js = "Y.use(\"gallery-lightbox\", function (Y) { Y.Lightbox.init(); });";
+                    $this->page->requires->js_init_code($js, true);
                 }
 
                 if ($withwriteaccess) {
@@ -282,7 +311,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     $deletelinkhtml = html_writer::tag('a', get_string('delete'), array('href' => $deleteeurl));
 
                     // add a row to the table
-                    $cells = array($firstscreenshothtml, $coursenamehtml, $deschtml, $language,
+                    $cells = array($coursenamehtml, $deschtml, $screenshothtml, $language,
                             $visiblehtml, $deletelinkhtml);
                     if (!$course->enrollable) {
                         $cells[] = $downloadbuttonhtml;
@@ -290,7 +319,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 } else {
                     // add a row to the table
-                    $cells = array($firstscreenshothtml, $coursenamehtml, $deschtml, $languages[$course->language]);
+                    $cells = array($coursenamehtml, $deschtml, $screenshothtml, $languages[$course->language]);
                     if (!$course->enrollable) {
                         $cells[] = $downloadbuttonhtml;
                     }

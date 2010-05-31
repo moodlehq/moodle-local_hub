@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/lib/filelib.php');
 $courseid = optional_param('courseid', '', PARAM_INTEGER);
 $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, backup, ...
 $screenshotnumber = optional_param('screenshotnumber', 1, PARAM_INT); //the screenshot number of this course
-$imagewidth = optional_param('imagewidth', SITEIMAGEWIDTH, PARAM_INT); //the screenshot width
+$imagewidth = optional_param('imagewidth', SITEIMAGEWIDTH, PARAM_ALPHANUM); //the screenshot width, can be set to 'original' to forcce original size
 $imageheight = optional_param('imageheight', SITEIMAGEHEIGHT, PARAM_INT); //the screenshot height
 
 if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
@@ -60,16 +60,26 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
                 $imageinfo = getimagesize($filepath, $info);
 
                 //TODO: make a way better check the requested size
-                if ($imagewidth != SITEIMAGEWIDTH and $imageheight != SITEIMAGEHEIGHT) {
+                if (($imagewidth != SITEIMAGEWIDTH and $imageheight != SITEIMAGEHEIGHT)
+                        and $imagewidth != 'original') {
                     throw new moodle_exception('wrongimagesize');
                 }
 
                 //check if the screenshot exists in the requested size           
-                require_once($CFG->dirroot."/repository/flickr_public/image.php");             
-                $newfilepath = $filepath."_".$imagewidth."x".$imageheight;
-                if (!file_exists($newfilepath)) {
+                require_once($CFG->dirroot."/repository/flickr_public/image.php");
+                if ($imagewidth == 'original') {
+                    $newfilepath = $filepath."_original"; //need to be done if ever the picture changed
+                } else {
+                    $newfilepath = $filepath."_".$imagewidth."x".$imageheight;
+                }
+
+                //if the date of original newer than thumbnail all recreate a thumbnail
+                if (!file_exists($newfilepath) or
+                        (filemtime($filepath) > filemtime($newfilepath))) {
                     $image = new moodle_image($filepath);
-                    $image->resize($imagewidth, $imageheight);
+                    if ($imagewidth != 'original') {
+                        $image->resize($imagewidth, $imageheight);
+                    }
                     $image->saveas($newfilepath);
                 }
                 send_file($newfilepath, 'image', 'default', 0, false, true, $imageinfo['mime'], false);
