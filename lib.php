@@ -528,7 +528,7 @@ class local_hub {
 
     public function get_course_contents($courseid) {
         global $DB;
-        return $DB->get_records('hub_course_contents', array('courseid' => $courseid));
+        return $DB->get_records('hub_course_contents', array('courseid' => $courseid), 'contentcount DESC');
     }
 
 ///////////////////////////

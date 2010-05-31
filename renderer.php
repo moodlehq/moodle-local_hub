@@ -199,6 +199,15 @@ class local_hub_renderer extends plugin_renderer_base {
                 $deschtml = $course->description; //the description
                 /// courses and sites number display under the description, in smaller
                 $deschtml .= html_writer::empty_tag('br');
+                //create the additional description
+                if ($course->contributornames) {
+                    $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);
+                    $additionaldesc .= ' - ';
+                }
+                if ($course->coverage) {
+                    $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);
+                    $additionaldesc .= ' - ';
+                }
                 $additionaldesc = get_string('additionalcoursedesc', 'local_hub', $course);
                 $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
                 /// time registered and time modified only display for administrator
@@ -218,10 +227,17 @@ class local_hub_renderer extends plugin_renderer_base {
                     $activitieshtml = '';
                     $blockhtml = '';
                     foreach ($course->contents as $content) {
+                        
                         if ($content->moduletype == 'block') {
-                            $blockhtml .= ' - '. $content->modulename. " (".$content->contentcount.")";
+                            if (!empty($blockhtml)) {
+                                $blockhtml .= ' - ';
+                            }
+                            $blockhtml .= get_string('pluginname', 'block_'.$content->modulename). " (".$content->contentcount.")";
                         } else {
-                            $activitieshtml .= ' - '. $content->modulename. " (".$content->contentcount.")";
+                            if (!empty($activitieshtml)) {
+                                $activitieshtml .= ' - ';
+                            }
+                            $activitieshtml .= get_string('modulename', $content->modulename). " (".$content->contentcount.")";
                         }
                     }
                     $deschtml .= html_writer::empty_tag('br').html_writer::tag('span',

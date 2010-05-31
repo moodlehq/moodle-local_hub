@@ -25,7 +25,7 @@
 $string['activities'] = 'Activities';
 $string['additionaldesc'] = 'Courses: {$a->courses} - Users: {$a->users} - Enrolments: {$a->enrolments} - Resources: {$a->resources} - Posts: {$a->posts}
     - Questions: {$a->questions} - Average number of participants: {$a->participantnumberaverage} - Average number of course modules: {$a->modulenumberaverage}';
-$string['additionalcoursedesc'] = 'Contributors: {$a->contributornames} - Coverage: {$a->coverage} - Creator: {$a->creatorname} - Publisher: {$a->publishername} - Subject: {$a->subject}
+$string['additionalcoursedesc'] = 'Creator: {$a->creatorname} - Publisher: {$a->publishername} - Subject: {$a->subject}
     - Audience: {$a->audience} - Educational level: {$a->educationallevel}';
 $string['additionaladmindesc'] = 'Registered: {$a->timeregistered} - Modified: {$a->timemodified} - Privacy: {$a->privacy} -
     Contactable: {$a->contactable} - Email Notification: {$a->emailalert}';
@@ -48,6 +48,7 @@ $string['confirmregistration'] = 'Confirm registration';
 $string['contactemail'] = 'Contact email';
 $string['contactname'] = 'Contact name';
 $string['contributornames'] = 'Contributor names';
+$string['contributors'] = 'Contributors: {$a}';
 $string['coursedesc'] = 'Description';
 $string['courselang'] = 'Language';
 $string['coursemap'] = 'Course map';
@@ -57,6 +58,7 @@ $string['coursepublic'] = 'Public';
 $string['coursepublished'] = 'Course published';
 $string['courseshortname'] = 'Shortname';
 $string['coursesnumber'] = 'Number of courses ({$a})';
+$string['coverage'] = 'Coverage: {$a}';
 $string['creatorname'] = 'Creator name';
 $string['creatornotes'] = 'Creator notes';
 $string['deleteconfirmation'] = 'Are you sure to delete the {$a} site ?';

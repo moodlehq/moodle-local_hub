@@ -25,7 +25,9 @@
 #page-admin-local-hub-admin-managecourses .prioritisetr {background-color: #ffd4ff;}
 #page-admin-local-hub-admin-managecourses .additionaldesc {font-size: 80%; color: purple;}
 #page-admin-local-hub-admin-managecourses .additionaladmindesc {font-size: 80%; color: #6666ff;}
-#page-local-hub-index .trustedtr {background-color: #ffe1c3;}
-#page-local-hub-index .prioritisetr {background-color: #ffd4ff;}
-#page-local-hub-index .additionaldesc {font-size: 80%; color: purple;}
-#page-local-hub-index .additionaladmindesc {font-size: 80%; color: #6666ff;}
+#page-site-index .trustedtr {background-color: #ffe1c3;}
+#page-site-index .prioritisetr {background-color: #ffd4ff;}
+#page-site-index .additionaldesc {font-size: 80%; color: purple;}
+#page-site-index .additionaladmindesc {font-size: 80%; color: #6666ff;}
+#page-site-index .blockdescription {font-size: 80%; color: #3333ff;}
+#page-site-index .activitiesdescription {font-size: 80%; color: #3333ff;}
