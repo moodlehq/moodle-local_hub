@@ -76,20 +76,26 @@ $string['edulevelother'] = 'Other';
 $string['edulevelprimary'] = 'Primary';
 $string['edulevelsecondary'] = 'Secondary';
 $string['eduleveltertiary'] = 'Tertiary';
-$string['emailmessagesiteadded'] = '{$a->name} site has been added. Its url is {$a->url}.
-The site description is: {$a->description}.
-The admin contact is: {$a->contactname} {$a->contactemail} ({$a->contactphone}).
-The site is mainly in {$a->language} (ISO language code).
-Its picture is linked from {$a->imageurl}.
-Its privacy is {$a->privacy}';
-$string['emailmessagesiteupdated'] = '{$a->name} site has been updated. Its url is {$a->url}.
-The site description is: {$a->description}.
-The admin contact is: {$a->contactname} {$a->contactemail} ({$a->contactphone}).
-The site is mainly in {$a->language} (ISO language code).
-Its picture is linked from {$a->imageurl}.
-Its privacy is {$a->privacy}';
+$string['emailmessagesiteadded'] = 'A new site just registered with the hub at {$a->huburl}
+    
+Name: {$a->name}
+URL: {$a->url}
+Admin: {$a->contactname} ({$a->contactemail})
+Language: {$a->language}
+
+To manage registered sites, go to: {$a->managesiteurl}
+';
+$string['emailmessagesiteupdated'] = '{$a->name} just updated registration with the hub at {$a->huburl}
+
+Name: {$a->name}
+URL: {$a->url}
+Admin: {$a->contactname} ({$a->contactemail})
+Language: {$a->language}
+
+To manage registered sites, go to: {$a->managesiteurl}
+';
 $string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})
-Its url {$a->url} has been changed to ({$a->oldurl}).';
+Its new url {$a->url} has been updated from ({$a->oldurl}).';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesiteupdated'] = '{$a} site has been updated on the hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his url (please check it).';

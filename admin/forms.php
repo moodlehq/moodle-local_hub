@@ -69,12 +69,12 @@ class hub_registration_form extends moodleform {
         $mform->addElement('hidden', 'contactname', $contactname);
         $mform->addElement('static', 'contactemailstring', get_string('contactemail', 'local_hub'), $contactemail);
         $mform->addElement('hidden', 'contactemail', $contactemail);
-//        if (!empty($imageurl)) {
-//            $imagetag = html_writer::empty_tag('img', array('src' => $imageurl, 'alt' => $hubname));
-//            $mform->addElement('static', 'logourlstring', get_string('imageurl', 'local_hub'), $imagetag);
-//            $mform->addElement('hidden', 'imageurl', $imageurl);
-//
-//        }
+        if (!empty($imageurl)) {
+            $imagetag = html_writer::empty_tag('img', array('src' => $imageurl, 'alt' => $hubname));
+            $mform->addElement('static', 'logourlstring', get_string('imageurl', 'local_hub'), $imagetag);
+            $mform->addElement('hidden', 'imageurl', $imageurl);
+
+        }
         $mform->addElement('hidden', 'imageurl', ''); //TODO: temporary
         $mform->addElement('static', 'urlstring', get_string('url', 'local_hub'), $CFG->wwwroot."/local/hub");
 
@@ -178,8 +178,8 @@ class hub_settings_form extends moodleform {
         $mform->addElement('text', 'contactemail', get_string('contactemail', 'local_hub'));
         $mform->setDefault('contactemail', $contactemail);
         $mform->addRule('contactemail', get_string('required'), 'required');
-//        $mform->addElement('text', 'imageurl', get_string('imageurl', 'local_hub'));
-//        $mform->setDefault('imageurl', $imageurl);
+        $mform->addElement('text', 'imageurl', get_string('imageurl', 'local_hub'));
+        $mform->setDefault('imageurl', $imageurl);
         $mform->addElement('text', 'password', get_string('password', 'local_hub'));
         $mform->setDefault('password', $password);
         $mform->addHelpButton('password', 'password', 'local_hub');
@@ -190,24 +190,24 @@ class hub_settings_form extends moodleform {
 
     }
 
-//    function validation($data, $files) {
-//        global $CFG;
-//
-//        $errors = array();
-//
-//        //check if the image (imageurl) has a correct size
-//        $imageurl = $this->_form->_submitValues['imageurl'];
-//        if (!empty($imageurl)) {
-//            list($imagewidth, $imageheight, $imagetype, $imageattr)  = getimagesize($imageurl); //getimagesize is a GD function
-//            if ($imagewidth > HUBLOGOIMAGEWIDTH or $imageheight > HUBLOGOIMAGEHEIGHT) {
-//                $sizestrings = new stdClass();
-//                $sizestrings->width = HUBLOGOIMAGEWIDTH;
-//                $sizestrings->height = HUBLOGOIMAGEHEIGHT;
-//                $errors['imageurl'] = get_string('errorbadimageheightwidth', 'local_hub', $sizestrings);
-//            }
-//        }
-//
-//        return $errors;
-//    }
+    function validation($data, $files) {
+        global $CFG;
+
+        $errors = array();
+
+        //check if the image (imageurl) has a correct size
+        $imageurl = $this->_form->_submitValues['imageurl'];
+        if (!empty($imageurl)) {
+            list($imagewidth, $imageheight, $imagetype, $imageattr)  = getimagesize($imageurl); //getimagesize is a GD function
+            if ($imagewidth > HUBLOGOIMAGEWIDTH or $imageheight > HUBLOGOIMAGEHEIGHT) {
+                $sizestrings = new stdClass();
+                $sizestrings->width = HUBLOGOIMAGEWIDTH;
+                $sizestrings->height = HUBLOGOIMAGEHEIGHT;
+                $errors['imageurl'] = get_string('errorbadimageheightwidth', 'local_hub', $sizestrings);
+            }
+        }
+
+        return $errors;
+    }
 
 }

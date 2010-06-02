@@ -61,6 +61,9 @@ if ($update && confirm_sesskey()) {
     //update the registration
     $function = 'hubdirectory_update_hub_info';
     $hubinfo = $hub->get_info();
+    $hubinfo['name'] = clean_param($hubinfo['name'], PARAM_TEXT);
+    $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
+    $hubinfo['contactname'] = clean_param($hubinfo['contactname'], PARAM_TEXT);
     $params = array($hubinfo);
     $serverurl = HUBDIRECTORYURL."/local/hubdirectory/webservice/webservices.php";
     require_once($CFG->dirroot."/webservice/xmlrpc/lib.php");

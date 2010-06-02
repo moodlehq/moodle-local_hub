@@ -802,12 +802,17 @@ class local_hub {
         $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
         $contactuser->lastname = '';
         $contactuser->maildisplay = true;
+        $emailinfo = $siteinfo;
+        $emailinfo->huburl = $CFG->wwwroot;
+        $emailinfo->managesiteurl = $CFG->wwwroot.'/local/hub/admin/managesites.php';
+        $languages = get_string_manager()->get_list_of_languages();
+        $emailinfo->language = $languages[$siteinfo->language];
         if (!empty($siteurltoupdate)) {
-            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteupdated', 'local_hub', $siteinfo->name),
-                    get_string('emailmessagesiteupdated', 'local_hub', $siteinfo));
+            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
+                    get_string('emailmessagesiteupdated', 'local_hub', $emailinfo));
         } else {
-            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteadded', 'local_hub', $siteinfo->name),
-                    get_string('emailmessagesiteadded', 'local_hub', $siteinfo));
+            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
+                    get_string('emailmessagesiteadded', 'local_hub', $emailinfo));
         }
 
         return $sitetohubcommunication->token;
