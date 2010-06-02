@@ -170,9 +170,9 @@ class course_search_form extends moodleform {
 
         $options = array();
         $options['all'] = get_string('any');
-        $options[AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'hub');
-        $options[AUDIENCE_STUDENTS] = get_string('audiencestudents', 'hub');
-        $options[AUDIENCE_ADMINS] = get_string('audienceadmins', 'hub');
+        $options[HUB_AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'hub');
+        $options[HUB_AUDIENCE_STUDENTS] = get_string('audiencestudents', 'hub');
+        $options[HUB_AUDIENCE_ADMINS] = get_string('audienceadmins', 'hub');
         $mform->addElement('select', 'audience', get_string('audience', 'local_hub'), $options);
         $mform->setDefault('audience', $audience);
         unset($options);
@@ -180,13 +180,13 @@ class course_search_form extends moodleform {
 
         $options = array();
         $options['all'] = get_string('any');
-        $options[EDULEVEL_PRIMARY] = get_string('edulevelprimary', 'hub');
-        $options[EDULEVEL_SECONDARY] = get_string('edulevelsecondary', 'hub');
-        $options[EDULEVEL_TERTIARY] = get_string('eduleveltertiary', 'hub');
-        $options[EDULEVEL_GOVERNMENT] = get_string('edulevelgovernment', 'hub');
-        $options[EDULEVEL_ASSOCIATION] = get_string('edulevelassociation', 'hub');
-        $options[EDULEVEL_CORPORATE] = get_string('edulevelcorporate', 'hub');
-        $options[EDULEVEL_OTHER] = get_string('edulevelother', 'hub');
+        $options[HUB_EDULEVEL_PRIMARY] = get_string('edulevelprimary', 'hub');
+        $options[HUB_EDULEVEL_SECONDARY] = get_string('edulevelsecondary', 'hub');
+        $options[HUB_EDULEVEL_TERTIARY] = get_string('eduleveltertiary', 'hub');
+        $options[HUB_EDULEVEL_GOVERNMENT] = get_string('edulevelgovernment', 'hub');
+        $options[HUB_EDULEVEL_ASSOCIATION] = get_string('edulevelassociation', 'hub');
+        $options[HUB_EDULEVEL_CORPORATE] = get_string('edulevelcorporate', 'hub');
+        $options[HUB_EDULEVEL_OTHER] = get_string('edulevelother', 'hub');
         $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'local_hub'), $options);
         $mform->setDefault('educationallevel', $educationallevel);
         unset($options);

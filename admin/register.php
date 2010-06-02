@@ -34,15 +34,15 @@ require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/admin/forms.php');
 require_once($CFG->dirroot.'/webservice/lib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/lib/hublib.php'); //HUBDIRECTORYURL
+require_once($CFG->dirroot.'/lib/hublib.php'); //HUB_HUBDIRECTORYURL
 
 admin_externalpage_setup('hubregistration');
 
 $hub = new local_hub();
 
-$directorytohubcommunication = $hub->get_communication(WSSERVER, HUBDIRECTORY, HUBDIRECTORYURL);
+$directorytohubcommunication = $hub->get_communication(WSSERVER, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
 
-$hubtodirectorycommunication = $hub->get_communication(WSCLIENT, HUBDIRECTORY, HUBDIRECTORYURL);
+$hubtodirectorycommunication = $hub->get_communication(WSCLIENT, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
 
 $hubregistrationform = new hub_registration_form('', array('alreadyregistered' => !empty($hubtodirectorycommunication->confirmed)));
 $fromform = $hubregistrationform->get_data();
@@ -65,7 +65,7 @@ if ($update && confirm_sesskey()) {
     $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
     $hubinfo['contactname'] = clean_param($hubinfo['contactname'], PARAM_TEXT);
     $params = array($hubinfo);
-    $serverurl = HUBDIRECTORYURL."/local/hubdirectory/webservice/webservices.php";
+    $serverurl = HUB_HUBDIRECTORYURL."/local/hubdirectory/webservice/webservices.php";
     require_once($CFG->dirroot."/webservice/xmlrpc/lib.php");
     $xmlrpcclient = new webservice_xmlrpc_client();
     $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
@@ -85,7 +85,7 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
 
         //create new token for the hub directory to call the hub
         $capabilities = array('moodle/hub:viewinfo', 'moodle/hub:confirmhubregistration');
-        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUBDIRECTORYURL.'_directory_user',
+        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUB_HUBDIRECTORYURL.'_directory_user',
                 $capabilities);
 
         //we save the token into the communication table in order to have a reference to the hidden token
@@ -94,7 +94,7 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
         $directorytohubcommunication->type = WSSERVER;
         $directorytohubcommunication->remotename = 'Moodle.org hub directory';
         $directorytohubcommunication->remoteentity = HUBDIRECTORY;
-        $directorytohubcommunication->remoteurl = HUBDIRECTORYURL;
+        $directorytohubcommunication->remoteurl = HUB_HUBDIRECTORYURL;
         $directorytohubcommunication->confirmed = 0;
         $directorytohubcommunication->id = $hub->add_communication($directorytohubcommunication);
 
@@ -106,7 +106,7 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
 
     //if the hub is private do not redirect to moodle.org
     if ($privacy != HUBPRIVATE) {
-        redirect(new moodle_url(HUBDIRECTORYURL.'/local/hubdirectory/hubregistration.php', $params));
+        redirect(new moodle_url(HUB_HUBDIRECTORYURL.'/local/hubdirectory/hubregistration.php', $params));
     }
 
 }

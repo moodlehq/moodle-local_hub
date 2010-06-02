@@ -26,7 +26,7 @@
 
 require('../../../config.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/lib/hublib.php'); //SCREENSHOT_FILE_TYPE and BACKUP_FILE_TYPE
+require_once($CFG->dirroot.'/lib/hublib.php'); //HUB_SCREENSHOT_FILE_TYPE and HUB_BACKUP_FILE_TYPE
 
 
 $token = optional_param('token', '', PARAM_ALPHANUM);
@@ -42,14 +42,14 @@ if (!empty($token) && !empty($communication) and get_config('local_hub', 'hubena
     $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
     if (!empty($course) && !empty($_FILES)) {
         switch ($filetype) {
-            case BACKUP_FILE_TYPE:
+            case HUB_BACKUP_FILE_TYPE:
                 //check that the backup doesn't already exist
                 $backup = $hub->backup_exits($courseid);
                 if (empty($backup)) {
                     $hub->add_backup($_FILES['file'], $courseid);
                 }
                 break;
-            case SCREENSHOT_FILE_TYPE:
+            case HUB_SCREENSHOT_FILE_TYPE:
                 $hub->add_screenshot($_FILES['file'], $courseid, $screenshotnumber);
                 break;
         }

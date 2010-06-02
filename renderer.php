@@ -19,7 +19,7 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-require_once($CFG->dirroot. "/lib/hublib.php"); //SITENOTPUBLISHED, get_site_privacy_string
+require_once($CFG->dirroot. "/lib/hublib.php"); //HUB_SITENOTPUBLISHED, get_site_privacy_string
 
 /**
  * Hub renderer.
@@ -260,7 +260,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 if (!$course->enrollable) {
                     $params['courseid'] = $course->id;
-                    $params['filetype'] = BACKUP_FILE_TYPE;
+                    $params['filetype'] = HUB_BACKUP_FILE_TYPE;
                     $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
                     $downloadbutton = new single_button($addurl, get_string('download', 'block_community'));
                     $downloadbutton->class = 'centeredbutton';
@@ -277,7 +277,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     for ($i = 1; $i <= $course->screenshotsids; $i = $i + 1) {
                         if ($i == 1) {
                             $params = array('courseid' => $course->id,
-                                'filetype' => SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i);
+                                'filetype' => HUB_SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i);
                             $imgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $params);
                         } else {
                             //empty image
@@ -285,7 +285,7 @@ class local_hub_renderer extends plugin_renderer_base {
                         }
                         $ascreenshothtml = html_writer::empty_tag('img', array('src' => $imgurl, 'alt' => $course->fullname));
                         $originalparams = array('courseid' => $course->id,
-                            'filetype' => SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i, 'imagewidth' => 'original');
+                            'filetype' => HUB_SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i, 'imagewidth' => 'original');
                         $originalimgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $originalparams);
                         $screenshothtml .= html_writer::tag('a', $ascreenshothtml,
                                         array('rel' => 'lightbox[' . $course->shortname . ']', 'title' => $course->fullname,
@@ -492,7 +492,7 @@ class local_hub_renderer extends plugin_renderer_base {
                                 'class' => 'siteimage', 'alt' => get_string('enable')));
                         $makevisible = true;
                     }
-                    if ($site->privacy != SITENOTPUBLISHED) {
+                    if ($site->privacy != HUB_SITENOTPUBLISHED) {
                         $visibleurl = new moodle_url("/local/hub/admin/managesites.php",
                                 array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $site->id));
                         $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));

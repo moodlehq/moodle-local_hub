@@ -33,7 +33,7 @@
 require('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/lib/hublib.php'); //HUBDIRECTORYURL
+require_once($CFG->dirroot.'/lib/hublib.php'); //HUB_HUBDIRECTORYURL
 
 admin_externalpage_setup('registrationconfirmed');
 
@@ -55,7 +55,7 @@ if (!empty($directorytohubcommunication) and  $directorytohubcommunication->conf
     $hubtodirectorycommunication->type = WSCLIENT;
     $hubtodirectorycommunication->remotename = 'Moodle.org hub directory';
     $hubtodirectorycommunication->remoteentity = HUBDIRECTORY;
-    $hubtodirectorycommunication->remoteurl = HUBDIRECTORYURL;
+    $hubtodirectorycommunication->remoteurl = HUB_HUBDIRECTORYURL;
     $hubtodirectorycommunication->confirmed = 1;
     $hubtodirectorycommunication->id = $hub->add_communication($hubtodirectorycommunication);
 

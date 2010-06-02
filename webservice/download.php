@@ -25,18 +25,18 @@
  */
 
 require('../../../config.php');
-require_once($CFG->dirroot.'/lib/hublib.php'); //SCREENSHOT_FILE_TYPE and BACKUP_FILE_TYPE
+require_once($CFG->dirroot.'/lib/hublib.php'); //HUB_SCREENSHOT_FILE_TYPE and HUB_BACKUP_FILE_TYPE
 require_once($CFG->dirroot.'/lib/filelib.php');
 
 $courseid = optional_param('courseid', '', PARAM_INTEGER);
 $filetype = optional_param('filetype', '', PARAM_ALPHA); //can be screenshots, backup, ...
 $screenshotnumber = optional_param('screenshotnumber', 1, PARAM_INT); //the screenshot number of this course
-$imagewidth = optional_param('imagewidth', SITEIMAGEWIDTH, PARAM_ALPHANUM); //the screenshot width, can be set to 'original' to forcce original size
-$imageheight = optional_param('imageheight', SITEIMAGEHEIGHT, PARAM_INT); //the screenshot height
+$imagewidth = optional_param('imagewidth', HUB_SITEIMAGEWIDTH, PARAM_ALPHANUM); //the screenshot width, can be set to 'original' to forcce original size
+$imageheight = optional_param('imageheight', HUB_SITEIMAGEHEIGHT, PARAM_INT); //the screenshot height
 
 if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
     switch ($filetype) {
-        case BACKUP_FILE_TYPE:
+        case HUB_BACKUP_FILE_TYPE:
             //check that the file is downloadable
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
             if (!empty($course) && 
@@ -48,7 +48,7 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
                         'default', 0, false, true, '', false);
             }
             break;
-         case SCREENSHOT_FILE_TYPE:
+         case HUB_SCREENSHOT_FILE_TYPE:
             //check that the file is downloadable
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
             if (!empty($course) &&
@@ -60,7 +60,7 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
                 $imageinfo = getimagesize($filepath, $info);
 
                 //TODO: make a way better check the requested size
-                if (($imagewidth != SITEIMAGEWIDTH and $imageheight != SITEIMAGEHEIGHT)
+                if (($imagewidth != HUB_SITEIMAGEWIDTH and $imageheight != HUB_SITEIMAGEHEIGHT)
                         and $imagewidth != 'original') {
                     throw new moodle_exception('wrongimagesize');
                 }
