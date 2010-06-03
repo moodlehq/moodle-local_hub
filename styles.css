@@ -15,6 +15,11 @@
 */
 
 #page-admin-local-hub-admin-register .buttoncenter {text-align: center}
+#page-admin-local-hub-admin-settings .adminhubdescription {width: 400px; height: 120px; padding: 2px;}
+#page-admin-local-hub-admin-settings .admintextfield {width: 400px;}
+#page-admin-local-hub-admin-settings .admincurrentimage {
+    vertical-align: top;
+}
 #page-admin-local-registration-index .centeredbutton {text-align: center}
 #page-admin-local-registration-index .cell {border-width: 0 1px;}
 #page-admin-local-registration-index .justifytext {text-align: justify}

@@ -483,8 +483,7 @@ class local_hub {
      */
     public function get_registered_courses_total() {
         global $DB;
-        return 0;
-        //return $DB->count_records('hub_courses_directory', array('visible' => 1));
+        return $DB->count_records('hub_course_directory', array('privacy' => 1));
     }
 
 
@@ -507,6 +506,11 @@ class local_hub {
         }
         $token = $DB->get_record('hub_communications',$params);
         return $token;
+    }
+
+    public function delete_communication($communicationid) {
+        global $DB;
+        $DB->delete_records('hub_communications', array('id' => $communicationid));
     }
 
     public function confirm_communication($communication) {
@@ -547,7 +551,7 @@ class local_hub {
         $hubinfo['description'] = get_config('local_hub', 'description');
         $hubinfo['contactname'] = get_config('local_hub', 'contactname');
         $hubinfo['contactemail'] = get_config('local_hub', 'contactemail');
-        $hubinfo['imageurl'] = get_config('local_hub', 'imageurl');
+        $hubinfo['hublogo'] = get_config('local_hub', 'hublogo');
         $hubinfo['privacy'] = get_config('local_hub', 'privacy');
         $hubinfo['language'] = get_config('local_hub', 'language');
         $hubinfo['url'] = $CFG->wwwroot;

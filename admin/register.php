@@ -49,7 +49,20 @@ $fromform = $hubregistrationform->get_data();
 
 
 /////// UNREGISTER ACTION //////
-// TODO
+// TODO way better unregister
+//ATM delete the registration informations
+$unregister   = optional_param('unregister', 0, PARAM_INT);
+$confirm  = optional_param('confirm', 0, PARAM_INT);
+if ($unregister && $confirm && confirm_sesskey()) {
+    //delete the web service token
+    $webservice_manager = new webservice();
+    $tokentodelete =  $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
+    $webservice_manager->delete_user_ws_token($tokentodelete->id);
+
+    //delete the communication
+    $hub->delete_communication($directorytohubcommunication->id);
+    $hub->delete_communication($hubtodirectorycommunication->id);
+}
 
 
 

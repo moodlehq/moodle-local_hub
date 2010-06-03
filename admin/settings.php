@@ -50,11 +50,39 @@ if (!empty($fromform)) {
     set_config('hubenabled', $fromform->enabled ,'local_hub');
     set_config('description', $fromform->desc ,'local_hub');
     set_config('contactname', $fromform->contactname ,'local_hub');
-    set_config('contactemail', $fromform->contactemail ,'local_hub');
-    set_config('imageurl', $fromform->imageurl ,'local_hub');
+    set_config('contactemail', $fromform->contactemail ,'local_hub');  
     set_config('privacy', $fromform->privacy ,'local_hub');
     set_config('language', $fromform->lang ,'local_hub');
     set_config('password', $fromform->password ,'local_hub');
+
+    //save the image
+    if (empty($fromform->keepcurrentimage)) {
+        $fs = get_file_storage();
+        $files = $fs->get_area_files(get_context_instance(CONTEXT_USER, $USER->id)->id, 'user_draft', $fromform->hubimage);
+
+        foreach ($files as $file) {
+            if ($file->is_valid_image()) {
+
+                $userdir = "hub/0/";
+
+                $directory = make_upload_directory($userdir);
+
+                $fp = fopen($directory.'/hublogo', 'w');
+                fwrite($fp, $file->get_content());
+                fclose($fp);
+
+                 set_config('hublogo', true ,'local_hub');
+                 $updatelogo = true;
+            }
+        }
+    }
+
+    if (empty ($updatelogo) and empty($fromform->keepcurrentimage)) {
+        set_config('hublogo', false ,'local_hub');
+    }
+
+    //reload the form
+    $hubsettingsform = new hub_settings_form();
 
     //display confirmation
     echo $OUTPUT->notification(get_string('settingsupdated', 'local_hub'), 'notifysuccess');

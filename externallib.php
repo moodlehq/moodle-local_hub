@@ -68,7 +68,7 @@ class local_hub_external extends external_api {
                         'description' => new external_value(PARAM_TEXT, 'hub description'),
                         'contactname' => new external_value(PARAM_TEXT, 'hub server administrator name'),
                         'contactemail' => new external_value(PARAM_EMAIL, 'hub server administrator email'),
-                        'imageurl' => new external_value(PARAM_URL, 'hub logo url'),
+                        'hublogo' => new external_value(PARAM_INT, 'does a hub logo exist'),
                         'privacy' => new external_value(PARAM_ALPHA, 'hub privacy'),
                         'language' => new external_value(PARAM_ALPHANUMEXT, 'hub main language'),
                         'url' => new external_value(PARAM_URL, 'hub url'),
