@@ -638,7 +638,11 @@ class local_hub {
             $course->format = 'url';
         }
 
-        $course->privacy = 0;
+        if ($site->trusted) {
+            $course->privacy = 1;
+        } else {
+            $course->privacy = 0;
+        }
         $course->deleted = 0;
 
         //if the course is enrollable and is already registered, update it
