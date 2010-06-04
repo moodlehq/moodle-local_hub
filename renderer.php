@@ -30,11 +30,6 @@ require_once($CFG->dirroot. "/lib/hublib.php"); //HUB_SITENOTPUBLISHED, get_site
  */
 class local_hub_renderer extends plugin_renderer_base {
 
-    public function __construct(moodle_page $page, $target) {
-        parent::__construct($page, $target);
-        $this->page->requires->css('/lib/gallery/assets/skins/sam/gallery-lightbox-skin.css');
-    }
-
     /**
      * Display a box message confirming a site registration (add or update)
      * @param string $confirmationmessage
@@ -270,31 +265,21 @@ class local_hub_renderer extends plugin_renderer_base {
                 // add screenshots
                 $screenshothtml = '';
                 if (!empty($course->screenshotsids)) {
-
-                    //include gallery lightbox js
-                    $this->page->requires->js('/lib/gallery/gallery-lightbox-min.js');
-
+                    $images = array();
+                    $baseurl = new moodle_url($CFG->wwwroot.'/local/hub/webservice/download.php',
+                            array('courseid' => $course->id, 'filetype' => HUB_SCREENSHOT_FILE_TYPE));
                     for ($i = 1; $i <= $course->screenshotsids; $i = $i + 1) {
-                        if ($i == 1) {
-                            $params = array('courseid' => $course->id,
-                                'filetype' => HUB_SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i);
-                            $imgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $params);
-                        } else {
-                            //empty image
-                            $imgurl = new moodle_url($CFG->wwwroot . "/pix/spacer.gif");
-                        }
-                        $ascreenshothtml = html_writer::empty_tag('img', array('src' => $imgurl, 'alt' => $course->fullname));
-                        $originalparams = array('courseid' => $course->id,
-                            'filetype' => HUB_SCREENSHOT_FILE_TYPE, 'screenshotnumber' => $i, 'imagewidth' => 'original');
-                        $originalimgurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $originalparams);
-                        $screenshothtml .= html_writer::tag('a', $ascreenshothtml,
-                                        array('rel' => 'lightbox[' . $course->shortname . ']', 'title' => $course->fullname,
-                                            'href' => $originalimgurl));
+                        $params['screenshotnumber'] = $i;
+                        $images[] = array(
+                            'thumburl' => new moodle_url($baseurl, array('screenshotnumber' => $i)),
+                            'imageurl' => new moodle_url($baseurl, array('screenshotnumber' => $i, 'imagewidth' => 'original')),
+                            'title' => $course->fullname,
+                            'alt' => $course->fullname
+                        );
                     }
-
-                    // run the JS
-                    $js = "Y.use(\"gallery-lightbox\", function (Y) { Y.Lightbox.init(); });";
-                    $this->page->requires->js_init_code($js, true);
+                    $imagegallery = new image_gallery($images, $course->shortname);
+                    $imagegallery->displayfirstimageonly = true;
+                    $screenshothtml = $this->output->render($imagegallery);
                 }
 
                 if ($withwriteaccess) {
