@@ -86,9 +86,9 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     
     //Retrieve courses by web service
     $courses = null;
+    $options = array();
     if (!empty($fromform)) {
 
-        $options = array();
         if (!empty($fromform->coverage)) {
             $options['coverage'] = $fromform->coverage;
         }
@@ -111,7 +111,11 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
         $options['visibility'] = $fromform->visibility;
 
         //get courses
-        $courses = $hub->get_courses($search, $options, false, $downloadable, !$downloadable);
+        $options['search'] = $search;
+        $options['onlyvisible'] = false;
+        $options['downloadable'] = $downloadable;
+        $options['enrollable'] = !$downloadable;
+        $courses = $hub->get_courses($options);
 
         //get courses content
         foreach($courses as $course) {

@@ -233,23 +233,23 @@ class local_hub {
     }
 
     /**
-     * Return course found against some parameters, by default it returns all visible courses
-     * @param string $search String that will be compared to course name and site description
-     * @param string $options language, license, audience, subject...
-     * @param boolean $onlyvisible - set to false to return full list 
-     * @param boolean $downloadable - set to true to return downloadable course
-     * @param boolean $enrollable - set to true to return enrollable course
-     * @param boolean $deleted - set to true to return deleted course only, otherwise only undeleted
+     * Return course found against some options, by default it returns all visible courses
+     * @param array $options all different search options
+     *  string  'search' string that will be compared to course name and site description
+     *  string  'options' language, license, audience, subject...
+     *  boolean 'onlyvisible' - set to false to return full list
+     *  boolean 'downloadable' - set to true to return downloadable course
+     *  boolean 'enrollable' - set to true to return enrollable course
+     *  boolean 'onlydeleted' - set to true to return deleted course only, otherwise only undeleted
      * @return array of courses
      */
-    public function get_courses($search =null, $options = array(), 
-            $onlyvisible = true, $downloadable = true, $enrollable = true, $deleted = false) {
+    public function get_courses($options = array()) {
         global $DB;
 
         $sqlparams = array();
         $wheresql = '';
 
-        if (!empty($onlyvisible)) {
+        if (!empty($options['onlyvisible'])) {
             $wheresql .= " privacy = :visible";
             $sqlparams['visible'] = 1;
             $ordersql = 'fullname';
@@ -257,13 +257,13 @@ class local_hub {
             $ordersql = 'privacy DESC, fullname';
         }
 
-        if (!empty($search)) {
+        if (!empty($options['search'])) {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             $wheresql .= " (fullname ".$DB->sql_ilike()." :namesearch OR description ".$DB->sql_ilike()." :descsearch)";
-            $sqlparams['namesearch'] = '%'.$search.'%';
-            $sqlparams['descsearch'] = '%'.$search.'%';
+            $sqlparams['namesearch'] = '%'.$options['search'].'%';
+            $sqlparams['descsearch'] = '%'.$options['search'].'%';
         }
 
         if (!empty($options['language'])) {
@@ -367,14 +367,22 @@ class local_hub {
             $wheresql .= " sitecourseid IN ". $idlist;
         }
 
-        if (!($downloadable and $enrollable)) {
+        //check that one of the downloadable/enrollable option is false (otherwise display both kind of course)
+        if (! ((key_exists('downloadable', $options) and $options['downloadable'])
+                and
+              (key_exists('enrollable', $options) and $options['enrollable']))) {
+
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
-            if ($downloadable) {
+
+            if (key_exists('downloadable', $options) and $options['downloadable']) {
                 $wheresql .= " enrollable = 0";
-            } else {
+            } else if (key_exists('enrollable', $options) and $options['enrollable']) {
                 $wheresql .= " enrollable = 1";
+            } else { //this case means that we are searching course as downloadable == 0 and enrollable == 0
+                $wheresql .= " enrollable = 4"; //=> return nothing,
+                //it should never be ask to return a course not enrollable AND not downloadable
             }
         }
 
@@ -389,7 +397,7 @@ class local_hub {
              }
         }
 
-        if (!$deleted) {
+        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
@@ -478,7 +486,7 @@ class local_hub {
     }
 
     /**
-     * TODO: Return number of visible registered courses
+     * Return number of visible registered courses
      * @return integer
      */
     public function get_registered_courses_total() {
@@ -486,13 +494,34 @@ class local_hub {
         return $DB->count_records('hub_course_directory', array('privacy' => 1));
     }
 
-
+    /**
+     * Record a communication information between the hub and another entity (hub directory, site, public site)
+     * Mostly use to remember the token given to us by the remote entity, or the token that we gave to the remote entity
+     * A communication is composed by:
+     *     type of the communication, hub point of view: SERVER / CLIENT
+     *     remoteentity name
+     *     remoteentity url
+     *     token used during this communication
+     * @param object $communication
+     * @return int id of the create communication into the DB
+     */
     public function add_communication($communication) {
         global $DB;
         $id = $DB->insert_record('hub_communications', $communication);
         return $id;
     }
 
+    /**
+     * Get communication information between the hub and another entity (hub directory, site, public site)
+     * Mostly use to remember the token given to us by the remote entity, or the token that we gave to the remote entity
+     * @param string $type can be SERVER or CLIENT. SERVER mean that the hub is the server into the communication, so the token
+     * refered, is used by the remote entity to call the a hub function. CLIENT mean that the hub used the token to call
+     * the remote entity function
+     * @param string $remoteentity the name of the remote entity
+     * @param string $remoteurl the token of the remote entity
+     * @param string $token the token used by this communication
+     * @return object return the communication
+     */
     public function get_communication($type, $remoteentity, $remoteurl = null, $token = null) {
         global $DB;
 
@@ -508,28 +537,51 @@ class local_hub {
         return $token;
     }
 
+    /**
+     * Delete communication
+     * @param integer $communicationid
+     */
     public function delete_communication($communicationid) {
         global $DB;
         $DB->delete_records('hub_communications', array('id' => $communicationid));
     }
 
+    /**
+     * Confirm a communication
+     * When the hub try to register on the hub directory, it first creates a token for the hub directory, send it,
+     * and wait for the hub directory to confirm the communication has been established. Then the hub call this function to confirm
+     * the communication.
+     * @param object $communication
+     */
     public function confirm_communication($communication) {
         global $DB;
         $communication->confirmed = 1;
         $DB->update_record('hub_communications', $communication);
     }
 
-
+    /**
+     * Add a course content
+     * @param object $content
+     */
     public function add_course_content($content) {
         global $DB;
         $DB->insert_record('hub_course_contents', $content);
     }
 
+    /**
+     * Delete all course contents of a course
+     * @param int $courseid
+     */
     public function delete_course_contents($courseid) {
         global $DB;
         $DB->delete_records('hub_course_contents', array('courseid' => $courseid));
     }
 
+    /**
+     * Get all course contents of a course
+     * @param integer $courseid
+     * @return array of course contents
+     */
     public function get_course_contents($courseid) {
         global $DB;
         return $DB->get_records('hub_course_contents', array('courseid' => $courseid), 'contentcount DESC');
@@ -1032,6 +1084,11 @@ class local_hub {
         
     }
 
+    /**
+     * TODO: it is a bit a hacky way...
+     * This function display the hub homepage
+     * It is called early when loading any Moodle page.
+     */
     public function display_homepage() {
         global $PAGE, $SITE, $OUTPUT, $CFG;
 
@@ -1053,10 +1110,10 @@ class local_hub {
         $fromform = $coursesearchform->get_data();
         $courses = null;
         //Retrieve courses by web service
+        $options = array();
         if (!empty($fromform)) {
             $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
-
-            $options = array();
+           
             if (!empty($fromform->coverage)) {
                 $options['coverage'] = $fromform->coverage;
             }
@@ -1077,7 +1134,11 @@ class local_hub {
             }
 
             //get courses
-            $courses = $this->get_courses($search, $options, true, $downloadable, !$downloadable);
+            $options['search'] = $search;
+            $options['onlyvisible'] = true;
+            $options['downloadable'] = $downloadable;
+            $options['enrollable'] = !$downloadable;
+            $courses = $this->get_courses($options);
 
             //get courses content
             foreach($courses as $course) {

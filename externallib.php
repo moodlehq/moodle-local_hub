@@ -294,24 +294,24 @@ class local_hub_external extends external_api {
      */
     public static function get_courses_parameters() {
         return new external_function_parameters(
-                array(
-                        'search' => new external_value(PARAM_TEXT, 'string to search'),
-                        'downloadable' => new external_value(PARAM_BOOL, 'is the course downloadable'),
-                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
-                        'options' => new external_single_structure(
                             array(
-                                    'ids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the hub course directory'), 'ids of course', VALUE_OPTIONAL),
-                                    'sitecourseids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the site'), 'ids of course in the site', VALUE_OPTIONAL),
-                                    'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
-                                    'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name', VALUE_OPTIONAL),
-                                    'subject' => new external_value(PARAM_ALPHANUM, 'subject', VALUE_OPTIONAL),
-                                    'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
-                                    'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
-                                    'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
-                                    'allsitecourses' => new external_value(PARAM_INTEGER,
-                                            'if 1 return all not visible and visible courses whose siteid is the site
-                                                matching token. And course of this site only. In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
-                            ), 'course info')
+                                    'search' => new external_value(PARAM_TEXT, 'string to search'),
+                                    'downloadable' => new external_value(PARAM_BOOL, 'course can be downloadable'),
+                                    'enrollable' => new external_value(PARAM_BOOL, 'course can be enrollable'),
+                                    'options' => new external_single_structure(
+                                        array(
+                                                'ids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the hub course directory'), 'ids of course', VALUE_OPTIONAL),
+                                                'sitecourseids' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'id of a course in the site'), 'ids of course in the site', VALUE_OPTIONAL),
+                                                'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
+                                                'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name', VALUE_OPTIONAL),
+                                                'subject' => new external_value(PARAM_ALPHANUM, 'subject', VALUE_OPTIONAL),
+                                                'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
+                                                'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
+                                                'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
+                                                'allsitecourses' => new external_value(PARAM_INTEGER,
+                                                        'if 1 return all not visible and visible courses whose siteid is the site
+                                                            matching token. And course of this site only. In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
+                                        ), 'course info')
                 )
         );
     }
@@ -320,7 +320,7 @@ class local_hub_external extends external_api {
      * Get courses
      * @return array courses
      */
-    public static function get_courses($search, $downloadable = 0, $enrollable = 0, $options = array()) {
+    public static function get_courses($search, $downloadable, $enrollable, $options = array()) {
         global $DB;
 
         // Ensure the current user is allowed to run this function
@@ -329,7 +329,8 @@ class local_hub_external extends external_api {
         require_capability('moodle/hub:view', $context);
 
         $params = self::validate_parameters(self::get_courses_parameters(),
-                array('search' => $search, 'downloadable' => $downloadable, 'enrollable' => $enrollable, 'options' => $options));
+                array('search' => $search, 'downloadable' => $downloadable,
+                    'enrollable' => $enrollable, 'options' => $options));
     
         //retieve siteid
         $onlyvisible = true;
@@ -347,11 +348,13 @@ class local_hub_external extends external_api {
             }
         }
         
-
+        $options = $params['options'];
+        $options['onlyvisible'] = $onlyvisible;
+        $options['search'] = $params['search'];
+        $options['downloadable'] = $params['downloadable'];
+        $options['enrollable'] = $params['enrollable'];
         $hub = new local_hub();
-
-        $courses = $hub->get_courses($params['search'],
-               $params['options'] , $onlyvisible, $params['downloadable'], $params['enrollable']);
+        $courses = $hub->get_courses($options);
 
         //create result
         $result = array();
