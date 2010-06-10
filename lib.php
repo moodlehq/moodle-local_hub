@@ -397,15 +397,12 @@ class local_hub {
              }
         }
 
-        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {
-            if (!empty($wheresql)) {
+        if (!empty($wheresql)) {
                 $wheresql .= " AND";
-            }
+        }
+        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {          
             $wheresql .= " deleted = 0";
-        } else {
-            if (!empty($wheresql)) {
-                $wheresql .= " AND";
-            }
+        } else {            
             $wheresql .= " deleted = 1";
         }
 
@@ -716,6 +713,24 @@ class local_hub {
             foreach ( $course->contents as $content) {
                 $content['courseid'] = $courseid;
                 $this->add_course_content($content);
+            }
+        }
+
+        //delete all screenshots if required
+        if (!empty($course->deletescreenshots)) {
+
+            $level1 = floor($courseid / 1000) * 1000;
+
+            $userdir = "hub/$level1/$courseid";
+
+            $directory = make_upload_directory($userdir);
+
+            for ($screenshotnumber = 1; $screenshotnumber <= MAXSCREENSHOTSNUMBER; $screenshotnumber = $screenshotnumber + 1) {
+
+               //delete all existing screenshot
+                if ($this->screenshot_exists($courseid, $screenshotnumber)) {
+                    unlink($directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+                }
             }
         }
 

@@ -235,7 +235,8 @@ class local_hub_external extends external_api {
                                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                                         'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable', VALUE_DEFAULT, 0),
-                                        'screenshotsids' => new external_value(PARAM_TEXT, 'screenshotsids', VALUE_OPTIONAL),
+                                        'screenshotsids' => new external_value(PARAM_TEXT, 'the number of screenhots', VALUE_OPTIONAL),
+                                        'deletescreenshots' => new external_value(PARAM_INT, 'ask to delete all the existing screenshot files (it does not reset the screenshot number)', VALUE_DEFAULT, 0),
                                         'contents' => new external_multiple_structure(new external_single_structure(
                                                 array(
                                                         'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
