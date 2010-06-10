@@ -418,13 +418,13 @@ class local_hub {
      * @param boolean $onlyvisible - set to false to return full list
      * @return array of sites
      */
-    public function get_sites($search =null, $language =null, $onlyvisible = true) {
+    public function get_sites($options = array()) {
         global $DB;
 
         $sqlparams = array();
         $wheresql = '';
 
-        if (!empty($onlyvisible)) {
+        if (key_exists('onlyvisible', $options) and !empty($options['onlyvisible'])) {
             $wheresql .= " visible = :visible";
             $sqlparams['visible'] = 1;
             $ordersql = 'prioritise DESC, trusted DESC, name';
@@ -432,21 +432,37 @@ class local_hub {
             $ordersql = 'prioritise DESC, trusted DESC, visible DESC, name';
         }
 
-        if (!empty($search)) {
-            if (!empty($onlyvisible)) {
+        if (key_exists('search', $options) and !empty($options['search'])) {
+            if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             $wheresql .= " (name ".$DB->sql_ilike()." :namesearch OR description ".$DB->sql_ilike()." :descsearch)";
-            $sqlparams['namesearch'] = '%'.$search.'%';
-            $sqlparams['descsearch'] = '%'.$search.'%';
+            $sqlparams['namesearch'] = '%'.$options['search'].'%';
+            $sqlparams['descsearch'] = '%'.$options['search'].'%';
         }
 
-        if (!empty($language)) {
-            if (!empty($onlyvisible) || !empty($search)) {
+        if (key_exists('language', $options) and !empty($options['language'])) {
+            if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
             $wheresql .= " language = :language";
-            $sqlparams['language'] = $language;
+            $sqlparams['language'] = $options['language'];
+        }
+
+        if (key_exists('urls', $options) and !empty($options['urls'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $urllist = '(\'';
+            foreach($options['urls'] as $url) {
+                if ($urllist == '(\'') {
+                    $urllist .= $url;
+                } else {
+                    $urllist .= '\',\''.$url;
+                }
+            }
+            $urllist .= '\')';
+            $wheresql .= " url IN ". $urllist;
         }
 
         $sites = $DB->get_records_select('hub_site_directory', $wheresql, $sqlparams, $ordersql);

@@ -235,7 +235,7 @@ class local_hub_external extends external_api {
                                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                                         'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable', VALUE_DEFAULT, 0),
-                                        'screenshotsids' => new external_value(PARAM_TEXT, 'the number of screenhots', VALUE_OPTIONAL),
+                                        'screenshots' => new external_value(PARAM_INT, 'the number of screenhots', VALUE_OPTIONAL),
                                         'deletescreenshots' => new external_value(PARAM_INT, 'ask to delete all the existing screenshot files (it does not reset the screenshot number)', VALUE_DEFAULT, 0),
                                         'contents' => new external_multiple_structure(new external_single_structure(
                                                 array(
@@ -349,13 +349,13 @@ class local_hub_external extends external_api {
             }
         }
         
-        $options = $params['options'];
-        $options['onlyvisible'] = $onlyvisible;
-        $options['search'] = $params['search'];
-        $options['downloadable'] = $params['downloadable'];
-        $options['enrollable'] = $params['enrollable'];
+        $cleanedoptions = $params['options'];
+        $cleanedoptions['onlyvisible'] = $onlyvisible;
+        $cleanedoptions['search'] = $params['search'];
+        $cleanedoptions['downloadable'] = $params['downloadable'];
+        $cleanedoptions['enrollable'] = $params['enrollable'];
         $hub = new local_hub();
-        $courses = $hub->get_courses($options);
+        $courses = $hub->get_courses($cleanedoptions);
 
         //create result
         $result = array();
@@ -384,7 +384,7 @@ class local_hub_external extends external_api {
             $courseinfo['creatornotes'] = $course->creatornotes;
             $courseinfo['creatornotesformat'] = $course->creatornotesformat;
             $courseinfo['enrollable'] = $course->enrollable;
-            $courseinfo['screenshotsids'] = $course->screenshotsids;
+            $courseinfo['screenshots'] = $course->screenshots;
             if (!empty($course->demourl)) {
                 $courseinfo['demourl'] = $course->demourl;
             }
@@ -440,7 +440,7 @@ class local_hub_external extends external_api {
                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                         'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
-                        'screenshotsids' => new external_value(PARAM_INT, 'total number of screenshots'),
+                        'screenshots' => new external_value(PARAM_INT, 'total number of screenshots'),
                         'contents' => new external_multiple_structure(new external_single_structure(
                                                 array(
                                                         'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
@@ -450,5 +450,71 @@ class local_hub_external extends external_api {
                 ), 'course info')
         );
     }
+
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
+    public static function get_sites_parameters() {
+        return new external_function_parameters(
+                            array(
+                                    'search' => new external_value(PARAM_TEXT, 'string to search'),
+                                    'options' => new external_single_structure(
+                                        array(
+                                                'urls' => new external_multiple_structure(new external_value(PARAM_INTEGER, 'url'), 'urls to look for', VALUE_OPTIONAL),
+                                        ), '')
+                )
+        );
+    }
+
+    /**
+     * Get sites
+     * @return array sites
+     */
+    public static function get_sites($search, $options = array()) {
+        global $DB;
+
+        // Ensure the current user is allowed to run this function
+        $context = get_context_instance(CONTEXT_SYSTEM);
+        self::validate_context($context);
+        require_capability('moodle/hub:view', $context);
+
+        $params = self::validate_parameters(self::get_sites_parameters(),
+                array('search' => $search, 'options' => $options));
+
+        $cleanedoptions = $params['options'];
+        $cleanedoptions['search'] = $params['search'];
+        $hub = new local_hub();
+        $sites = $hub->get_sites($cleanedoptions);
+
+        //create result
+        $result = array();
+        foreach ($sites as $site) {
+            $siteinfo = array();
+            $siteinfo['id'] = $site->id;
+            $siteinfo['name'] = $site->name;
+            $siteinfo['url'] = $site->url;
+            $result[] = $siteinfo;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns description of method result value
+     * @return boolean
+     */
+    public static function get_sites_returns() {
+        return new external_multiple_structure(
+                new external_single_structure(
+                array(
+                        'id' => new external_value(PARAM_INTEGER, 'id'),
+                        'name' => new external_value(PARAM_TEXT, 'name'),
+                        'url' => new external_value(PARAM_URL, 'url'),
+
+                ), 'site info')
+        );
+    }
+
 
 }

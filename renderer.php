@@ -264,11 +264,11 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 // add screenshots
                 $screenshothtml = '';
-                if (!empty($course->screenshotsids)) {
+                if (!empty($course->screenshots)) {
                     $images = array();
                     $baseurl = new moodle_url($CFG->wwwroot.'/local/hub/webservice/download.php',
                             array('courseid' => $course->id, 'filetype' => HUB_SCREENSHOT_FILE_TYPE));
-                    for ($i = 1; $i <= $course->screenshotsids; $i = $i + 1) {
+                    for ($i = 1; $i <= $course->screenshots; $i = $i + 1) {
                         $params['screenshotnumber'] = $i;
                         $images[] = array(
                             'thumburl' => new moodle_url($baseurl, array('screenshotnumber' => $i)),

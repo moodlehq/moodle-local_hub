@@ -82,7 +82,9 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $site = $hub->get_site($delete);
     $contenthtml = $renderer->delete_confirmation($site);
 } else { //all other cases we go back to site list page (no need confirmation)
-    $sites = $hub->get_sites($search, null, false); //return list of all sites
+    $options = array();
+    $options['search'] = $search;
+    $sites = $hub->get_sites($options); //return list of all sites
     //(search, none language, no onlyvisible)
     $contenthtml = $renderer->searchable_site_list($sites, $search, true);
 }

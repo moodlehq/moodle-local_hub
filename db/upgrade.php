@@ -92,6 +92,32 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010051802, 'local', 'hub');
     }
 
+    if ($result && $oldversion < 2010061000) {
+
+    /// Define field description to be dropped from hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('screenshotsids');
+
+    /// Conditionally launch drop field description
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+    /// Define field screenshots to be added to hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('screenshots', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, '0', 'deleted');
+
+    /// Conditionally launch add field screenshots
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010061000, 'local', 'hub');
+    }
+
+
 
     return $result;
 }

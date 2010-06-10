@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20100519" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20100610" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -72,14 +72,14 @@
         <FIELD NAME="downloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a local cached zip but could be anything else, including empty for non-downloadable" PREVIOUS="privacy" NEXT="originaldownloadurl"/>
         <FIELD NAME="originaldownloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a download script on the original Moodle site, used by Hub to get cache" PREVIOUS="downloadurl" NEXT="demourl"/>
         <FIELD NAME="demourl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="a URL, if any, where the course can be seen in action" PREVIOUS="originaldownloadurl" NEXT="enrollable"/>
-        <FIELD NAME="enrollable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Is the course enrollable anyone with an account?" PREVIOUS="demourl" NEXT="screenshotsids"/>
-        <FIELD NAME="screenshotsids" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="stored on disk under id of this record (id spearated by commas)" PREVIOUS="enrollable" NEXT="enrolcost"/>
-        <FIELD NAME="enrolcost" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="screenshotsids" NEXT="enrolcostcurrency"/>
+        <FIELD NAME="enrollable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Is the course enrollable anyone with an account?" PREVIOUS="demourl" NEXT="enrolcost"/>
+        <FIELD NAME="enrolcost" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="enrollable" NEXT="enrolcostcurrency"/>
         <FIELD NAME="enrolcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" PREVIOUS="enrolcost" NEXT="downloadcost"/>
         <FIELD NAME="downloadcost" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="enrolcostcurrency" NEXT="downloadcostcurrency"/>
         <FIELD NAME="downloadcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" PREVIOUS="downloadcost" NEXT="publisheremail"/>
         <FIELD NAME="publisheremail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The email of the publisher" PREVIOUS="downloadcostcurrency" NEXT="deleted"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the course has been deleted from the course directory (unpublished/unregistered)" PREVIOUS="publisheremail"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the course has been deleted from the course directory (unpublished/unregistered)" PREVIOUS="publisheremail" NEXT="screenshots"/>
+        <FIELD NAME="screenshots" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The number of screenshots" PREVIOUS="deleted"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
