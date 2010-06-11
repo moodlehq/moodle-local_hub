@@ -1134,7 +1134,10 @@ class local_hub {
         $renderer = $PAGE->get_renderer('local_hub');
 
         //forms
-        $coursesearchform = new course_search_form('', array('search' => $search));
+        //Warning: because we want to support GET and we want people to be able to give the url, we need to bypass the
+        //sesskey form checking
+        $_GET['sesskey'] = sesskey();
+        $coursesearchform = new course_search_form('', array('search' => $search), 'get');
         $fromform = $coursesearchform->get_data();
         $courses = null;
         //Retrieve courses by web service
