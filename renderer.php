@@ -19,7 +19,8 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-require_once($CFG->dirroot. "/lib/hublib.php"); //HUB_SITENOTPUBLISHED, get_site_privacy_string
+require_once($CFG->dirroot. "/admin/registration/lib.php");
+require_once($CFG->dirroot. "/course/publish/lib.php");
 
 /**
  * Hub renderer.
@@ -415,9 +416,9 @@ class local_hub_renderer extends plugin_renderer_base {
                     } else {
                         $admindisplayedinfo->timemodified = '-';
                     }
-                    require_once($CFG->dirroot.'/local/hub/lib.php');
-                    $hub = new hub();
-                    $admindisplayedinfo->privacy = $hub->get_site_privacy_string($site->privacy);
+
+                    $registrationmanager = new registration_manager();
+                    $admindisplayedinfo->privacy = $registrationmanager->get_site_privacy_string($site->privacy);
                     $admindisplayedinfo->contactable = $site->contactable?get_string('yes'):get_string('no');
                     $admindisplayedinfo->emailalert = $site->emailalert?get_string('yes'):get_string('no');
                     $additionaladmindesc = html_writer::empty_tag('br');

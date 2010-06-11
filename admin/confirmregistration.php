@@ -33,7 +33,6 @@
 require('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/lib/hublib.php'); //HUB_HUBDIRECTORYURL
 
 admin_externalpage_setup('registrationconfirmed');
 

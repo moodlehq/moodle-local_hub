@@ -83,6 +83,17 @@ if (!empty($hubpassword) and $hubpassword != $password) {
     throw new moodle_exception('wronghubpassword', 'local_hub', $url.'/admin/registration/hubselector.php');
 }
 
+//check if the site url is already registered
+$hub = new local_hub();
+if (!empty($hub->get_site_by_url($url))) {
+    redirect(new moodle_url($url."/admin/registration/confirmregistration.php",
+            array('error' => 'urlalreadyexist', 'url' => $CFG->wwwroot, 'token' => $fromform->token,
+                'hubname' => get_config('local_hub', 'name'))));
+}
+
+//check if we can access the site
+
+
 
 //fill the "recaptcha" Moodle form with hub values
 $sitevalues = array('name' => $name,
@@ -156,7 +167,7 @@ if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL 
     $siteinfo->moodleversion = $fromform->moodleversion;
     $siteinfo->moodlerelease = $fromform->moodlerelease;
 
-    $hub = new local_hub();
+    
     $newtoken = $hub->register_site($siteinfo);
 
     //Redirect to the site with the created token

@@ -118,11 +118,6 @@ define('COURSEVISIBILITY_NOTVISIBLE', '0');
 
 
 
-
-require_once($CFG->dirroot.'/lib/hublib.php'); //get_site_privacy_string()
-
-
-
 class local_hub {
 
 ///////////////////////////
@@ -757,12 +752,6 @@ class local_hub {
 
     /**
      * Register the site (creation / update)
-     * 1- check token doesn't already existing / check if url different
-     * 2- check lang and image size
-     * 3- create new token for the site to call the hub server
-     * 4- confirm the registration to the site (web service)
-     * 5- add / update site
-     * 6- send email to the hub administrator
      * @param object $siteinfo
      * @param boolean $siteurltoupdate
      */
@@ -785,6 +774,13 @@ class local_hub {
             $siteinfo->oldurl = $currentsiteinfo->url; //needed for url testing
 
             if ($siteinfo->url != $siteinfo->oldurl) {
+
+                //check if the site url already exist
+                $existingurlsite = $this->get_site_by_url($siteinfo->url);
+                if (!empty($existingurlsite)) {
+                    throw new moodle_exception('urlalreadyexist', 'local_hub', $CFG->wwwroot);
+                }
+
                 //make the site not visible (hub admin need to reconfirm it)
                 $siteinfo->visible = 0;
 
@@ -815,9 +811,10 @@ class local_hub {
 
                 $sameurl = 0;
 
-                $hub = new hub();
-                $siteinfo->oldprivacystring = $hub->get_site_privacy_string($siteinfo->oldprivacy);
-                $siteinfo->privacystring = $hub->get_site_privacy_string($siteinfo->privacy);
+                require_once($CFG->dirroot.'/admin/registration/lib.php'); //get_site_privacy_string()
+                $registrationmanager = new registration_manager();
+                $siteinfo->oldprivacystring = $registrationmanager->get_site_privacy_string($siteinfo->oldprivacy);
+                $siteinfo->privacystring = $registrationmanager->get_site_privacy_string($siteinfo->privacy);
 
                 //alert the administrator
                 $contactuser = new object;

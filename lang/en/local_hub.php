@@ -222,6 +222,7 @@ $string['unprioritise'] = 'Unprioritise';
 $string['untrustme'] = 'Untrust';
 $string['updatesite'] = 'Update registration on {$a}';
 $string['url'] = 'hub URL';
+$string['urlalreadyexist'] = 'Your new site url is already existing on {$a}. It could come from a bad database on {$a} or a previous registration. Alert the hub administrator. You could have to unregister your site and register again. You must tell the hub administrator if you want to keep your already published courses, as he will need to delete your previous registration.';
 $string['usersnumber'] = 'Number of users ({$a})';
 $string['visibility'] = 'Visibility';
 $string['visibility_help'] = 'Display visible courses, invisible courses or both at the same time.';

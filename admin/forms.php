@@ -29,7 +29,7 @@
 
 require_once($CFG->dirroot.'/lib/formslib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/lib/hublib.php');
+require_once($CFG->dirroot.'/course/publish/lib.php');
 
 /**
  * This form display registration form to Moodle.org

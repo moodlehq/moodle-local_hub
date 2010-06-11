@@ -141,9 +141,9 @@ class local_hub_external extends external_api {
         $localhub = new local_hub();
 
         $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
-        $localhub->register_site($params['siteinfo'], $siteurl); //'true' indicates registration update mode
+        $result = $localhub->register_site($params['siteinfo'], $siteurl);
+         
         return 1;
-
     }
 
     /**
@@ -484,6 +484,7 @@ class local_hub_external extends external_api {
 
         $cleanedoptions = $params['options'];
         $cleanedoptions['search'] = $params['search'];
+        $cleanedoptions['onlyvisible'] = true;
         $hub = new local_hub();
         $sites = $hub->get_sites($cleanedoptions);
 
