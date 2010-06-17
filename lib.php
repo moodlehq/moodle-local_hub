@@ -823,9 +823,20 @@ class local_hub {
             //retrieve current hub info
             $currentsiteinfo = $this->get_site_by_url($siteurltoupdate);
             $siteinfo->id = $currentsiteinfo->id; //needed for hub update
-            $siteinfo->oldurl = $currentsiteinfo->url; //needed for url testing
 
-            if ($siteinfo->url != $siteinfo->oldurl) {
+            $emailinfo = new stdClass();
+            $emailinfo->name = $siteinfo->name;
+            $emailinfo->oldname = $currentsiteinfo->name;// needed for the email params
+            $emailinfo->url = $siteinfo->url;
+            $emailinfo->oldurl = $currentsiteinfo->url; //needed for url testing
+            $emailinfo->contactname = $siteinfo->contactname;
+            $emailinfo->contactemail = $siteinfo->contactemail;
+            $emailinfo->huburl = $CFG->wwwroot;
+            $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
+            $languages = get_string_manager()->get_list_of_languages();
+            $emailinfo->language = $languages[$siteinfo->language];
+            
+            if ($siteinfo->url != $emailinfo->oldurl) {
 
                 //check if the site url already exist
                 $existingurlsite = $this->get_site_by_url($siteinfo->url);
@@ -835,48 +846,18 @@ class local_hub {
 
                 //make the site not visible (hub admin need to reconfirm it)
                 $siteinfo->visible = 0;
-
-                $siteinfo->oldname = $currentsiteinfo->name;
-                $siteinfo->olddescription = $currentsiteinfo->description;
-                $siteinfo->oldcontactname = $currentsiteinfo->contactname;
-                $siteinfo->oldcontactemail = $currentsiteinfo->contactemail;
-                $siteinfo->oldcontactphone = $currentsiteinfo->contactphone;
-                $siteinfo->oldimageurl = $currentsiteinfo->imageurl;
-                $siteinfo->oldprivacy = $currentsiteinfo->privacy;
-                $siteinfo->oldlanguage = $currentsiteinfo->language;
-                $siteinfo->oldusers = $currentsiteinfo->users;
-                $siteinfo->oldcourses = $currentsiteinfo->courses;
-                $siteinfo->oldstreet = $currentsiteinfo->street;
-                $siteinfo->oldregioncode = $currentsiteinfo->regioncode;
-                $siteinfo->oldcountrycode = $currentsiteinfo->countrycode;
-                $siteinfo->oldgeolocation = $currentsiteinfo->geolocation;
-                $siteinfo->oldcontactable = $currentsiteinfo->contactable;
-                $siteinfo->oldemailalert = $currentsiteinfo->emailalert;
-                $siteinfo->oldenrolments = $currentsiteinfo->enrolments;
-                $siteinfo->oldposts = $currentsiteinfo->posts;
-                $siteinfo->oldquestions = $currentsiteinfo->questions;
-                $siteinfo->oldresources = $currentsiteinfo->resources;
-                $siteinfo->oldmodulenumberaverage = $currentsiteinfo->modulenumberaverage;
-                $siteinfo->oldparticipantnumberaverage = $currentsiteinfo->participantnumberaverage;
-                $siteinfo->oldmoodleversion = $currentsiteinfo->moodleversion;
-                $siteinfo->oldmoodlerelease = $currentsiteinfo->moodlerelease;
-
+                
                 $sameurl = 0;
-
-                require_once($CFG->dirroot . '/admin/registration/lib.php'); //get_site_privacy_string()
-                $registrationmanager = new registration_manager();
-                $siteinfo->oldprivacystring = $registrationmanager->get_site_privacy_string($siteinfo->oldprivacy);
-                $siteinfo->privacystring = $registrationmanager->get_site_privacy_string($siteinfo->privacy);
 
                 //alert the administrator
                 $contactuser = new object;
                 $contactuser->email = $siteinfo->contactemail ? $siteinfo->contactemail : $CFG->noreplyaddress;
                 $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
                 $contactuser->lastname = '';
-                $contactuser->maildisplay = true;
+                $contactuser->maildisplay = true;             
                 email_to_user(get_admin(), $contactuser,
-                        get_string('emailtitlesiteurlchanged', 'local_hub', $siteinfo->name),
-                        get_string('emailmessagesiteurlchanged', 'local_hub', $siteinfo));
+                        get_string('emailtitlesiteurlchanged', 'local_hub', $emailinfo->name),
+                        get_string('emailmessagesiteurlchanged', 'local_hub', $emailinfo));
             }
         } else {
             //if creation mode, check that the token don't exist already
@@ -944,11 +925,17 @@ class local_hub {
         $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
         $contactuser->lastname = '';
         $contactuser->maildisplay = true;
-        $emailinfo = $siteinfo;
-        $emailinfo->huburl = $CFG->wwwroot;
-        $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
-        $languages = get_string_manager()->get_list_of_languages();
-        $emailinfo->language = $languages[$siteinfo->language];
+        if (empty($emailinfo)) {
+            $emailinfo = new stdClass();
+            $emailinfo->name = $siteinfo->name;
+            $emailinfo->url = $siteinfo->url;
+            $emailinfo->contactname = $siteinfo->contactname;
+            $emailinfo->contactemail = $siteinfo->contactemail;
+            $emailinfo->huburl = $CFG->wwwroot;
+            $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
+            $languages = get_string_manager()->get_list_of_languages();
+            $emailinfo->language = $languages[$siteinfo->language];
+        }
         if (!empty($siteurltoupdate)) {
             email_to_user(get_admin(), $contactuser,
                     get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
