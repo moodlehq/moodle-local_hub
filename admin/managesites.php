@@ -27,6 +27,7 @@ require('../../../config.php');
 
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
+require_once($CFG->dirroot. "/local/hub/forms.php");
 
 admin_externalpage_setup('managesites');
 $hub = new local_hub();
@@ -82,16 +83,62 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $site = $hub->get_site($delete);
     $contenthtml = $renderer->delete_confirmation($site);
 } else { //all other cases we go back to site list page (no need confirmation)
+
+    //forms
+    $sitesearchform = new site_search_form('', array('search' => $search, 'adminform' => 1));
+    $fromform = $sitesearchform->get_data();
+
+    //if the page result from any action from the renderer, set data to the previous search in order to
+    //display the same result
+    if (($trust != -1 or $delete != -1 or $visible != -1 or $prioritise != -1)
+            and confirm_sesskey()) {
+        $fromformdata['trusted']  = optional_param('trusted', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['prioritise']  = optional_param('prioritise', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['visible']  = optional_param('visible', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['countrycode'] = optional_param('countrycode', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['language']  = optional_param('language', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['search'] = $search;
+        $sitesearchform->set_data($fromformdata);
+        $fromform = (object)$fromformdata;
+    }
+
+
+    //Retrieve courses by web service
+    $sites = null;
     $options = array();
-    $options['search'] = $search;
-    $sites = $hub->get_sites($options); //return list of all sites
+    if (!empty($fromform)) {
+
+        if ($fromform->trusted != 'all') {
+            $options['trusted'] = $fromform->trusted;
+        }
+        if ($fromform->prioritise != 'all') {
+            $options['prioritise'] = $fromform->prioritise;
+        }
+        if ($fromform->visible != 'all') {
+            $options['visible'] = $fromform->visible;
+        }
+        if ($fromform->countrycode != 'all') {
+            $options['countrycode'] = $fromform->countrycode;
+        }
+        if ($fromform->language != 'all') {
+            $options['language'] = $fromform->language;
+        }
+
+        //get courses
+        $options['search'] = $search;
+        $sites = $hub->get_sites($options);
+    }
+
     //(search, none language, no onlyvisible)
-    $contenthtml = $renderer->searchable_site_list($sites, $search, true);
+    $contenthtml = $renderer->site_list($sites, true);
 }
 
 
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('managesites', 'local_hub'), 3, 'main');
+if (!($delete != -1 and !$confirm)) {
+    $sitesearchform->display();
+}
 echo $contenthtml;
 echo $OUTPUT->footer();

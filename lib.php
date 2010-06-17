@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -21,7 +22,7 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+define('HUB_COURSE_PER_PAGE', 10);
 
 
 //// HUB IMAGE SIZE
@@ -116,14 +117,10 @@ define('COURSEVISIBILITY_VISIBLE', '1');
  */
 define('COURSEVISIBILITY_NOTVISIBLE', '0');
 
-
-
 class local_hub {
-
 ///////////////////////////
 /// DB Facade functions  //
 ///////////////////////////
-
 
     /**
      * Return a site for a given id
@@ -132,7 +129,7 @@ class local_hub {
      */
     public function get_site($id) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('id'=>$id));
+        return $DB->get_record('hub_site_directory', array('id' => $id));
     }
 
     /**
@@ -143,7 +140,7 @@ class local_hub {
      */
     public function delete_site($id) {
         global $DB;
-        return $DB->delete_records('hub_site_directory', array('id'=>$id));
+        return $DB->delete_records('hub_site_directory', array('id' => $id));
     }
 
     /**
@@ -191,10 +188,10 @@ class local_hub {
      */
     public function get_course($id) {
         global $DB;
-        return $DB->get_record('hub_course_directory', array('id'=>$id));
+        return $DB->get_record('hub_course_directory', array('id' => $id));
     }
 
-      /**
+    /**
      * Return a enrollable course for a given site id and course id
      * @param integer $id
      * @return object course, false if null
@@ -202,18 +199,22 @@ class local_hub {
     public function get_enrollable_course_by_site($siteid, $sitecourseid) {
         global $DB;
         return $DB->get_record('hub_course_directory',
-                array('siteid'=>$siteid, 'sitecourseid' => $sitecourseid, 'enrollable' => 1));
+                array('siteid' => $siteid, 'sitecourseid' => $sitecourseid, 'enrollable' => 1));
     }
 
     /**
-     * Remove a course from the directory (delete the row from DB)
+     * Mark a course as deleted (we never really delete a course)
      * @param integer $id - id of the course to remove from the directory
      * @return boolean true
      * @throws dml_exception if error
      */
     public function delete_course($id) {
         global $DB;
-        return $DB->delete_records('hub_course_directory', array('id'=>$id));
+        $course = $DB->get_record('hub_course_directory',
+                        array('id' => $id));
+        $course->deleted = 1;
+        $course->timemodified = time();
+        return $DB->update_record('hub_course_directory', $course);
     }
 
     /**
@@ -236,9 +237,12 @@ class local_hub {
      *  boolean 'downloadable' - set to true to return downloadable course
      *  boolean 'enrollable' - set to true to return enrollable course
      *  boolean 'onlydeleted' - set to true to return deleted course only, otherwise only undeleted
-     * @return array of courses
+     * @param int $limitfrom
+     * @param int $limitnum
+     * @param bool $countresult if set to true return the count, otherwise result the raw
+     * @return array of courses/int
      */
-    public function get_courses($options = array()) {
+    public function get_courses($options = array(), $limitfrom=0, $limitnum=0, $countresult = false) {
         global $DB;
 
         $sqlparams = array();
@@ -256,9 +260,10 @@ class local_hub {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
-            $wheresql .= " (fullname ".$DB->sql_ilike()." :namesearch OR description ".$DB->sql_ilike()." :descsearch)";
-            $sqlparams['namesearch'] = '%'.$options['search'].'%';
-            $sqlparams['descsearch'] = '%'.$options['search'].'%';
+            $wheresql .= " (fullname " . $DB->sql_ilike() . " :namesearch OR description "
+                    . $DB->sql_ilike() . " :descsearch)";
+            $sqlparams['namesearch'] = '%' . $options['search'] . '%';
+            $sqlparams['descsearch'] = '%' . $options['search'] . '%';
         }
 
         if (!empty($options['language'])) {
@@ -287,24 +292,24 @@ class local_hub {
 
         if (!empty($options['subject'])) {
             if (!empty($wheresql)) {
-                        $wheresql .= " AND";
+                $wheresql .= " AND";
             }
             //search subject and all sub-subjects
             $edufields = get_string_manager()->load_component_strings('edufields', 'en');
             $topsubject = true;
-            foreach($edufields as $key => $value) {
-                if (strpos($key, $options['subject']) !==false) {
+            foreach ($edufields as $key => $value) {
+                if (strpos($key, $options['subject']) !== false) {
                     if ($topsubject) {
                         $wheresql .= " (";
                         $topsubject = false;
                     } else {
                         $wheresql .= " OR";
                     }
-                    $wheresql .= " subject = :".$key;
+                    $wheresql .= " subject = :" . $key;
                     $sqlparams[$key] = $key;
                 }
             }
-            $wheresql .= ")";      
+            $wheresql .= ")";
         }
 
         if (!empty($options['educationallevel'])) {
@@ -335,15 +340,15 @@ class local_hub {
                 $wheresql .= " AND";
             }
             $idlist = '(';
-            foreach($options['ids'] as $id) {
+            foreach ($options['ids'] as $id) {
                 if ($idlist == '(') {
                     $idlist .= $id;
                 } else {
-                    $idlist .= ','.$id;
+                    $idlist .= ',' . $id;
                 }
             }
             $idlist .= ')';
-            $wheresql .= " id IN ". $idlist;
+            $wheresql .= " id IN " . $idlist;
         }
 
         if (!empty($options['sitecourseids'])) {
@@ -351,21 +356,21 @@ class local_hub {
                 $wheresql .= " AND";
             }
             $idlist = '(';
-            foreach($options['sitecourseids'] as $sitecourseid) {
+            foreach ($options['sitecourseids'] as $sitecourseid) {
                 if ($idlist == '(') {
                     $idlist .= $sitecourseid;
                 } else {
-                    $idlist .= ','.$sitecourseid;
+                    $idlist .= ',' . $sitecourseid;
                 }
             }
             $idlist .= ')';
-            $wheresql .= " sitecourseid IN ". $idlist;
+            $wheresql .= " sitecourseid IN " . $idlist;
         }
 
         //check that one of the downloadable/enrollable option is false (otherwise display both kind of course)
-        if (! ((key_exists('downloadable', $options) and $options['downloadable'])
+        if (!((key_exists('downloadable', $options) and $options['downloadable'])
                 and
-              (key_exists('enrollable', $options) and $options['enrollable']))) {
+                (key_exists('enrollable', $options) and $options['enrollable']))) {
 
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
@@ -381,30 +386,39 @@ class local_hub {
             }
         }
 
-        if (!empty($options['allsitecourses'])) {
-            $siteid = $options['siteid'];
-             if (!empty($siteid)) {
-                if (!empty($wheresql)) {
-                    $wheresql .= " AND";
-                }
-                $wheresql .= " siteid = :siteid";
-                $sqlparams['siteid'] = $siteid;
-             }
+        if (!empty($options['siteid'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " siteid = :siteid";
+            $sqlparams['siteid'] = $options['siteid'];
+        }
+
+        if (!empty($options['lastmodified'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " timemodified > :lastmodified";
+            $sqlparams['lastmodified'] = $options['lastmodified'];
         }
 
         if (!empty($wheresql)) {
-                $wheresql .= " AND";
+            $wheresql .= " AND";
         }
-        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {          
+        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {
             $wheresql .= " deleted = 0";
-        } else {            
+        } else {
             $wheresql .= " deleted = 1";
         }
 
-        $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams, $ordersql);
+        if ($countresult) {
+            $courses = $DB->count_records_select('hub_course_directory', $wheresql, $sqlparams);
+        } else {
+            $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams,
+                            $ordersql, '*', $limitfrom, $limitnum);
+        }
         return $courses;
     }
-
 
     /**
      * Return sites found against some parameters, by default it returns all visible sites
@@ -431,9 +445,10 @@ class local_hub {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
-            $wheresql .= " (name ".$DB->sql_ilike()." :namesearch OR description ".$DB->sql_ilike()." :descsearch)";
-            $sqlparams['namesearch'] = '%'.$options['search'].'%';
-            $sqlparams['descsearch'] = '%'.$options['search'].'%';
+            $wheresql .= " (name " . $DB->sql_ilike() . " :namesearch OR description "
+                    . $DB->sql_ilike() . " :descsearch)";
+            $sqlparams['namesearch'] = '%' . $options['search'] . '%';
+            $sqlparams['descsearch'] = '%' . $options['search'] . '%';
         }
 
         if (key_exists('language', $options) and !empty($options['language'])) {
@@ -449,15 +464,49 @@ class local_hub {
                 $wheresql .= " AND";
             }
             $urllist = '(\'';
-            foreach($options['urls'] as $url) {
+            foreach ($options['urls'] as $url) {
                 if ($urllist == '(\'') {
                     $urllist .= $url;
                 } else {
-                    $urllist .= '\',\''.$url;
+                    $urllist .= '\',\'' . $url;
                 }
             }
             $urllist .= '\')';
-            $wheresql .= " url IN ". $urllist;
+            $wheresql .= " url IN " . $urllist;
+        }
+
+        //this option should be only be called by admin script
+        //note that this option is overrided by the onlyvisible parameter
+        if (key_exists('visible', $options)) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " visible = :visibility";
+            $sqlparams['visibility'] = $options['visible'];
+        }
+
+        if (key_exists('trusted', $options)) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " trusted = :trusted";
+            $sqlparams['trusted'] = $options['trusted'];
+        }
+
+        if (key_exists('prioritise', $options)) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " prioritise = :prioritise";
+            $sqlparams['prioritise'] = $options['prioritise'];
+        }
+
+        if (key_exists('countrycode', $options)) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " countrycode = :countrycode";
+            $sqlparams['countrycode'] = $options['countrycode'];
         }
 
         $sites = $DB->get_records_select('hub_site_directory', $wheresql, $sqlparams, $ordersql);
@@ -503,8 +552,10 @@ class local_hub {
     }
 
     /**
-     * Record a communication information between the hub and another entity (hub directory, site, public site)
-     * Mostly use to remember the token given to us by the remote entity, or the token that we gave to the remote entity
+     * Record a communication information between the hub and another entity
+     * (hub directory, site, public site)
+     * Mostly use to remember the token given to us by the remote entity,
+     * or the token that we gave to the remote entity
      * A communication is composed by:
      *     type of the communication, hub point of view: SERVER / CLIENT
      *     remoteentity name
@@ -521,9 +572,12 @@ class local_hub {
 
     /**
      * Get communication information between the hub and another entity (hub directory, site, public site)
-     * Mostly use to remember the token given to us by the remote entity, or the token that we gave to the remote entity
-     * @param string $type can be SERVER or CLIENT. SERVER mean that the hub is the server into the communication, so the token
-     * refered, is used by the remote entity to call the a hub function. CLIENT mean that the hub used the token to call
+     * Mostly use to remember the token given to us by the remote entity,
+     * or the token that we gave to the remote entity
+     * @param string $type can be SERVER or CLIENT. SERVER mean that the hub
+     * is the server into the communication, so the token
+     * refered, is used by the remote entity to call the a hub function.
+     * CLIENT mean that the hub used the token to call
      * the remote entity function
      * @param string $remoteentity the name of the remote entity
      * @param string $remoteurl the token of the remote entity
@@ -534,14 +588,14 @@ class local_hub {
         global $DB;
 
         $params = array('type' => $type,
-                'remoteentity' => $remoteentity);
+            'remoteentity' => $remoteentity);
         if (!empty($remoteurl)) {
             $params['remoteurl'] = $remoteurl;
         }
         if (!empty($token)) {
             $params['token'] = $token;
         }
-        $token = $DB->get_record('hub_communications',$params);
+        $token = $DB->get_record('hub_communications', $params);
         return $token;
     }
 
@@ -556,8 +610,10 @@ class local_hub {
 
     /**
      * Confirm a communication
-     * When the hub try to register on the hub directory, it first creates a token for the hub directory, send it,
-     * and wait for the hub directory to confirm the communication has been established. Then the hub call this function to confirm
+     * When the hub try to register on the hub directory, it first creates
+     * a token for the hub directory, send it,
+     * and wait for the hub directory to confirm the communication has been established.
+     * Then the hub call this function to confirm
      * the communication.
      * @param object $communication
      */
@@ -592,13 +648,13 @@ class local_hub {
      */
     public function get_course_contents($courseid) {
         global $DB;
-        return $DB->get_records('hub_course_contents', array('courseid' => $courseid), 'contentcount DESC');
+        return $DB->get_records('hub_course_contents',
+                array('courseid' => $courseid), 'contentcount DESC');
     }
 
 ///////////////////////////
 /// Library functions   ///
 ///////////////////////////
-
 
     /**
      * Return hub server information
@@ -619,7 +675,6 @@ class local_hub {
         $hubinfo['courses'] = $this->get_registered_courses_total();
         return $hubinfo;
     }
-
 
     /**
      * Retrieve the privacy string matching the define value
@@ -653,7 +708,7 @@ class local_hub {
      */
     public function unregister_course($courseid, $siteurl) {
         global $CFG;
-        
+
         $site = $this->get_site_by_url($siteurl);
         $course = $this->get_course($courseid);
 
@@ -706,7 +761,7 @@ class local_hub {
         $course->deleted = 0;
 
         //if the course is enrollable and is already registered, update it
-        $existingenrollablecourse= $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
+        $existingenrollablecourse = $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
         if (!empty($existingenrollablecourse)) {
             $course->id = $existingenrollablecourse->id;
             $courseid = $existingenrollablecourse->id;
@@ -714,14 +769,13 @@ class local_hub {
 
             //delete previous course content
             $this->delete_course_contents($courseid);
-
         } else {
             $courseid = $this->add_course($course);
         }
 
         //add new course contents
         if (!empty($course->contents)) {
-            foreach ( $course->contents as $content) {
+            foreach ($course->contents as $content) {
                 $content['courseid'] = $courseid;
                 $this->add_course_content($content);
             }
@@ -738,17 +792,15 @@ class local_hub {
 
             for ($screenshotnumber = 1; $screenshotnumber <= MAXSCREENSHOTSNUMBER; $screenshotnumber = $screenshotnumber + 1) {
 
-               //delete all existing screenshot
+                //delete all existing screenshot
                 if ($this->screenshot_exists($courseid, $screenshotnumber)) {
-                    unlink($directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+                    unlink($directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
                 }
             }
         }
 
         return $courseid;
-
     }
-
 
     /**
      * Register the site (creation / update)
@@ -811,7 +863,7 @@ class local_hub {
 
                 $sameurl = 0;
 
-                require_once($CFG->dirroot.'/admin/registration/lib.php'); //get_site_privacy_string()
+                require_once($CFG->dirroot . '/admin/registration/lib.php'); //get_site_privacy_string()
                 $registrationmanager = new registration_manager();
                 $siteinfo->oldprivacystring = $registrationmanager->get_site_privacy_string($siteinfo->oldprivacy);
                 $siteinfo->privacystring = $registrationmanager->get_site_privacy_string($siteinfo->privacy);
@@ -822,16 +874,16 @@ class local_hub {
                 $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
                 $contactuser->lastname = '';
                 $contactuser->maildisplay = true;
-                email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteurlchanged', 'local_hub', $siteinfo->name),
+                email_to_user(get_admin(), $contactuser,
+                        get_string('emailtitlesiteurlchanged', 'local_hub', $siteinfo->name),
                         get_string('emailmessagesiteurlchanged', 'local_hub', $siteinfo));
             }
-
-
         } else {
             //if creation mode, check that the token don't exist already
             $checkedhub = $this->get_site_by_token($siteinfo->token);
             if (!empty($checkedhub)) { //no registration process failed but the token still exist
-                throw new moodle_exception('sitetokenalreadyexist'); //probably token already attributed, should never happen
+                //probably token already attributed, should never happen
+                throw new moodle_exception('sitetokenalreadyexist');
             }
         }
 
@@ -845,18 +897,18 @@ class local_hub {
         //check if the image (imageurl) has a correct size
         //Note: it should have been tested on client side
         if (!empty($siteinfo->imageurl)) {
-            list($imagewidth, $imageheight, $imagetype, $imageattr)  = getimagesize($siteinfo->imageurl); //getimagesize is a GD function
+            //getimagesize is a GD function
+            list($imagewidth, $imageheight, $imagetype, $imageattr) = getimagesize($siteinfo->imageurl);
             if ($imagewidth > HUBLOGOIMAGEWIDTH or $imageheight > HUBLOGOIMAGEHEIGHT) {
                 $sizestrings = new stdClass();
                 $sizestrings->width = HUBLOGOIMAGEWIDTH;
                 $sizestrings->height = HUBLOGOIMAGEHEIGHT;
                 throw new moodle_exception('errorbadimageheightwidth', 'local_hub',
-                new moodle_url('/index.php'), $sizestrings);
+                        new moodle_url('/index.php'), $sizestrings);
             }
 
             //TODO we do not record image yet, it could be a security issue
             $siteinfo->imageurl = '';
-
         }
 
         //Add or update the site into the site directory (hub)
@@ -870,9 +922,11 @@ class local_hub {
         $sitetohubcommunication = $this->get_communication(WSSERVER, REGISTEREDSITE, $siteinfo->url);
         if (empty($sitetohubcommunication)) {
             //create token for the hub
-            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse', 'moodle/hub:view', 'moodle/hub:unregistercourse');
-            $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site', $siteinfo->url.'_registered_site_user',
-                    $capabilities);
+            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse',
+                'moodle/hub:view', 'moodle/hub:unregistercourse');
+            $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site',
+                            $siteinfo->url . '_registered_site_user',
+                            $capabilities);
 
             $sitetohubcommunication = new stdClass();
             $sitetohubcommunication->token = $tokenusedbysite->token;
@@ -892,20 +946,21 @@ class local_hub {
         $contactuser->maildisplay = true;
         $emailinfo = $siteinfo;
         $emailinfo->huburl = $CFG->wwwroot;
-        $emailinfo->managesiteurl = $CFG->wwwroot.'/local/hub/admin/managesites.php';
+        $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
         $languages = get_string_manager()->get_list_of_languages();
         $emailinfo->language = $languages[$siteinfo->language];
         if (!empty($siteurltoupdate)) {
-            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
+            email_to_user(get_admin(), $contactuser,
+                    get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteupdated', 'local_hub', $emailinfo));
         } else {
-            email_to_user(get_admin(), $contactuser, get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
+            email_to_user(get_admin(), $contactuser,
+                    get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteadded', 'local_hub', $emailinfo));
         }
 
         return $sitetohubcommunication->token;
     }
-
 
     /**
      * Create a user, role and token. Return the created token id.
@@ -920,7 +975,7 @@ class local_hub {
         global $CFG, $DB;
 
         //requires libraries
-        require_once($CFG->dirroot.'/user/lib.php');
+        require_once($CFG->dirroot . '/user/lib.php');
 
         //check the hidden service
         //because we cannot know the id of the service, we consider that hidden services have unique name!
@@ -935,14 +990,15 @@ class local_hub {
 
         $role = $DB->get_record('role', array('name' => $rolename));
         if (empty($role)) {
-            $roleid = create_role($rolename, clean_param($rolename, PARAM_ALPHAEXT), get_string('hubwsroledescription', 'local_hub'), '', true);
+            $roleid = create_role($rolename, clean_param($rolename, PARAM_ALPHAEXT),
+                            get_string('hubwsroledescription', 'local_hub'), '', true);
         } else {
             $roleid = $role->id;
         }
 
         //check and create a user
         $user = $DB->get_record('user', array('username' => $username,
-                'idnumber' => $username));
+                    'idnumber' => $username));
         if (empty($user)) {
             $user->username = $username;
             $user->firstname = $username;
@@ -979,21 +1035,21 @@ class local_hub {
         if (!empty($capabilities)) {
             foreach ($capabilities as $capability) {
                 $capabilityassigned = false;
-                foreach($rolecapabilities as $rolecapability) {
+                foreach ($rolecapabilities as $rolecapability) {
                     if ($rolecapability->capability == $capability) {
                         $capabilityassigned = true;
                         break;
                     }
                 }
 
-                if(!$capabilityassigned) {
+                if (!$capabilityassigned) {
                     assign_capability($capability, CAP_ALLOW, $roleid, $context->id);
                 }
             }
         }
 
         //enable the hidden service and assign it to the user
-        foreach($services as $service) { //there should be only one service into the array!!!
+        foreach ($services as $service) { //there should be only one service into the array!!!
             //checked at beginning of the function
             $serviceid = $service->id;
             //if no hidden token was created for this service, we need to enable it
@@ -1003,7 +1059,7 @@ class local_hub {
             }
 
             $serviceuser = $DB->get_record('external_services_users',
-                    array('externalserviceid' => $serviceid, 'userid' => $user->id));
+                            array('externalserviceid' => $serviceid, 'userid' => $user->id));
             if (empty($serviceuser)) {
                 $serviceuser = new stdClass();
                 $serviceuser->externalserviceid = $serviceid;
@@ -1011,7 +1067,6 @@ class local_hub {
                 $serviceuser->timecreated = time();
                 $DB->insert_record('external_services_users', $serviceuser);
             }
-
         }
 
         //check and create a token
@@ -1024,9 +1079,9 @@ class local_hub {
         $token = $DB->get_record('external_tokens', (array) $resulttoken);
         if (empty($token)) {
             $resulttoken->timecreated = time();
-            $resulttoken->token = md5(uniqid(rand(),1));
+            $resulttoken->token = md5(uniqid(rand(), 1));
             $tokenid = $DB->insert_record('external_tokens', $resulttoken);
-            $resulttoken->id =$tokenid;
+            $resulttoken->id = $tokenid;
         } else {
             throw new moodle_exception('hiddentokenalreadyexist');
         }
@@ -1042,7 +1097,8 @@ class local_hub {
      */
     public function add_screenshot($file, $courseid, $screenshotnumber) {
 
-        // Generate a two-level path for the userid. First level groups them by slices of 1000 users, second level is userid
+        // Generate a two-level path for the userid. First level groups them by slices of 1000 users,
+        // second level is userid
         $level1 = floor($courseid / 1000) * 1000;
 
         $userdir = "hub/$level1/$courseid";
@@ -1056,12 +1112,12 @@ class local_hub {
 
             //delete previously existing screenshot
             if ($this->screenshot_exists($courseid, $screenshotnumber)) {
-                unlink($directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+                unlink($directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
             }
 
-            move_uploaded_file($file['tmp_name'], $directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+            move_uploaded_file($file['tmp_name'],
+                    $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
         }
-
     }
 
     /**
@@ -1076,7 +1132,7 @@ class local_hub {
         $level1 = floor($courseid / 1000) * 1000;
 
         $directory = "hub/$level1/$courseid";
-        return file_exists($CFG->dataroot. '/' . $directory.'/screenshot_'.$courseid."_".$screenshotnumber);
+        return file_exists($CFG->dataroot . '/' . $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
     }
 
     /**
@@ -1087,14 +1143,15 @@ class local_hub {
      */
     public function add_backup($file, $courseid) {
 
-        // Generate a two-level path for the userid. First level groups them by slices of 1000 users, second level is userid
+        // Generate a two-level path for the userid. First level groups them by slices of 1000 users,
+        //  second level is userid
         $level1 = floor($courseid / 1000) * 1000;
 
         $userdir = "hub/$level1/$courseid";
 
         $directory = make_upload_directory($userdir);
 
-        move_uploaded_file($file['tmp_name'], $directory.'/backup_'.$courseid.".zip");
+        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".zip");
     }
 
     /**
@@ -1107,9 +1164,7 @@ class local_hub {
         $level1 = floor($courseid / 1000) * 1000;
 
         $directory = "hub/$level1/$courseid";
-        return file_exists($CFG->dataroot. '/' . $directory.'/backup_'.$courseid.".zip");
-
-        
+        return file_exists($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".zip");
     }
 
     /**
@@ -1120,7 +1175,7 @@ class local_hub {
     public function display_homepage() {
         global $PAGE, $SITE, $OUTPUT, $CFG;
 
-        require_once($CFG->dirroot. "/local/hub/forms.php");
+        require_once($CFG->dirroot . "/local/hub/forms.php");
 
         $PAGE->set_url('/');
         $PAGE->set_pagetype('site-index');
@@ -1129,22 +1184,35 @@ class local_hub {
         $PAGE->set_title($SITE->fullname);
         $PAGE->set_heading($SITE->fullname);
 
-        $search  = optional_param('search', null, PARAM_TEXT);
+        $search = optional_param('search', null, PARAM_TEXT);
 
         $renderer = $PAGE->get_renderer('local_hub');
 
         //forms
-        //Warning: because we want to support GET and we want people to be able to give the url, we need to bypass the
-        //sesskey form checking
+        //Warning: because we want to support GET and we want people to be able to give the url,
+        // we need to bypass the sesskey form checking
         $_GET['sesskey'] = sesskey();
-        $coursesearchform = new course_search_form('', array('search' => $search), 'get');
+
+        $fromformdata['coverage'] = optional_param('coverage', 'all', PARAM_TEXT);
+        $fromformdata['licence'] = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['siteid'] = optional_param('siteid', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['lastmodified'] = optional_param('lastmodified', HUB_LASTMODIFIED_WEEK, PARAM_ALPHANUMEXT);
+        $fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
+        $fromformdata['downloadable'] = optional_param('downloadable', 0, PARAM_ALPHANUM);
+        $fromformdata['search'] = $search;
+        $coursesearchform = new course_search_form('', $fromformdata, 'get');
         $fromform = $coursesearchform->get_data();
-        $courses = null;
+        $coursesearchform->set_data($fromformdata);
+        $fromform = (object) $fromformdata;
+
         //Retrieve courses by web service
         $options = array();
         if (!empty($fromform)) {
-            $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
-           
+            $downloadable = optional_param('downloadable', false, PARAM_INTEGER);
+
             if (!empty($fromform->coverage)) {
                 $options['coverage'] = $fromform->coverage;
             }
@@ -1169,23 +1237,37 @@ class local_hub {
             $options['onlyvisible'] = true;
             $options['downloadable'] = $downloadable;
             $options['enrollable'] = !$downloadable;
-            $courses = $this->get_courses($options);
+            $page = optional_param('page', 0, PARAM_INT);
+            $courses = $this->get_courses($options, $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
+
+            $coursetotal = $this->get_courses($options, 0, 0, true);
 
             //get courses content
-            foreach($courses as $course) {
-              
+            foreach ($courses as $course) {
+
                 $contents = $this->get_course_contents($course->id);
-                 if (!empty($contents)) {
-                     foreach($contents as $content) {
+                if (!empty($contents)) {
+                    foreach ($contents as $content) {
                         $course->contents[] = $content;
-                     }
-                 }
+                    }
+                }
             }
         }
 
         echo $OUTPUT->header();
         $coursesearchform->display();
+        //set to course to null if you didn't do any search (so the render doesn't display 'no search result')
+        if (!optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)) {
+            $courses = null;
+        }
+        $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
         echo $renderer->course_list($courses);
+        //paging bar
+        if ($coursetotal > HUB_COURSE_PER_PAGE) {
+            $baseurl = new moodle_url('', $options);
+            $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
+            echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+        }
         echo $OUTPUT->footer();
     }
 

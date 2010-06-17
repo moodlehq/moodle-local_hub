@@ -1,4 +1,5 @@
 <?php
+
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // This file is part of Moodle - http://moodle.org/                      //
@@ -19,8 +20,8 @@
 //                                                                       //
 ///////////////////////////////////////////////////////////////////////////
 
-require_once($CFG->dirroot. "/admin/registration/lib.php");
-require_once($CFG->dirroot. "/course/publish/lib.php");
+require_once($CFG->dirroot . "/admin/registration/lib.php");
+require_once($CFG->dirroot . "/course/publish/lib.php");
 
 /**
  * Hub renderer.
@@ -38,8 +39,8 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function registration_confirmation($confirmationmessage) {
         global $OUTPUT;
-        $linktositelist = html_writer::tag('a', get_string('sitelist','local_hub'), array('href' => new moodle_url('/index.php')));
-        $message = $confirmationmessage.html_writer::empty_tag('br').$linktositelist;
+        $linktositelist = html_writer::tag('a', get_string('sitelist', 'local_hub'), array('href' => new moodle_url('/index.php')));
+        $message = $confirmationmessage . html_writer::empty_tag('br') . $linktositelist;
         return $OUTPUT->box($message);
     }
 
@@ -50,8 +51,8 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function delete_confirmation($site) {
         global $OUTPUT;
-        $optionsyes = array('delete'=>$site->id, 'confirm'=>1, 'sesskey'=>sesskey());
-        $optionsno  = array('sesskey'=>sesskey());
+        $optionsyes = array('delete' => $site->id, 'confirm' => 1, 'sesskey' => sesskey());
+        $optionsno = array('sesskey' => sesskey());
         $formcontinue = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsyes), get_string('delete'), 'post');
         $formcancel = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsno), get_string('cancel'), 'get');
         $sitename = html_writer::tag('strong', $site->name);
@@ -59,18 +60,39 @@ class local_hub_renderer extends plugin_renderer_base {
     }
 
     /**
-     * Display a box confirmation message for removing a course from the directory
-     * @param object $course - site to delete
+     * Display a box confirmation message for bulk operation on courses
+     * @param array $courses - course to apply the operation
+     * @param string $bulkoperation the operation (bulkdelete, bulkvisible, bulknotvisible)
      * @return string
      */
-    public function delete_course_confirmation($course) {
+    public function course_bulk_operation_confirmation($courses, $bulkoperation) {
         global $OUTPUT;
-        $optionsyes = array('delete'=>$course->id, 'confirm'=>1, 'sesskey'=>sesskey());
-        $optionsno  = array('sesskey'=>sesskey());
-        $formcontinue = new single_button(new moodle_url("/local/hub/admin/managecourses.php", $optionsyes), get_string('delete'), 'post');
+
+        $confirmationmessage = get_string('confirmmessage' . $bulkoperation, 'local_hub');
+        $brtag = html_writer::empty_tag('br');
+        $courseiteration = 0;
+        foreach ($courses as $course) {
+            $courseiteration = $courseiteration + 1;
+            if (empty($course->demourl)) {
+                $href = $course->courseurl;
+            } else {
+                $href = $course->demourl;
+            }
+            $confirmationmessage .= $brtag .
+                    html_writer::tag('a', $course->fullname, array('href' => $href));
+            $key = 'bulk-' . $courseiteration;
+            $optionsyes[$key] = $course->id;
+        }
+        $optionsyes['bulkselect'] = $bulkoperation;
+        $optionsyes['confirm'] = 1;
+        $optionsyes['sesskey'] = sesskey();
+        $optionsno = array('sesskey' => sesskey());
+
+        $formcontinue = new single_button(new moodle_url("/local/hub/admin/managecourses.php", $optionsyes), get_string($bulkoperation, 'local_hub'), 'post');
         $formcancel = new single_button(new moodle_url("/local/hub/admin/managecourses.php", $optionsno), get_string('cancel'), 'get');
-        $coursename = html_writer::tag('strong', $course->fullname);
-        return $OUTPUT->confirm(get_string('deletecourseconfirmation', 'local_hub', $coursename), $formcontinue, $formcancel);
+
+
+        return $OUTPUT->confirm($confirmationmessage, $formcontinue, $formcancel);
     }
 
     /**
@@ -82,9 +104,9 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function searchable_site_list($sites, $searchdefaultvalue = '', $withwriteaccess=false) {
         global $OUTPUT;
-        return $this->search_box($searchdefaultvalue).
-                html_writer::empty_tag('br').
-                $this->site_list($sites,  $withwriteaccess);
+        return $this->search_box($searchdefaultvalue) .
+        html_writer::empty_tag('br') .
+        $this->site_list($sites, $withwriteaccess);
     }
 
     /**
@@ -96,11 +118,10 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function searchable_course_list($courses, $searchdefaultvalue = '', $withwriteaccess=false) {
         global $OUTPUT;
-        return $this->search_box($searchdefaultvalue).
-                html_writer::empty_tag('br').
-                $this->course_list($courses,  $withwriteaccess);
+        return $this->search_box($searchdefaultvalue) .
+        html_writer::empty_tag('br') .
+        $this->course_list($courses, $withwriteaccess);
     }
-
 
     /**
      * Display a search box
@@ -110,14 +131,14 @@ class local_hub_renderer extends plugin_renderer_base {
     public function search_box($searchdefaultvalue = '') {
         global $OUTPUT;
         $searchtextfield = html_writer::empty_tag('input', array('type' => 'text',
-                'name' => 'search', 'id' => 'search', 'value' => $searchdefaultvalue));
+                    'name' => 'search', 'id' => 'search', 'value' => $searchdefaultvalue));
         $submitbutton = html_writer::empty_tag('input', array('type' => 'submit',
-                'value' => get_string('search', 'local_hub')));
+                    'value' => get_string('search', 'local_hub')));
         $formcontent = $searchtextfield . $submitbutton;
         $formcontent = html_writer::tag('div', $formcontent, array()); //input element cannot be straight
         //into a form element (XHTML strict)
         $searchform = html_writer::tag('form', $formcontent, array('action' => '',
-                'method' => 'post'));
+                    'method' => 'post'));
         return $searchform;
     }
 
@@ -128,32 +149,29 @@ class local_hub_renderer extends plugin_renderer_base {
      * @param boolean $withwriteaccess
      * @return string
      */
-    public function course_list($courses,  $withwriteaccess=false, $optionalurlparams = array()) {
+    public function course_list($courses, $withwriteaccess=false, $optionalurlparams = array()) {
         global $OUTPUT, $CFG;
 
         $renderedhtml = '';
 
+        $brtag = html_writer::empty_tag('br');
+
         $table = new html_table();
 
         if ($withwriteaccess) {
-            $table->head  = array(get_string('coursename', 'local_hub'),
-                    get_string('coursedesc', 'local_hub'),
-                    get_string('screenshots', 'local_hub'),
-                    get_string('courselang', 'local_hub'),
-                    get_string('visible'),
-                    get_string('operation', 'local_hub'));
-
-            $table->align = array('center', 'left', 'left', 'center', 'center', 'center');
-            $table->size = array('20%', '40%', '10%', '10%', '5%', '5%');
-        } else {
-            $table->head  = array(get_string('coursename', 'local_hub'),
-                    get_string('coursedesc', 'local_hub'),
-                    get_string('screenshots', 'local_hub'),
-                    get_string('courselang', 'local_hub'));
+            $table->head = array(get_string('bulkoperation', 'local_hub'),
+                get_string('coursename', 'local_hub'),
+                get_string('coursedesc', 'local_hub'),
+                get_string('visible'));
 
             $table->align = array('center', 'left', 'left', 'center');
-            $table->size = array('25%', '60%', '20%', '5%');
+            $table->size = array('1%', '20%', '78%', '1%');
+        } else {
+            $table->head = array(get_string('coursename', 'local_hub'),
+                get_string('coursedesc', 'local_hub'));
 
+            $table->align = array('left', 'left');
+            $table->size = array('25%', '75%');
         }
 
         if (empty($courses)) {
@@ -163,12 +181,13 @@ class local_hub_renderer extends plugin_renderer_base {
         } else {
 
             $table->width = '100%';
-            $table->data  = array();
+            $table->data = array();
             $table->attributes['class'] = 'sitedirectory';
 
             // iterate through sites and add to the display table
+            $courseiteration = 0;
             foreach ($courses as $course) {
-
+                $courseiteration = $courseiteration + 1;
                 //create site name with link
                 if (!empty($course->courseurl)) {
                     $courseurl = new moodle_url($course->courseurl);
@@ -182,93 +201,12 @@ class local_hub_renderer extends plugin_renderer_base {
                     $coursenamehtml = html_writer::tag('span', $courseatag, array('class' => 'dimmed_text'));
                 }
 
-                //create description to display
-                $course->subject = get_string($course->subject, 'edufields');
-                $course->audience = get_string('audience'.$course->audience, 'hub');
-                $course->educationallevel = get_string('edulevel'.$course->educationallevel, 'hub');
-                if (!empty($course->contributornames)) {
-                    $course->contributorname = get_string('contributors', 'block_community', $course->contributorname);
-                }
-                if (empty($course->coverage)) {
-                    $course->coverage = '';
-                }
-                $deschtml = $course->description; //the description
-                /// courses and sites number display under the description, in smaller
-                $deschtml .= html_writer::empty_tag('br');
-                //create the additional description
-                if ($course->contributornames) {
-                    $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);
-                    $additionaldesc .= ' - ';
-                }
-                if ($course->coverage) {
-                    $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);
-                    $additionaldesc .= ' - ';
-                }
-                $additionaldesc = get_string('additionalcoursedesc', 'local_hub', $course);
-                $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
-                /// time registered and time modified only display for administrator
-                if ($withwriteaccess) {
-                    $admindisplayedinfo = new stdClass();
-                    $admindisplayedinfo->timemodified = userdate($course->timemodified);
-                    require_once($CFG->dirroot.'/local/hub/lib.php');
-                    $hub = new local_hub();
-                    $admindisplayedinfo->downloadurl = $course->downloadurl;
-                    $admindisplayedinfo->originaldownloadurl = $course->originaldownloadurl;
-                    $additionaladmindesc = html_writer::empty_tag('br');
-                    $additionaladmindesc .= get_string('additionalcourseadmindesc', 'local_hub', $admindisplayedinfo);
-                    $deschtml .= html_writer::tag('span', $additionaladmindesc, array('class' => 'additionaladmindesc'));
-                }
-                //add content to the course description
-                if (!empty($course->contents)) {
-                    $activitieshtml = '';
-                    $blockhtml = '';
-                    foreach ($course->contents as $content) {
-                        
-                        if ($content->moduletype == 'block') {
-                            if (!empty($blockhtml)) {
-                                $blockhtml .= ' - ';
-                            }
-                            $blockhtml .= get_string('pluginname', 'block_'.$content->modulename). " (".$content->contentcount.")";
-                        } else {
-                            if (!empty($activitieshtml)) {
-                                $activitieshtml .= ' - ';
-                            }
-                            $activitieshtml .= get_string('modulename', $content->modulename). " (".$content->contentcount.")";
-                        }
-                    }
-                    $blocksandactivities = html_writer::tag('span',
-                            get_string('blocks', 'local_hub')." : ".$blockhtml);
-                    $blocksandactivities .= html_writer::empty_tag('br').html_writer::tag('span',
-                            get_string('activities', 'local_hub')." : ".$activitieshtml);
-                
-                    $deschtml .= print_collapsible_region($blocksandactivities, 'blockdescription',
-                            'blocksandactivities', get_string('moredetails','local_hub'), '', false,true);
-                }
-
-                //retrieve language string
-                //construct languages array
-                if (!empty($course->language)) {
-                    $languages = get_string_manager()->get_list_of_languages();
-                    $language = $languages[$course->language];
-                } else {
-                    $language= '';
-                }
-
-                if (!$course->enrollable) {
-                    $params['courseid'] = $course->id;
-                    $params['filetype'] = HUB_BACKUP_FILE_TYPE;
-                    $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
-                    $downloadbutton = new single_button($addurl, get_string('download', 'block_community'));
-                    $downloadbutton->class = 'centeredbutton';
-                    $downloadbuttonhtml = $OUTPUT->render($downloadbutton);
-                }
-
                 // add screenshots
                 $screenshothtml = '';
                 if (!empty($course->screenshots)) {
                     $images = array();
-                    $baseurl = new moodle_url($CFG->wwwroot.'/local/hub/webservice/download.php',
-                            array('courseid' => $course->id, 'filetype' => HUB_SCREENSHOT_FILE_TYPE));
+                    $baseurl = new moodle_url($CFG->wwwroot . '/local/hub/webservice/download.php',
+                                    array('courseid' => $course->id, 'filetype' => HUB_SCREENSHOT_FILE_TYPE));
                     for ($i = 1; $i <= $course->screenshots; $i = $i + 1) {
                         $params['screenshotnumber'] = $i;
                         $images[] = array(
@@ -283,63 +221,152 @@ class local_hub_renderer extends plugin_renderer_base {
                     $screenshothtml = $this->output->render($imagegallery);
                 }
 
+                //create description to display
+                $course->subject = get_string($course->subject, 'edufields');
+                $course->audience = get_string('audience' . $course->audience, 'hub');
+                $course->educationallevel = get_string('edulevel' . $course->educationallevel, 'hub');
+                if (!empty($course->contributornames)) {
+                    $course->contributorname = get_string('contributors', 'block_community', $course->contributorname);
+                }
+                if (empty($course->coverage)) {
+                    $course->coverage = '';
+                }
+                $deschtml = html_writer::tag('div', $screenshothtml, array('class' => 'coursescreenshot'));
+                $deschtml .= $course->description; //the description
+                /// courses and sites number display under the description, in smaller
+                $deschtml .= $brtag;
+                //create the additional description
+                if ($course->contributornames) {
+                    $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);
+                    $additionaldesc .= ' - ';
+                }
+                if ($course->coverage) {
+                    $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);
+                    $additionaldesc .= ' - ';
+                }
+                //retrieve language string
+                //construct languages array
+                if (!empty($course->language)) {
+                    $languages = get_string_manager()->get_list_of_languages();
+                    $course->lang = $languages[$course->language];
+                } else {
+                    $course->lang = '';
+                }
+                $additionaldesc = get_string('additionalcoursedesc', 'local_hub', $course);
+                $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
+                /// time registered and time modified only display for administrator
                 if ($withwriteaccess) {
-                
+                    $admindisplayedinfo = new stdClass();
+                    $admindisplayedinfo->timemodified = userdate($course->timemodified);
+                    require_once($CFG->dirroot . '/local/hub/lib.php');
+                    $hub = new local_hub();
+                    $additionaladmindesc = $brtag;
+                    $admindisplayedinfo->shortname = $course->shortname;
+                    $additionaladmindesc .= get_string('additionalcourseadmindesc', 'local_hub', $admindisplayedinfo);
+                    $deschtml .= html_writer::tag('span', $additionaladmindesc, array('class' => 'additionaladmindesc'));
+                }
+                //add content to the course description
+                if (!empty($course->contents)) {
+                    $activitieshtml = '';
+                    $blockhtml = '';
+                    foreach ($course->contents as $content) {
+
+                        if ($content->moduletype == 'block') {
+                            if (!empty($blockhtml)) {
+                                $blockhtml .= ' - ';
+                            }
+                            $blockhtml .= get_string('pluginname', 'block_' . $content->modulename) . " (" . $content->contentcount . ")";
+                        } else {
+                            if (!empty($activitieshtml)) {
+                                $activitieshtml .= ' - ';
+                            }
+                            $activitieshtml .= get_string('modulename', $content->modulename) . " (" . $content->contentcount . ")";
+                        }
+                    }
+
+                    $blocksandactivities = html_writer::tag('span',
+                                    get_string('activities', 'local_hub') . " : " . $activitieshtml);
+                    $blocksandactivities .= $brtag . html_writer::tag('span',
+                                    get_string('blocks', 'local_hub') . " : " . $blockhtml);
+
+                    $deschtml .= print_collapsible_region($blocksandactivities, 'blockdescription',
+                                    'blocksandactivities-' . $course->id, get_string('moredetails', 'local_hub'), '', false, true);
+                }
+
+                //create download button if necessary
+                //in order to avoid form conflict, it is a button tag
+                if (!$course->enrollable) {
+                    $params['courseid'] = $course->id;
+                    $params['filetype'] = HUB_BACKUP_FILE_TYPE;
+                    $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
+                    $downloadbutton = html_writer::tag('button', get_string('download', 'block_community'));
+                    $downloadbutton = html_writer::tag('a', $downloadbutton,
+                                    array('href' => $addurl, 'class' => 'centeredbutton'));
+                    $deschtml .= $brtag . $downloadbutton;
+                }
+
+                if ($withwriteaccess) {
+                    //bulk operations
+                    $checkboxhtml = html_writer::checkbox('bulk-' . $courseiteration, $course->id, false, '', array());
+
                     //visible
                     if ($course->privacy) {
                         $imgparams = array('src' => $OUTPUT->pix_url('i/hide'),
-                                'class' => 'siteimage', 'alt' => get_string('disable'));
+                            'class' => 'siteimage', 'alt' => get_string('disable'));
                         $makevisible = false;
                     } else {
                         $imgparams = array('src' => $OUTPUT->pix_url('i/show'),
-                                'class' => 'siteimage', 'alt' => get_string('enable'));                        
+                            'class' => 'siteimage', 'alt' => get_string('enable'));
                         $makevisible = true;
-                    }                  
-                    $hideimgtag = html_writer::empty_tag('img', $imgparams);
-                    $visibleurlparams = array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $course->id);
-                    if (!empty($optionalurlparams)) {
-                            $visibleurlparams = array_merge($visibleurlparams, $optionalurlparams);
                     }
+                    $hideimgtag = html_writer::empty_tag('img', $imgparams);
+                    $visibleurlparams = array('sesskey' => sesskey(), 'visible' => $makevisible,
+                        'id' => $course->id);
+                    if (!empty($optionalurlparams)) {
+                        $visibleurlparams = array_merge($visibleurlparams, $optionalurlparams);
+                    }
+                  
                     $visibleurl = new moodle_url("/local/hub/admin/managecourses.php",
-                            $visibleurlparams);
+                                    $visibleurlparams);
                     $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));
 
-
-
-                    //delete link
-                    $deleteurlparams = array('sesskey' => sesskey(), 'delete' => $course->id);
-                    if (!empty($optionalurlparams)) {
-                            $deleteurlparams = array_merge($deleteurlparams, $optionalurlparams);
-                    }
-                    $deleteeurl = new moodle_url("/local/hub/admin/managecourses.php",
-                           $deleteurlparams );
-                    $deletelinkhtml = html_writer::tag('a', get_string('delete'), array('href' => $deleteeurl));
-
                     // add a row to the table
-                    $cells = array($coursenamehtml, $deschtml, $screenshothtml, $language,
-                            $visiblehtml, $deletelinkhtml);
-                    if (!$course->enrollable) {
-                        $cells[] = $downloadbuttonhtml;
-                    }
-
+                    $cells = array($checkboxhtml, $coursenamehtml, $deschtml, $visiblehtml);
                 } else {
                     // add a row to the table
-                    $cells = array($coursenamehtml, $deschtml, $screenshothtml, $languages[$course->language]);
-                    if (!$course->enrollable) {
-                        $cells[] = $downloadbuttonhtml;
-                    }
+                    $cells = array($coursenamehtml, $deschtml);
                 }
 
-
-                $row = new html_table_row($cells);              
+                $row = new html_table_row($cells);
 
                 $table->data[] = $row;
             }
+
             $renderedhtml .= html_writer::table($table);
+
+            //add the select bulk operation
+            if ($withwriteaccess) {
+                $selecthtml = html_writer::select(array(
+                            'bulkdelete' => get_string('bulkdelete', 'local_hub'),
+                            'bulkvisible' => get_string('bulkvisible', 'local_hub'),
+                            'bulknotvisible' => get_string('bulknotvisible', 'local_hub')), 'bulkselect', '',
+                                array('' => get_string('bulkselectoperation', 'local_hub')));
+                $renderedhtml .= html_writer::tag('div', $selecthtml);
+
+                //perform button
+                $optionalurlparams['sesskey'] = sesskey();
+                $bulkformparam['method'] = 'post';
+                $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
+                $bulkbutton = html_writer::empty_tag('input',
+                                array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit', 'type' => 'submit',
+                                    'value' => get_string('bulkoperationperform', 'local_hub')));
+                $renderedhtml .= html_writer::tag('div', $bulkbutton);
+                $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
+                $renderedhtml = html_writer::tag('div', $renderedhtml);
+            }
         }
         return $renderedhtml;
     }
-
 
     /**
      * Display a list of sites
@@ -349,7 +376,7 @@ class local_hub_renderer extends plugin_renderer_base {
      * @param boolean $withwriteaccess
      * @return string
      */
-    public function site_list($sites,  $withwriteaccess=false) {
+    public function site_list($sites, $withwriteaccess=false) {
         global $OUTPUT, $CFG;
 
         $renderedhtml = '';
@@ -357,32 +384,33 @@ class local_hub_renderer extends plugin_renderer_base {
         $table = new html_table();
 
         if ($withwriteaccess) {
-            $table->head  = array('', get_string('sitename', 'local_hub'),
-                    get_string('sitedesc', 'local_hub'),
-                    get_string('sitelang', 'local_hub'),
-                    get_string('siteadmin', 'local_hub'),
-                    get_string('visible'),
-                    '',
-                    '',
-                    get_string('operation', 'local_hub'));
+            $table->head = array('', get_string('sitename', 'local_hub'),
+                get_string('sitedesc', 'local_hub'),
+                get_string('sitelang', 'local_hub'),
+                get_string('siteadmin', 'local_hub'),
+                get_string('visible'),
+                '',
+                '',
+                get_string('operation', 'local_hub'));
 
             $table->align = array('center', 'left', 'left', 'center', 'center', 'center', 'center', 'center', 'center');
             $table->size = array('5%', '25%', '40%', '5%', '15%', '%5', '%5');
         } else {
-            $table->head  = array('', get_string('sitename', 'local_hub'),
-                    get_string('sitedesc', 'local_hub'),
-                    get_string('sitelang', 'local_hub'));
+            $table->head = array('', get_string('sitename', 'local_hub'),
+                get_string('sitedesc', 'local_hub'),
+                get_string('sitelang', 'local_hub'));
 
             $table->align = array('center', 'left', 'left', 'center');
             $table->size = array('10%', '25%', '60%', '5%');
         }
 
         if (empty($sites)) {
-            $renderedhtml .= get_string('nosite', 'local_hub');
+            if (isset($sites)) {
+                $renderedhtml .= get_string('nosite', 'local_hub');
+            }
         } else {
-
             $table->width = '100%';
-            $table->data  = array();
+            $table->data = array();
             $table->attributes['class'] = 'sitedirectory';
 
             // iterate through sites and add to the display table
@@ -419,8 +447,8 @@ class local_hub_renderer extends plugin_renderer_base {
 
                     $registrationmanager = new registration_manager();
                     $admindisplayedinfo->privacy = $registrationmanager->get_site_privacy_string($site->privacy);
-                    $admindisplayedinfo->contactable = $site->contactable?get_string('yes'):get_string('no');
-                    $admindisplayedinfo->emailalert = $site->emailalert?get_string('yes'):get_string('no');
+                    $admindisplayedinfo->contactable = $site->contactable ? get_string('yes') : get_string('no');
+                    $admindisplayedinfo->emailalert = $site->emailalert ? get_string('yes') : get_string('no');
                     $additionaladmindesc = html_writer::empty_tag('br');
                     $additionaladmindesc .= get_string('additionaladmindesc', 'local_hub', $admindisplayedinfo);
                     $deschtml .= html_writer::tag('span', $additionaladmindesc, array('class' => 'additionaladmindesc'));
@@ -432,14 +460,19 @@ class local_hub_renderer extends plugin_renderer_base {
                     $languages = get_string_manager()->get_list_of_languages();
                     $language = $languages[$site->language];
                 } else {
-                    $language= '';
+                    $language = '';
+                }
+
+                //retrieve country string
+                if (!empty($site->countrycode)) {
+                    $country = get_string_manager()->get_list_of_countries();
+                    $language .= ' (' . $country[$site->countrycode] . ')';
                 }
 
                 if ($withwriteaccess) {
                     //create site administrator name with email link
                     $adminnamehtml = html_writer::tag('a', $site->contactname,
-                            array('href' => 'mailto:'.$site->contactemail));
-
+                                    array('href' => 'mailto:' . $site->contactemail));
 
                     //create trust button
                     if ($site->trusted) {
@@ -450,7 +483,7 @@ class local_hub_renderer extends plugin_renderer_base {
                         $trust = true;
                     }
                     $trusturl = new moodle_url("/local/hub/admin/managesites.php",
-                            array('sesskey' => sesskey(), 'trust' => $trust, 'id' => $site->id));
+                                    array('sesskey' => sesskey(), 'trust' => $trust, 'id' => $site->id));
                     $trustedbutton = new single_button($trusturl, $trustmsg);
                     $trustbuttonhtml = $OUTPUT->render($trustedbutton);
 
@@ -464,23 +497,23 @@ class local_hub_renderer extends plugin_renderer_base {
                         $makeprioritise = true;
                     }
                     $prioritiseurl = new moodle_url("/local/hub/admin/managesites.php",
-                            array('sesskey' => sesskey(), 'prioritise' => $makeprioritise, 'id' => $site->id));
+                                    array('sesskey' => sesskey(), 'prioritise' => $makeprioritise, 'id' => $site->id));
                     $prioritisebutton = new single_button($prioritiseurl, $prioritisemsg);
                     $prioritisebuttonhtml = $OUTPUT->render($prioritisebutton);
 
                     //visible
                     if ($site->visible) {
                         $hideimgtag = html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('i/hide'),
-                                'class' => 'siteimage', 'alt' => get_string('disable')));
+                                    'class' => 'siteimage', 'alt' => get_string('disable')));
                         $makevisible = false;
                     } else {
                         $hideimgtag = html_writer::empty_tag('img', array('src' => $OUTPUT->pix_url('i/show'),
-                                'class' => 'siteimage', 'alt' => get_string('enable')));
+                                    'class' => 'siteimage', 'alt' => get_string('enable')));
                         $makevisible = true;
                     }
                     if ($site->privacy != HUB_SITENOTPUBLISHED) {
                         $visibleurl = new moodle_url("/local/hub/admin/managesites.php",
-                                array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $site->id));
+                                        array('sesskey' => sesskey(), 'visible' => $makevisible, 'id' => $site->id));
                         $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));
                     } else {
                         $visiblehtml = get_string('private', 'local_hub');
@@ -488,13 +521,12 @@ class local_hub_renderer extends plugin_renderer_base {
 
                     //delete link
                     $deleteeurl = new moodle_url("/local/hub/admin/managesites.php",
-                            array('sesskey' => sesskey(), 'delete' => $site->id));
+                                    array('sesskey' => sesskey(), 'delete' => $site->id));
                     $deletelinkhtml = html_writer::tag('a', get_string('delete'), array('href' => $deleteeurl));
 
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $language, $adminnamehtml,
-                            $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, $deletelinkhtml);
-
+                        $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, $deletelinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $languages[$site->language]);

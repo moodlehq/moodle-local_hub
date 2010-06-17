@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,28 +23,51 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require('../../../config.php');
 
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot. "/local/hub/forms.php");
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/local/hub/lib.php');
+require_once($CFG->dirroot . "/local/hub/forms.php");
 
 admin_externalpage_setup('managecourses');
 $hub = new local_hub();
+$renderer = $PAGE->get_renderer('local_hub');
 
-/// Check if the page has been called with delete argument
-$delete  = optional_param('delete', -1, PARAM_INTEGER);
-$confirm  = optional_param('confirm', false, PARAM_INTEGER);
-if ($delete != -1 and $confirm and confirm_sesskey()) {
-    $hub->delete_course($delete);
+//bulk operations
+$bulkoperation = optional_param('bulkselect', false, PARAM_ALPHANUM);
+$confirm = optional_param('confirm', false, PARAM_INTEGER);
+if (!empty($bulkoperation) and confirm_sesskey()) {
+    //retrieve all ids
+    for ($i = 1; $i <= HUB_COURSE_PER_PAGE; $i = $i + 1) {
+        $selectedcourseid = optional_param('bulk-' . $i, false, PARAM_INTEGER);
+        if (!empty($selectedcourseid)) {
+            $bulkcourses[] = $hub->get_course($selectedcourseid);
+        }
+    }
+    if (!$confirm) {
+        $contenthtml = $renderer->course_bulk_operation_confirmation($bulkcourses, $bulkoperation);
+        $skipmainform = true;
+    } else if ($bulkoperation == 'bulkdelete') {
+        foreach ($bulkcourses as $bulkcourse) {
+            $hub->delete_course($bulkcourse->id);
+        }
+    } else {
+        foreach ($bulkcourses as $bulkcourse) {
+            if ($bulkoperation == 'bulkvisible') {
+                $bulkcourse->privacy = COURSEVISIBILITY_VISIBLE;
+            } else if ($bulkoperation == 'bulknotvisible') {
+                $bulkcourse->privacy = COURSEVISIBILITY_NOTVISIBLE;
+            }
+            $hub->update_course($bulkcourse);
+        }
+    }
 }
 
 
-/// Check if the page has been called by visible action
-$visible  = optional_param('visible', -1, PARAM_INTEGER);
+/// Check if the page has been called by visible icon
+$visible = optional_param('visible', -1, PARAM_INTEGER);
 if ($visible != -1 and confirm_sesskey()) {
-    $id  = optional_param('id', '', PARAM_INTEGER);
+    $id = optional_param('id', '', PARAM_INTEGER);
     $course = $hub->get_course($id);
     if (!empty($course)) {
         $course->privacy = $visible;
@@ -51,97 +75,122 @@ if ($visible != -1 and confirm_sesskey()) {
     }
 }
 
+$search = optional_param('search', '', PARAM_TEXT);
 
-$search  = optional_param('search', '', PARAM_TEXT);
-
-$renderer = $PAGE->get_renderer('local_hub');
-$contenthtml = "";
-if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
-    $course = $hub->get_course($delete);
-    $contenthtml = $renderer->delete_course_confirmation($course);
-} else { //all other cases we go back to site list page (no need confirmation)
-    
-    $downloadable  = optional_param('downloadable', false, PARAM_INTEGER);
+if (empty($skipmainform)) { //all other cases we go back to site list page (no need confirmation)
+    $fromformdata['coverage'] = optional_param('coverage', 'all', PARAM_TEXT);
+    $fromformdata['licence'] = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['siteid'] = optional_param('siteid', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['lastmodified'] = optional_param('lastmodified', HUB_LASTMODIFIED_WEEK, PARAM_ALPHANUMEXT);
+    $fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
+    $fromformdata['visibility'] = optional_param('visibility', COURSEVISIBILITY_NOTVISIBLE, PARAM_ALPHANUMEXT);
+    $fromformdata['downloadable'] = optional_param('downloadable', 'all', PARAM_ALPHANUM);
+    $fromformdata['adminform'] = 1;
+    $fromformdata['search'] = $search;
 
     //forms
-    $coursesearchform = new course_search_form('', array('search' => $search, 'adminform' => 1));
+    $coursesearchform = new course_search_form('', $fromformdata);
     $fromform = $coursesearchform->get_data();
 
-    //if the page result from any action from the renderer, set data to the previous search in order to
-    //display the same result
-    if (($visible != -1 or ($delete != -1  and $confirm)) and confirm_sesskey()) {
-        $fromformdata['coverage']  = optional_param('coverage', 'all', PARAM_TEXT);
-        $fromformdata['licence']  = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['audience']  = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['language']  = optional_param('language', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['educationallevel']  = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['visibility']  = optional_param('visibility', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['downloadable']  = $downloadable;
-        $fromformdata['search'] = $search;
-        $coursesearchform->set_data($fromformdata);
-        $fromform = (object)$fromformdata;
-    }
+    $coursesearchform->set_data($fromformdata);
+    $fromform = (object) $fromformdata;
 
-    
     //Retrieve courses by web service
     $courses = null;
     $options = array();
-    if (!empty($fromform)) {
 
-        if (!empty($fromform->coverage)) {
-            $options['coverage'] = $fromform->coverage;
-        }
-        if ($fromform->licence != 'all') {
-            $options['licenceshortname'] = $fromform->licence;
-        }
-        if ($fromform->subject != 'all') {
-            $options['subject'] = $fromform->subject;
-        }
-        if ($fromform->audience != 'all') {
-            $options['audience'] = $fromform->audience;
-        }
-        if ($fromform->educationallevel != 'all') {
-            $options['educationallevel'] = $fromform->educationallevel;
-        }
-        if ($fromform->language != 'all') {
-            $options['language'] = $fromform->language;
+    if (!empty($fromform->coverage)) {
+        $options['coverage'] = $fromform->coverage;
+    }
+    if ($fromform->licence != 'all') {
+        $options['licenceshortname'] = $fromform->licence;
+    }
+    if ($fromform->subject != 'all') {
+        $options['subject'] = $fromform->subject;
+    }
+    if ($fromform->audience != 'all') {
+        $options['audience'] = $fromform->audience;
+    }
+    if ($fromform->educationallevel != 'all') {
+        $options['educationallevel'] = $fromform->educationallevel;
+    }
+    if ($fromform->language != 'all') {
+        $options['language'] = $fromform->language;
+    }
+    if ($fromform->siteid != 'all') {
+        $options['siteid'] = $fromform->siteid;
+    }
+    if ($fromform->lastmodified != 'all') {
+        switch ($fromform->lastmodified) {
+            case HUB_LASTMODIFIED_WEEK:
+                $lastmodified = strtotime("-7 day");
+                break;
+            case HUB_LASTMODIFIED_FORTEENNIGHT:
+                $lastmodified = strtotime("-14 day");
+                break;
+            case HUB_LASTMODIFIED_MONTH:
+                $lastmodified = strtotime("-30 day");
+                break;
         }
 
-        $options['visibility'] = $fromform->visibility;
+        $options['lastmodified'] = $lastmodified;
+    }
 
-        //get courses
-        $options['search'] = $search;
-        $options['onlyvisible'] = false;
-        $options['downloadable'] = $downloadable;
-        $options['enrollable'] = !$downloadable;
-        $courses = $hub->get_courses($options);
+    $options['visibility'] = $fromform->visibility;
 
-        //get courses content
-        foreach($courses as $course) {
+    //get courses
+    $options['search'] = $search;
+    $options['onlyvisible'] = false;
+    if ($fromform->downloadable != 'all') {
+        $options['downloadable'] = $fromform->downloadable;
+        $options['enrollable'] = !$fromform->downloadable;
+    } else {
+        $options['downloadable'] = 1;
+        $options['enrollable'] = 1;
+    }
 
-            $contents = $hub->get_course_contents($course->id);
-             if (!empty($contents)) {
-                 foreach($contents as $content) {
-                    $course->contents[] = $content;
-                 }
-             }
+    $page = optional_param('page', 0, PARAM_INT);
+
+    $courses = $hub->get_courses($options,
+                    $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
+
+    $coursetotal = $hub->get_courses($options, 0, 0, true);
+
+    //get courses content
+    foreach ($courses as $course) {
+
+        $contents = $hub->get_course_contents($course->id);
+        if (!empty($contents)) {
+            foreach ($contents as $content) {
+                $course->contents[] = $content;
+            }
         }
     }
 
-   
 /// (search, none language, no onlyvisible)
     $options['search'] = $search;
-    $options['downloadable'] = $downloadable;
+    //$options['downloadable'] = $downloadable;
+    if (!empty($fromform)) {
+
+        $options['lastmodified'] = $fromform->lastmodified;
+    }
+    $options['downloadable'] = $fromform->downloadable; //need to overwrite download, could be == 'all'
     $contenthtml = $renderer->course_list($courses, true, $options);
+
+    //paging bar
+    if ($coursetotal > HUB_COURSE_PER_PAGE) {       
+        $baseurl = new moodle_url('', $options);
+        $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
+        $contenthtml .= html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+    }
 }
-
-
-
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
-if (!($delete != -1 and !$confirm)) {
+if (empty($skipmainform)) {
     $coursesearchform->display();
 }
 echo $contenthtml;

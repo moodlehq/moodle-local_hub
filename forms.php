@@ -28,6 +28,7 @@
  */
 
 require_once($CFG->dirroot.'/lib/formslib.php');
+require_once($CFG->dirroot.'/local/hub/lib.php');
 
 /**
  * Registration confirmation form - a captcha is required to be filled by the registered hub
@@ -140,18 +141,32 @@ class course_search_form extends moodleform {
         if (isset($this->_customdata['visibility'])) {
             $visibility = $this->_customdata['visibility'];
         } else {
-            $visibility = COURSEVISIBILITY_ALL;
+            $visibility = COURSEVISIBILITY_NOTVISIBLE;
         }
         if (isset($this->_customdata['downloadable'])) {
             $downloadable = $this->_customdata['downloadable'];
         } else {
             $downloadable = 0;
         }
-     
+        if (isset($this->_customdata['siteid'])) {
+            $siteid = $this->_customdata['siteid'];
+        } else {
+            $siteid = 'all';
+        }
+        if (isset($this->_customdata['lastmodified'])) {
+            $lastmodified = $this->_customdata['lastmodified'];
+        } else {
+            $lastmodified = HUB_LASTMODIFIED_WEEK;
+        }
+
+
         $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 
-        $options = array(0 => get_string('enrollable', 'local_hub'), 
+        $options = array(0 => get_string('enrollable', 'local_hub'),
                          1 => get_string('downloadable', 'local_hub'));
+        if (key_exists('adminform', $this->_customdata)) {
+            $options = array('all' => get_string('any')) + $options;
+        }
         $mform->addElement('select', 'downloadable', get_string('enroldownload', 'local_hub'), $options);
         $mform->addHelpButton('downloadable', 'enroldownload', 'local_hub');
 
@@ -177,6 +192,18 @@ class course_search_form extends moodleform {
         $mform->setDefault('audience', $audience);
         unset($options);
         $mform->addHelpButton('audience', 'audience', 'local_hub');
+
+        if (key_exists('adminform', $this->_customdata)) {
+            $options = array();
+            $options['all'] = '-';
+            $options[HUB_LASTMODIFIED_WEEK] = get_string('periodweek', 'local_hub');
+            $options[HUB_LASTMODIFIED_FORTEENNIGHT] = get_string('periodforteennight', 'local_hub');
+            $options[HUB_LASTMODIFIED_MONTH] = get_string('periodmonth', 'local_hub');
+            $mform->addElement('select', 'lastmodified', get_string('lastmodified', 'local_hub'), $options);
+            $mform->setDefault('lastmodified', $lastmodified);
+            unset($options);
+            $mform->addHelpButton('lastmodified', 'lastmodified', 'local_hub');
+        }
 
         $options = array();
         $options['all'] = get_string('any');
@@ -228,12 +255,119 @@ class course_search_form extends moodleform {
         $mform->setDefault('language', $language);
         $mform->addHelpButton('language', 'language', 'local_hub');
 
+        if (key_exists('adminform', $this->_customdata)) {
+            require_once($CFG->dirroot."/local/hub/lib.php");
+            $hub = new local_hub();
+            $sites = $hub->get_sites();
+            $siteids = array();
+            foreach ($sites as $site) {
+                
+                $siteids[$site->id] = $site->name;
+            }
+            asort($siteids, SORT_LOCALE_STRING);
+            $siteids = array('all' => get_string('any'))+ $siteids;
+            $mform->addElement('select', 'siteid',get_string('site', 'local_hub'), $siteids);
+            $mform->setDefault('siteid', $siteid);
+            $mform->addHelpButton('siteid', 'site', 'local_hub');
+        }
 
         $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
         $mform->addHelpButton('search', 'keywords', 'local_hub');
+        $mform->setDefault('search', $search);
+
+        $mform->addElement('submit', 'submitbutton', get_string('search', 'local_hub'));
+
+    }
+
+}
+
+class site_search_form extends moodleform {
+
+    public function definition() {
+        $strrequired = get_string('required');
+        $mform =& $this->_form;
+
+        //set default value
+        $search = $this->_customdata['search'];
+        if (isset($this->_customdata['trusted'])) {
+            $trusted = $this->_customdata['trusted'];
+        } else {
+            $trusted = 'all';
+        }
+        if (isset($this->_customdata['prioritise'])) {
+            $prioritise = $this->_customdata['prioritise'];
+        } else {
+            $prioritise = 'all';
+        }
+        if (isset($this->_customdata['visible'])) {
+            $visible = $this->_customdata['visible'];
+        } else {
+            $visible = 'all';
+        }
+        if (isset($this->_customdata['countrycode'])) {
+            $country = $this->_customdata['countrycode'];
+        } else {
+            $country = 'all';
+        }
+        if (isset($this->_customdata['language'])) {
+            $language = $this->_customdata['language'];
+        } else {
+            $language = 'all';
+        }
+       
+
+        $mform->addElement('header', 'site', get_string('sitesearch', 'local_hub'));
+
+        //visible field
+        if (key_exists('adminform', $this->_customdata)) {
+            $options = array();
+            $options['all'] = get_string('visibilityall', 'local_hub');
+            $options[1] = get_string('visibilityyes', 'local_hub');
+            $options[0] = get_string('visibilityno', 'local_hub');
+            $mform->addElement('select', 'visible', get_string('sitevisibility', 'local_hub'), $options);
+            $mform->setDefault('visible', $visible);
+            unset($options);
+            $mform->addHelpButton('visible', 'sitevisibility', 'local_hub');
+        }
+
+        $options = array();
+        $options['all'] = get_string('any');
+        $options[1] = get_string('trustedyes', 'local_hub');
+        $options[0] = get_string('trustedno', 'local_hub');
+        $mform->addElement('select', 'trusted', get_string('trusted', 'local_hub'), $options);
+        $mform->setDefault('trusted', $trusted);
+        unset($options);
+        $mform->addHelpButton('trusted', 'trusted', 'local_hub');
+
+        $options = array();
+        $options['all'] = get_string('any');
+        $options[1] = get_string('prioritiseyes', 'local_hub');
+        $options[0] = get_string('prioritiseno', 'local_hub');
+        $mform->addElement('select', 'prioritise', get_string('prioritise', 'local_hub'), $options);
+        $mform->setDefault('prioritise', $prioritise);
+        unset($options);
+        $mform->addHelpButton('prioritise', 'prioritise', 'local_hub');
+
+        $options = array();
+        $options['all'] = get_string('any');
+        $options = array_merge($options, get_string_manager()->get_list_of_countries());
+        $mform->addElement('select', 'countrycode', get_string('country', 'local_hub'), $options);
+        $mform->setDefault('countrycode', $country);
+        unset($options);
+        $mform->addHelpButton('countrycode', 'country', 'local_hub');
+        
+        $languages = get_string_manager()->get_list_of_languages();
+        asort($languages, SORT_LOCALE_STRING);
+        $languages = array_merge (array('all' => get_string('any')),$languages);
+        $mform->addElement('select', 'language',get_string('sitelang', 'local_hub'), $languages);
+        $mform->setDefault('language', $language);
+        $mform->addHelpButton('language', 'sitelang', 'local_hub');
+
+        $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
+        $mform->addHelpButton('search', 'sitekeywords', 'local_hub');
          $mform->setDefault('search', $search);
 
-        $this->add_action_buttons(false, get_string('search', 'local_hub'));
+        $this->add_action_buttons(false, get_string('sitesearch', 'local_hub'));
     }
 
 }
