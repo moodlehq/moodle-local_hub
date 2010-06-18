@@ -100,7 +100,20 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
         if (!file_exists($newfilepath) or
                 (filemtime($filepath) > filemtime($newfilepath))) {
             $image = new moodle_image($filepath);
-            $image->resize(HUBLOGOIMAGEWIDTH, HUBLOGOIMAGEHEIGHT);
+
+            //scale to the max width/height dimension
+            $imagewidth = $imageinfo[0];
+            $imageheight =  $imageinfo[1];
+            if ($imagewidth >  HUBLOGOIMAGEWIDTH) {
+                $imagewidth = $imagewidth / ($imagewidth / HUBLOGOIMAGEWIDTH);
+                $imageheight = $imageheight / ($imagewidth / HUBLOGOIMAGEWIDTH);
+            }
+            if ($imageheight >  HUBLOGOIMAGEHEIGHT) {
+                $imageheight = $imageheight / ($imageheight / HUBLOGOIMAGEWIDTH);
+                $imagewidth = $imagewidth / ($imageheight / HUBLOGOIMAGEWIDTH);
+            }
+
+            $image->resize($imagewidth, $imageheight);
             $image->saveas($newfilepath);
         }
 

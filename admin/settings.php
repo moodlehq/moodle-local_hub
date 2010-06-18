@@ -65,14 +65,16 @@ if (!empty($fromform)) {
 
                 $userdir = "hub/0/";
 
+                //create directory if doesn't exist
                 $directory = make_upload_directory($userdir);
 
+                //save the image into the directory
                 $fp = fopen($directory.'/hublogo', 'w');
                 fwrite($fp, $file->get_content());
                 fclose($fp);
 
-                 set_config('hublogo', true ,'local_hub');
-                 $updatelogo = true;
+                set_config('hublogo', true ,'local_hub');
+                $updatelogo = true;
             }
         }
     }
