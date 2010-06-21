@@ -80,7 +80,11 @@ if ($update && confirm_sesskey()) {
     $serverurl = HUB_HUBDIRECTORYURL."/local/hubdirectory/webservice/webservices.php";
     require_once($CFG->dirroot."/webservice/xmlrpc/lib.php");
     $xmlrpcclient = new webservice_xmlrpc_client();
-    $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+    try {
+        $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+    } catch (Exception $e) {
+        $error = $OUTPUT->notification(get_string('errorregistration', 'local_hub', $e->getMessage()));
+    }
 }
 
 
@@ -142,6 +146,10 @@ if (!empty($hubtodirectorycommunication->confirmed) and $privacy != HUBPRIVATE) 
     //display update result
     if (!empty($result)) {
         echo $OUTPUT->notification(get_string('registrationupdated', 'local_hub'), 'notifysuccess');
+    }
+
+    if (!empty($error)) {
+        echo $error;
     }
 
     $url = new moodle_url("/local/hub/admin/register.php",
