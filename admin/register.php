@@ -96,7 +96,7 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
     if (empty($directorytohubcommunication)) {
 
         //create new token for the hub directory to call the hub
-        $capabilities = array('moodle/hub:viewinfo', 'moodle/hub:confirmhubregistration');
+        $capabilities = array('local/hub:viewinfo');
         $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUB_HUBDIRECTORYURL.'_directory_user',
                 $capabilities);
 

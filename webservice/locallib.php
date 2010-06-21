@@ -42,7 +42,7 @@ class hub_webservice_xmlrpc_server extends webservice_xmlrpc_server {
             $publiccommunication = $hub->get_communication(WSSERVER, PUBLICSITE);
 
             if (empty($publiccommunication)) {
-                $capabilities = array('moodle/hub:view');
+                $capabilities = array('local/hub:view');
                 $token = $hub->create_hub_token('Public Hub User',
                         'Public site', 'public_hub_user', $capabilities);
                 $publiccommunication = new stdClass();

@@ -46,7 +46,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:viewinfo', $context);
+        require_capability('local/hub:viewinfo', $context);
 
         //not useful to validate no params, but following line just here to remind u ;)
         self::validate_parameters(self::get_info_parameters(), array());
@@ -131,7 +131,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:updateinfo', $context);
+        require_capability('local/hub:updateinfo', $context);
 
         $params = self::validate_parameters(self::update_site_info_parameters(),
                 array('siteinfo' => $siteinfo));
@@ -178,7 +178,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:unregistercourse', $context);
+        require_capability('local/hub:unregistercourse', $context);
 
         $params = self::validate_parameters(self::unregister_courses_parameters(),
                 array('courseids' => $courseids));
@@ -259,7 +259,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:registercourse', $context);
+        require_capability('local/hub:registercourse', $context);
 
         $params = self::validate_parameters(self::register_courses_parameters(),
                 array('courses' => $courses));
@@ -327,7 +327,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:view', $context);
+        require_capability('local/hub:view', $context);
 
         $params = self::validate_parameters(self::get_courses_parameters(),
                 array('search' => $search, 'downloadable' => $downloadable,
@@ -477,7 +477,7 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('moodle/hub:view', $context);
+        require_capability('local/hub:view', $context);
 
         $params = self::validate_parameters(self::get_sites_parameters(),
                 array('search' => $search, 'options' => $options));

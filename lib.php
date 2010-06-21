@@ -903,8 +903,8 @@ class local_hub {
         $sitetohubcommunication = $this->get_communication(WSSERVER, REGISTEREDSITE, $siteinfo->url);
         if (empty($sitetohubcommunication)) {
             //create token for the hub
-            $capabilities = array('moodle/hub:updateinfo', 'moodle/hub:registercourse',
-                'moodle/hub:view', 'moodle/hub:unregistercourse');
+            $capabilities = array('local/hub:updateinfo', 'local/hub:registercourse',
+                'local/hub:view', 'local/hub:unregistercourse');
             $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site',
                             $siteinfo->url . '_registered_site_user',
                             $capabilities);

@@ -37,28 +37,24 @@
 
 
 $capabilities = array(
-        'moodle/hub:viewinfo' => array(
+        'local/hub:viewinfo' => array(
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_SYSTEM,
         ),
-        'moodle/hub:registerinfo' => array(
-                'captype' => 'read',
-                'contextlevel' => CONTEXT_SYSTEM,
-        ),
-        'moodle/hub:updateinfo' => array(
+        'local/hub:updateinfo' => array(
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
         ),
-        'moodle/hub:registercourse' => array(
+        'local/hub:registercourse' => array(
                 'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM
         ),
-        'moodle/hub:view' => array(
+        'local/hub:view' => array(
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_SYSTEM
         ),
-        'moodle/hub:unregistercourse' => array(
+        'local/hub:unregistercourse' => array(
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM
         ),
