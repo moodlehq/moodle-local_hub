@@ -77,8 +77,12 @@ $string['coursesnumber'] = 'Number of courses ({$a})';
 $string['coverage'] = 'Coverage: {$a}';
 $string['creatorname'] = 'Creator name';
 $string['creatornotes'] = 'Creator notes';
-$string['deleteconfirmation'] = 'Are you sure to delete the {$a} site ?';
+$string['deleteconfirmation'] = 'The site administrator will be sent an email explaining how he can unregister his site.';
 $string['deletecourseconfirmation'] = 'Are you sure to delete the {$a} course ?';
+$string['deleterelatedcourseslink'] = 'related courses';
+$string['deletesite'] = 'Unregister {$a}';
+$string['unregistersite'] = 'Unregister the site';
+$string['unregistersiteandcourses'] = 'Unregister the site and all courses';
 $string['demourl'] = 'Demo URL';
 $string['description'] = 'Description';
 $string['description_help'] = 'The hub description will always appear on hub listing.';
@@ -102,6 +106,10 @@ Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}
 ';
+$string['emailmessagesitedeleted'] = '{$a->sitename} at {$a->siteurl} has just been deleted from the {$a->hubname} hub at {$a->huburl}.
+
+A {$a->hubname} administrator deleted {$a->sitename} from the hub database. If you are allowed and want to register a new time on the hub, you will need first to force unregister from this hub. Please go to {$a->unregisterpagelink} on {$a->sitename}.
+';
 $string['emailmessagesiteupdated'] = '{$a->name} just updated registration with the hub at {$a->huburl}
 
 Name: {$a->name}
@@ -114,6 +122,7 @@ To manage registered sites, go to: {$a->managesiteurl}
 $string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})
 Its new url {$a->url} has been updated from ({$a->oldurl}).';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
+$string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from a hub';
 $string['emailtitlesiteupdated'] = '{$a} site has been updated on the hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his url (please check it).';
 $string['enabled'] = 'Enabled';

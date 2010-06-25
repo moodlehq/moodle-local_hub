@@ -88,7 +88,7 @@ $hub = new local_hub();
 $checkedsite = $hub->get_site_by_url($url);
 if (!empty($checkedsite)) {
     redirect(new moodle_url($url."/admin/registration/confirmregistration.php",
-            array('error' => 'urlalreadyexist', 'url' => $CFG->wwwroot, 'token' => $fromform->token,
+            array('error' => 'urlalreadyexist', 'url' => $CFG->wwwroot, 'token' => $token,
                 'hubname' => get_config('local_hub', 'name'))));
 }
 

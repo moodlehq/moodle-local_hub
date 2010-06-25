@@ -133,15 +133,25 @@ class local_hub {
     }
 
     /**
-     * Remove a site from the directory (delete the row from DB)
-     * @param integer $id - id of the site to remove from the directory
-     * @return boolean true
-     * @throws dml_exception if error
+     * Unregister a site from the directory
+     * If the site doesn't exist do nothing - no error thrown
+     * If the site id doesn't match the site url, throw an error
+     * @param string $siteurl
      */
-    public function delete_site($id) {
-        global $DB;
-        return $DB->delete_records('hub_site_directory', array('id' => $id));
+    public function unregister_site($site) {
+        global $CFG;
+
+        //check that the site exist (otherwise unregister)
+        if (!empty($site)) {
+            //reset the following settings that could have been changed by admin
+            $site->deleted = 1;
+            $site->trusted = 0;
+            $site->visible = 0;
+            $site->prioritise = 0;
+            $this->update_site($site);
+        }
     }
+
 
     /**
      * Update a site
@@ -161,10 +171,19 @@ class local_hub {
      * @throws dml_exception if error
      */
     public function add_site($site) {
-        global $DB;
+        global $DB;       
         $site->timeregistered = time();
         $site->timemodified = time();
-        $site->id = $DB->insert_record('hub_site_directory', $site);
+
+        //check if a deleted site exist
+        $deletedsite = $this->get_site_by_url($site->url, true);
+        $site->deleted = 0;
+        if (!empty($deletedsite)) {
+            $site->id = $deletedsite->id;
+            $this->update_site($site);
+        } else {
+            $site->id = $DB->insert_record('hub_site_directory', $site);
+        }
         return $site;
     }
 
@@ -215,6 +234,19 @@ class local_hub {
         $course->deleted = 1;
         $course->timemodified = time();
         return $DB->update_record('hub_course_directory', $course);
+    }
+
+    /**
+     * Mark all courses of a site as deleted (we never really delete a course)
+     * @param integer $siteid - site id of the courses to remove from the directory
+     * @return boolean true
+     * @throws dml_exception if error
+     */
+    public function delete_courses($siteid) {
+        global $DB;
+        $DB->set_field('hub_course_directory', 'deleted', 1, array('siteid' => $siteid));
+        $DB->set_field('hub_course_directory', 'timemodified', time(), array('siteid' => $siteid));
+        return true;
     }
 
     /**
@@ -509,6 +541,15 @@ class local_hub {
             $sqlparams['countrycode'] = $options['countrycode'];
         }
 
+        if (!empty($wheresql)) {
+            $wheresql .= " AND";
+        }
+        if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {
+            $wheresql .= " deleted = 0";
+        } else {
+            $wheresql .= " deleted = 1";
+        }
+
         $sites = $DB->get_records_select('hub_site_directory', $wheresql, $sqlparams, $ordersql);
         return $sites;
     }
@@ -520,17 +561,18 @@ class local_hub {
      */
     public function get_site_by_token($token) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('token' => $token));
+        return $DB->get_record('hub_site_directory', array('token' => $token, 'deleted' => 0));
     }
 
     /**
      * Return a site for a given url
      * @param string $url
+     * @param int $deleted
      * @return object site , false if null
      */
-    public function get_site_by_url($url) {
+    public function get_site_by_url($url, $deleted = 0) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('url' => $url));
+        return $DB->get_record('hub_site_directory', array('url' => $url, 'deleted' => $deleted));
     }
 
     /**
@@ -539,7 +581,7 @@ class local_hub {
      */
     public function get_registered_sites_total() {
         global $DB;
-        return $DB->count_records('hub_site_directory', array('visible' => 1));
+        return $DB->count_records('hub_site_directory', array('visible' => 1, 'deleted' => 0));
     }
 
     /**
@@ -561,12 +603,25 @@ class local_hub {
      *     remoteentity name
      *     remoteentity url
      *     token used during this communication
+     * If a communication was previously existing, just overrride token, remotename and confirmed fields
      * @param object $communication
      * @return int id of the create communication into the DB
      */
     public function add_communication($communication) {
         global $DB;
-        $id = $DB->insert_record('hub_communications', $communication);
+
+        //look for previously deleted communication
+        $deletedcommunication = $this->get_communication($communication->type,
+                $communication->remoteentity, $communication->remoteurl, null, 1);
+        
+        $communication->deleted = 0;
+        if (!empty($deletedcommunication)) {
+            $communication->id = $deletedcommunication->id;
+            $DB->update_record('hub_communications', $communication);
+            $id = $communication->id;
+        } else {
+            $id = $DB->insert_record('hub_communications', $communication);
+        }
         return $id;
     }
 
@@ -582,19 +637,25 @@ class local_hub {
      * @param string $remoteentity the name of the remote entity
      * @param string $remoteurl the token of the remote entity
      * @param string $token the token used by this communication
+     * @param int $deleted set to 1, return only deleted communication
      * @return object return the communication
      */
-    public function get_communication($type, $remoteentity, $remoteurl = null, $token = null) {
+    public function get_communication($type, $remoteentity, $remoteurl = null, $token = null, $deleted = 0) {
         global $DB;
 
         $params = array('type' => $type,
             'remoteentity' => $remoteentity);
+        
         if (!empty($remoteurl)) {
             $params['remoteurl'] = $remoteurl;
         }
+
         if (!empty($token)) {
             $params['token'] = $token;
         }
+
+        $params['deleted'] = $deleted;
+
         $token = $DB->get_record('hub_communications', $params);
         return $token;
     }
@@ -603,9 +664,10 @@ class local_hub {
      * Delete communication
      * @param integer $communicationid
      */
-    public function delete_communication($communicationid) {
+    public function delete_communication($communication) {
         global $DB;
-        $DB->delete_records('hub_communications', array('id' => $communicationid));
+        $communication->deleted = 1;
+        $DB->update_record('hub_communications', $communication);
     }
 
     /**
@@ -762,7 +824,7 @@ class local_hub {
 
         //if the course is enrollable and is already registered, update it
         $existingenrollablecourse = $this->get_enrollable_course_by_site($course->siteid, $course->sitecourseid);
-        if (!empty($existingenrollablecourse)) {
+        if (!empty($existingenrollablecourse) and $course->enrollable) {
             $course->id = $existingenrollablecourse->id;
             $courseid = $existingenrollablecourse->id;
             $this->update_course($course);
@@ -814,6 +876,9 @@ class local_hub {
         if (is_array($siteinfo)) {
             $siteinfo = (object) $siteinfo;
         }
+
+        //if we create or update a site, it can not be deleted
+        $siteinfo->deleted = 0;
 
         //if update, check if the url changed, if yes it could be a potential hack attempt
         //=> make the hub not visible and alert the administrator

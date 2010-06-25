@@ -51,12 +51,30 @@ class local_hub_renderer extends plugin_renderer_base {
      */
     public function delete_confirmation($site) {
         global $OUTPUT;
+        $managecourseurl = new moodle_url('/local/hub/admin/managecourses.php',
+                        array('siteid' => $site->id, 'lastmodified' => 'all',
+                            'visibility' => 'all', 'sesskey' => sesskey()));
+        $managecourselink = html_writer::tag('a', get_string('deleterelatedcourseslink', 'local_hub'),
+                        array('href' => $managecourseurl));
+        $site->relatedcourses = $managecourselink;
         $optionsyes = array('delete' => $site->id, 'confirm' => 1, 'sesskey' => sesskey());
         $optionsno = array('sesskey' => sesskey());
-        $formcontinue = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsyes), get_string('delete'), 'post');
-        $formcancel = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsno), get_string('cancel'), 'get');
-        $sitename = html_writer::tag('strong', $site->name);
-        return $OUTPUT->confirm(get_string('deleteconfirmation', 'local_hub', $sitename), $formcontinue, $formcancel);
+        $deletesitebutton = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsyes),
+                        get_string('unregistersite', 'local_hub'), 'post');
+        $optionsyes['unregistercourses'] = true;
+        $deletesiteandcoursebutton = new single_button(new moodle_url("/local/hub/admin/managesites.php",
+                                $optionsyes), get_string('unregistersiteandcourses', 'local_hub'), 'post');
+        $cancelbutton = new single_button(new moodle_url("/local/hub/admin/managesites.php", $optionsno),
+                        get_string('cancel'), 'get');
+        $site->name = html_writer::tag('strong', $site->name);
+        $output = $this->box_start('generalbox', 'notice');
+        $output .= html_writer::tag('p', get_string('deleteconfirmation', 'local_hub', $site));
+        $output .= html_writer::tag('div', $OUTPUT->render($deletesitebutton)
+                        . ' ' . $OUTPUT->render($deletesiteandcoursebutton) .
+                ' ' . $OUTPUT->render($cancelbutton),
+                        array('class' => 'buttons'));
+        $output .= $this->box_end();
+        return $output;
     }
 
     /**
@@ -201,6 +219,12 @@ class local_hub_renderer extends plugin_renderer_base {
                     $coursenamehtml = html_writer::tag('span', $courseatag, array('class' => 'dimmed_text'));
                 }
 
+
+                $managesiteurl = new moodle_url($CFG->wwwroot . '/local/hub/admin/managesites.php',
+                                array('search' => $course->site->name, 'sesskey' => sesskey()));
+                $siteatag = html_writer::tag('a', $course->site->name, array('href' => $managesiteurl));
+                $coursenamehtml .= $brtag . html_writer::tag('span', $siteatag, array('class' => 'coursesitelink'));
+
                 // add screenshots
                 $screenshothtml = '';
                 if (!empty($course->screenshots)) {
@@ -258,8 +282,6 @@ class local_hub_renderer extends plugin_renderer_base {
                 if ($withwriteaccess) {
                     $admindisplayedinfo = new stdClass();
                     $admindisplayedinfo->timemodified = userdate($course->timemodified);
-                    require_once($CFG->dirroot . '/local/hub/lib.php');
-                    $hub = new local_hub();
                     $additionaladmindesc = $brtag;
                     $admindisplayedinfo->shortname = $course->shortname;
                     $additionaladmindesc .= get_string('additionalcourseadmindesc', 'local_hub', $admindisplayedinfo);
@@ -325,7 +347,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     if (!empty($optionalurlparams)) {
                         $visibleurlparams = array_merge($visibleurlparams, $optionalurlparams);
                     }
-                  
+
                     $visibleurl = new moodle_url("/local/hub/admin/managecourses.php",
                                     $visibleurlparams);
                     $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));

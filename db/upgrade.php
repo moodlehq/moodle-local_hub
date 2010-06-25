@@ -117,7 +117,35 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010061000, 'local', 'hub');
     }
 
+     if ($result && $oldversion < 2010062300) {
 
+    /// Define field deleted to be added to hub_site_directory
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('deleted', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, null, null, '0', 'participantnumberaverage');
+
+    /// Conditionally launch add field deleted
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010062300, 'local', 'hub');
+    }
+
+    if ($result && $oldversion < 2010062302) {
+
+    /// Define field deleted to be added to hub_communications
+        $table = new xmldb_table('hub_communications');
+        $field = new xmldb_field('deleted', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'confirmed');
+
+    /// Conditionally launch add field deleted
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint($result, 2010062302, 'local', 'hub');
+    }
 
     return $result;
 }

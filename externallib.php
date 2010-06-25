@@ -154,6 +154,50 @@ class local_hub_external extends external_api {
         return new external_value(PARAM_BOOL, '1 if all went well');
     }
 
+    /**
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
+    public static function unregister_site_parameters() {
+        return new external_function_parameters(
+                array()
+        );
+    }
+
+    /**
+     * Unregister site
+     * @return bool 1 if unregistration was successfull
+     */
+    public static function unregister_site() {
+        global $DB;
+        // Ensure the current user is allowed to run this function
+        $context = get_context_instance(CONTEXT_SYSTEM);
+        self::validate_context($context);
+        require_capability('local/hub:updateinfo', $context);
+
+        $params = self::validate_parameters(self::unregister_site_parameters(),
+                array());
+
+        //retieve site url
+        $token = optional_param('wstoken', '', PARAM_ALPHANUM);
+        $hub = new local_hub();
+        $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+
+        $site = $hub->get_site_by_url($siteurl);
+        if (!empty($site)) {
+            $hub->unregister_site($site);
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns description of method result value
+     * @return boolean
+     */
+    public static function unregister_site_returns() {
+        return new external_value(PARAM_INTEGER, '1 for successfull');
+    }
 
      /**
      * Returns description of method parameters

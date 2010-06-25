@@ -59,8 +59,8 @@ if ($unregister && $confirm && confirm_sesskey()) {
     $webservice_manager->delete_user_ws_token($tokentodelete->id);
 
     //delete the communication
-    $hub->delete_communication($directorytohubcommunication->id);
-    $hub->delete_communication($hubtodirectorycommunication->id);
+    $hub->delete_communication($directorytohubcommunication);
+    $hub->delete_communication($hubtodirectorycommunication);
 }
 
 
