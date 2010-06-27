@@ -632,7 +632,7 @@ class local_hub {
      * @param string $type can be SERVER or CLIENT. SERVER mean that the hub
      * is the server into the communication, so the token
      * refered, is used by the remote entity to call the a hub function.
-     * CLIENT mean that the hub used the token to call
+     * CLIENT mean that the hub use the token to call
      * the remote entity function
      * @param string $remoteentity the name of the remote entity
      * @param string $remoteurl the token of the remote entity

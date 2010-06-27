@@ -169,24 +169,38 @@ class local_hub_external extends external_api {
      * @return bool 1 if unregistration was successfull
      */
     public static function unregister_site() {
-        global $DB;
+        global $DB, $CFG;
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
         require_capability('local/hub:updateinfo', $context);
 
+        //clean params
         $params = self::validate_parameters(self::unregister_site_parameters(),
                 array());
 
-        //retieve site url
+        //retieve the site communication
         $token = optional_param('wstoken', '', PARAM_ALPHANUM);
         $hub = new local_hub();
-        $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+        $communication = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token);
 
+        //retrieve the site
+        $siteurl = $communication->remoteurl;
         $site = $hub->get_site_by_url($siteurl);
+
+        //unregister the site
         if (!empty($site)) {
             $hub->unregister_site($site);
         }
+
+        //delete the web service token
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservice_manager = new webservice();
+        $tokentodelete = $webservice_manager->get_user_ws_token($communication->token);
+        $webservice_manager->delete_user_ws_token($tokentodelete->id);
+
+        //delete the site communication
+        $hub->delete_communication($communication);
 
         return true;
     }

@@ -44,6 +44,30 @@ class local_hub_renderer extends plugin_renderer_base {
         return $OUTPUT->box($message);
     }
 
+     /**
+     * Display a confirm box for the hub unregistration (add or update)
+     * @param string $confirmationmessage
+     * @return string
+     */
+    public function unregistration_confirmation($force) {
+        global $OUTPUT;
+        if (empty($force)) {
+            $confirmationmessage = get_string('confirmunregistration', 'local_hub');
+            $buttonyeslabel = get_string('hubunregister', 'local_hub');
+        } else {
+            $confirmationmessage = get_string('confirmforceunregistration', 'local_hub');
+            $buttonyeslabel = get_string('hubforceunregister', 'local_hub');
+        }
+        $optionsyes['sesskey'] = sesskey();
+        $optionsyes['unregister'] = true;
+        $optionsyes['confirm'] = true;
+        $optionsyes['force'] = $force;
+        $optionsno = array();
+        $formcontinue = new single_button(new moodle_url("/local/hub/admin/register.php", $optionsyes), $buttonyeslabel, 'post');
+        $formcancel = new single_button(new moodle_url("/local/hub/admin/register.php", $optionsno), get_string('cancel'), 'get');
+        return $OUTPUT->confirm($confirmationmessage, $formcontinue, $formcancel);
+    }
+
     /**
      * Display a box confirmation message for removing a site from the directory
      * @param object $site - site to delete

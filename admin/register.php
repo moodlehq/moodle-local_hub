@@ -1,4 +1,5 @@
 <?php
+
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // This file is part of Moodle - http://moodle.org/                      //
@@ -28,12 +29,11 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require('../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/local/hub/admin/forms.php');
-require_once($CFG->dirroot.'/webservice/lib.php');
-require_once($CFG->dirroot.'/local/hub/lib.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/local/hub/admin/forms.php');
+require_once($CFG->dirroot . '/webservice/lib.php');
+require_once($CFG->dirroot . '/local/hub/lib.php');
 
 admin_externalpage_setup('hubregistration');
 
@@ -48,27 +48,41 @@ $fromform = $hubregistrationform->get_data();
 
 
 /////// UNREGISTER ACTION //////
-// TODO way better unregister
-//ATM delete the registration informations
-$unregister   = optional_param('unregister', 0, PARAM_INT);
-$confirm  = optional_param('confirm', 0, PARAM_INT);
+$unregister = optional_param('unregister', 0, PARAM_INT);
+$confirm = optional_param('confirm', 0, PARAM_INT);
+$force = optional_param('force', 0, PARAM_INT);
 if ($unregister && $confirm && confirm_sesskey()) {
-    //delete the web service token
-    $webservice_manager = new webservice();
-    $tokentodelete =  $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
-    $webservice_manager->delete_user_ws_token($tokentodelete->id);
 
-    //delete the communication
-    $hub->delete_communication($directorytohubcommunication);
-    $hub->delete_communication($hubtodirectorycommunication);
+    if (!$force) {
+        $function = 'hubdirectory_unregister_hub';
+        $params = array();
+        $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
+        require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
+        $xmlrpcclient = new webservice_xmlrpc_client();
+        try {
+            $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+        } catch (Exception $e) {
+            $error = $OUTPUT->notification(get_string('errorunregistration', 'local_hub', $e->getMessage()));
+        }
+    }
+
+    if (empty($error)) {
+        //delete the web service token
+        $webservice_manager = new webservice();
+        $tokentodelete = $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
+        $webservice_manager->delete_user_ws_token($tokentodelete->id);
+
+        //delete the communication
+        $hub->delete_communication($directorytohubcommunication);
+        $hub->delete_communication($hubtodirectorycommunication);
+    }
 }
 
 
 
 /////// UPDATE ACTION ////////
-
 // update the hub registration (in fact it is a new registration)
-$update     = optional_param('update', 0, PARAM_INT);
+$update = optional_param('update', 0, PARAM_INT);
 if ($update && confirm_sesskey()) {
     //update the registration
     $function = 'hubdirectory_update_hub_info';
@@ -77,8 +91,8 @@ if ($update && confirm_sesskey()) {
     $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
     $hubinfo['contactname'] = clean_param($hubinfo['contactname'], PARAM_TEXT);
     $params = array($hubinfo);
-    $serverurl = HUB_HUBDIRECTORYURL."/local/hubdirectory/webservice/webservices.php";
-    require_once($CFG->dirroot."/webservice/xmlrpc/lib.php");
+    $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
+    require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
     $xmlrpcclient = new webservice_xmlrpc_client();
     try {
         $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
@@ -89,20 +103,18 @@ if ($update && confirm_sesskey()) {
 
 
 /////// FORM REGISTRATION ACTION //////
-
 // retrieve the privacy setting
 $privacy = get_config('local_hub', 'privacy');
 
 if (!empty($fromform) and confirm_sesskey()) { // if the register button has been clicked
     $params = (array) $fromform; //we are using the form input as the redirection parameters (token, url and name)
-
     //first time we press the registration button (and only time if no failure)
     if (empty($directorytohubcommunication)) {
 
         //create new token for the hub directory to call the hub
         $capabilities = array('local/hub:viewinfo');
-        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUB_HUBDIRECTORYURL.'_directory_user',
-                $capabilities);
+        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUB_HUBDIRECTORYURL . '_directory_user',
+                        $capabilities);
 
         //we save the token into the communication table in order to have a reference to the hidden token
         $directorytohubcommunication = new stdClass();
@@ -115,48 +127,59 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
         $directorytohubcommunication->id = $hub->add_communication($directorytohubcommunication);
 
         $params['token'] = $token->token;
-
     } else {
         $params['token'] = $directorytohubcommunication->token;
     }
 
     //if the hub is private do not redirect to moodle.org
     if ($privacy != HUBPRIVATE) {
-        redirect(new moodle_url(HUB_HUBDIRECTORYURL.'/local/hubdirectory/hubregistration.php', $params));
+        redirect(new moodle_url(HUB_HUBDIRECTORYURL . '/local/hubdirectory/hubregistration.php', $params));
     }
-
 }
 
 
 /////// OUTPUT SECTION /////////////
 
 
-echo $OUTPUT->header();
 
-$hubregistrationform->display();
+
+echo $OUTPUT->header();
+$renderer = $PAGE->get_renderer('local_hub');
+//unregister confirmation page
+if ($unregister && empty($confirm)) {
+    echo $renderer->unregistration_confirmation($force);
+} else {
+    $hubregistrationform->display();
 
 //if the hub is private, do not display the register button
-if ($privacy == HUBPRIVATE) {
-    echo $OUTPUT->notification(get_string('cannotregisterprivatehub', 'local_hub'));
-}
+    if ($privacy == HUBPRIVATE) {
+        echo $OUTPUT->notification(get_string('cannotregisterprivatehub', 'local_hub'));
+    }
 
 //Display update single button if needed
-if (!empty($hubtodirectorycommunication->confirmed) and $privacy != HUBPRIVATE) {
+    if (!empty($hubtodirectorycommunication->confirmed) and $privacy != HUBPRIVATE) {
 
-    //display update result
-    if (!empty($result)) {
-        echo $OUTPUT->notification(get_string('registrationupdated', 'local_hub'), 'notifysuccess');
+        //display update result
+        if (!empty($result)) {
+            echo $OUTPUT->notification(get_string('registrationupdated', 'local_hub'), 'notifysuccess');
+        }
+
+        if (!empty($error)) {
+            echo $error;
+        }
+
+        $url = new moodle_url("/local/hub/admin/register.php",
+                        array('sesskey' => sesskey(), 'update' => 1));
+        $button = new single_button($url, get_string('hubregisterupdate', 'local_hub'));
+        $button->class = "buttoncenter";
+        echo $OUTPUT->render($button);
+
+        $url = new moodle_url("/local/hub/admin/register.php",
+                        array('confirm' => 0, 'unregister' => 1));
+        $button = new single_button($url, get_string('hubunregister', 'local_hub'));
+        $button->class = "buttoncenter";
+        echo $OUTPUT->render($button);
     }
-
-    if (!empty($error)) {
-        echo $error;
-    }
-
-    $url = new moodle_url("/local/hub/admin/register.php",
-            array('sesskey' => sesskey(), 'update' => 1));
-    $button = new single_button($url, get_string('hubregisterupdate', 'local_hub'));
-    $button->class = "buttoncenter";
-    echo $OUTPUT->render($button);
 }
 
 echo $OUTPUT->footer();
