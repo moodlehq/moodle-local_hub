@@ -156,7 +156,7 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
 
     $courses = $hub->get_courses($options,
                     $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
-
+  
     //add site name to each courses
     $sites = $hub->get_sites();
 
@@ -167,8 +167,7 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
     $coursetotal = $hub->get_courses($options, 0, 0, true);
 
     //get courses content
-    foreach ($courses as $course) {
-
+    foreach ($courses as &$course) {
         $contents = $hub->get_course_contents($course->id);
         if (!empty($contents)) {
             foreach ($contents as $content) {
