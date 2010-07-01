@@ -1073,7 +1073,7 @@ class local_hub {
             }
         }
         if (empty($userfound)) {
-            role_assign($roleid, $user->id, null, $context->id);
+            role_assign($roleid, $user->id, $context->id);
         }
 
 
