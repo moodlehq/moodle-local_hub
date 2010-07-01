@@ -48,14 +48,16 @@ if ($delete != -1 and $confirm and confirm_sesskey()) {
 
     $sitetohubcommunication = $hub->get_communication(WSSERVER, REGISTEREDSITE, $sitetodelete->url);
 
-    //delete the token for this site
-    require_once($CFG->dirroot . '/webservice/lib.php');
-    $webservice_manager = new webservice();
-    $tokentodelete = $webservice_manager->get_user_ws_token($sitetohubcommunication->token);
-    $webservice_manager->delete_user_ws_token($tokentodelete->id);
+    if (!empty($sitetohubcommunication)) {
+        //delete the token for this site
+        require_once($CFG->dirroot . '/webservice/lib.php');
+        $webservice_manager = new webservice();
+        $tokentodelete = $webservice_manager->get_user_ws_token($sitetohubcommunication->token);
+        $webservice_manager->delete_user_ws_token($tokentodelete->id);
 
-    //delete the communications to this hub
-    $hub->delete_communication($sitetohubcommunication);
+        //delete the communications to this hub
+        $hub->delete_communication($sitetohubcommunication);
+    }
 
     //send email to the site administrator
     $contactuser = new object;
