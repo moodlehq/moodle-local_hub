@@ -1,4 +1,5 @@
 <?php
+
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // This file is part of Moodle - http://moodle.org/                      //
@@ -26,10 +27,9 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require('../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->dirroot.'/local/hub/admin/forms.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->dirroot . '/local/hub/admin/forms.php');
 
 admin_externalpage_setup('hubsettings');
 
@@ -39,6 +39,15 @@ $fromform = $hubsettingsform->get_data();
 
 echo $OUTPUT->header();
 
+//check that the PHP xmlrpc extension is enabled
+if (!extension_loaded('xmlrpc')) {
+    $xmlrpcnotification = $OUTPUT->doc_link('admin/environment/php_extension/xmlrpc', '');
+    $xmlrpcnotification .= get_string('xmlrpcdisabled', 'local_hub');
+    echo $OUTPUT->notification($xmlrpcnotification);
+    echo $OUTPUT->footer();
+    die();
+}
+
 if (!empty($fromform)) {
 
     if ($fromform->privacy != HUBPRIVATE and !empty($fromform->password)) {
@@ -46,14 +55,14 @@ if (!empty($fromform)) {
     }
 
     //Save settings
-    set_config('name', $fromform->name ,'local_hub');
-    set_config('hubenabled', $fromform->enabled ,'local_hub');
-    set_config('description', $fromform->desc ,'local_hub');
-    set_config('contactname', $fromform->contactname ,'local_hub');
-    set_config('contactemail', $fromform->contactemail ,'local_hub');  
-    set_config('privacy', $fromform->privacy ,'local_hub');
-    set_config('language', $fromform->lang ,'local_hub');
-    set_config('password', $fromform->password ,'local_hub');
+    set_config('name', $fromform->name, 'local_hub');
+    set_config('hubenabled', $fromform->enabled, 'local_hub');
+    set_config('description', $fromform->desc, 'local_hub');
+    set_config('contactname', $fromform->contactname, 'local_hub');
+    set_config('contactemail', $fromform->contactemail, 'local_hub');
+    set_config('privacy', $fromform->privacy, 'local_hub');
+    set_config('language', $fromform->lang, 'local_hub');
+    set_config('password', $fromform->password, 'local_hub');
 
     //save the image
     if (empty($fromform->keepcurrentimage)) {
@@ -69,18 +78,18 @@ if (!empty($fromform)) {
                 $directory = make_upload_directory($userdir);
 
                 //save the image into the directory
-                $fp = fopen($directory.'/hublogo', 'w');
+                $fp = fopen($directory . '/hublogo', 'w');
                 fwrite($fp, $file->get_content());
                 fclose($fp);
 
-                set_config('hublogo', true ,'local_hub');
+                set_config('hublogo', true, 'local_hub');
                 $updatelogo = true;
             }
         }
     }
 
-    if (empty ($updatelogo) and empty($fromform->keepcurrentimage)) {
-        set_config('hublogo', false ,'local_hub');
+    if (empty($updatelogo) and empty($fromform->keepcurrentimage)) {
+        set_config('hublogo', false, 'local_hub');
     }
 
     //reload the form

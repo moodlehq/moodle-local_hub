@@ -285,6 +285,7 @@ $string['visibilityyes'] = 'Visible';
 $string['visibilityno'] = 'Not visible';
 $string['wrongurlformat'] = 'Bad URL format';
 $string['wronghubpassword'] = 'Wrong hub password, press continue and try again.';
+$string['xmlrpcdisabled'] = 'The XML-RPC extension is not enabled on the server. You can not manage your hub until this extension is enabled.';
 $string['yeswithmoodle'] = 'Yes, with Moodle';
 $string['yeswithoutmoodle'] = 'Yes, without Moodle';
 

@@ -30,6 +30,17 @@ require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . "/local/hub/forms.php");
 
 admin_externalpage_setup('managecourses');
+
+//check that the PHP xmlrpc extension is enabled
+if (!extension_loaded('xmlrpc')) {
+    echo $OUTPUT->header();
+    $xmlrpcnotification = $OUTPUT->doc_link('admin/environment/php_extension/xmlrpc', '');
+    $xmlrpcnotification .= get_string('xmlrpcdisabled', 'local_hub');
+    echo $OUTPUT->notification($xmlrpcnotification);
+    echo $OUTPUT->footer();
+    die();
+}
+
 $hub = new local_hub();
 $renderer = $PAGE->get_renderer('local_hub');
 
@@ -156,7 +167,7 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
 
     $courses = $hub->get_courses($options,
                     $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
-  
+
     //add site name to each courses
     $sites = $hub->get_sites();
 
@@ -187,7 +198,7 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
     $contenthtml = $renderer->course_list($courses, true, $options);
 
     //paging bar
-    if ($coursetotal > HUB_COURSE_PER_PAGE) {       
+    if ($coursetotal > HUB_COURSE_PER_PAGE) {
         $baseurl = new moodle_url('', $options);
         $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
         $contenthtml .= html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));

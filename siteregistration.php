@@ -92,10 +92,6 @@ if (!empty($checkedsite)) {
                 'hubname' => get_config('local_hub', 'name'))));
 }
 
-//check if we can access the site
-
-
-
 //fill the "recaptcha" Moodle form with hub values
 $sitevalues = array('name' => $name,
         'url' => $url,

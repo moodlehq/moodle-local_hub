@@ -31,6 +31,17 @@ require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . "/local/hub/forms.php");
 
 admin_externalpage_setup('managesites');
+
+//check that the PHP xmlrpc extension is enabled
+if (!extension_loaded('xmlrpc')) {
+    echo $OUTPUT->header();
+    $xmlrpcnotification = $OUTPUT->doc_link('admin/environment/php_extension/xmlrpc', '');
+    $xmlrpcnotification .= get_string('xmlrpcdisabled', 'local_hub');
+    echo $OUTPUT->notification($xmlrpcnotification);
+    echo $OUTPUT->footer();
+    die();
+}
+
 $hub = new local_hub();
 
 /// Check if the page has been called with trust argument
