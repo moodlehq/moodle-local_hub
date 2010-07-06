@@ -44,7 +44,7 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
 
                 $level1 = floor($courseid / 1000) * 1000;
                 $userdir = "hub/$level1/$courseid";
-                send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".zip", 'backup_' . $courseid . ".zip",
+                send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".zip", $course->shortname.".zip",
                         'default', 0, false, true, '', false);
             }
             break;
