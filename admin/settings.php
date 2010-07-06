@@ -30,11 +30,11 @@
 require('../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/hub/admin/forms.php');
+require_once($CFG->dirroot . '/webservice/lib.php');
 
 admin_externalpage_setup('hubsettings');
 
 $hubsettingsform = new hub_settings_form();
-
 $fromform = $hubsettingsform->get_data();
 
 echo $OUTPUT->header();
@@ -60,9 +60,45 @@ if (!empty($fromform)) {
     set_config('description', $fromform->desc, 'local_hub');
     set_config('contactname', $fromform->contactname, 'local_hub');
     set_config('contactemail', $fromform->contactemail, 'local_hub');
-    set_config('privacy', $fromform->privacy, 'local_hub');
+
     set_config('language', $fromform->lang, 'local_hub');
     set_config('password', $fromform->password, 'local_hub');
+
+    //if privacy settings is downgraded to 'private', then unregister from the hub
+    $currentprivacy = get_config('local_hub', 'privacy');
+    $hubmanager = new local_hub();
+    $hubtodirectorycommunication = $hubmanager->get_communication(WSCLIENT, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
+    if ($currentprivacy != HUBPRIVATE and !empty($hubtodirectorycommunication)
+            and !empty($hubtodirectorycommunication->confirmed)) {
+        
+        $directorytohubcommunication = $hubmanager->get_communication(WSSERVER, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
+
+        $function = 'hubdirectory_unregister_hub';
+        $params = array();
+        $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
+        require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
+        $xmlrpcclient = new webservice_xmlrpc_client();
+        try {
+            $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+        } catch (Exception $e) {
+            $error = $OUTPUT->notification(get_string('failunregistrationofprivate', 'local_hub', $e->getMessage()));
+        }
+
+        if (empty($error)) {
+            //delete the web service token
+            $webservice_manager = new webservice();
+            $tokentodelete = $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
+            $webservice_manager->delete_user_ws_token($tokentodelete->id);
+
+            //delete the communication
+            $hubmanager->delete_communication($directorytohubcommunication);
+            $hubmanager->delete_communication($hubtodirectorycommunication);
+            echo $OUTPUT->notification(get_string('unregistrationofprivate', 'local_hub'), 'notifysuccess');
+        } else {
+            echo $error;
+        }
+    }
+    set_config('privacy', $fromform->privacy, 'local_hub');
 
     //save the image
     if (empty($fromform->keepcurrentimage)) {

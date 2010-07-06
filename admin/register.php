@@ -77,14 +77,19 @@ if ($unregister && $confirm && confirm_sesskey()) {
     }
 
     if (empty($error)) {
-        //delete the web service token
-        $webservice_manager = new webservice();
-        $tokentodelete = $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
-        $webservice_manager->delete_user_ws_token($tokentodelete->id);
+        if (!empty($directorytohubcommunication)) {
+            //delete the web service token
+            $webservice_manager = new webservice();
+            $tokentodelete = $webservice_manager->get_user_ws_token($directorytohubcommunication->token);
+            $webservice_manager->delete_user_ws_token($tokentodelete->id);
 
-        //delete the communication
-        $hub->delete_communication($directorytohubcommunication);
-        $hub->delete_communication($hubtodirectorycommunication);
+            //delete the communication
+            $hub->delete_communication($directorytohubcommunication);
+        }
+
+        if (!empty($hubtodirectorycommunication)) {
+            $hub->delete_communication($hubtodirectorycommunication);
+        }
     }
 }
 
