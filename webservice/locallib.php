@@ -35,8 +35,11 @@ class hub_webservice_xmlrpc_server extends webservice_xmlrpc_server {
     protected function authenticate_user() {
         global $DB;
 
+        //retrieve hub privacy
+        $privacy = get_config('local_hub', 'privacy');
+
         // hub server public access (search, rate, comment, import)
-        if ($this->token == 'publichub') {
+        if ($this->token == 'publichub' and $privacy != HUBPRIVATE) {
 
             $hub = new local_hub();
             $publiccommunication = $hub->get_communication(WSSERVER, PUBLICSITE);
