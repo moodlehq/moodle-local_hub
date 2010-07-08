@@ -77,9 +77,9 @@ if (!empty($fromform)) {
         $params = array();
         $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
         require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
-        $xmlrpcclient = new webservice_xmlrpc_client();
+        $xmlrpcclient = new webservice_xmlrpc_client($serverurl, $hubtodirectorycommunication->token);
         try {
-            $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+            $result = $xmlrpcclient->call($function, $params);
         } catch (Exception $e) {
             $error = $OUTPUT->notification(get_string('failunregistrationofprivate', 'local_hub', $e->getMessage()));
         }

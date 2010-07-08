@@ -68,9 +68,9 @@ if ($unregister && $confirm && confirm_sesskey()) {
         $params = array();
         $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
         require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
-        $xmlrpcclient = new webservice_xmlrpc_client();
+        $xmlrpcclient = new webservice_xmlrpc_client($serverurl, $hubtodirectorycommunication->token);
         try {
-            $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+            $result = $xmlrpcclient->call($function, $params);
         } catch (Exception $e) {
             $error = $OUTPUT->notification(get_string('errorunregistration', 'local_hub', $e->getMessage()));
         }
@@ -108,9 +108,9 @@ if ($update && confirm_sesskey()) {
     $params = array($hubinfo);
     $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
     require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
-    $xmlrpcclient = new webservice_xmlrpc_client();
+    $xmlrpcclient = new webservice_xmlrpc_client($serverurl, $hubtodirectorycommunication->token);
     try {
-        $result = $xmlrpcclient->call($serverurl, $hubtodirectorycommunication->token, $function, $params);
+        $result = $xmlrpcclient->call($function, $params);
     } catch (Exception $e) {
         $error = $OUTPUT->notification(get_string('errorregistration', 'local_hub', $e->getMessage()));
     }
