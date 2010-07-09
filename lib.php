@@ -149,6 +149,8 @@ class local_hub {
             $site->visible = 0;
             $site->prioritise = 0;
             $this->update_site($site);
+
+            add_to_log(SITEID, 'local_hub', 'site unregistration', '', $site->id);
         }
     }
 
@@ -782,6 +784,8 @@ class local_hub {
             }
             $course->deleted = 1;
             $this->update_course($course);
+
+            add_to_log(SITEID, 'local_hub', 'course unregistration', '', $course->id);
         }
     }
 
@@ -828,11 +832,13 @@ class local_hub {
             $course->id = $existingenrollablecourse->id;
             $courseid = $existingenrollablecourse->id;
             $this->update_course($course);
+            add_to_log(SITEID, 'local_hub', 'course update', '', $courseid);
 
             //delete previous course content
             $this->delete_course_contents($courseid);
         } else {
             $courseid = $this->add_course($course);
+            add_to_log(SITEID, 'local_hub', 'course registration', '', $courseid);
         }
 
         //add new course contents
@@ -963,7 +969,7 @@ class local_hub {
         if (!empty($siteurltoupdate)) {
             $this->update_site($siteinfo);
         } else {
-            $this->add_site($siteinfo);
+            $site = $this->add_site($siteinfo);
         }
 
         //we save the token into the communication table in order to have a reference to the hidden token
@@ -1007,10 +1013,13 @@ class local_hub {
             email_to_user(get_admin(), $contactuser,
                     get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteupdated', 'local_hub', $emailinfo));
+            add_to_log(SITEID, 'local_hub', 'site update', '', $siteinfo->id);
+
         } else {
             email_to_user(get_admin(), $contactuser,
                     get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteadded', 'local_hub', $emailinfo));
+            add_to_log(SITEID, 'local_hub', 'site registration', '', $site->id);
         }
 
         return $sitetohubcommunication->token;
