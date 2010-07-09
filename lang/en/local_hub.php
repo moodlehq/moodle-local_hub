@@ -126,7 +126,7 @@ Its new url {$a->url} has been updated from ({$a->oldurl}).';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from a hub';
 $string['emailtitlesiteupdated'] = '{$a} site has been updated on the hub';
-$string['emailtitlesiteurlchanged'] = '{$a} site has changed his url (please check it).';
+$string['emailtitlesiteurlchanged'] = '{$a} site has changed his name or url (please check it).';
 $string['enabled'] = 'Enabled';
 $string['enabled_help'] = 'You can enabled/disabled the hub server.';
 $string['enrollable'] = 'courses I can enrol in';

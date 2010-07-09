@@ -900,8 +900,10 @@ class local_hub {
             $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
             $languages = get_string_manager()->get_list_of_languages();
             $emailinfo->language = $languages[$siteinfo->language];
-            
-            if ($siteinfo->url != $emailinfo->oldurl) {
+
+            //check if the url or name changed
+            if ($siteinfo->url != $emailinfo->oldurl or
+                    $siteinfo->name != $emailinfo->oldname) {
 
                 //check if the site url already exist
                 $existingurlsite = $this->get_site_by_url($siteinfo->url);
