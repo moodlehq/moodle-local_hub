@@ -70,7 +70,7 @@ if (!empty($fromform)) {
     $hubtodirectorycommunication = $hubmanager->get_communication(WSCLIENT, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
     if ($currentprivacy != HUBPRIVATE and !empty($hubtodirectorycommunication)
             and !empty($hubtodirectorycommunication->confirmed)) {
-        
+
         $directorytohubcommunication = $hubmanager->get_communication(WSSERVER, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
 
         $function = 'hubdirectory_unregister_hub';
@@ -135,6 +135,15 @@ if (!empty($fromform)) {
     echo $OUTPUT->notification(get_string('settingsupdated', 'local_hub'), 'notifysuccess');
 }
 
-$hubsettingsform->display();
+//check if Recaptcha is enabled
+if (!$CFG->recaptchapublickey or !$CFG->recaptchaprivatekey) {
+    $recaptchaurl = new moodle_url('/admin/search.php', array('query' => 'recaptcha'));
+    $recaptchalink = html_writer::tag('a',
+                    get_string('recaptcha', 'local_hub'),
+                    array('href' => $recaptchaurl));
+    echo $OUTPUT->notification(get_string('recaptchadisable', 'local_hub', $recaptchalink));
+} else {
+    $hubsettingsform->display();
+}
 echo $OUTPUT->footer();
 
