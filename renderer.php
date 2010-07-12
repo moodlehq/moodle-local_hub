@@ -239,8 +239,8 @@ class local_hub_renderer extends plugin_renderer_base {
                 if ($withwriteaccess) {
                     $courseatag = html_writer::tag('a', $course->fullname, array('href' => $courseurl));
                 } else {
-                    $courseurl = new moodle_url('', array( 'sesskey' => sesskey(),
-                        'redirectcourseid' => $course->id));
+                    $courseurl = new moodle_url('', array('sesskey' => sesskey(),
+                                'redirectcourseid' => $course->id));
                     $courseatag = html_writer::tag('a', $course->fullname, array('href' => $courseurl));
                 }
                 if ($course->privacy) {
@@ -300,6 +300,16 @@ class local_hub_renderer extends plugin_renderer_base {
                 } else {
                     $course->lang = '';
                 }
+                //licence
+                require_once($CFG->dirroot . "/lib/licenselib.php");
+                $licensemanager = new license_manager();
+                $licenses = $licensemanager->get_licenses();
+                foreach ($licenses as $license) {
+                    if ($license->shortname == $course->licenceshortname) {
+                        $course->license = $license->fullname;
+                    }
+                }
+
                 $additionaldesc = get_string('additionalcoursedesc', 'local_hub', $course);
                 $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
                 /// time registered and time modified only display for administrator
