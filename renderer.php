@@ -44,7 +44,7 @@ class local_hub_renderer extends plugin_renderer_base {
         return $OUTPUT->box($message);
     }
 
-     /**
+    /**
      * Display a confirm box for the hub unregistration (add or update)
      * @param string $confirmationmessage
      * @return string
@@ -95,7 +95,7 @@ class local_hub_renderer extends plugin_renderer_base {
         $output .= html_writer::tag('p', get_string('deleteconfirmation', 'local_hub', $site));
         $output .= html_writer::tag('div', $OUTPUT->render($deletesitebutton)
                         . ' ' . $OUTPUT->render($deletesiteandcoursebutton) .
-                ' ' . $OUTPUT->render($cancelbutton),
+                        ' ' . $OUTPUT->render($cancelbutton),
                         array('class' => 'buttons'));
         $output .= $this->box_end();
         return $output;
@@ -236,18 +236,18 @@ class local_hub_renderer extends plugin_renderer_base {
                 } else {
                     $courseurl = new moodle_url($course->demourl);
                 }
-                $courseatag = html_writer::tag('a', $course->fullname, array('href' => $courseurl));
+                if ($withwriteaccess) {
+                    $courseatag = html_writer::tag('a', $course->fullname, array('href' => $courseurl));
+                } else {
+                    $courseurl = new moodle_url('', array( 'sesskey' => sesskey(),
+                        'redirectcourseid' => $course->id));
+                    $courseatag = html_writer::tag('a', $course->fullname, array('href' => $courseurl));
+                }
                 if ($course->privacy) {
                     $coursenamehtml = html_writer::tag('span', $courseatag, array());
                 } else {
                     $coursenamehtml = html_writer::tag('span', $courseatag, array('class' => 'dimmed_text'));
                 }
-
-
-                $managesiteurl = new moodle_url($CFG->wwwroot . '/local/hub/admin/managesites.php',
-                                array('search' => $course->site->name, 'sesskey' => sesskey()));
-                $siteatag = html_writer::tag('a', $course->site->name, array('href' => $managesiteurl));
-                $coursenamehtml .= $brtag . html_writer::tag('span', $siteatag, array('class' => 'coursesitelink'));
 
                 // add screenshots
                 $screenshothtml = '';
@@ -376,6 +376,12 @@ class local_hub_renderer extends plugin_renderer_base {
                     $visibleurl = new moodle_url("/local/hub/admin/managecourses.php",
                                     $visibleurlparams);
                     $visiblehtml = html_writer::tag('a', $hideimgtag, array('href' => $visibleurl));
+
+                    //add site link under course name
+                    $managesiteurl = new moodle_url($CFG->wwwroot . '/local/hub/admin/managesites.php',
+                                    array('search' => $course->site->name, 'sesskey' => sesskey()));
+                    $siteatag = html_writer::tag('a', $course->site->name, array('href' => $managesiteurl));
+                    $coursenamehtml .= $brtag . html_writer::tag('span', $siteatag, array('class' => 'coursesitelink'));
 
                     // add a row to the table
                     $cells = array($checkboxhtml, $coursenamehtml, $deschtml, $visiblehtml);

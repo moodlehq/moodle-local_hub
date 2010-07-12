@@ -154,7 +154,6 @@ class local_hub {
         }
     }
 
-
     /**
      * Update a site
      * @param object $site
@@ -173,7 +172,7 @@ class local_hub {
      * @throws dml_exception if error
      */
     public function add_site($site) {
-        global $DB;       
+        global $DB;
         $site->timeregistered = time();
         $site->timemodified = time();
 
@@ -614,8 +613,8 @@ class local_hub {
 
         //look for previously deleted communication
         $deletedcommunication = $this->get_communication($communication->type,
-                $communication->remoteentity, $communication->remoteurl, null, 1);
-        
+                        $communication->remoteentity, $communication->remoteurl, null, 1);
+
         $communication->deleted = 0;
         if (!empty($deletedcommunication)) {
             $communication->id = $deletedcommunication->id;
@@ -647,7 +646,7 @@ class local_hub {
 
         $params = array('type' => $type,
             'remoteentity' => $remoteentity);
-        
+
         if (!empty($remoteurl)) {
             $params['remoteurl'] = $remoteurl;
         }
@@ -897,7 +896,7 @@ class local_hub {
 
             $emailinfo = new stdClass();
             $emailinfo->name = $siteinfo->name;
-            $emailinfo->oldname = $currentsiteinfo->name;// needed for the email params
+            $emailinfo->oldname = $currentsiteinfo->name; // needed for the email params
             $emailinfo->url = $siteinfo->url;
             $emailinfo->oldurl = $currentsiteinfo->url; //needed for url testing
             $emailinfo->contactname = $siteinfo->contactname;
@@ -919,7 +918,7 @@ class local_hub {
 
                 //make the site not visible (hub admin need to reconfirm it)
                 $siteinfo->visible = 0;
-                
+
                 $sameurl = 0;
 
                 //alert the administrator
@@ -927,7 +926,7 @@ class local_hub {
                 $contactuser->email = $siteinfo->contactemail ? $siteinfo->contactemail : $CFG->noreplyaddress;
                 $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
                 $contactuser->lastname = '';
-                $contactuser->maildisplay = true;             
+                $contactuser->maildisplay = true;
                 email_to_user(get_admin(), $contactuser,
                         get_string('emailtitlesiteurlchanged', 'local_hub', $emailinfo->name),
                         get_string('emailmessagesiteurlchanged', 'local_hub', $emailinfo));
@@ -1014,7 +1013,6 @@ class local_hub {
                     get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteupdated', 'local_hub', $emailinfo));
             add_to_log(SITEID, 'local_hub', 'site update', '', $siteinfo->id);
-
         } else {
             email_to_user(get_admin(), $contactuser,
                     get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
@@ -1246,6 +1244,19 @@ class local_hub {
         $PAGE->set_pagelayout('frontpage');
         $PAGE->set_title($SITE->fullname);
         $PAGE->set_heading($SITE->fullname);
+
+        //log redirection to a course page
+        $redirectcourseid = optional_param('redirectcourseid', false, PARAM_INT);
+        if (!empty($redirectcourseid) and confirm_sesskey()) {
+            $course = $this->get_course($redirectcourseid);
+            if (!empty($course->courseurl)) {
+                $courseurl = new moodle_url($course->courseurl);
+            } else {
+                $courseurl = new moodle_url($course->demourl);
+            }
+            add_to_log(SITEID, 'local_hub', 'course redirection', '', $redirectcourseid);
+            redirect(new moodle_url($courseurl));
+        }
 
         $search = optional_param('search', null, PARAM_TEXT);
 
