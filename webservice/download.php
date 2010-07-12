@@ -35,26 +35,42 @@ $imagewidth = optional_param('imagewidth', HUBLOGOIMAGEWIDTH, PARAM_ALPHANUM); /
 $imageheight = optional_param('imageheight', HUBLOGOIMAGEHEIGHT, PARAM_INT); //the screenshot height
 
 if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenabled')) {
+
     switch ($filetype) {
+
         case HUB_BACKUP_FILE_TYPE:
             //check that the file is downloadable
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
             if (!empty($course) &&
                     ($course->privacy or (!empty($USER) and is_siteadmin($USER->id)))) {
 
-                $level1 = floor($courseid / 1000) * 1000;
-                $userdir = "hub/$level1/$courseid";
-                add_to_log(SITEID, 'local_hub', 'download backup', '', $courseid);
-                send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".zip", $course->shortname.".zip",
-                        'default', 0, false, true, '', false);
+                //check the hub password if the hub is set as PRIVATE
+                $hubprivacy = get_config('local_hub', 'privacy');
+                $hubpassword = get_config('local_hub', 'password');
+                $password = optional_param('hubpassword', '', PARAM_TEXT);
+                if ($hubprivacy != HUBPRIVATE
+                        or (strcmp($hubpassword, $password) === 0)) {
+                    $level1 = floor($courseid / 1000) * 1000;
+                    $userdir = "hub/$level1/$courseid";
+                    $remotemoodleurl = optional_param('remotemoodleurl', '', PARAM_URL);
+                    if (!empty($remotemoodleurl)) {
+                        $remotemoodleurl = ',' . $remotemoodleurl . ',' . getremoteaddr();
+                    } else {
+                        $remotemoodleurl = ',' . 'unknown' . ',' . getremoteaddr();
+                    }
+                    add_to_log(SITEID, 'local_hub', 'download backup', '', $courseid . $remotemoodleurl);
+                    send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".zip", $course->shortname . ".zip",
+                            'default', 0, false, true, '', false);
+                }
             }
             break;
+
         case HUB_SCREENSHOT_FILE_TYPE:
             //check that the file is downloadable          
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
             if (!empty($course) &&
                     ($course->privacy or (!empty($USER) and is_siteadmin($USER->id)))) {
-  
+
                 $level1 = floor($courseid / 1000) * 1000;
                 $userdir = "hub/$level1/$courseid";
                 $filepath = $CFG->dataroot . '/' . $userdir . '/screenshot_' . $courseid . "_" . $screenshotnumber;
@@ -93,7 +109,7 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
         $userdir = "hub/0";
         $filepath = $CFG->dataroot . '/' . $userdir . '/hublogo';
         $imageinfo = getimagesize($filepath, $info);
-        
+
         //check if the screenshot exists in the requested size
         require_once($CFG->dirroot . "/repository/flickr_public/image.php");
         $newfilepath = $filepath . "_" . HUBLOGOIMAGEWIDTH . "x" . HUBLOGOIMAGEHEIGHT;
@@ -104,12 +120,12 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
 
             //scale to the max width/height dimension
             $imagewidth = $imageinfo[0];
-            $imageheight =  $imageinfo[1];
-            if ($imagewidth >  HUBLOGOIMAGEWIDTH) {
+            $imageheight = $imageinfo[1];
+            if ($imagewidth > HUBLOGOIMAGEWIDTH) {
                 $imagewidth = $imagewidth / ($imagewidth / HUBLOGOIMAGEWIDTH);
                 $imageheight = $imageheight / ($imagewidth / HUBLOGOIMAGEWIDTH);
             }
-            if ($imageheight >  HUBLOGOIMAGEHEIGHT) {
+            if ($imageheight > HUBLOGOIMAGEHEIGHT) {
                 $imageheight = $imageheight / ($imageheight / HUBLOGOIMAGEWIDTH);
                 $imagewidth = $imagewidth / ($imageheight / HUBLOGOIMAGEWIDTH);
             }

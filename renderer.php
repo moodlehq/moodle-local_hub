@@ -344,6 +344,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 if (!$course->enrollable) {
                     $params['courseid'] = $course->id;
                     $params['filetype'] = HUB_BACKUP_FILE_TYPE;
+                    $params['remotemoodleurl'] = $CFG->wwwroot;
                     $addurl = new moodle_url('/local/hub/webservice/download.php', $params);
                     $downloadbutton = html_writer::tag('button', get_string('download', 'block_community'));
                     $downloadbutton = html_writer::tag('a', $downloadbutton,
