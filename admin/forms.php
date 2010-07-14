@@ -235,10 +235,12 @@ class hub_settings_form extends moodleform {
         $errors = parent::validation($data, $files);
 
         $privacy = $this->_form->_submitValues['privacy'];
-        $password = $this->_form->_submitValues['password'];
+        if (isset($this->_form->_submitValues['password'])) {
+            $password = $this->_form->_submitValues['password'];
 
-        if ($privacy != HUBPRIVATE) {
-            $this->_form->_submitValues['password'] = '';
+            if ($privacy != HUBPRIVATE) {
+                $this->_form->_submitValues['password'] = '';
+            }
         }
 
         return $errors;

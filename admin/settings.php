@@ -68,7 +68,7 @@ if (!empty($fromform)) {
     $currentprivacy = get_config('local_hub', 'privacy');
     $hubmanager = new local_hub();
     $hubtodirectorycommunication = $hubmanager->get_communication(WSCLIENT, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
-    if ($currentprivacy != HUBPRIVATE and !empty($hubtodirectorycommunication)
+    if (($currentprivacy != HUBPRIVATE and $fromform->privacy == HUBPRIVATE) and !empty($hubtodirectorycommunication)
             and !empty($hubtodirectorycommunication->confirmed)) {
 
         $directorytohubcommunication = $hubmanager->get_communication(WSSERVER, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
@@ -102,26 +102,22 @@ if (!empty($fromform)) {
 
     //save the image
     if (empty($fromform->keepcurrentimage)) {
-        $fs = get_file_storage();
-        $files = $fs->get_area_files(get_context_instance(CONTEXT_USER, $USER->id)->id, 'user_draft', $fromform->hubimage);
+           
+        $file = $hubsettingsform->save_temp_file('hubimage');
 
-        foreach ($files as $file) {
-            if ($file->is_valid_image()) {
+        // if ($file->is_valid_image()) {
+        $userdir = "hub/0/";
 
-                $userdir = "hub/0/";
+        //create directory if doesn't exist
+        $directory = make_upload_directory($userdir);
 
-                //create directory if doesn't exist
-                $directory = make_upload_directory($userdir);
+        //save the image into the directory
+        copy($file,  $directory . 'hublogo');
 
-                //save the image into the directory
-                $fp = fopen($directory . '/hublogo', 'w');
-                fwrite($fp, $file->get_content());
-                fclose($fp);
+        set_config('hublogo', true, 'local_hub');
+        $updatelogo = true;
 
-                set_config('hublogo', true, 'local_hub');
-                $updatelogo = true;
-            }
-        }
+        //   }
     }
 
     if (empty($updatelogo) and empty($fromform->keepcurrentimage)) {
