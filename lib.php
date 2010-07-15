@@ -294,9 +294,11 @@ class local_hub {
                 $wheresql .= " AND";
             }
             $wheresql .= " (fullname " . $DB->sql_ilike() . " :namesearch OR description "
-                    . $DB->sql_ilike() . " :descsearch)";
+                    . $DB->sql_ilike() . " :descsearch OR coverage "
+                    . $DB->sql_ilike() . " :coveragesearch)";
             $sqlparams['namesearch'] = '%' . $options['search'] . '%';
             $sqlparams['descsearch'] = '%' . $options['search'] . '%';
+            $sqlparams['coveragesearch'] = '%' . $options['search'] . '%';
         }
 
         if (!empty($options['language'])) {
@@ -840,6 +842,14 @@ class local_hub {
             add_to_log(SITEID, 'local_hub', 'course registration', '', $courseid);
         }
 
+        //update course tag
+        $tags = array();
+        if (!empty($course->coverage)) {
+            $tags = split(',', $course->coverage);
+        }
+        require_once($CFG->dirroot . '/tag/lib.php');
+        tag_set('hub_course_directory', $courseid, $tags);
+
         //add new course contents
         if (!empty($course->contents)) {
             foreach ($course->contents as $content) {
@@ -1335,13 +1345,14 @@ class local_hub {
             $courses = null;
         }
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
-        echo $renderer->course_list($courses);
+        echo highlight($search, $renderer->course_list($courses));
         //paging bar
         if ($coursetotal > HUB_COURSE_PER_PAGE) {
             $baseurl = new moodle_url('', $options);
             $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
             echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
         }
+
         echo $OUTPUT->footer();
     }
 

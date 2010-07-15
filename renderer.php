@@ -284,11 +284,13 @@ class local_hub_renderer extends plugin_renderer_base {
                 /// courses and sites number display under the description, in smaller
                 $deschtml .= $brtag;
                 //create the additional description
+                $additionaldesc = '';
                 if ($course->contributornames) {
                     $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);
                     $additionaldesc .= ' - ';
                 }
                 if ($course->coverage) {
+
                     $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);
                     $additionaldesc .= ' - ';
                 }
@@ -310,7 +312,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     }
                 }
 
-                $additionaldesc = get_string('additionalcoursedesc', 'local_hub', $course);
+                $additionaldesc .= get_string('additionalcoursedesc', 'local_hub', $course);
                 $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
                 /// time registered and time modified only display for administrator
                 if ($withwriteaccess) {
