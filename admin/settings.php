@@ -60,6 +60,7 @@ if (!empty($fromform)) {
     set_config('description', $fromform->desc, 'local_hub');
     set_config('contactname', $fromform->contactname, 'local_hub');
     set_config('contactemail', $fromform->contactemail, 'local_hub');
+    set_config('maxcoursesperday', $fromform->maxcoursesperday, 'local_hub');
 
     set_config('language', $fromform->lang, 'local_hub');
     set_config('password', $fromform->password, 'local_hub');

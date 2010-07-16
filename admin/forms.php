@@ -43,8 +43,10 @@ class hub_registration_form extends moodleform {
         $hub = new local_hub();
 
         $mform = & $this->_form;
-        $mform->addElement('header', 'moodle', get_string('hubdetails', 'local_hub'));
-        $mform->addElement('static', 'comment', '', get_string('hubregistrationcomment', 'local_hub'));
+        $mform->addElement('header', 'moodle',
+                get_string('hubdetails', 'local_hub'));
+        $mform->addElement('static', 'comment', '',
+                get_string('hubregistrationcomment', 'local_hub'));
         $mform->addElement('hidden', 'url', $CFG->wwwroot);
 
         $languages = get_string_manager()->get_list_of_languages();
@@ -57,38 +59,49 @@ class hub_registration_form extends moodleform {
         $privacy = get_config('local_hub', 'privacy');
         $hublanguage = get_config('local_hub', 'language');
 
-        $mform->addElement('static', 'hubnamestring', get_string('name', 'local_hub'), $hubname);
+        $mform->addElement('static', 'hubnamestring',
+                get_string('name', 'local_hub'), $hubname);
         $mform->addElement('hidden', 'name', $hubname);
-        $mform->addElement('static', 'hubprivacystring', get_string('privacy', 'local_hub'),
+        $mform->addElement('static', 'hubprivacystring',
+                get_string('privacy', 'local_hub'),
                 $hub->get_privacy_string($privacy));
         $mform->addElement('hidden', 'privacy', $privacy);
-        $mform->addElement('static', 'languagestring', get_string('language'), $languages[$hublanguage]);
+        $mform->addElement('static', 'languagestring',
+                get_string('language'), $languages[$hublanguage]);
         $mform->addElement('hidden', 'language', $hublanguage);
-        $mform->addElement('static', 'hubdescriptionstring', get_string('description', 'local_hub'), $hubdescription);
+        $mform->addElement('static', 'hubdescriptionstring',
+                get_string('description', 'local_hub'), $hubdescription);
         $mform->addElement('hidden', 'description', $hubdescription);
-        $mform->addElement('static', 'contactnamestring', get_string('contactname', 'local_hub'), $contactname);
+        $mform->addElement('static', 'contactnamestring',
+                get_string('contactname', 'local_hub'), $contactname);
         $mform->addElement('hidden', 'contactname', $contactname);
-        $mform->addElement('static', 'contactemailstring', get_string('contactemail', 'local_hub'), $contactemail);
+        $mform->addElement('static', 'contactemailstring',
+                get_string('contactemail', 'local_hub'), $contactemail);
         $mform->addElement('hidden', 'contactemail', $contactemail);
         if (!empty($hublogo)) {
             $params = array('filetype' => HUB_HUBSCREENSHOT_FILE_TYPE, 'time' => time());
-            $imageurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $params);
+            $imageurl = new moodle_url($CFG->wwwroot .
+                            "/local/hub/webservice/download.php", $params);
             $imagetag = html_writer::empty_tag('img',
                             array('src' => $imageurl, 'alt' => $hubname));
-            $mform->addElement('static', 'logourlstring', get_string('image', 'local_hub'), $imagetag);
+            $mform->addElement('static', 'logourlstring',
+                    get_string('image', 'local_hub'), $imagetag);
         } else {
             $hublogo = 0;
         }
         $mform->addElement('hidden', 'hublogo', $hublogo);
 
-        $mform->addElement('static', 'urlstring', get_string('url', 'local_hub'), $CFG->wwwroot);
+        $mform->addElement('static', 'urlstring',
+                get_string('url', 'local_hub'), $CFG->wwwroot);
 
         $registeredsites = $hub->get_registered_sites_total();
         $registeredcourses = $hub->get_registered_courses_total();
 
-        $mform->addElement('static', 'sitesstring', get_string('registeredsites', 'local_hub'), $registeredsites);
+        $mform->addElement('static', 'sitesstring',
+                get_string('registeredsites', 'local_hub'), $registeredsites);
         $mform->addElement('hidden', 'sites', $registeredsites);
-        $mform->addElement('static', 'coursesstring', get_string('registeredcourses', 'local_hub'), $registeredcourses);
+        $mform->addElement('static', 'coursesstring',
+                get_string('registeredcourses', 'local_hub'), $registeredcourses);
         $mform->addElement('hidden', 'courses', $registeredcourses);
 
         //if the hub is private do not display the register button
@@ -150,6 +163,12 @@ class hub_settings_form extends moodleform {
             $hublanguage = current_language();
         }
 
+         //language (default) value
+        $hubmaxpublication = get_config('local_hub', 'maxcoursesperday');
+        if ($hubmaxpublication === false) {
+            $hubmaxpublication = HUB_MAXCOURSESPERSITEPERDAY;
+        }
+
         //language (default) value
         $password = get_config('local_hub', 'password');
 
@@ -161,7 +180,8 @@ class hub_settings_form extends moodleform {
         $mform = & $this->_form;
         $mform->addElement('header', 'moodle', get_string('settings', 'local_hub'));
 
-        $mform->addElement('text', 'name', get_string('name', 'local_hub'), array('class' => 'admintextfield'));
+        $mform->addElement('text', 'name', get_string('name', 'local_hub'),
+                array('class' => 'admintextfield'));
         $mform->setDefault('name', $hubname);
         $mform->addRule('name', get_string('required'), 'required');
         $mform->addHelpButton('name', 'name', 'local_hub');
@@ -169,31 +189,37 @@ class hub_settings_form extends moodleform {
         $privacyoptions = array(HUBPRIVATE => get_string('nosearch', 'local_hub'),
             HUBALLOWPUBLICSEARCH => get_string('allowpublicsearch', 'local_hub'),
             HUBALLOWGLOBALSEARCH => get_string('allowglobalsearch', 'local_hub'));
-        $mform->addElement('checkbox', 'enabled', get_string('enabled', 'local_hub'), '');
+        $mform->addElement('checkbox', 'enabled',
+                get_string('enabled', 'local_hub'), '');
         $mform->setDefault('enabled', $enabled);
         $mform->addHelpButton('enabled', 'enabled', 'local_hub');
 
-        $mform->addElement('select', 'privacy', get_string('privacy', 'local_hub'), $privacyoptions);
+        $mform->addElement('select', 'privacy',
+                get_string('privacy', 'local_hub'), $privacyoptions);
         $mform->setDefault('privacy', $privacy);
         $mform->addHelpButton('privacy', 'privacy', 'local_hub');
 
-        $mform->addElement('select', 'lang', get_string('language', 'local_hub'), $languages);
+        $mform->addElement('select', 'lang',
+                get_string('language', 'local_hub'), $languages);
         $mform->setDefault('lang', $hublanguage);
         $mform->addHelpButton('lang', 'hublang', 'local_hub');
 
-        $mform->addElement('textarea', 'desc', get_string('description', 'local_hub'),
+        $mform->addElement('textarea', 'desc',
+                get_string('description', 'local_hub'),
                 array('rows' => 10, 'cols' => 15, 'class' => 'adminhubdescription'));
         $mform->addRule('desc', get_string('required'), 'required');
         $mform->setDefault('desc', $hubdescription);
         $mform->addHelpButton('desc', 'description', 'local_hub');
 
-        $mform->addElement('text', 'contactname', get_string('contactname', 'local_hub')
+        $mform->addElement('text', 'contactname',
+                get_string('contactname', 'local_hub')
                 , array('class' => 'admintextfield'));
         $mform->setDefault('contactname', $contactname);
         $mform->addRule('contactname', get_string('required'), 'required');
         $mform->addHelpButton('contactname', 'contactname', 'local_hub');
 
-        $mform->addElement('text', 'contactemail', get_string('contactemail', 'local_hub')
+        $mform->addElement('text', 'contactemail',
+                get_string('contactemail', 'local_hub')
                 , array('class' => 'admintextfield'));
         $mform->setDefault('contactemail', $contactemail);
         $mform->addRule('contactemail', get_string('required'), 'required');
@@ -202,15 +228,19 @@ class hub_settings_form extends moodleform {
         $hublogo = get_config('local_hub', 'hublogo');
         if (!empty($hublogo)) {
             $params = array('filetype' => HUB_HUBSCREENSHOT_FILE_TYPE, 'time' => time());
-            $imageurl = new moodle_url($CFG->wwwroot . "/local/hub/webservice/download.php", $params);
+            $imageurl = new moodle_url($CFG->wwwroot .
+                            "/local/hub/webservice/download.php", $params);
             $imagetag = html_writer::empty_tag('img',
-                            array('src' => $imageurl, 'alt' => $hubname, 'class' => 'admincurrentimage'));
-            $mform->addElement('checkbox', 'keepcurrentimage', get_string('keepcurrentimage', 'local_hub'), ' ' . $imagetag);
+                            array('src' => $imageurl, 'alt' => $hubname,
+                                'class' => 'admincurrentimage'));
+            $mform->addElement('checkbox', 'keepcurrentimage',
+                    get_string('keepcurrentimage', 'local_hub'), ' ' . $imagetag);
             $mform->addHelpButton('keepcurrentimage', 'keepcurrentimage', 'local_hub');
             $mform->setDefault('keepcurrentimage', true);
         }
 
-        $mform->addElement('filepicker', 'hubimage', get_string('hubimage', 'local_hub'), null,
+        $mform->addElement('filepicker', 'hubimage',
+                get_string('hubimage', 'local_hub'), null,
                 array('subdirs' => 0,
                     'maxfiles' => 1
         ));
@@ -223,6 +253,13 @@ class hub_settings_form extends moodleform {
         $mform->disabledIf('password', 'privacy', 'eq', HUBALLOWPUBLICSEARCH);
         $mform->disabledIf('password', 'privacy', 'eq', HUBALLOWGLOBALSEARCH);
         $mform->addHelpButton('password', 'hubpassword', 'local_hub');
+
+        $mform->addElement('text', 'maxcoursesperday',
+                get_string('maxcoursesperday', 'local_hub'));
+        $mform->addHelpButton('maxcoursesperday',
+                'maxcoursesperday', 'local_hub');
+        $mform->setAdvanced('maxcoursesperday');
+        $mform->setDefault('maxcoursesperday', $hubmaxpublication);
 
         $this->add_action_buttons(false, get_string('update'));
     }

@@ -22,7 +22,13 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 define('HUB_COURSE_PER_PAGE', 10);
+
+/**
+ * Maximum number of course per day default
+ */
+define('HUB_MAXCOURSESPERSITEPERDAY', 20);
 
 
 //// HUB IMAGE SIZE
@@ -196,6 +202,7 @@ class local_hub {
      */
     public function add_course($course) {
         global $DB;
+        $course->timepublished = time();
         $course->timemodified = time();
         $id = $DB->insert_record('hub_course_directory', $course);
         return $id;
@@ -435,6 +442,14 @@ class local_hub {
             }
             $wheresql .= " timemodified > :lastmodified";
             $sqlparams['lastmodified'] = $options['lastmodified'];
+        }
+
+        if (!empty($options['lastpublished'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " timepublished > :lastpublished";
+            $sqlparams['lastpublished'] = $options['lastpublished'];
         }
 
         if (!empty($wheresql)) {

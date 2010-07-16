@@ -147,5 +147,20 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint($result, 2010062302, 'local', 'hub');
     }
 
+    if ($oldversion < 2010071500) {
+
+    /// Define field timepublished to be added to hub_course_directory
+        $table = new xmldb_table('hub_course_directory');
+        $field = new xmldb_field('timepublished', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'screenshots');
+
+    /// Conditionally launch add field timepublished
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+    /// hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010071500, 'local', 'hub');
+    }
+
     return $result;
 }

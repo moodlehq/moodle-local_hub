@@ -136,6 +136,7 @@ $string['enroldownload_help'] = 'Some courses listed in this directory are being
 Others are course templates provided for you to download and use on your own Moodle site.';
 $string['errorbadimageheightwidth'] = 'The image should have a maximum size of {$a->width} X {$a->height}';
 $string['errorlangnotrecognized'] = 'Language code is unknown by Moodle. Please contact {$a}';
+$string['errormaxpublication'] = 'Sorry your site has published  more than {$a->maxpublication} courses today. You will be able to publish in: {$a->time}.';
 $string['errorregistration'] = 'An error occured during registration, please try again later. ({$a})';
 $string['errorunregistration'] = 'An error occurred during hub unregistration, try again later. ({$a})';
 $string['errorwrongpostdata'] = 'Some POST data are missing, please use the Moodle registration form.';
@@ -176,11 +177,14 @@ $string['licence_help'] = 'You can search for courses that are licensed in a par
 $string['logourl'] = 'Logo URL';
 $string['managecourses'] = 'Manage courses';
 $string['managesites'] = 'Manage sites';
+$string['maxcoursesperday'] = 'Maximum courses published per day';
+$string['maxcoursesperday_help'] = 'The maximum number of courses that can be published per site per day. This setting is to avoid automatic spam. Once reaching the maximum number, an error will be displayed on the registered site during the next 24 hours. (0 = none, empty = unlimited)';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
 $string['moredetails'] = 'More details';
 $string['name'] = 'Name';
 $string['name_help'] = 'The hub name will be displayed in the hub directory listing.';
+$string['never'] = 'never';
 $string['no'] = 'No';
 $string['nocourse'] = 'No courses match your search.';
 $string['nosearch'] = 'Don\'t publish hub or courses';
