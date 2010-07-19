@@ -22,7 +22,6 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 define('HUB_COURSE_PER_PAGE', 10);
 
 /**
@@ -276,7 +275,25 @@ class local_hub {
      *  boolean 'onlyvisible' - set to false to return full list
      *  boolean 'downloadable' - set to true to return downloadable course
      *  boolean 'enrollable' - set to true to return enrollable course
-     *  boolean 'onlydeleted' - set to true to return deleted course only, otherwise only undeleted
+     *  boolean 'onlydeleted' - set to true to return deleted course only,
+     *                          otherwise only undeleted
+     *  string 'subject' - all course with this subject and subsubject
+     *                     (TODO: need a subjectonly options)
+     *  string 'language' - all course with this language
+     *  string 'audience' - all course with this audience
+     *  string 'licenceshortname' - all course with this licence
+     *  string 'educationallevel' - select
+     *  string 'visibility' - this option is overrided by the onlyvisible parameter
+     *                        (only use for admin pages)
+     *  array 'ids' - return all the course for these given id on the hub
+     *  array 'sitecourseids' - return all the course for these given id on the site
+     *                          (most of the time you will give a siteid)
+     *  integer 'siteid' - return course for this site id only
+     *  integer 'lastmodified' - return all the courses that have been modified/created
+     *                           after this lastmodified time.
+     *  integer 'lastpublished' - return all the courses that have been first published
+     *                            after this lastpublished time.
+     *  string 'orderby' - let you override the default order by
      * @param int $limitfrom
      * @param int $limitnum
      * @param bool $countresult if set to true return the count, otherwise result the raw
@@ -459,6 +476,10 @@ class local_hub {
             $wheresql .= " deleted = 0";
         } else {
             $wheresql .= " deleted = 1";
+        }
+
+        if (!empty($options['orderby'])) {
+            $ordersql = $options['orderby'];
         }
 
         if ($countresult) {
@@ -1259,7 +1280,7 @@ class local_hub {
      * It is called early when loading any Moodle page.
      */
     public function display_homepage() {
-        global $PAGE, $SITE, $OUTPUT, $CFG;
+        global $PAGE, $SITE, $OUTPUT, $CFG, $USER;
 
         require_once($CFG->dirroot . "/local/hub/forms.php");
 
@@ -1272,14 +1293,16 @@ class local_hub {
 
         //log redirection to a course page
         $redirectcourseid = optional_param('redirectcourseid', false, PARAM_INT);
-        if (!empty($redirectcourseid) and confirm_sesskey()) {
+        if (!empty($redirectcourseid)) { //do not check sesskey because can be call by RSS feed
             $course = $this->get_course($redirectcourseid);
             if (!empty($course->courseurl)) {
                 $courseurl = new moodle_url($course->courseurl);
             } else {
                 $courseurl = new moodle_url($course->demourl);
             }
-            add_to_log(SITEID, 'local_hub', 'course redirection', '', $redirectcourseid);
+            $rss = optional_param('rss', false, PARAM_BOOL);
+            $rss = empty($rss)?'':'rss';
+            add_to_log(SITEID, 'local_hub', 'course redirection '.$rss, '', $redirectcourseid);
             redirect(new moodle_url($courseurl));
         }
 
@@ -1368,6 +1391,30 @@ class local_hub {
             echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
         }
 
+
+        //create rss feed link
+        $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
+        if (!empty($enablerssfeeds)) {
+            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
+            $educationallevel = key_exists('educationallevel', $options) ? $options['educationallevel'] : 'all';
+            if (key_exists('downloadable', $options)) {
+                $downloadable = empty($options['downloadable']) ? 0 : 1;
+            } else {
+                $downloadable = 'all';
+            }
+            $subject = key_exists('subject', $options) ? $options['subject'] : 'all';
+            $licence = key_exists('licence', $options) ? $options['licence'] : 'all';
+            $language = key_exists('language', $options) ? $options['language'] : 'all';
+            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
+            $search = empty($search) ? 0 : urlencode($search);
+            //retrieve guest user if user not logged in
+            $userid = empty($USER->id)?$CFG->siteguest:$USER->id;
+            rss_print_link(2, $userid, 'local_hub',
+                    $downloadable . '/' . $audience . '/' . $educationallevel
+                    . '/' . $subject . '/' . $licence
+                    . '/' . $language . '/' . $search . '/'); //Hack: first param 2 is the front page course context id
+            // so we bypass the course context checking of the rss lib that is not usefull for our case.
+        }
         echo $OUTPUT->footer();
     }
 

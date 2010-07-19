@@ -163,11 +163,14 @@ class hub_settings_form extends moodleform {
             $hublanguage = current_language();
         }
 
-         //language (default) value
+        //max course publication per site per day (default) value
         $hubmaxpublication = get_config('local_hub', 'maxcoursesperday');
         if ($hubmaxpublication === false) {
             $hubmaxpublication = HUB_MAXCOURSESPERSITEPERDAY;
         }
+
+        //enable rss feed
+        $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
 
         //language (default) value
         $password = get_config('local_hub', 'password');
@@ -260,6 +263,13 @@ class hub_settings_form extends moodleform {
                 'maxcoursesperday', 'local_hub');
         $mform->setAdvanced('maxcoursesperday');
         $mform->setDefault('maxcoursesperday', $hubmaxpublication);
+
+        $mform->addElement('checkbox', 'enablerssfeeds',
+                get_string('enablerssfeeds', 'local_hub'));
+        $mform->addHelpButton('enablerssfeeds', 'enablerssfeeds', 'local_hub');
+        $mform->setAdvanced('enablerssfeeds');
+        $mform->setDefault('enablerssfeeds', $enablerssfeeds);
+
 
         $this->add_action_buttons(false, get_string('update'));
     }
