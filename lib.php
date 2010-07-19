@@ -1409,11 +1409,10 @@ class local_hub {
             $search = empty($search) ? 0 : urlencode($search);
             //retrieve guest user if user not logged in
             $userid = empty($USER->id)?$CFG->siteguest:$USER->id;
-            rss_print_link(2, $userid, 'local_hub',
+            rss_print_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
                     $downloadable . '/' . $audience . '/' . $educationallevel
                     . '/' . $subject . '/' . $licence
-                    . '/' . $language . '/' . $search . '/'); //Hack: first param 2 is the front page course context id
-            // so we bypass the course context checking of the rss lib that is not usefull for our case.
+                    . '/' . $language . '/' . $search . '/');
         }
         echo $OUTPUT->footer();
     }
