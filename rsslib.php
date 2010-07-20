@@ -39,7 +39,7 @@
  * $args[9] => search - PARAM_TEXT (url encoded)
  * @return string the full path to the cached RSS feed directory. Null if there is a problem.
  */
-function hub_rss_get_feed($args) {
+function hub_rss_get_feed($context, $args) {
     global $CFG, $DB;
 
     require_once($CFG->dirroot . '/local/hub/lib.php');
@@ -53,7 +53,7 @@ function hub_rss_get_feed($args) {
     }
 
     //check capabilities
-    if (!has_capability('local/hub:view', get_system_context())) {
+    if (!has_capability('local/hub:view', $context)) {
         return null;
     }
 
