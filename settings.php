@@ -24,6 +24,7 @@
 
 /// Add hub administration pages to the Moodle administration menu
 $ADMIN->add('root', new admin_category('local_hub', get_string('hub', 'local_hub')));
+
 $ADMIN->add('local_hub', new admin_externalpage('hubsettings', get_string('settings', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/settings.php",
         'moodle/site:config'));
@@ -31,17 +32,24 @@ $ADMIN->add('local_hub', new admin_externalpage('hubsettings', get_string('setti
 $ADMIN->add('local_hub', new admin_externalpage('managesites', get_string('managesites', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/managesites.php",
         'moodle/site:config'));
+
 $ADMIN->add('local_hub', new admin_externalpage('managecourses', get_string('managecourses', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/managecourses.php",
         'moodle/site:config'));
+
 $ADMIN->add('local_hub', new admin_externalpage('hubregistration', get_string('registration', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/register.php",
         'moodle/site:config'));
 
-$ADMIN->add('local_hub', new admin_externalpage('registrationconfirmed', get_string('registrationconfirmed', 'local_hub'),
+$ADMIN->add('local_hub', new admin_externalpage('registrationconfirmed',
+        get_string('registrationconfirmed', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/confirmregistration.php",
         'moodle/site:config', true));
 
 $ADMIN->add('local_hub', new admin_externalpage('sitesettings', get_string('sitesettings', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/sitesettings.php",
+        'moodle/site:config', true));
+
+$ADMIN->add('local_hub', new admin_externalpage('hubcoursesettings', get_string('coursesettings', 'local_hub'),
+        $CFG->wwwroot."/local/hub/admin/coursesettings.php",
         'moodle/site:config', true));

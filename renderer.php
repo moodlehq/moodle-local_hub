@@ -204,10 +204,11 @@ class local_hub_renderer extends plugin_renderer_base {
             $table->head = array(get_string('bulkoperation', 'local_hub'),
                 get_string('coursename', 'local_hub'),
                 get_string('coursedesc', 'local_hub'),
-                get_string('visible'));
+                get_string('visible'),
+                '');
 
-            $table->align = array('center', 'left', 'left', 'center');
-            $table->size = array('1%', '20%', '78%', '1%');
+            $table->align = array('center', 'left', 'left', 'center', 'center');
+            $table->size = array('1%', '20%', '78%', '1%', '1%');
         } else {
             $table->head = array(get_string('coursename', 'local_hub'),
                 get_string('coursedesc', 'local_hub'));
@@ -411,8 +412,14 @@ class local_hub_renderer extends plugin_renderer_base {
                     $coursenamehtml .= $brtag . html_writer::tag('span', $siteatag,
                                     array('class' => 'coursesitelink'));
 
+                    //settings link
+                    $settingsurl = new moodle_url("/local/hub/admin/coursesettings.php",
+                                    array('sesskey' => sesskey(), 'id' => $course->id));
+                    $settingslinkhtml = html_writer::tag('a', get_string('settings'),
+                                    array('href' => $settingsurl));
+
                     // add a row to the table
-                    $cells = array($checkboxhtml, $coursenamehtml, $deschtml, $visiblehtml);
+                    $cells = array($checkboxhtml, $coursenamehtml, $deschtml, $visiblehtml, $settingslinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($coursenamehtml, $deschtml);
@@ -474,10 +481,11 @@ class local_hub_renderer extends plugin_renderer_base {
                 get_string('visible'),
                 '',
                 '',
-                get_string('operation', 'local_hub'));
+                get_string('operation', 'local_hub'),
+                '');
 
             $table->align = array('center', 'left', 'left', 'center', 'center', 'center',
-                'center', 'center', 'center');
+                'center', 'center', 'center', 'center');
             $table->size = array('5%', '25%', '40%', '5%', '15%', '%5', '%5');
         } else {
             $table->head = array('', get_string('sitename', 'local_hub'),
@@ -633,7 +641,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $language, $adminnamehtml,
                         $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, 
-                        $deletelinkhtml . html_writer::empty_tag('br') . $settingslinkhtml);
+                        $deletelinkhtml, $settingslinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $languages[$site->language]);

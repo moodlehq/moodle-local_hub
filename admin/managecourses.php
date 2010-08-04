@@ -206,6 +206,12 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
 }
 
 echo $OUTPUT->header();
+//display a message if we come back from site settings page
+$updatecourse = optional_param('coursesettings', '', PARAM_TEXT);
+if (!empty($updatecourse) and confirm_sesskey()) {
+     echo $OUTPUT->notification(get_string('coursesettingsupdated', 'local_hub', $updatecourse),
+             'notifysuccess');
+}
 echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
 if (empty($skipmainform)) {
     $coursesearchform->display();

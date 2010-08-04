@@ -305,7 +305,7 @@ class hub_site_settings_form extends moodleform {
         //retrieve the publication
         $hub = new local_hub();
         $site = $hub->get_site($this->_customdata['id']);
-             
+
         $mform = & $this->_form;
         $mform->addElement('header', 'moodle', get_string('sitesettingsform', 'local_hub', $site->name));
 
@@ -357,7 +357,7 @@ class hub_site_settings_form extends moodleform {
         $mform->addHelpButton('publicationmax',
                 'publicationmax', 'local_hub');
         $mform->setDefault('publicationmax', $site->publicationmax);
- 
+
         $this->add_action_buttons(false, get_string('update'));
     }
 
@@ -370,7 +370,78 @@ class hub_site_settings_form extends moodleform {
 
         $publicationmax = $this->_form->_submitValues['publicationmax'];
         if (!empty($publicationmax)) {
-            if (strcmp(clean_param($publicationmax, PARAM_INT), $publicationmax) !=0 ) {
+            if (strcmp(clean_param($publicationmax, PARAM_INT), $publicationmax) != 0) {
+                $errors['publicationmax'] = get_string('mustbeinteger', 'local_hub');
+            }
+        }
+
+        return $errors;
+    }
+
+}
+
+/**
+ * This form displays course settings
+ */
+class hub_course_settings_form extends moodleform {
+
+    public function definition() {
+
+        //retrieve the publication
+        $hub = new local_hub();
+        $course = $hub->get_course($this->_customdata['id']);
+
+        $mform = & $this->_form;
+        $mform->addElement('header', 'moodle',
+                get_string('coursesettingsform', 'local_hub', $course->fullname));
+
+        $mform->addElement('hidden', 'id', $course->id);
+
+        $mform->addElement('text', 'fullname',
+                get_string('coursename', 'local_hub'));
+        $mform->addHelpButton('fullname',
+                'coursename', 'local_hub');
+        $mform->setDefault('fullname', $course->fullname);
+
+        if (!empty($course->courseurl)) {
+            $mform->addElement('text', 'courseurl',
+                    get_string('courseurl', 'local_hub'));
+            $mform->addHelpButton('courseurl',
+                    'courseurl', 'local_hub');
+            $mform->setDefault('courseurl', $course->courseurl);
+        } else {
+            $mform->addElement('text', 'demourl',
+                    get_string('demourl', 'local_hub'));
+            $mform->addHelpButton('demourl',
+                    'demourl', 'local_hub');
+            $mform->setDefault('demourl', $course->demourl);
+        }
+
+        $mform->addElement('textarea', 'description',
+                get_string('coursedesc', 'local_hub'));
+        $mform->addHelpButton('description',
+                'coursedesc', 'local_hub');
+        $mform->setDefault('description', $course->description);
+
+        $languages = get_string_manager()->get_list_of_languages();
+        asort($languages, SORT_LOCALE_STRING);
+        $mform->addElement('select', 'language', get_string('courselang', 'local_hub'), $languages);
+        $mform->setDefault('language', $course->language);
+        $mform->addHelpButton('language', 'courselang', 'local_hub');
+
+        $this->add_action_buttons(false, get_string('update'));
+    }
+
+    /**
+     * Set password to empty if hub not private
+     */
+    function validation($data, $files) {
+        global $CFG;
+        $errors = parent::validation($data, $files);
+
+        $publicationmax = $this->_form->_submitValues['publicationmax'];
+        if (!empty($publicationmax)) {
+            if (strcmp(clean_param($publicationmax, PARAM_INT), $publicationmax) != 0) {
                 $errors['publicationmax'] = get_string('mustbeinteger', 'local_hub');
             }
         }

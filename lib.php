@@ -211,11 +211,12 @@ class local_hub {
     /**
      * Return a course for a given id
      * @param integer $id
+     * @param integer $strictness
      * @return object course, false if null
      */
-    public function get_course($id) {
+    public function get_course($id, $strictness = IGNORE_MISSING) {
         global $DB;
-        return $DB->get_record('hub_course_directory', array('id' => $id));
+        return $DB->get_record('hub_course_directory', array('id' => $id), '*', $strictness);
     }
 
     /**

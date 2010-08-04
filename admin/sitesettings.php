@@ -30,7 +30,6 @@
 require('../../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/hub/admin/forms.php');
-require_once($CFG->dirroot . '/webservice/lib.php');
 
 admin_externalpage_setup('sitesettings');
 
@@ -78,9 +77,6 @@ if (!empty($fromform)) {
 
 //OUTPUT
 echo $OUTPUT->header();
-if (!empty($message)) {
-    echo $message;
-}
 $sitesettingsform->display();
 echo $OUTPUT->footer();
 
