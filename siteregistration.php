@@ -41,6 +41,7 @@ if (!get_config('local_hub', 'hubenabled')) {
     throw new moodle_exception('hubnotenabled');
 }
 
+$PAGE->set_context(get_system_context());
 $PAGE->set_url('/local/hub/siteregistration.php');
 $PAGE->set_title(get_string('siteregistration', 'local_hub'));
 $PAGE->set_heading(get_string('siteregistration', 'local_hub'));
