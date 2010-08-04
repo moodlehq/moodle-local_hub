@@ -311,6 +311,47 @@ class hub_site_settings_form extends moodleform {
 
         $mform->addElement('hidden', 'id', $site->id);
 
+        $mform->addElement('text', 'name',
+                get_string('sitename', 'local_hub'));
+        $mform->addHelpButton('name',
+                'sitename', 'local_hub');
+        $mform->setDefault('name', $site->name);
+
+        $mform->addElement('text', 'url',
+                get_string('siteurl', 'local_hub'));
+        $mform->addHelpButton('url',
+                'siteurl', 'local_hub');
+        $mform->setDefault('url', $site->url);
+
+        $mform->addElement('textarea', 'description',
+                get_string('sitedesc', 'local_hub'));
+        $mform->addHelpButton('description',
+                'sitedesc', 'local_hub');
+        $mform->setDefault('description', $site->description);
+
+        $mform->addElement('text', 'contactname',
+                get_string('siteadmin', 'local_hub'));
+        $mform->addHelpButton('contactname',
+                'siteadmin', 'local_hub');
+        $mform->setDefault('contactname', $site->contactname);
+
+        $mform->addElement('text', 'contactemail',
+                get_string('siteadminemail', 'local_hub'));
+        $mform->addHelpButton('contactemail',
+                'siteadminemail', 'local_hub');
+        $mform->setDefault('contactemail', $site->contactemail);
+
+        $languages = get_string_manager()->get_list_of_languages();
+        asort($languages, SORT_LOCALE_STRING);
+        $mform->addElement('select', 'language', get_string('sitelanguage', 'local_hub'), $languages);
+        $mform->setDefault('language', $site->language);
+        $mform->addHelpButton('language', 'sitelanguage', 'local_hub');
+
+        $countries = get_string_manager()->get_list_of_countries();
+        $mform->addElement('select', 'countrycode', get_string('sitecountry', 'local_hub'), $countries);
+        $mform->setDefault('countrycode', $site->countrycode);
+        $mform->addHelpButton('countrycode', 'sitecountry', 'local_hub');
+
         $mform->addElement('text', 'publicationmax',
                 get_string('publicationmax', 'local_hub'));
         $mform->addHelpButton('publicationmax',

@@ -35,6 +35,8 @@ require_once($CFG->dirroot . '/webservice/lib.php');
 admin_externalpage_setup('sitesettings');
 
 $id = optional_param('id', 0, PARAM_INT);
+$hub = new local_hub();
+$site = $hub->get_site($id, MUST_EXIST);
 
 //define nav bar
 $PAGE->set_url('/local/hub/admin/sitesettings.php', array('id' => $id));
@@ -42,31 +44,36 @@ $PAGE->navbar->ignore_active(true);
 $PAGE->navbar->add(get_string('administrationsite'));
 $PAGE->navbar->add(get_string('hub', 'local_hub'));
 $PAGE->navbar->add(get_string('managesites', 'local_hub'),
-        new moodle_url('/local/hub/admin/managesites.php'));
+        new moodle_url('/local/hub/admin/managesites.php', 
+                array('search' => $site->name, 'sesskey' => sesskey())));
 $PAGE->navbar->add(get_string('sitesettings', 'local_hub'),
         new moodle_url('/local/hub/admin/sitesettings.php', array('id' => $id)));
 
-$hub = new local_hub();
+
 $sitesettingsform = new hub_site_settings_form('',
         array('id' => $id));
 $fromform = $sitesettingsform->get_data();
 
-//Save settings
-if (!empty($fromform)) {
-
-    //check site exists then update it
-    $site = $hub->get_site($fromform->id, MUST_EXIST);
+//Save settings and redirect to search site page
+if (!empty($fromform)) {    
     if ($fromform->publicationmax === '') {
         $site->publicationmax = null;
     } else {
         $site->publicationmax = $fromform->publicationmax;
     }
+    $site->name = $fromform->name;
+    $site->description = $fromform->description;
+    $site->contactname = $fromform->contactname;
+    $site->contactemail = $fromform->contactemail;
+    $site->language = $fromform->language;
+    $site->countrycode = $fromform->countrycode;
+    $site->url = $fromform->url;
 
     $hub->update_site($site);
    
-    //redirect to the search page
     redirect(new moodle_url('/local/hub/admin/managesites.php', 
-            array('sitesettings' => $site->name, 'sesskey' => sesskey())));
+            array('sitesettings' => $site->name, 'sesskey' => sesskey(),
+                'search' => $site->name)));
 }
 
 //OUTPUT
