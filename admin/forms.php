@@ -294,3 +294,47 @@ class hub_settings_form extends moodleform {
     }
 
 }
+
+/**
+ * This form displays site settings
+ */
+class hub_site_settings_form extends moodleform {
+
+    public function definition() {
+
+        //retrieve the publication
+        $hub = new local_hub();
+        $site = $hub->get_site($this->_customdata['id']);
+             
+        $mform = & $this->_form;
+        $mform->addElement('header', 'moodle', get_string('sitesettingsform', 'local_hub', $site->name));
+
+        $mform->addElement('hidden', 'id', $site->id);
+
+        $mform->addElement('text', 'publicationmax',
+                get_string('publicationmax', 'local_hub'));
+        $mform->addHelpButton('publicationmax',
+                'publicationmax', 'local_hub');
+        $mform->setDefault('publicationmax', $site->publicationmax);
+ 
+        $this->add_action_buttons(false, get_string('update'));
+    }
+
+    /**
+     * Set password to empty if hub not private
+     */
+    function validation($data, $files) {
+        global $CFG;
+        $errors = parent::validation($data, $files);
+
+        $publicationmax = $this->_form->_submitValues['publicationmax'];
+        if (!empty($publicationmax)) {
+            if (strcmp(clean_param($publicationmax, PARAM_INT), $publicationmax) !=0 ) {
+                $errors['publicationmax'] = get_string('mustbeinteger', 'local_hub');
+            }
+        }
+
+        return $errors;
+    }
+
+}

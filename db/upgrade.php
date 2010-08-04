@@ -162,5 +162,21 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2010071500, 'local', 'hub');
     }
 
+    if ($oldversion < 2010080400) {
+
+        // Define field publicationmax to be added to hub_site_directory
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('publicationmax', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, null, 'deleted');
+
+        // Conditionally launch add field publicationmax
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010080400, 'local', 'hub');
+    }
+
+
     return $result;
 }

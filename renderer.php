@@ -618,14 +618,22 @@ class local_hub_renderer extends plugin_renderer_base {
                     }
 
                     //delete link
-                    $deleteeurl = new moodle_url("/local/hub/admin/managesites.php",
+                    $deleteurl = new moodle_url("/local/hub/admin/managesites.php",
                                     array('sesskey' => sesskey(), 'delete' => $site->id));
                     $deletelinkhtml = html_writer::tag('a', get_string('delete'),
-                                    array('href' => $deleteeurl));
+                                    array('href' => $deleteurl));
+
+                    //settings link
+                    $settingsurl = new moodle_url("/local/hub/admin/sitesettings.php",
+                                    array('sesskey' => sesskey(), 'id' => $site->id));
+                    $settingslinkhtml = html_writer::tag('a', get_string('settings'),
+                                    array('href' => $settingsurl));
+
 
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $language, $adminnamehtml,
-                        $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, $deletelinkhtml);
+                        $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, 
+                        $deletelinkhtml . html_writer::empty_tag('br') . $settingslinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $languages[$site->language]);

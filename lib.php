@@ -130,11 +130,12 @@ class local_hub {
     /**
      * Return a site for a given id
      * @param integer $id
+     * @param integer $strictness
      * @return object site, false if null
      */
-    public function get_site($id) {
+    public function get_site($id, $strictness = IGNORE_MISSING) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('id' => $id));
+        return $DB->get_record('hub_site_directory', array('id' => $id), '*', $strictness);
     }
 
     /**

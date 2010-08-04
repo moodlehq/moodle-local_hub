@@ -324,13 +324,18 @@ class local_hub_external extends external_api {
         $token = optional_param('wstoken', '', PARAM_ALPHANUM);
 
         $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
-
+        $site = $hub->get_site_by_url($siteurl);
+        
         //check that the number of allowed publication is not reached
-        $maxpublication = get_config('local_hub', 'maxcoursesperday');
+        if (isset($site->publicationmax)) {
+            //site setting (overwrite the hub setting value)
+            $maxpublication = $site->publicationmax;
+        } else { //hub setting
+            $maxpublication = get_config('local_hub', 'maxcoursesperday');
+        }
         if ($maxpublication !== false) {
 
-            //retrieve the number of publication for the last 24hours
-            $site = $hub->get_site_by_url($siteurl);
+            //retrieve the number of publication for the last 24hours         
             $options = array();
             $options['lastpublished'] = strtotime("-1 day");
             $options['siteid'] = $site->id;
@@ -340,21 +345,24 @@ class local_hub_external extends external_api {
 
             if (!empty($lastpublishedcourses)) {
                 if (count($lastpublishedcourses) >= $maxpublication) {
-
-                    //get the oldest publication
-                    $nextpublicationtime = get_string('never', 'local_hub');
-                    $oldestpublicationtime = time();
-                    foreach ($lastpublishedcourses as $lastpublishedcourse) {
-                        if ($lastpublishedcourse->timepublished < $oldestpublicationtime) {
-                            $oldestpublicationtime = $lastpublishedcourse->timepublished;
+                    if ($maxpublication > 0) {
+                        //get the oldest publication
+                        $nextpublicationtime = get_string('never', 'local_hub');
+                        $oldestpublicationtime = time();
+                        foreach ($lastpublishedcourses as $lastpublishedcourse) {
+                            if ($lastpublishedcourse->timepublished < $oldestpublicationtime) {
+                                $oldestpublicationtime = $lastpublishedcourse->timepublished;
+                            }
                         }
-                    }
 
-                    $errorinfo = new stdClass();
-                    //calculate the time when the site can publish again
-                    $errorinfo->time = format_time((24 * 60 * 60) - (time() - $oldestpublicationtime));
-                    $errorinfo->maxpublication = $maxpublication;
-                    throw new moodle_exception('errormaxpublication', 'local_hub', '', $errorinfo);
+                        $errorinfo = new stdClass();
+                        //calculate the time when the site can publish again
+                        $errorinfo->time = format_time((24 * 60 * 60) - (time() - $oldestpublicationtime));
+                        $errorinfo->maxpublication = $maxpublication;
+                        throw new moodle_exception('errormaxpublication', 'local_hub', '', $errorinfo);
+                    } else {
+                        throw new moodle_exception('errornopublication', 'local_hub');
+                    }
                 }
             }
         }

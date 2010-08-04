@@ -185,6 +185,12 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
 
 echo $OUTPUT->header();
 
+//display a message if we come back from site settings page
+$updatesite = optional_param('sitesettings', '', PARAM_TEXT);
+if (!empty($updatesite) and confirm_sesskey()) {
+     echo $OUTPUT->notification(get_string('sitesettingsupdated', 'local_hub', $updatesite), 'notifysuccess');
+}
+
 if (!($delete != -1 and !$confirm)) {
     echo $OUTPUT->heading(get_string('managesites', 'local_hub'), 3, 'main');
     $sitesearchform->display();

@@ -41,3 +41,7 @@ $ADMIN->add('local_hub', new admin_externalpage('hubregistration', get_string('r
 $ADMIN->add('local_hub', new admin_externalpage('registrationconfirmed', get_string('registrationconfirmed', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/confirmregistration.php",
         'moodle/site:config', true));
+
+$ADMIN->add('local_hub', new admin_externalpage('sitesettings', get_string('sitesettings', 'local_hub'),
+        $CFG->wwwroot."/local/hub/admin/sitesettings.php",
+        'moodle/site:config', true));

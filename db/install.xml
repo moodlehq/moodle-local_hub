@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20100715" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20100804" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -40,7 +40,8 @@
         <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="this is the privacy setting of this site on the hub" PREVIOUS="emailalert" NEXT="posts"/>
         <FIELD NAME="posts" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of posts into the site" PREVIOUS="privacy" NEXT="participantnumberaverage"/>
         <FIELD NAME="participantnumberaverage" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="average number of participants (in non-empty courses)" PREVIOUS="posts" NEXT="deleted"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the site is unregistered" PREVIOUS="participantnumberaverage"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the site is unregistered" PREVIOUS="participantnumberaverage" NEXT="publicationmax"/>
+        <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the maximum number of publication a day for this site. If null, the value is taken from the hub setting." PREVIOUS="deleted"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
