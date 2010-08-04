@@ -470,6 +470,7 @@ class local_hub_renderer extends plugin_renderer_base {
         global $CFG;
 
         $renderedhtml = '';
+        $brtag = html_writer::empty_tag('br');
 
         $table = new html_table();
 
@@ -478,15 +479,13 @@ class local_hub_renderer extends plugin_renderer_base {
                 get_string('sitedesc', 'local_hub'),
                 get_string('sitelang', 'local_hub'),
                 get_string('siteadmin', 'local_hub'),
-                get_string('visible'),
-                '',
-                '',
-                get_string('operation', 'local_hub'),
+                get_string('visible'),             
+                get_string('operation', 'local_hub'), 
                 '');
 
             $table->align = array('center', 'left', 'left', 'center', 'center', 'center',
-                'center', 'center', 'center', 'center');
-            $table->size = array('5%', '25%', '40%', '5%', '15%', '%5', '%5');
+                'center', 'center');
+            $table->size = array('5%', '25%', '40%', '5%', '5%');
         } else {
             $table->head = array('', get_string('sitename', 'local_hub'),
                 get_string('sitedesc', 'local_hub'),
@@ -526,7 +525,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 //create description to display
                 $deschtml = $site->description; //the description
                 /// courses and sites number display under the description, in smaller
-                $deschtml .= html_writer::empty_tag('br');
+                $deschtml .= $brtag;
                 $additionaldesc = get_string('additionaldesc', 'local_hub', $site);
                 $deschtml .= html_writer::tag('span', $additionaldesc,
                                 array('class' => 'additionaldesc'));
@@ -547,7 +546,7 @@ class local_hub_renderer extends plugin_renderer_base {
                             get_string('yes') : get_string('no');
                     $admindisplayedinfo->emailalert = $site->emailalert ?
                             get_string('yes') : get_string('no');
-                    $additionaladmindesc = html_writer::empty_tag('br');
+                    $additionaladmindesc = $brtag;
                     $additionaladmindesc .= get_string('additionaladmindesc',
                                     'local_hub', $admindisplayedinfo);
                     $deschtml .= html_writer::tag('span', $additionaladmindesc,
@@ -640,8 +639,8 @@ class local_hub_renderer extends plugin_renderer_base {
 
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $language, $adminnamehtml,
-                        $visiblehtml, $trustbuttonhtml, $prioritisebuttonhtml, 
-                        $deletelinkhtml, $settingslinkhtml);
+                        $visiblehtml, $deletelinkhtml . $brtag . $trustbuttonhtml
+                        . $prioritisebuttonhtml, $settingslinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $languages[$site->language]);
