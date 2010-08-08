@@ -1057,9 +1057,8 @@ class local_hub {
             $emailinfo->language = $languages[$siteinfo->language];
         }
         if (!empty($siteurltoupdate)) {
-            email_to_user(get_admin(), $contactuser,
-                    get_string('emailtitlesiteupdated', 'local_hub', $emailinfo->name),
-                    get_string('emailmessagesiteupdated', 'local_hub', $emailinfo));
+            //we just log, do not send an email to admin for update
+            //(an email was sent previously if the url or name changed)
             add_to_log(SITEID, 'local_hub', 'site update', '', $siteinfo->id);
         } else {
             email_to_user(get_admin(), $contactuser,

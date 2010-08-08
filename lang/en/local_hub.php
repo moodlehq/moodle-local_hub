@@ -121,20 +121,17 @@ $string['emailmessagesitedeleted'] = '{$a->sitename} at {$a->siteurl} has just b
 
 A {$a->hubname} administrator deleted {$a->sitename} from the hub database. If you are allowed and want to register a new time on the hub, you will need first to force unregister from this hub. Please go to {$a->unregisterpagelink} on {$a->sitename}.
 ';
-$string['emailmessagesiteupdated'] = '{$a->name} just updated registration with the hub at {$a->huburl}
+$string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})
+Its new url {$a->url} has been updated from ({$a->oldurl}).
 
 Name: {$a->name}
 URL: {$a->url}
 Admin: {$a->contactname} ({$a->contactemail})
 Language: {$a->language}
 
-To manage registered sites, go to: {$a->managesiteurl}
-';
-$string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})
-Its new url {$a->url} has been updated from ({$a->oldurl}).';
+To manage registered sites, go to: {$a->managesiteurl}';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from a hub';
-$string['emailtitlesiteupdated'] = '{$a} site has been updated on the hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his name or url (please check it).';
 $string['enabled'] = 'Enabled';
 $string['enabled_help'] = 'You can enabled/disabled the hub server.';
