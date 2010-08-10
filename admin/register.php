@@ -47,14 +47,16 @@ if (!extension_loaded('xmlrpc')) {
     die();
 }
 
+$error = optional_param('error', '', PARAM_TEXT);
+
 $hub = new local_hub();
 
 $directorytohubcommunication = $hub->get_communication(WSSERVER, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
 
 $hubtodirectorycommunication = $hub->get_communication(WSCLIENT, HUBDIRECTORY, HUB_HUBDIRECTORYURL);
 
-$hubregistrationform = new hub_registration_form('', array('alreadyregistered' => !empty($hubtodirectorycommunication->confirmed)));
-$fromform = $hubregistrationform->get_data();
+$hubregistrationform = new hub_registration_form('',
+                array('alreadyregistered' => !empty($hubtodirectorycommunication->confirmed)));
 
 
 /////// UNREGISTER ACTION //////
@@ -72,7 +74,7 @@ if ($unregister && $confirm && confirm_sesskey()) {
         try {
             $result = $xmlrpcclient->call($function, $params);
         } catch (Exception $e) {
-            $error = $OUTPUT->notification(get_string('errorunregistration', 'local_hub', $e->getMessage()));
+            $error = get_string('errorunregistration', 'local_hub', $e->getMessage());
         }
     }
 
@@ -91,8 +93,10 @@ if ($unregister && $confirm && confirm_sesskey()) {
             $hub->delete_communication($hubtodirectorycommunication);
         }
     }
-}
 
+    redirect(new moodle_url('/local/hub/admin/register.php',
+                    array('sesskey' => sesskey(), 'error' => $error)));
+}
 
 
 /////// UPDATE ACTION ////////
@@ -112,7 +116,7 @@ if ($update && confirm_sesskey()) {
     try {
         $result = $xmlrpcclient->call($function, $params);
     } catch (Exception $e) {
-        $error = $OUTPUT->notification(get_string('errorregistration', 'local_hub', $e->getMessage()));
+        $error = get_string('errorregistration', 'local_hub', $e->getMessage());
     }
 }
 
@@ -120,16 +124,18 @@ if ($update && confirm_sesskey()) {
 /////// FORM REGISTRATION ACTION //////
 // retrieve the privacy setting
 $privacy = get_config('local_hub', 'privacy');
-
+$fromform = $hubregistrationform->get_data();
 if (!empty($fromform) and confirm_sesskey()) { // if the register button has been clicked
-    $params = (array) $fromform; //we are using the form input as the redirection parameters (token, url and name)
+    //we are using the form input as the redirection parameters
+    //(token, url and name)
+    $params = (array) $fromform;
     //first time we press the registration button (and only time if no failure)
     if (empty($directorytohubcommunication)) {
 
         //create new token for the hub directory to call the hub
         $capabilities = array('local/hub:viewinfo');
-        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory', HUB_HUBDIRECTORYURL . '_directory_user',
-                        $capabilities);
+        $token = $hub->create_hub_token('Moodle.org Hub Directory', 'Hub directory',
+                        HUB_HUBDIRECTORYURL . '_directory_user', $capabilities);
 
         //we save the token into the communication table in order to have a reference to the hidden token
         $directorytohubcommunication = new stdClass();
@@ -154,10 +160,6 @@ if (!empty($fromform) and confirm_sesskey()) { // if the register button has bee
 
 
 /////// OUTPUT SECTION /////////////
-
-
-
-
 echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('local_hub');
 //unregister confirmation page
@@ -179,8 +181,8 @@ if ($unregister && empty($confirm)) {
             echo $OUTPUT->notification(get_string('registrationupdated', 'local_hub'), 'notifysuccess');
         }
 
-        if (!empty($error)) {
-            echo $error;
+        if (!empty($error) and confirm_sesskey()) {
+            echo $OUTPUT->notification($error);
         }
 
         $url = new moodle_url("/local/hub/admin/register.php",
