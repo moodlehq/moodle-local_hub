@@ -56,7 +56,8 @@ if (!empty($fromform)) {
 
     //Save settings
     set_config('name', $fromform->name, 'local_hub');
-    set_config('hubenabled', $fromform->enabled, 'local_hub');
+    set_config('hubenabled', 
+            empty($fromform->enabled)?0:$fromform->enabled, 'local_hub');
     set_config('description', $fromform->desc, 'local_hub');
     set_config('contactname', $fromform->contactname, 'local_hub');
     set_config('contactemail', $fromform->contactemail, 'local_hub');
