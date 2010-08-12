@@ -216,6 +216,7 @@ class hub_settings_form extends moodleform {
                 array('rows' => 10, 'cols' => 15, 'class' => 'adminhubdescription'));
         $mform->addRule('desc', get_string('required'), 'required');
         $mform->setDefault('desc', $hubdescription);
+        $mform->setType('desc', PARAM_TEXT);
         $mform->addHelpButton('desc', 'description', 'local_hub');
 
         $mform->addElement('text', 'contactname',
