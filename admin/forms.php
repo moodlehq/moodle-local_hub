@@ -172,8 +172,12 @@ class hub_settings_form extends moodleform {
         //enable rss feed
         $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
 
-        //language (default) value
-        $password = get_config('local_hub', 'password');
+        //password (default) value
+        if ($privacy == HUBPRIVATE) {
+            $password = get_config('local_hub', 'password');
+        } else {
+            $password = '';
+        }
 
         $enabled = get_config('local_hub', 'hubenabled');
 
@@ -272,25 +276,6 @@ class hub_settings_form extends moodleform {
 
 
         $this->add_action_buttons(false, get_string('update'));
-    }
-
-    /**
-     * Set password to empty if hub not private
-     */
-    function validation($data, $files) {
-        global $CFG;
-        $errors = parent::validation($data, $files);
-
-        $privacy = $this->_form->_submitValues['privacy'];
-        if (isset($this->_form->_submitValues['password'])) {
-            $password = $this->_form->_submitValues['password'];
-
-            if ($privacy != HUBPRIVATE) {
-                $this->_form->_submitValues['password'] = '';
-            }
-        }
-
-        return $errors;
     }
 
 }

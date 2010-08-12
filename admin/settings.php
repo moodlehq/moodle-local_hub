@@ -51,7 +51,7 @@ if (!extension_loaded('xmlrpc')) {
 if (!empty($fromform)) {
 
     if ($fromform->privacy != HUBPRIVATE and !empty($fromform->password)) {
-        throw new moodle_exception('cannotsetpasswordforpublichub', 'local_hub', new moodle_url('/local/hub/admin/settings.php'));
+        $fromform->password = null;
     }
 
     //Save settings
@@ -66,7 +66,10 @@ if (!empty($fromform)) {
             empty($fromform->enablerssfeeds)?0:$fromform->enablerssfeeds, 'local_hub');
     
     set_config('language', $fromform->lang, 'local_hub');
-    set_config('password', $fromform->password, 'local_hub');
+
+    set_config('password', 
+            empty($fromform->password)?null:$fromform->password, 'local_hub');
+
 
     //if privacy settings is downgraded to 'private', then unregister from the hub
     $currentprivacy = get_config('local_hub', 'privacy');
