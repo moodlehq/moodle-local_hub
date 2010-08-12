@@ -52,6 +52,7 @@ class local_hub_external extends external_api {
 
         $hub = new local_hub();
         $hubinfo = $hub->get_info();
+        $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
 
         return $hubinfo;
     }
