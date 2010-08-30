@@ -14,27 +14,96 @@
  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.*//*
 */
 
+/* ADMIN: registration */
 #page-admin-local-hub-admin-register .buttoncenter {text-align: center}
+
+/* ADMIN: hub settings */
 #page-admin-local-hub-admin-settings .adminhubdescription {width: 400px; height: 120px; padding: 2px;}
 #page-admin-local-hub-admin-settings .admintextfield {width: 400px;}
 #page-admin-local-hub-admin-settings .admincurrentimage {vertical-align: top;}
+
+/* Site registration page */
 #page-admin-local-registration-index .centeredbutton {text-align: center}
 #page-admin-local-registration-index .cell {border-width: 0 1px;}
 #page-admin-local-registration-index .justifytext {text-align: justify}
+
+
+/* ADMIN: manage sites */
 #page-admin-local-hub-admin-managesites .trustedtr {background-color: #ffe1c3;}
 #page-admin-local-hub-admin-managesites .prioritisetr {background-color: #ffd4ff;}
-#page-admin-local-hub-admin-managesites .additionaldesc {font-size: 80%; color: purple;}
+#page-admin-local-hub-admin-managesites .additionaldesc {font-size: 80%; color: #B8860B;}
 #page-admin-local-hub-admin-managesites .additionaladmindesc {font-size: 80%; color: #6666ff;}
-#page-admin-local-hub-admin-managecourses .prioritisetr {background-color: #ffd4ff;}
-#page-admin-local-hub-admin-managecourses .additionaldesc {font-size: 80%; color: purple;}
-#page-admin-local-hub-admin-managecourses .additionaladmindesc {font-size: 80%; color: #6666ff;}
+
+
+/*ADMIN: manage courses */
+#page-admin-local-hub-admin-managecourses .additionaldesc {font-size: 80%; color:  #B8860B;}
 #page-admin-local-hub-admin-managecourses .coursesitelink {font-size: 80%;}
-#page-site-index .trustedtr {background-color: #ffe1c3;}
-#page-site-index .prioritisetr {background-color: #ffd4ff;}
-#page-site-index .additionaldesc {font-size: 80%; color: #aa6666;}
-#page-site-index .additionaladmindesc {font-size: 80%; color: #6666ff;}
-#page-site-index .blockdescription {font-size: 80%; color: #555555;}
-#page-admin-local-hub-admin-managecourses .coursescreenshot {float: left; padding-right: 8px;}
+#page-admin-local-hub-admin-managecourses .coursecomment {float: right;}
+#page-admin-local-hub-admin-managecourses .courselinks {float: right;width: 174px}
+#page-admin-local-hub-admin-managecourses .coursedescription {margin-right: 200px;}
+#page-admin-local-hub-admin-managecourses .hubadminoperations {}
+#page-admin-local-hub-admin-managecourses .courseoperations {margin-top:9px; text-align:center}
+#page-admin-local-hub-admin-managecourses .hubcoursetitle {font-size: 140%;color: #333333;}
+#page-admin-local-hub-admin-managecourses .coursescreenshot {margin-top: 9px;text-align:center}
+#page-admin-local-hub-admin-managecourses .fullhubcourse {margin-bottom: 20px;}
+#page-admin-local-hub-admin-managecourses .hubcoursedelete {float: left;}
+#page-admin-local-hub-admin-managecourses .hubcoursevisible {float: left;padding-right: 4px;}
 #page-admin-local-hub-admin-managecourses .pagingbar {text-align: center;}
-#page-site-index .coursescreenshot {float: left; padding-right: 8px;}
+#page-admin-local-hub-admin-managecourses .hubcoursedownload:hover {background-color: #d45500;}
+#page-admin-local-hub-admin-managecourses .hubcoursedownload {
+    display: inline-block;
+    padding: 5px 8px 6px;
+    color: #fff;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+    background-color: #F7B500;
+    margin-left: 4px;
+}
+
+
+/* FRONT PAGE */
+#page-site-index .additionaldesc {font-size: 80%; color: #B8860B;}
+#page-site-index .comment-link {font-size: 80%; color: #555555;}
+#page-site-index .coursescreenshot {margin-top: 9px; text-align:center}
 #page-site-index .pagingbar {text-align: center;}
+#page-site-index .coursecomment {float: right;}
+#page-site-index .courseoperations {margin-top:9px; text-align:center}
+#page-site-index .hubcoursedownload:hover {background-color: #d45500;}
+#page-site-index .courselinks {float: right;width: 174px}
+#page-site-index .ratingaggregate {float: left; padding-right: 4px;}
+#page-site-index .hubcourserating { padding-top: 3px; font-size: 80%; color: #555555;}
+#page-site-index .hubcoursecomments { padding-top: 3px; }
+#page-site-index .coursedescription {margin-right: 200px;}
+#page-site-index .hubcoursetitle {font-size: 140%;ncolor: #333333;}
+#page-site-index .fullhubcourse {margin-bottom: 20px;}
+#page-site-index .hubcoursedownload {
+    display: inline-block;
+    padding: 5px 8px 6px;
+    color: #fff;
+    text-decoration: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    position: relative;
+    cursor: pointer;
+    background-color: #F7B500;
+    margin-left: 4px;
+}
+#page-site-index .comment-list li {
+    background-color:#FFD970 !important;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    padding-right: 4px;
+    padding-bottom: 2px;
+}
+

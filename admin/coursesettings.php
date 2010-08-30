@@ -68,7 +68,8 @@ if (!empty($fromform)) {
 
     redirect(new moodle_url('/local/hub/admin/managecourses.php',
             array('coursesettings' => $course->fullname, 'sesskey' => sesskey(),
-                'search' => $course->fullname)));
+                'search' => $course->fullname, 'visibility' => COURSEVISIBILITY_ALL,
+                'lastmodified' => 'all')));
 }
 
 //OUTPUT

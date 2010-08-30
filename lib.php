@@ -1302,8 +1302,8 @@ class local_hub {
                 $courseurl = new moodle_url($course->demourl);
             }
             $rss = optional_param('rss', false, PARAM_BOOL);
-            $rss = empty($rss)?'':'rss';
-            add_to_log(SITEID, 'local_hub', 'course redirection '.$rss, '', $redirectcourseid);
+            $rss = empty($rss) ? '' : 'rss';
+            add_to_log(SITEID, 'local_hub', 'course redirection ' . $rss, '', $redirectcourseid);
             redirect(new moodle_url($courseurl));
         }
 
@@ -1375,6 +1375,36 @@ class local_hub {
                     }
                 }
             }
+
+            //load ratings and comments
+            if (!empty($courses)) {
+                require_once($CFG->dirroot . '/rating/lib.php');
+                $ratingoptions = new stdclass();
+                $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+                $ratingoptions->items = $courses;
+                $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
+                $ratingoptions->scaleid = 10;
+                $ratingoptions->userid = $USER->id;
+                $ratingoptions->returnurl = "$CFG->wwwroot/local/hub/index.php";
+
+                $rm = new rating_manager();
+                $courses = $rm->get_ratings($ratingoptions);
+
+                foreach ($courses as $course) {
+                    $course->rating->settings->permissions->viewany = 1;
+                }
+
+                require_once($CFG->dirroot . '/comment/lib.php');
+                foreach ($courses as $course) {
+                    $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
+                    $commentoptions->area = 'local_hub';
+                    $commentoptions->itemid = $course->id;
+                    $commentoptions->showcount = true;
+                    $commentoptions->component = 'local_hub';
+                    $course->comment = new comment($commentoptions);
+                    $course->comment->set_view_permission(true);
+                }
+            }
         }
 
         echo $OUTPUT->header();
@@ -1409,7 +1439,7 @@ class local_hub {
             $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
             $search = empty($search) ? 0 : urlencode($search);
             //retrieve guest user if user not logged in
-            $userid = empty($USER->id)?$CFG->siteguest:$USER->id;
+            $userid = empty($USER->id) ? $CFG->siteguest : $USER->id;
             rss_print_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
                     $downloadable . '/' . $audience . '/' . $educationallevel
                     . '/' . $subject . '/' . $licence
@@ -1418,4 +1448,28 @@ class local_hub {
         echo $OUTPUT->footer();
     }
 
+}
+
+/**
+ * Callback function to check permission
+ * used by Comment API
+ * @return array
+ */
+function hub_comment_permissions($params) {
+    global $DB, $USER;
+
+    $post = false;
+
+    //check post permission only if the user didn't post previously  comment
+    if (isset($USER->id)) {
+        $comments = $DB->get_records('comments',
+                        array('userid' => $USER->id, 'itemid' => $params->itemid,
+                            'contextid' => $params->context->id, 'commentarea' => 'local_hub'));
+        if (empty($comments)) {
+            $post = has_capability('moodle/comment:post', $params->context);
+        }
+    }
+
+    return array('view' => true,
+        'post' => $post);
 }
