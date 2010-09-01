@@ -418,21 +418,4 @@ class hub_course_settings_form extends moodleform {
         $this->add_action_buttons(false, get_string('update'));
     }
 
-    /**
-     * Set password to empty if hub not private
-     */
-    function validation($data, $files) {
-        global $CFG;
-        $errors = parent::validation($data, $files);
-
-        $publicationmax = $this->_form->_submitValues['publicationmax'];
-        if (!empty($publicationmax)) {
-            if (strcmp(clean_param($publicationmax, PARAM_INT), $publicationmax) != 0) {
-                $errors['publicationmax'] = get_string('mustbeinteger', 'local_hub');
-            }
-        }
-
-        return $errors;
-    }
-
 }
