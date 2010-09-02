@@ -296,8 +296,7 @@ class local_hub_renderer extends plugin_renderer_base {
                         . $sitehtml;
 
                 // create screenshots html
-                $screenshothtml = html_writer::empty_tag('img',
-                                array('src' => new moodle_url('/local/hub/images/noimage.png')));
+                $screenshothtml = '';
 
                 if (!empty($course->screenshots)) {
                     $images = array();

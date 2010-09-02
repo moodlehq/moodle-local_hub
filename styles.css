@@ -39,12 +39,18 @@
 #page-admin-local-hub-admin-managecourses .additionaldesc {font-size: 80%; color:  #B8860B;}
 #page-admin-local-hub-admin-managecourses .coursesitelink {font-size: 80%;}
 #page-admin-local-hub-admin-managecourses .coursecomment {float: right;}
-#page-admin-local-hub-admin-managecourses .courselinks {float: right;width: 174px}
+#page-admin-local-hub-admin-managecourses .courselinks {float: right;width: 150px}
 #page-admin-local-hub-admin-managecourses .coursedescription {margin-right: 200px;}
 #page-admin-local-hub-admin-managecourses .hubadminoperations {}
 #page-admin-local-hub-admin-managecourses .courseoperations {margin-top:9px; text-align:center}
 #page-admin-local-hub-admin-managecourses .hubcoursetitle {font-size: 140%;color: #333333;}
-#page-admin-local-hub-admin-managecourses .coursescreenshot {margin-top: 9px;text-align:center}
+#page-admin-local-hub-admin-managecourses .coursescreenshot {
+    margin-top: 9px;
+    text-align:center;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    height:150px;
+    background-color: #B8860B;}
 #page-admin-local-hub-admin-managecourses .fullhubcourse {margin-bottom: 20px;}
 #page-admin-local-hub-admin-managecourses .hubcoursedelete {float: left;}
 #page-admin-local-hub-admin-managecourses .hubcoursevisible {float: left;padding-right: 4px;}
@@ -65,18 +71,25 @@
     cursor: pointer;
     background-color: #F7B500;
     margin-left: 4px;
+    font-size: 89%;
 }
 
 
 /* FRONT PAGE */
 #page-site-index .additionaldesc {font-size: 80%; color: #B8860B;}
 #page-site-index .comment-link {font-size: 80%; color: #555555;}
-#page-site-index .coursescreenshot {margin-top: 9px; text-align:center}
+#page-site-index .coursescreenshot {
+    margin-top: 9px; 
+    text-align:center;
+    height:150px;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    background-color: #B8860B;}
 #page-site-index .pagingbar {text-align: center;}
 #page-site-index .coursecomment {float: right;}
 #page-site-index .courseoperations {margin-top:9px; text-align:center}
 #page-site-index .hubcoursedownload:hover {background-color: #d45500;}
-#page-site-index .courselinks {float: right;width: 174px}
+#page-site-index .courselinks {float: right;width: 150px}
 #page-site-index .ratingaggregate {float: left; padding-right: 4px;}
 #page-site-index .hubcourserating { padding-top: 3px; font-size: 80%; color: #555555;}
 #page-site-index .hubcoursecomments { padding-top: 3px; }
@@ -98,6 +111,7 @@
     cursor: pointer;
     background-color: #F7B500;
     margin-left: 4px;
+    font-size: 89%;
 }
 #page-site-index .comment-list li {
     background-color:#FFD970 !important;
