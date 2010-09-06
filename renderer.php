@@ -216,7 +216,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     $siteatag = html_writer::tag('a', get_string('site', 'local_hub') . ': '
                                     . $course->site->name,
                                     array('href' => $managesiteurl));
-                    $sitehtml = html_writer::tag('span', $siteatag,
+                    $sitehtml = html_writer::tag('div', $siteatag,
                                     array('class' => 'coursesitelink'));
 
                     //bulk operation checkbox html
@@ -266,7 +266,7 @@ class local_hub_renderer extends plugin_renderer_base {
                                             'lastmodified' => 'all'));
                         $courseatag = html_writer::tag('a', get_string('editcourse', 'local_hub'),
                                         array('href' => $managecourseurl));
-                        $sitehtml = html_writer::tag('span', $courseatag,
+                        $sitehtml = html_writer::tag('div', $courseatag,
                                         array('class' => 'coursesitelink'));
                     } else {
                         $sitehtml = "";
@@ -289,10 +289,10 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('href' => $courseurl, 'class' => 'hubcoursedownload'));
 
                 //create title html
-                $coursename = html_writer::tag('span', $course->fullname,
+                $coursename = html_writer::tag('div', $course->fullname,
                                 array('class' => 'hubcoursetitle'));
-                $coursenamehtml = html_writer::tag('div', $coursename,
-                                $course->privacy ? array('class' => 'hubcoursetitle') : array('class' => 'hubcoursetitle dimmed_text'))
+                $coursenamehtml = html_writer::tag('h3', $coursename,
+                                $course->privacy ? array() : array('class' => 'dimmed_text'))
                         . $sitehtml;
 
                 // create screenshots html
@@ -410,7 +410,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 //create additional information html
                 $additionaldesc = $courseuserinfohtml . $coursecontentinfohtml
                         . $coursefileinfohtml . $blocksandactivities;
-                $additionaldeschtml = html_writer::tag('span', $additionaldesc,
+                $additionaldeschtml = html_writer::tag('div', $additionaldesc,
                                 array('class' => 'additionaldesc'));
 
                 //create download button html
@@ -446,16 +446,21 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //the main DIV tags
-                $courseoperations = html_writer::tag('div',
+                $buttonsdiv = html_writer::tag('div',
                                 $downloadbuttonhtml . $visitlinkhtml,
                                 array('class' => 'courseoperations'));
-                $coursehtml = html_writer::tag('div',
-                                $coursescreenshot . $courseoperations,
+                $screenshotbuttonsdiv = html_writer::tag('div',
+                                $coursescreenshot . $buttonsdiv,
                                 array('class' => 'courselinks'));
-                $coursehtml .= html_writer::tag('div',
-                                $coursenamehtml . $deschtml . $additionaldeschtml
+
+                $coursedescdiv = html_writer::tag('div',
+                                $deschtml . $additionaldeschtml
                                 . $comment . $rating,
                                 array('class' => 'coursedescription'));
+                $coursehtml =
+                        $coursenamehtml . html_writer::tag('div',
+                                $coursedescdiv . $screenshotbuttonsdiv,
+                                array('class' => 'hubcourseinfo clearfix'));
                 $coursehtml .= html_writer::tag('div',
                                 $checkboxhtml . $visiblehtml . $settingslinkhtml,
                                 array('class' => 'hubadminoperations clearfix'));
@@ -464,29 +469,35 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('class' => 'fullhubcourse clearfix'));
             }
 
-            //add the select bulk operation
-            if ($withwriteaccess) {
-                $selecthtml = html_writer::select(array(
-                            'bulkdelete' => get_string('bulkdelete', 'local_hub'),
-                            'bulkvisible' => get_string('bulkvisible', 'local_hub'),
-                            'bulknotvisible' => get_string('bulknotvisible', 'local_hub')),
-                                'bulkselect', '',
-                                array('' => get_string('bulkselectoperation', 'local_hub')));
-                $renderedhtml .= html_writer::tag('div', $selecthtml);
-
-                //perform button
-                $optionalurlparams['sesskey'] = sesskey();
-                $bulkformparam['method'] = 'post';
-                $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
-                $bulkbutton = html_writer::empty_tag('input',
-                                array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
-                                    'type' => 'submit',
-                                    'value' => get_string('bulkoperationperform', 'local_hub')));
-                $renderedhtml .= html_writer::tag('div', $bulkbutton);
-                $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
-                $renderedhtml = html_writer::tag('div', $renderedhtml);
-            }
+            $renderedhtml = html_writer::tag('div', $renderedhtml,
+                        array('class' => 'hubcourseresult'));
         }
+
+        //add the select bulk operation
+        if ($withwriteaccess) {
+            $selecthtml = html_writer::select(array(
+                        'bulkdelete' => get_string('bulkdelete', 'local_hub'),
+                        'bulkvisible' => get_string('bulkvisible', 'local_hub'),
+                        'bulknotvisible' => get_string('bulknotvisible', 'local_hub')),
+                            'bulkselect', '',
+                            array('' => get_string('bulkselectoperation', 'local_hub')));
+            $renderedhtml .= html_writer::tag('div', $selecthtml,
+                    array('class' => 'hubbulkselect'));
+
+            //perform button
+            $optionalurlparams['sesskey'] = sesskey();
+            $bulkformparam['method'] = 'post';
+            $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
+            $bulkbutton = html_writer::empty_tag('input',
+                            array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
+                                'type' => 'submit',
+                                'value' => get_string('bulkoperationperform', 'local_hub')));
+            $renderedhtml .= html_writer::tag('div', $bulkbutton,
+                    array('class' => 'hubbulkbutton'));
+            $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
+            $renderedhtml = html_writer::tag('div', $renderedhtml);
+        }
+
         return $renderedhtml;
     }
 
