@@ -421,7 +421,7 @@ class local_hub_external extends external_api {
      * @return array courses
      */
     public static function get_courses($search, $downloadable, $enrollable, $options = array()) {
-        global $DB;
+        global $DB, $CFG, $USER;
 
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
@@ -456,6 +456,20 @@ class local_hub_external extends external_api {
         $hub = new local_hub();
         $courses = $hub->get_courses($cleanedoptions);
 
+        //load ratings and comments
+        if (!empty($courses)) {
+            require_once($CFG->dirroot . '/comment/lib.php');
+            require_once($CFG->dirroot . '/rating/lib.php');
+            $ratingoptions = new stdclass();
+            $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+            $ratingoptions->items = $courses;
+            $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
+            $ratingoptions->scaleid = HUB_COURSE_RATING_SCALE;
+            $rm = new rating_manager();
+            $courses = $rm->get_ratings($ratingoptions);
+
+        }
+
         //create result
         $result = array();
         foreach ($courses as $course) {
@@ -484,6 +498,7 @@ class local_hub_external extends external_api {
             $courseinfo['creatornotesformat'] = $course->creatornotesformat;
             $courseinfo['enrollable'] = $course->enrollable;
             $courseinfo['screenshots'] = $course->screenshots;
+             $courseinfo['timemodified'] = $course->timemodified;
             if (!empty($course->demourl)) {
                 $courseinfo['demourl'] = $course->demourl;
             }
@@ -503,6 +518,26 @@ class local_hub_external extends external_api {
                 }
             }
 
+            if (isset($course->rating->aggregate)) {
+                $courseinfo['rating']['aggregate'] =  clean_param($course->rating->aggregate, PARAM_FLOAT);
+            }
+            $courseinfo['rating']['count'] = $course->rating->count;
+            $courseinfo['rating']['scaleid'] = $course->rating->settings->scale->id;
+
+            $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
+            $commentoptions->area = 'local_hub';
+            $commentoptions->itemid = $course->id;
+            $commentoptions->showcount = true;
+            $commentoptions->component = 'local_hub';
+            $course->comment = new comment($commentoptions);
+            $comments = $course->comment->get_comments();
+            foreach ($comments as $comment) {
+                $coursecomment = array();
+                $coursecomment['comment'] = clean_param($comment->content, PARAM_TEXT);
+                $coursecomment['commentator'] = clean_param($comment->fullname, PARAM_TEXT);
+                $coursecomment['date'] = $comment->timecreated;
+                $courseinfo['comments'][] = $coursecomment;
+            }
 
             $result[] = $courseinfo;
         }
@@ -540,12 +575,27 @@ class local_hub_external extends external_api {
                             'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
                             'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
                             'screenshots' => new external_value(PARAM_INT, 'total number of screenshots'),
+                            'timemodified' => new external_value(PARAM_INT, 'time of last modification - timestamp'),
                             'contents' => new external_multiple_structure(new external_single_structure(
                                             array(
                                                 'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
                                                 'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
                                                 'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
-                                    )), 'contents', VALUE_OPTIONAL)
+                                    )), 'contents', VALUE_OPTIONAL),
+                            'rating' => new external_single_structure (
+                                        array(
+                                            'aggregate' =>  new external_value(PARAM_FLOAT, 'Rating average', VALUE_OPTIONAL),
+                                            'scaleid' => new external_value(PARAM_INT, 'Rating scale'),
+                                            'count' => new external_value(PARAM_INT, 'Rating count'),
+                                    ), 'rating', VALUE_OPTIONAL),
+
+                            
+                            'comments' => new external_multiple_structure(new external_single_structure (
+                                            array(
+                                                'comment' => new external_value(PARAM_TEXT, 'the comment'),
+                                                'commentator' => new external_value(PARAM_TEXT, 'the name of commentator'),
+                                                'date' => new external_value(PARAM_INT, 'date of the comment'),
+                                    )), 'contents', VALUE_OPTIONAL),
                         ), 'course info')
         );
     }

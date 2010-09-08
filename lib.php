@@ -23,6 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define('HUB_COURSE_PER_PAGE', 10);
+define('HUB_COURSE_RATING_SCALE', 10);
 
 /**
  * Maximum number of course per day default

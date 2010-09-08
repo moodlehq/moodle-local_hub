@@ -431,11 +431,13 @@ class local_hub_renderer extends plugin_renderer_base {
                     $rating = html_writer::tag('div', $this->output->render($course->rating),
                                     array('class' => 'hubcourserating'));
                 } else {
-                    $rating = '';
+                    $rating = html_writer::tag('div', get_string('noratings', 'local_hub'),
+                                        array('class' => 'norating'));
                 }
 
                 //Create comments html
-                $comment = '';
+                $comment = html_writer::tag('div', get_string('nocomments', 'local_hub'),
+                                        array('class' => 'nocomments'));
                 if (!empty($course->comment)) {
                     //display only if there is some comment if there is some comment
                     if ((!empty($course->comment->count) and $course->comment->count != '(0)')
