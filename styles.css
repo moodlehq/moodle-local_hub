@@ -130,7 +130,7 @@
     background: #B8860B;
     left: -15px;
     position: relative;
-    z-index: 100;
+    z-index: 0;
     border: 0px;
     font-size: 100%;
     margin: 0px;

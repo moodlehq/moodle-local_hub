@@ -1073,12 +1073,11 @@ class local_hub {
 
     /**
      * Create a user, role and token. Return the created token id.
-     * @global <type> $CFG
-     * @global <type> $DB
-     * @param <type> $name
-     * @param <type> $servicename
-     * @param <type> $capabilities
-     * @return <type>
+     * @param string $rolename the role to create/use - will be assign to the user
+     * @param string $servicename service to link to the new token
+     * @param string $username user to link to the new token
+     * @param array $capabilities list of capabilities to add to the role
+     * @return object created token
      */
     function create_hub_token($rolename, $servicename, $username, $capabilities) {
         global $CFG, $DB;

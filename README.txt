@@ -11,7 +11,6 @@ Development spec:
 Hub Administration
     http://docs.moodle.org/en/Hub_administration
 
-More docs about running hubs coming soon.
 
 
 Installation
