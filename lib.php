@@ -854,7 +854,7 @@ class local_hub {
         $course->siteid = $site->id;
 
         if (!empty($course->share)) {
-            $course->format = 'zip';
+            $course->format = 'mbz';
         } else {
             $course->format = 'url';
         }
@@ -1260,7 +1260,7 @@ class local_hub {
 
         $directory = make_upload_directory($userdir);
 
-        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".zip");
+        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".mbz");
     }
 
     /**
@@ -1273,7 +1273,7 @@ class local_hub {
         $level1 = floor($courseid / 1000) * 1000;
 
         $directory = "hub/$level1/$courseid";
-        return file_exists($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".zip");
+        return file_exists($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".mbz");
     }
 
     /**

@@ -59,7 +59,7 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
                         $remotemoodleurl = ',' . 'unknown' . ',' . getremoteaddr();
                     }
                     add_to_log(SITEID, 'local_hub', 'download backup', '', $courseid . $remotemoodleurl);
-                    send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".zip", $course->shortname . ".zip",
+                    send_file($CFG->dataroot . '/' . $userdir . '/backup_' . $courseid . ".mbz", $course->shortname . ".mbz",
                             'default', 0, false, true, '', false);
                 }
             }
