@@ -109,7 +109,7 @@ if ($update && confirm_sesskey()) {
     $hubinfo['name'] = clean_param($hubinfo['name'], PARAM_TEXT);
     $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
     $hubinfo['contactname'] = clean_param($hubinfo['contactname'], PARAM_TEXT);
-    $params = array($hubinfo);
+    $params = array('hubinfo' => $hubinfo);
     $serverurl = HUB_HUBDIRECTORYURL . "/local/hubdirectory/webservice/webservices.php";
     require_once($CFG->dirroot . "/webservice/xmlrpc/lib.php");
     $xmlrpcclient = new webservice_xmlrpc_client($serverurl, $hubtodirectorycommunication->token);
