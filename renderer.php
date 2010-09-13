@@ -336,7 +336,7 @@ class local_hub_renderer extends plugin_renderer_base {
                                 html_writer::empty_tag('img',
                                         array('src' => $this->output->pix_url('i/email'),
                                                 'class' => 'hubcoursemail',
-                                            'alt' => get_string('msgtopublisher', 'local_hub'))),
+                                            'alt' => get_string('msgtopublisher', 'local_hub', $course->fullname))),
                                 array('href' => new moodle_url('/local/hub/sendmessage.php',
                                         array('id' => $course->id, 'admin' => $withwriteaccess))));
                 $courseuserinfohtml = html_writer::tag('div', $courseuserinfo,

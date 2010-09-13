@@ -55,7 +55,7 @@ if (!is_siteadmin ()) {
 }
 
 $sendmessageform = new send_message_form('', array('id' => $id, 'admin' => $admin,
-        'publishername' => $hubcourse->publishername));
+        'publishername' => $hubcourse->publishername, 'coursename' => $hubcourse->fullname));
 
 if ($data = $sendmessageform->get_data() and confirm_sesskey()) {
 

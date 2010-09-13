@@ -205,8 +205,8 @@ Following is {$a->userfullname}\'s message:
     
 ';
 $string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
-$string['msgtopublisher'] = 'Send message to publisher';
-$string['msgtype'] = 'Subject';
+$string['msgtopublisher'] = 'Send message to {$a}\'s publisher';
+$string['msgtype'] = 'Category';
 $string['msgtype_help'] = 'Select a broad category that describes your message.';
 $string['msgtypeappreciation'] = 'Appreciation / congratulation';
 $string['msgtypeimprovement'] = 'Improvement suggestion';
