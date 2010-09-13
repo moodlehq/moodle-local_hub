@@ -74,14 +74,16 @@ if ($data = $sendmessageform->get_data() and confirm_sesskey()) {
     $publisher->maildisplay = true;
     $hubcourse->hubname =  $SITE->fullname;
     $hubcourse->sitename = $hub->get_site($hubcourse->siteid)->name;
-    $hubcourse->huburl = new moodle_url('/', array('courseid' => $hubcourse->id));
+    $hubcourse->huburl = new moodle_url('/');
     $hubcourse->huburl = $hubcourse->huburl->out();
+    $hubcourse->hubcourseurl = new moodle_url('/', array('courseid' => $hubcourse->id));
+    $hubcourse->hubcourseurl = $hubcourse->hubcourseurl->out();
     $hubcourse->userurl = new moodle_url('/message/index.php', array('id' => $USER->id));
     $hubcourse->userurl = $hubcourse->userurl->out();
     $hubcourse->userfullname = $USER->firstname . ' ' . $USER->lastname;
+    $hubcourse->message =  $data->message;
     email_to_user($publisher, $USER, get_string('msgforcoursetitle', 'local_hub', $hubcourse),
-            get_string('msgforcourse', 'local_hub', $hubcourse)
-            . $data->message);
+            get_string('msgforcourse', 'local_hub', $hubcourse));
 
     //redirect either to the courses manage page either to the front page
     if ($admin) {

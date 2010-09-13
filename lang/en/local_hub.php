@@ -196,13 +196,18 @@ $string['maxmessagesent'] = 'You cannot send anymore message for today, try tomo
 $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
-$string['msgforcourse'] = 'This message was sent from the {$a->hubname} contact form.
-It concerns \'{$a->fullname}\' published course of \'{$a->sitename}\'.
-You can see the concerned course on the hub : {$a->huburl}.
-You can directly reply to this email, or send a private message on the hub: {$a->userurl}
+$string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
-Following is {$a->userfullname}\'s message:
-    
+--------------------------------------------------------------------------------------
+From: {$a->userfullname}
+Subject: \'{$a->fullname}\', {$a->hubcourseurl}
+Message:
+
+{$a->message}
+--------------------------------------------------------------------------------------
+
+You can reply directly via email or use messaging on the hub
+({$a->userurl}).
 ';
 $string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
 $string['msgtopublisher'] = 'Send message to {$a}\'s publisher';
