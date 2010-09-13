@@ -128,6 +128,30 @@ class local_hub {
 /// DB Facade functions  //
 ///////////////////////////
 
+
+    /**
+     * Add a new course feedback
+     * @param object $feedback
+     *      $feedback->courseid integer - mandatory
+     *      $feedback->type string ('question', 'issue', 'improvement', 'appreciation')
+     *      $feedback->text string
+     *      $feedback->userid integer if not given, tue current user is used
+     */
+    public function add_feedback($feedback) {
+        global $DB, $USER;
+
+        if (!isset($feedback->courseid)) {
+            throw new moodle_exception('feedbackcourseidmissing');
+        }
+
+        if (!isset($feedback->userid)) {
+            $feedback->userid = $USER->id;
+        }
+
+        $feedback->time = time();
+        $DB->insert_record('hub_course_feedbacks', $feedback);
+    }
+
     /**
      * Return a site for a given id
      * @param integer $id
@@ -1333,41 +1357,52 @@ class local_hub {
 
         //Retrieve courses by web service
         $options = array();
-        if (!empty($fromform)) {
-            $downloadable = optional_param('downloadable', false, PARAM_INTEGER);
-
-            if (!empty($fromform->coverage)) {
-                $options['coverage'] = $fromform->coverage;
-            }
-            if ($fromform->licence != 'all') {
-                $options['licenceshortname'] = $fromform->licence;
-            }
-            if ($fromform->subject != 'all') {
-                $options['subject'] = $fromform->subject;
-            }
-            if ($fromform->audience != 'all') {
-                $options['audience'] = $fromform->audience;
-            }
-            if ($fromform->educationallevel != 'all') {
-                $options['educationallevel'] = $fromform->educationallevel;
-            }
-            if ($fromform->language != 'all') {
-                $options['language'] = $fromform->language;
-            }
-
-            //get courses
-            $options['search'] = $search;
+        //special shortcut if a course id is given in param, we search straight forward this id
+        if ($courseid = optional_param('courseid', 0, PARAM_INTEGER)) {
             $options['onlyvisible'] = true;
-            $options['downloadable'] = $downloadable;
-            $options['enrollable'] = !$downloadable;
-            $page = optional_param('page', 0, PARAM_INT);
-            $courses = $this->get_courses($options, $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
+            $options['ids'] = array($courseid);
+            $options['downloadable'] = true;
+            $options['enrollable'] = true;
+            $courses = $this->get_courses($options);
+            $coursetotal = 1;
+        } else {
+            if (!empty($fromform)) {
+                $downloadable = optional_param('downloadable', false, PARAM_INTEGER);
 
-            $coursetotal = $this->get_courses($options, 0, 0, true);
+                if (!empty($fromform->coverage)) {
+                    $options['coverage'] = $fromform->coverage;
+                }
+                if ($fromform->licence != 'all') {
+                    $options['licenceshortname'] = $fromform->licence;
+                }
+                if ($fromform->subject != 'all') {
+                    $options['subject'] = $fromform->subject;
+                }
+                if ($fromform->audience != 'all') {
+                    $options['audience'] = $fromform->audience;
+                }
+                if ($fromform->educationallevel != 'all') {
+                    $options['educationallevel'] = $fromform->educationallevel;
+                }
+                if ($fromform->language != 'all') {
+                    $options['language'] = $fromform->language;
+                }
+
+                //get courses
+                $options['search'] = $search;
+                $options['onlyvisible'] = true;
+                $options['downloadable'] = $downloadable;
+                $options['enrollable'] = !$downloadable;
+                $page = optional_param('page', 0, PARAM_INT);
+                $courses = $this->get_courses($options, $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
+                $coursetotal = $this->get_courses($options, 0, 0, true);
+            }
+        }
+
+        if (!empty($courses)) {  
 
             //get courses content
             foreach ($courses as $course) {
-
                 $contents = $this->get_course_contents($course->id);
                 if (!empty($contents)) {
                     foreach ($contents as $content) {
@@ -1377,40 +1412,46 @@ class local_hub {
             }
 
             //load ratings and comments
-            if (!empty($courses)) {
-                require_once($CFG->dirroot . '/rating/lib.php');
-                $ratingoptions = new stdclass();
-                $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
-                $ratingoptions->items = $courses;
-                $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
-                $ratingoptions->scaleid = 10;
-                $ratingoptions->userid = $USER->id;
-                $ratingoptions->returnurl = "$CFG->wwwroot/local/hub/index.php";
+            require_once($CFG->dirroot . '/rating/lib.php');
+            $ratingoptions = new stdclass();
+            $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+            $ratingoptions->items = $courses;
+            $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
+            $ratingoptions->scaleid = 10;
+            $ratingoptions->userid = $USER->id;
+            $ratingoptions->returnurl = "$CFG->wwwroot/local/hub/index.php";
 
-                $rm = new rating_manager();
-                $courses = $rm->get_ratings($ratingoptions);
+            $rm = new rating_manager();
+            $courses = $rm->get_ratings($ratingoptions);
 
-                foreach ($courses as $course) {
-                    $course->rating->settings->permissions->viewany = 1;
-                }
+            foreach ($courses as $course) {
+                $course->rating->settings->permissions->viewany = 1;
+            }
 
-                require_once($CFG->dirroot . '/comment/lib.php');
-                foreach ($courses as $course) {
-                    $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
-                    $commentoptions->area = 'local_hub';
-                    $commentoptions->itemid = $course->id;
-                    $commentoptions->showcount = true;
-                    $commentoptions->component = 'local_hub';
-                    $course->comment = new comment($commentoptions);
-                    $course->comment->set_view_permission(true);
-                }
+            require_once($CFG->dirroot . '/comment/lib.php');
+            foreach ($courses as $course) {
+                $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
+                $commentoptions->area = 'local_hub';
+                $commentoptions->itemid = $course->id;
+                $commentoptions->showcount = true;
+                $commentoptions->component = 'local_hub';
+                $course->comment = new comment($commentoptions);
+                $course->comment->set_view_permission(true);
             }
         }
 
+        /// OUTPUT
+
         echo $OUTPUT->header();
+
+        if (optional_param('messagesent', 0, PARAM_INTEGER)) {
+            echo $OUTPUT->notification(get_string('messagesentsuccess', 'local_hub'), 'notifysuccess');
+        }
+
         $coursesearchform->display();
         //set to course to null if you didn't do any search (so the render doesn't display 'no search result')
-        if (!optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)) {
+        if (!optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)
+                and empty($courseid)) {
             $courses = null;
         }
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)

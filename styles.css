@@ -200,3 +200,12 @@
    color:#8B8989;
    font-size: 80%;
 }
+
+#page-site-index .hubcoursemail {
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+#page-site-index .hubemailsubject {
+    width:439px;
+}

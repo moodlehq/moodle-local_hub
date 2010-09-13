@@ -373,3 +373,39 @@ class site_search_form extends moodleform {
     }
 
 }
+
+class send_message_form extends moodleform {
+
+    public function definition() {
+        $strrequired = get_string('required');
+        $mform =& $this->_form;
+
+        //set default value
+        $publishername = $this->_customdata['publishername'];
+
+        $mform->addElement('header', '', get_string('sendmessage', 'local_hub'));
+
+        $mform->addElement('hidden', 'id' , $this->_customdata['id']);
+        $mform->addElement('hidden', 'admin' , $this->_customdata['admin']);
+
+        $mform->addElement('static', 'sentto' , get_string('sentto', 'local_hub'), $publishername);
+
+        $options = array('question' => get_string('msgtypequestion', 'local_hub'),
+            'improvement' => get_string('msgtypeimprovement', 'local_hub'),
+            'issue' => get_string('msgtypeissue', 'local_hub'),
+            'appreciation' => get_string('msgtypeappreciation', 'local_hub'));
+        $mform->addElement('select', 'type', get_string('msgtype', 'local_hub'), $options);
+        $mform->setType('type', PARAM_ALPHA);
+        $mform->addHelpButton('type', 'msgtype', 'local_hub');
+        $mform->addRule('type', $strrequired, 'required', null, 'client');
+
+        $mform->addElement('textarea', 'message', get_string('emailmessage', 'local_hub'),
+                array('rows' => 10, 'cols' => 60));
+        $mform->setType('message', PARAM_TEXT);
+        $mform->addHelpButton('message', 'emailmessage', 'local_hub');
+        $mform->addRule('message', $strrequired, 'required', null, 'client');
+
+        $this->add_action_buttons(true, get_string('sendmessage', 'local_hub'));
+    }
+
+}

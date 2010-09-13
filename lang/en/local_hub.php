@@ -108,6 +108,8 @@ $string['edulevelother'] = 'Other';
 $string['edulevelprimary'] = 'Primary';
 $string['edulevelsecondary'] = 'Secondary';
 $string['eduleveltertiary'] = 'Tertiary';
+$string['emailmessage'] = 'Message';
+$string['emailmessage_help'] = 'The message content.';
 $string['emailmessagesiteadded'] = 'A new site just registered with the hub at {$a->huburl}
     
 Name: {$a->name}
@@ -190,8 +192,25 @@ $string['managecourses'] = 'Manage courses';
 $string['managesites'] = 'Manage sites';
 $string['maxcoursesperday'] = 'Maximum courses published per day';
 $string['maxcoursesperday_help'] = 'The maximum number of courses that can be published per site per day. This setting is to avoid automatic spam. Once reaching the maximum number, an error will be displayed on the registered site during the next 24 hours. (0 = none, empty = unlimited)';
+$string['maxmessagesent'] = 'You cannot send anymore message for today, try tomorrow.';
+$string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
+$string['msgforcourse'] = 'This message was sent from the {$a->hubname} contact form.
+It concerns \'{$a->fullname}\' published course of \'{$a->sitename}\'.
+You can see the concerned course on the hub : {$a->huburl}.
+You can directly reply to this email, or send a private message on the hub: {$a->userurl}
+
+Following is {$a->userfullname}\'s message:
+    
+';
+$string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
+$string['msgtype'] = 'Subject';
+$string['msgtype_help'] = 'Select the kind of type your message is.';
+$string['msgtypeappreciation'] = 'Appreciation / congratulation';
+$string['msgtypeimprovement'] = 'Improvement suggestion';
+$string['msgtypeissue'] = 'Issue report';
+$string['msgtypequestion'] = 'Question';
 $string['mustbeinteger'] = 'Must be null or an integer.';
 $string['name'] = 'Name';
 $string['name_help'] = 'The hub name will be displayed in the hub directory listing.';
@@ -251,6 +270,8 @@ $string['screenshots'] = 'Screenshots';
 $string['search'] = 'Search for courses';
 $string['selecthub'] = 'Select hub';
 $string['sendfollowinginfo'] = 'Send the following information:';
+$string['sendmessage'] = 'Send message';
+$string['sentto'] = 'Sent to';
 $string['settings'] = 'Settings';
 $string['settingsupdated'] = 'Settings have been updated.';
 $string['site'] = 'Site';

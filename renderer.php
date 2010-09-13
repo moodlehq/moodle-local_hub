@@ -326,17 +326,18 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('class' => 'hubcoursedescription'));
 
                 //create users related information html
-                $courseuserinfo = '';
-                if (!empty($course->contributornames)) {
-                    $course->contributorname = get_string('contributors', 'block_community',
-                                    $course->contributorname);
-                }
-                if ($course->contributornames) {
-                    $courseuserinfo .= get_string('contributors', 'local_hub',
-                                    $course->contributornames);
-                    $courseuserinfo .= ' - ';
-                }
                 $courseuserinfo = get_string('userinfo', 'local_hub', $course);
+                if ($course->contributornames) {
+                    $courseuserinfo .= ' - ' . get_string('contributors', 'local_hub',
+                                    $course->contributornames);
+                }
+
+                $courseuserinfo .= html_writer::tag('a',
+                                html_writer::empty_tag('img',
+                                        array('src' => $this->output->pix_url('i/email'),
+                                                'class' => 'hubcoursemail')),
+                                array('href' => new moodle_url('/local/hub/sendmessage.php',
+                                        array('id' => $course->id, 'admin' => $withwriteaccess))));
                 $courseuserinfohtml = html_writer::tag('div', $courseuserinfo,
                                 array('class' => 'hubcourseuserinfo'));
 
@@ -432,12 +433,12 @@ class local_hub_renderer extends plugin_renderer_base {
                                     array('class' => 'hubcourserating'));
                 } else {
                     $rating = html_writer::tag('div', get_string('noratings', 'local_hub'),
-                                        array('class' => 'norating'));
+                                    array('class' => 'norating'));
                 }
 
                 //Create comments html
                 $comment = html_writer::tag('div', get_string('nocomments', 'local_hub'),
-                                        array('class' => 'nocomments'));
+                                array('class' => 'nocomments'));
                 if (!empty($course->comment)) {
                     //display only if there is some comment if there is some comment
                     if ((!empty($course->comment->count) and $course->comment->count != '(0)')
@@ -472,7 +473,7 @@ class local_hub_renderer extends plugin_renderer_base {
             }
 
             $renderedhtml = html_writer::tag('div', $renderedhtml,
-                        array('class' => 'hubcourseresult'));
+                            array('class' => 'hubcourseresult'));
         }
 
         //add the select bulk operation
@@ -484,7 +485,7 @@ class local_hub_renderer extends plugin_renderer_base {
                             'bulkselect', '',
                             array('' => get_string('bulkselectoperation', 'local_hub')));
             $renderedhtml .= html_writer::tag('div', $selecthtml,
-                    array('class' => 'hubbulkselect'));
+                            array('class' => 'hubbulkselect'));
 
             //perform button
             $optionalurlparams['sesskey'] = sesskey();
@@ -495,7 +496,7 @@ class local_hub_renderer extends plugin_renderer_base {
                                 'type' => 'submit',
                                 'value' => get_string('bulkoperationperform', 'local_hub')));
             $renderedhtml .= html_writer::tag('div', $bulkbutton,
-                    array('class' => 'hubbulkbutton'));
+                            array('class' => 'hubbulkbutton'));
             $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
             $renderedhtml = html_writer::tag('div', $renderedhtml);
         }
