@@ -170,7 +170,8 @@
     font-size: 95%;
 }
 #page-site-index .comment-list li {
-    background-color:#FFD970 !important;
+    background-color:#ffdf8e !important;
+    color: #000;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     padding-right: 4px;
