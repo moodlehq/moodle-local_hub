@@ -205,6 +205,7 @@ Following is {$a->userfullname}\'s message:
     
 ';
 $string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
+$string['msgtopublisher'] = 'Send message to publisher';
 $string['msgtype'] = 'Subject';
 $string['msgtype_help'] = 'Select the kind of type your message is.';
 $string['msgtypeappreciation'] = 'Appreciation / congratulation';

@@ -177,6 +177,28 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2010080400, 'local', 'hub');
     }
 
+    if ($oldversion < 2010091300) {
+
+         // Rename field userid on table hub_course_feedbacks to NEWNAMEGOESHERE
+        $table = new xmldb_table('hub_course_feedbacks');
+        $field = new xmldb_field('rating', XMLDB_TYPE_INTEGER, '10', false, null, null, null, 'text');
+
+        // Launch rename field userid
+        $dbman->rename_field($table, $field, 'userid');
+
+        // Define field time to be added to hub_course_feedbacks
+        $table = new xmldb_table('hub_course_feedbacks');
+        $field = new xmldb_field('time', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, null, 'userid');
+
+        // Conditionally launch add field time
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010091300, 'local', 'hub');
+   
+    }
 
     return $result;
 }

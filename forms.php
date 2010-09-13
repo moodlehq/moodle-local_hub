@@ -383,7 +383,7 @@ class send_message_form extends moodleform {
         //set default value
         $publishername = $this->_customdata['publishername'];
 
-        $mform->addElement('header', '', get_string('sendmessage', 'local_hub'));
+        $mform->addElement('header', '', get_string('msgtopublisher', 'local_hub'));
 
         $mform->addElement('hidden', 'id' , $this->_customdata['id']);
         $mform->addElement('hidden', 'admin' , $this->_customdata['admin']);
