@@ -47,7 +47,7 @@
 #page-admin-local-hub-admin-managecourses .hubcoursedelete {float: left;}
 #page-admin-local-hub-admin-managecourses .hubcoursevisible {float: left;padding-right: 4px;}
 #page-admin-local-hub-admin-managecourses .pagingbar {text-align: center;}
-#page-admin-local-hub-admin-managecourses .hubcoursedownload:hover {background-color: #d45500;}
+#page-admin-local-hub-admin-managecourses .hubcoursedownload:hover {background-color: #fdc332;}
 #page-admin-local-hub-admin-managecourses .hubcoursedownload {
     display: inline-block;
     padding: 5px 8px 6px;
@@ -61,7 +61,7 @@
     border-bottom: 1px solid rgba(0,0,0,0.25);
     position: relative;
     cursor: pointer;
-    background-color: #F7B500;
+    background-color: #ffdf8e;
     margin-left: 6px;
     font-size: 95%;
 }
@@ -69,7 +69,7 @@
 #page-admin-local-hub-admin-managecourses .hubcoursetitle {
     -webkit-box-shadow: rgba(0, 0, 0, 0.546875) 0px 0px 4px;
     -moz-box-shadow: rgba(0, 0, 0, 0.546875) 0px 0px 4px;
-    background: #B8860B;
+    background: #ebb42b;
     left: -15px;
     position: relative;
     z-index: 100;
@@ -116,7 +116,7 @@
 #page-site-index .pagingbar {text-align: center;}
 #page-site-index .coursecomment {float: right;}
 #page-site-index .courseoperations {margin-top:9px; text-align:center}
-#page-site-index .hubcoursedownload:hover {background-color: #d45500;}
+#page-site-index .hubcoursedownload:hover {background-color: #fdc332;}
 #page-site-index .courselinks {float: right;width: 180px}
 #page-site-index .ratingaggregate {float: left; padding-right: 4px;}
 #page-site-index .hubcourserating { padding-top: 3px; font-size: 80%; font-weight: bold;
@@ -127,7 +127,7 @@
 #page-site-index .hubcoursetitle {
     -webkit-box-shadow: rgba(0, 0, 0, 0.546875) 0px 0px 4px;
     -moz-box-shadow: rgba(0, 0, 0, 0.546875) 0px 0px 4px;
-    background: #B8860B;
+    background: #ebb42b;
     left: -15px;
     position: relative;
     z-index: 0;
@@ -165,7 +165,7 @@
     border-bottom: 1px solid rgba(0,0,0,0.25);
     position: relative;
     cursor: pointer;
-    background-color: #F7B500;
+    background-color: #ffdf8e;
     margin-left: 6px;
     font-size: 95%;
 }
