@@ -57,6 +57,18 @@ if (!is_siteadmin ()) {
 $sendmessageform = new send_message_form('', array('id' => $id, 'admin' => $admin,
         'publishername' => $hubcourse->publishername, 'coursename' => $hubcourse->fullname));
 
+//Cancel operation => redirect to the index/admin course page
+$cancel = optional_param('cancel', null, PARAM_ALPHA);
+if (!empty($cancel)) {
+    if ($admin) {
+        redirect(new moodle_url('/local/hub/admin/managecourses.php',
+                array('sesskey' => sesskey(), 'courseid' => $id)));
+    } else {
+        redirect(new moodle_url('/', array('courseid' => $id)));
+    }
+}
+
+//Send email operation => redirect to the index/admin course page
 if ($data = $sendmessageform->get_data() and confirm_sesskey()) {
 
     //add feedback
@@ -94,7 +106,7 @@ if ($data = $sendmessageform->get_data() and confirm_sesskey()) {
     }
 }
 
+//OUTPUT the contact form
 echo $OUTPUT->header();
 echo $sendmessageform->display();
-
 echo $OUTPUT->footer();
