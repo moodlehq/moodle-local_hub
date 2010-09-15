@@ -275,8 +275,45 @@ class hub_settings_form extends moodleform {
         $mform->setAdvanced('enablerssfeeds');
         $mform->setDefault('enablerssfeeds', $enablerssfeeds);
 
-
         $this->add_action_buttons(false, get_string('update'));
+    }
+
+    /**
+     * Validate fields
+     */
+    function validation($data, $files) {
+        global $CFG;
+        $errors = parent::validation($data, $files);
+
+        $name = $this->_form->_submitValues['name'];
+        if (!empty($name)) {
+            if (strcmp(clean_param($name, PARAM_TEXT), $name) != 0) {
+                $errors['name'] = get_string('mustbetext', 'local_hub');
+            }
+        }
+
+        $desc = $this->_form->_submitValues['desc'];
+        if (!empty($desc)) {
+            if (strcmp(clean_param($desc, PARAM_TEXT), $desc) != 0) {
+                $errors['desc'] = get_string('mustbetext', 'local_hub');
+            }
+        }
+
+        $contactemail = $this->_form->_submitValues['contactemail'];
+        if (!empty($contactemail)) {
+            if (strcmp(clean_param($contactemail, PARAM_EMAIL), $contactemail) != 0) {
+                $errors['contactemail'] = get_string('mustbeemail', 'local_hub');
+            }
+        }
+
+        $maxcoursesperday = $this->_form->_submitValues['maxcoursesperday'];
+        if (!empty($maxcoursesperday)) {
+            if (strcmp(clean_param($maxcoursesperday, PARAM_INT), $maxcoursesperday) != 0) {
+                $errors['maxcoursesperday'] = get_string('mustbeinteger', 'local_hub');
+            }
+        }
+
+        return $errors;
     }
 
 }

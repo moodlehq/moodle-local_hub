@@ -48,7 +48,7 @@ $PAGE->set_heading(get_string('siteregistration', 'local_hub'));
 
 $name                       = optional_param('name', '', PARAM_TEXT);
 $url                        = optional_param('url', '', PARAM_URL);
-$token                      = optional_param('token', '', PARAM_ALPHANUM);
+$token                      = optional_param('token', '', PARAM_TEXT);
 $description                = optional_param('description', '', PARAM_TEXT);
 $contactname                = optional_param('contactname', '', PARAM_TEXT);
 $contactemail               = optional_param('contactemail', '', PARAM_EMAIL);
@@ -173,7 +173,7 @@ if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL 
             array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $fromform->token,
                 'hubname' => get_config('local_hub', 'name'))));
 
-}
+} 
 
 echo $OUTPUT->header();
 $siteconfirmationform->display();

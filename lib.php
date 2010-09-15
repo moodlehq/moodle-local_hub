@@ -1081,6 +1081,8 @@ class local_hub {
             $languages = get_string_manager()->get_list_of_languages();
             $emailinfo->language = $languages[$siteinfo->language];
         }
+       
+        //log the operation
         if (!empty($siteurltoupdate)) {
             //we just log, do not send an email to admin for update
             //(an email was sent previously if the url or name changed)
@@ -1399,7 +1401,7 @@ class local_hub {
             }
         }
 
-        if (!empty($courses)) {  
+        if (!empty($courses)) {
 
             //get courses content
             foreach ($courses as $course) {

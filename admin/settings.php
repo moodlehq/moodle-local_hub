@@ -48,7 +48,7 @@ if (!extension_loaded('xmlrpc')) {
     die();
 }
 
-if (!empty($fromform)) {
+if (!empty($fromform) and confirm_sesskey()) {
 
     if ($fromform->privacy != HUBPRIVATE and !empty($fromform->password)) {
         $fromform->password = null;
