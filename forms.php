@@ -75,7 +75,7 @@ class site_registration_confirmation_form extends moodleform {
         $mform->addElement('hidden', 'moodleversion',   $this->_customdata['moodleversion']);
         $mform->addElement('hidden', 'moodlerelease',   $this->_customdata['moodlerelease']);
         $mform->addElement('recaptcha', 'recaptcha_element', get_string('recaptcha', 'auth'), array('https' => $CFG->loginhttps));
-        $mform->setHelpButton('recaptcha_element', array('recaptcha', get_string('recaptcha', 'auth')));
+        $mform->addHelpButton('recaptcha_element', 'recaptcha', 'auth');
 
         $this->add_action_buttons(false, get_string('confirmregistration', 'local_hub'));
     }
