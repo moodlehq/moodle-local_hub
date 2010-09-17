@@ -107,6 +107,7 @@
 #page-admin-local-hub-admin-managecourses .hubcoursesettings {}
 #page-admin-local-hub-admin-managecourses .hubbulkselect {margin-top: 13px; margin-left: 15px; float: left;}
 #page-admin-local-hub-admin-managecourses .hubbulkbutton { margin-left: 15px; margin-top: 13px;}
+#page-admin-local-hub-admin-managecourses .hubcourseoutcomes {}
 
 
 /* FRONT PAGE */
@@ -210,3 +211,5 @@
 #page-site-index .hubemailsubject {
     width:439px;
 }
+
+#page-site-index .hubcourseoutcomes {}

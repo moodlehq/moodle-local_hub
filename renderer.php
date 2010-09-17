@@ -408,10 +408,18 @@ class local_hub_renderer extends plugin_renderer_base {
 //                    $blocksandactivities .= html_writer::tag('span',
 //                                    get_string('blocks', 'local_hub') . " : " . $blockhtml);
                 }
-
+ 
+                //Create outcomes html
+                $outcomes= '';
+                if (!empty($course->outcomes)) {
+                    $outcomes = get_string('outcomes', 'local_hub',
+                            implode(', ', $course->outcomes));
+                }
+                $outcomeshtml = html_writer::tag('div', $outcomes, array('class' => 'hubcourseoutcomes'));
+ 
                 //create additional information html
                 $additionaldesc = $courseuserinfohtml . $coursecontentinfohtml
-                        . $coursefileinfohtml . $blocksandactivities;
+                        . $coursefileinfohtml . $blocksandactivities . $outcomeshtml;
                 $additionaldeschtml = html_writer::tag('div', $additionaldesc,
                                 array('class' => 'additionaldesc'));
 
@@ -501,7 +509,7 @@ class local_hub_renderer extends plugin_renderer_base {
             $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
             $renderedhtml = html_writer::tag('div', $renderedhtml);
         }
-
+       
         return $renderedhtml;
     }
 

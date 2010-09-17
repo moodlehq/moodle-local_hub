@@ -234,6 +234,7 @@ $string['notregisteredonhub'] = 'You cannot publish this course on any other hub
 $string['notregisteredonmoodleorg'] = 'You cannot publish this course on MOOCH, the Moodle.org Community Hub, because this site isn\'t registered there yet. Your site administrator needs to register this site with MOOCH.';
 $string['operation'] = 'Operation';
 $string['orenterprivatehub'] = 'or enter a private hub URL:';
+$string['outcomes'] = 'Outcomes: {$a}';
 $string['participantnumberaverage'] = 'Average number of participants ({$a})';
 $string['password'] = 'Password';
 $string['periodforteennight'] = 'Last 14 days';

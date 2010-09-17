@@ -297,7 +297,11 @@ class local_hub_external extends external_api {
                                                             'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
                                                             'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
                                                             'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
-                                                )), 'contents', VALUE_OPTIONAL)
+                                                )), 'contents', VALUE_OPTIONAL),
+                                        'outcomes' => new external_multiple_structure(new external_single_structure(
+                                                        array(
+                                                            'fullname' => new external_value(PARAM_TEXT, 'the outcome fullname')
+                                                )), 'outcomes', VALUE_OPTIONAL)
                                     )
                             )
                     )
@@ -498,12 +502,19 @@ class local_hub_external extends external_api {
             $courseinfo['creatornotesformat'] = $course->creatornotesformat;
             $courseinfo['enrollable'] = $course->enrollable;
             $courseinfo['screenshots'] = $course->screenshots;
-             $courseinfo['timemodified'] = $course->timemodified;
+            $courseinfo['timemodified'] = $course->timemodified;
             if (!empty($course->demourl)) {
                 $courseinfo['demourl'] = $course->demourl;
             }
             if (!empty($course->courseurl)) {
                 $courseinfo['courseurl'] = $course->courseurl;
+            }
+
+            //outcomes
+            if (!empty($course->outcomes)) {
+                foreach($course->outcomes as $outcome) {
+                    $courseinfo['outcomes'][] = array('fullname' => $outcome);
+                }
             }
 
             //get content
@@ -518,12 +529,14 @@ class local_hub_external extends external_api {
                 }
             }
 
+            //get ratings
             if (isset($course->rating->aggregate)) {
                 $courseinfo['rating']['aggregate'] =  clean_param($course->rating->aggregate, PARAM_FLOAT);
             }
             $courseinfo['rating']['count'] = $course->rating->count;
             $courseinfo['rating']['scaleid'] = $course->rating->settings->scale->id;
 
+            //get comments
             $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
             $commentoptions->area = 'local_hub';
             $commentoptions->itemid = $course->id;
@@ -596,6 +609,10 @@ class local_hub_external extends external_api {
                                                 'commentator' => new external_value(PARAM_TEXT, 'the name of commentator'),
                                                 'date' => new external_value(PARAM_INT, 'date of the comment'),
                                     )), 'contents', VALUE_OPTIONAL),
+                            'outcomes' => new external_multiple_structure(new external_single_structure(
+                                                        array(
+                                                            'fullname' => new external_value(PARAM_TEXT, 'the outcome fullname')
+                                                )), 'outcomes', VALUE_OPTIONAL)
                         ), 'course info')
         );
     }

@@ -220,6 +220,31 @@ class local_hub {
     }
 
     /**
+     * Delete all outcomes linked to a course id and add a new array of outcome
+     * @param integer $courseid
+     * @param array $outcomes
+     * this array contain the outcome. One outcome is an array.
+     *  outcome['fullname'] => the outcome fullname
+     *  TODO outcome['description']
+     */
+    public function update_course_outcomes($courseid, $outcomes = array()) {
+        global $DB;
+
+        //delete previous outcomes
+        $DB->delete_records('hub_course_outcomes', array('courseid' => $courseid));
+
+        //add new outcomes
+        if (!empty($outcomes)) {
+            foreach ($outcomes as $outcome) {
+                $newoutcome = new stdClass();
+                $newoutcome->courseid = $courseid;
+                $newoutcome->outcome = $outcome['fullname'];
+                $DB->insert_record('hub_course_outcomes', $newoutcome);
+            }
+        }
+    }
+
+    /**
      * Add a course into the course directory
      * @param object $
      * @return integer course id
@@ -515,6 +540,19 @@ class local_hub {
             $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams,
                             $ordersql, '*', $limitfrom, $limitnum);
         }
+
+        //retrieve outcomes
+        if (!$countresult) {
+            if (!empty($courses)) {
+                foreach($courses as &$course) {
+                    $courseoutcomes = $this->get_course_outcomes($course->id);
+                    foreach($courseoutcomes as $courseoutcome) {
+                        $course->outcomes[] = $courseoutcome->outcome;
+                    }
+                }
+            }
+        }
+
         return $courses;
     }
 
@@ -780,6 +818,17 @@ class local_hub {
                 array('courseid' => $courseid), 'contentcount DESC');
     }
 
+    /**
+     * Get all course outcome of a course
+     * @param integer $courseid
+     * @return array of course outcomes
+     */
+    public function get_course_outcomes($courseid) {
+        global $DB;
+        return $DB->get_records('hub_course_outcomes',
+                array('courseid' => $courseid), 'outcome ASC');
+    }
+
 ///////////////////////////
 /// Library functions   ///
 ///////////////////////////
@@ -849,6 +898,9 @@ class local_hub {
             $course->deleted = 1;
             $this->update_course($course);
 
+            //delete outcomes
+            $this->update_course_outcomes($courseid, null);
+
             add_to_log(SITEID, 'local_hub', 'course unregistration', '', $course->id);
         }
     }
@@ -904,6 +956,14 @@ class local_hub {
             $courseid = $this->add_course($course);
             add_to_log(SITEID, 'local_hub', 'course registration', '', $courseid);
         }
+
+        //update outcomes
+
+        if (!isset($course->outcomes)) {
+            $course->outcomes = null;
+        } 
+        $this->update_course_outcomes($courseid, $course->outcomes);
+
 
         //update course tag
         $tags = array();
