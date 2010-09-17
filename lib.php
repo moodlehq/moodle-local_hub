@@ -1318,6 +1318,12 @@ class local_hub {
         $PAGE->set_title($SITE->fullname);
         $PAGE->set_heading($SITE->fullname);
 
+        //little trick to require login in order to rate or comment
+        $mustbelogged = optional_param('mustbelogged', false, PARAM_BOOL);
+        if ($mustbelogged) {
+            require_login();
+        }
+
         //log redirection to a course page
         $redirectcourseid = optional_param('redirectcourseid', false, PARAM_INT);
         if (!empty($redirectcourseid)) { //do not check sesskey because can be call by RSS feed
