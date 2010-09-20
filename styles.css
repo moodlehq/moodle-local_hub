@@ -47,11 +47,13 @@
 #page-admin-local-hub-admin-managecourses .hubcoursedelete {float: left;}
 #page-admin-local-hub-admin-managecourses .hubcoursevisible {float: left;padding-right: 4px;}
 #page-admin-local-hub-admin-managecourses .pagingbar {text-align: center;}
+#page-admin-local-hub-admin-managecourses .hubcoursemail {margin-left: 5px; vertical-align: middle;}
+#page-admin-local-hub-admin-managecourses .fradio input {margin-right: 3px;}
 #page-admin-local-hub-admin-managecourses .hubcoursedownload:hover {background-color: #fdc332;}
 #page-admin-local-hub-admin-managecourses .hubcoursedownload {
     display: inline-block;
     padding: 5px 8px 6px;
-    color: #fff;
+    color: #000;
     text-decoration: none;
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -213,3 +215,5 @@
 }
 
 #page-site-index .hubcourseoutcomes {}
+
+#page-site-index .fradio input {margin-right: 3px;}

@@ -128,7 +128,6 @@ class local_hub {
 /// DB Facade functions  //
 ///////////////////////////
 
-
     /**
      * Add a new course feedback
      * @param object $feedback
@@ -544,15 +543,15 @@ class local_hub {
         //retrieve outcomes
         if (!$countresult) {
             if (!empty($courses)) {
-                foreach($courses as &$course) {
+                foreach ($courses as &$course) {
                     $courseoutcomes = $this->get_course_outcomes($course->id);
-                    foreach($courseoutcomes as $courseoutcome) {
+                    foreach ($courseoutcomes as $courseoutcome) {
                         $course->outcomes[] = $courseoutcome->outcome;
                     }
                 }
             }
         }
-
+     
         return $courses;
     }
 
@@ -961,7 +960,7 @@ class local_hub {
 
         if (!isset($course->outcomes)) {
             $course->outcomes = null;
-        } 
+        }
         $this->update_course_outcomes($courseid, $course->outcomes);
 
 
@@ -1141,7 +1140,7 @@ class local_hub {
             $languages = get_string_manager()->get_list_of_languages();
             $emailinfo->language = $languages[$siteinfo->language];
         }
-       
+
         //log the operation
         if (!empty($siteurltoupdate)) {
             //we just log, do not send an email to admin for update
@@ -1417,6 +1416,7 @@ class local_hub {
         $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['downloadable'] = optional_param('downloadable', 0, PARAM_ALPHANUM);
+        $fromformdata['orderby'] = optional_param('orderby', 'newest', PARAM_ALPHA);
         $fromformdata['search'] = $search;
         $coursesearchform = new course_search_form('', $fromformdata, 'get');
         $fromform = $coursesearchform->get_data();
@@ -1454,6 +1454,24 @@ class local_hub {
                 }
                 if ($fromform->language != 'all') {
                     $options['language'] = $fromform->language;
+                }
+
+                //sort method
+                switch ($fromform->orderby) {
+                    case 'newest':
+                        $options['orderby'] = 'timemodified DESC';
+                        break;
+                    case 'eldest':
+                        $options['orderby'] = 'timemodified ASC';
+                        break;
+                    case 'publisher':
+                        $options['orderby'] = 'publishername ASC';
+                        break;
+                    case 'fullname':
+                        $options['orderby'] = 'fullname ASC';
+                        break;
+                    default:
+                        break;
                 }
 
                 //get courses

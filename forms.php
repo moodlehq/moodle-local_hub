@@ -1,4 +1,5 @@
 <?php
+
 ///////////////////////////////////////////////////////////////////////////
 //                                                                       //
 // This file is part of Moodle - http://moodle.org/                      //
@@ -26,9 +27,8 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-require_once($CFG->dirroot.'/lib/formslib.php');
-require_once($CFG->dirroot.'/local/hub/lib.php');
+require_once($CFG->dirroot . '/lib/formslib.php');
+require_once($CFG->dirroot . '/local/hub/lib.php');
 
 /**
  * Registration confirmation form - a captcha is required to be filled by the registered hub
@@ -40,41 +40,45 @@ class site_registration_confirmation_form extends moodleform {
         global $CFG, $SITE;
 
         $strrequired = get_string('required');
-        $mform =& $this->_form;
+        $mform = & $this->_form;
         $mform->addElement('header', 'moodle', get_string('siteregistration', 'local_hub'));
 
-        $mform->addElement('static', 'comment','', get_string('siteregconfcomment', 'local_hub', $SITE->fullname));
-        $mform->addElement('static', 'sitenamestring',get_string('sitename', 'local_hub'), $this->_customdata['name']);
-        $mform->addElement('hidden', 'name',   $this->_customdata['name']);
-        $mform->addElement('hidden', 'url',   $this->_customdata['url']);
-        $mform->addElement('hidden', 'token',   $this->_customdata['token']);
-        $mform->addElement('hidden', 'description',   $this->_customdata['description']);
-        $mform->addElement('hidden', 'contactname',   $this->_customdata['contactname']);
-        $mform->addElement('hidden', 'contactemail',   $this->_customdata['contactemail']);
-        $mform->addElement('hidden', 'contactphone',   $this->_customdata['contactphone']);
-        $mform->addElement('hidden', 'imageurl',   $this->_customdata['imageurl']);
-        $mform->addElement('hidden', 'privacy',   $this->_customdata['privacy']);
-        $mform->addElement('hidden', 'language',   $this->_customdata['language']);
-        $mform->addElement('hidden', 'users',   $this->_customdata['users']);
-        $mform->addElement('hidden', 'courses',   $this->_customdata['courses']);
-        $mform->addElement('hidden', 'street',   $this->_customdata['street']);
-        $mform->addElement('hidden', 'regioncode',   $this->_customdata['regioncode']);
-        $mform->addElement('hidden', 'countrycode',   $this->_customdata['countrycode']);
-        $mform->addElement('hidden', 'geolocation',   $this->_customdata['geolocation']);
-        $mform->addElement('hidden', 'contactable',   $this->_customdata['contactable']);
-        $mform->addElement('hidden', 'emailalert',   $this->_customdata['emailalert']);
-        $mform->addElement('hidden', 'enrolments',   $this->_customdata['enrolments']);
-        $mform->addElement('hidden', 'posts',   $this->_customdata['posts']);
-        $mform->addElement('hidden', 'questions',   $this->_customdata['questions']);
-        $mform->addElement('hidden', 'resources',   $this->_customdata['resources']);
+        $mform->addElement('static', 'comment', '',
+                get_string('siteregconfcomment', 'local_hub', $SITE->fullname));
+        $mform->addElement('static', 'sitenamestring',
+                get_string('sitename', 'local_hub'), $this->_customdata['name']);
+        $mform->addElement('hidden', 'name', $this->_customdata['name']);
+        $mform->addElement('hidden', 'url', $this->_customdata['url']);
+        $mform->addElement('hidden', 'token', $this->_customdata['token']);
+        $mform->addElement('hidden', 'description', $this->_customdata['description']);
+        $mform->addElement('hidden', 'contactname', $this->_customdata['contactname']);
+        $mform->addElement('hidden', 'contactemail', $this->_customdata['contactemail']);
+        $mform->addElement('hidden', 'contactphone', $this->_customdata['contactphone']);
+        $mform->addElement('hidden', 'imageurl', $this->_customdata['imageurl']);
+        $mform->addElement('hidden', 'privacy', $this->_customdata['privacy']);
+        $mform->addElement('hidden', 'language', $this->_customdata['language']);
+        $mform->addElement('hidden', 'users', $this->_customdata['users']);
+        $mform->addElement('hidden', 'courses', $this->_customdata['courses']);
+        $mform->addElement('hidden', 'street', $this->_customdata['street']);
+        $mform->addElement('hidden', 'regioncode', $this->_customdata['regioncode']);
+        $mform->addElement('hidden', 'countrycode', $this->_customdata['countrycode']);
+        $mform->addElement('hidden', 'geolocation', $this->_customdata['geolocation']);
+        $mform->addElement('hidden', 'contactable', $this->_customdata['contactable']);
+        $mform->addElement('hidden', 'emailalert', $this->_customdata['emailalert']);
+        $mform->addElement('hidden', 'enrolments', $this->_customdata['enrolments']);
+        $mform->addElement('hidden', 'posts', $this->_customdata['posts']);
+        $mform->addElement('hidden', 'questions', $this->_customdata['questions']);
+        $mform->addElement('hidden', 'resources', $this->_customdata['resources']);
         if (!empty($this->_customdata['password'])) {
-            $mform->addElement('hidden', 'password',   $this->_customdata['password']);
+            $mform->addElement('hidden', 'password', $this->_customdata['password']);
         }
-        $mform->addElement('hidden', 'participantnumberaverage',   $this->_customdata['participantnumberaverage']);
-        $mform->addElement('hidden', 'modulenumberaverage',   $this->_customdata['modulenumberaverage']);
-        $mform->addElement('hidden', 'moodleversion',   $this->_customdata['moodleversion']);
-        $mform->addElement('hidden', 'moodlerelease',   $this->_customdata['moodlerelease']);
-        $mform->addElement('recaptcha', 'recaptcha_element', get_string('recaptcha', 'auth'), array('https' => $CFG->loginhttps));
+        $mform->addElement('hidden', 'participantnumberaverage',
+                $this->_customdata['participantnumberaverage']);
+        $mform->addElement('hidden', 'modulenumberaverage', $this->_customdata['modulenumberaverage']);
+        $mform->addElement('hidden', 'moodleversion', $this->_customdata['moodleversion']);
+        $mform->addElement('hidden', 'moodlerelease', $this->_customdata['moodlerelease']);
+        $mform->addElement('recaptcha', 'recaptcha_element', get_string('recaptcha', 'auth'),
+                array('https' => $CFG->loginhttps));
         $mform->addHelpButton('recaptcha_element', 'recaptcha', 'auth');
 
         $this->add_action_buttons(false, get_string('confirmregistration', 'local_hub'));
@@ -97,6 +101,7 @@ class site_registration_confirmation_form extends moodleform {
 
         return $errors;
     }
+
 }
 
 class course_search_form extends moodleform {
@@ -104,7 +109,7 @@ class course_search_form extends moodleform {
     public function definition() {
         global $CFG;
         $strrequired = get_string('required');
-        $mform =& $this->_form;
+        $mform = & $this->_form;
 
         //set default value
         $search = $this->_customdata['search'];
@@ -158,12 +163,18 @@ class course_search_form extends moodleform {
         } else {
             $lastmodified = HUB_LASTMODIFIED_WEEK;
         }
+        if (isset($this->_customdata['orderby'])) {
+            $orderby = $this->_customdata['orderby'];
+        } else {
+            $siteid = 'newest';
+        }
+
 
 
         $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 
         $options = array(0 => get_string('enrollable', 'local_hub'),
-                         1 => get_string('downloadable', 'local_hub'));
+            1 => get_string('downloadable', 'local_hub'));
         if (key_exists('adminform', $this->_customdata)) {
             $options = array('all' => get_string('any')) + $options;
         }
@@ -223,21 +234,22 @@ class course_search_form extends moodleform {
         $publicationmanager = new course_publish_manager();
         $options = $publicationmanager->get_sorted_subjects();
         foreach ($options as $key => &$option) {
-            $keylength = strlen ( $key );
-            if ( $keylength == 10) {
+            $keylength = strlen($key);
+            if ($keylength == 10) {
                 $option = "&nbsp;&nbsp;" . $option;
-            } else  if ( $keylength == 12) {
+            } else if ($keylength == 12) {
                 $option = "&nbsp;&nbsp;&nbsp;&nbsp;" . $option;
             }
         }
-        $options = array_merge (array('all' => get_string('any')),$options);
+        $options = array_merge(array('all' => get_string('any')), $options);
         $mform->addElement('select', 'subject', get_string('subject', 'hub'), $options);
         $mform->setDefault('subject', $subject);
         unset($options);
         $mform->addHelpButton('subject', 'subject', 'local_hub');
-        $this->init_javascript_enhancement('subject', 'smartselect', array('selectablecategories' => true, 'mode'=>'compact'));
+        $this->init_javascript_enhancement('subject', 'smartselect', 
+                array('selectablecategories' => true, 'mode' => 'compact'));
 
-        require_once($CFG->dirroot."/lib/licenselib.php");
+        require_once($CFG->dirroot . "/lib/licenselib.php");
         $licensemanager = new license_manager();
         $licences = $licensemanager->get_licenses();
         $options = array();
@@ -252,33 +264,41 @@ class course_search_form extends moodleform {
 
         $languages = get_string_manager()->get_list_of_languages();
         asort($languages, SORT_LOCALE_STRING);
-        $languages = array_merge (array('all' => get_string('any')),$languages);
-        $mform->addElement('select', 'language',get_string('language'), $languages);
+        $languages = array_merge(array('all' => get_string('any')), $languages);
+        $mform->addElement('select', 'language', get_string('language'), $languages);
         $mform->setDefault('language', $language);
         $mform->addHelpButton('language', 'language', 'local_hub');
 
+        $mform->addElement('radio', 'orderby', get_string('orderby', 'local_hub'),
+                get_string('orderbynewest', 'local_hub'), 'newest');
+        $mform->addElement('radio', 'orderby', null, get_string('orderbyeldest', 'local_hub'), 'eldest');
+        $mform->addElement('radio', 'orderby', null, get_string('orderbyname', 'local_hub'), 'fullname');
+        $mform->addElement('radio', 'orderby', null, get_string('orderbypublisher', 'local_hub'), 'publisher');
+        $mform->setDefault('orderby', $orderby);
+        $mform->setType('orderby', PARAM_ALPHA);
+
+
         if (key_exists('adminform', $this->_customdata)) {
-            require_once($CFG->dirroot."/local/hub/lib.php");
+            require_once($CFG->dirroot . "/local/hub/lib.php");
             $hub = new local_hub();
             $sites = $hub->get_sites();
             $siteids = array();
             foreach ($sites as $site) {
-                
+
                 $siteids[$site->id] = $site->name;
             }
             asort($siteids, SORT_LOCALE_STRING);
-            $siteids = array('all' => get_string('any'))+ $siteids;
-            $mform->addElement('select', 'siteid',get_string('site', 'local_hub'), $siteids);
+            $siteids = array('all' => get_string('any')) + $siteids;
+            $mform->addElement('select', 'siteid', get_string('site', 'local_hub'), $siteids);
             $mform->setDefault('siteid', $siteid);
             $mform->addHelpButton('siteid', 'site', 'local_hub');
         }
 
-        $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
+        $mform->addElement('text', 'search', get_string('keywords', 'local_hub'));
         $mform->addHelpButton('search', 'keywords', 'local_hub');
         $mform->setDefault('search', $search);
 
         $mform->addElement('submit', 'submitbutton', get_string('search', 'local_hub'));
-
     }
 
 }
@@ -287,7 +307,7 @@ class site_search_form extends moodleform {
 
     public function definition() {
         $strrequired = get_string('required');
-        $mform =& $this->_form;
+        $mform = & $this->_form;
 
         //set default value
         $search = $this->_customdata['search'];
@@ -316,7 +336,7 @@ class site_search_form extends moodleform {
         } else {
             $language = 'all';
         }
-       
+
 
         $mform->addElement('header', 'site', get_string('sitesearch', 'local_hub'));
 
@@ -357,17 +377,17 @@ class site_search_form extends moodleform {
         $mform->setDefault('countrycode', $country);
         unset($options);
         $mform->addHelpButton('countrycode', 'country', 'local_hub');
-        
+
         $languages = get_string_manager()->get_list_of_languages();
         asort($languages, SORT_LOCALE_STRING);
-        $languages = array_merge (array('all' => get_string('any')),$languages);
-        $mform->addElement('select', 'language',get_string('sitelang', 'local_hub'), $languages);
+        $languages = array_merge(array('all' => get_string('any')), $languages);
+        $mform->addElement('select', 'language', get_string('sitelang', 'local_hub'), $languages);
         $mform->setDefault('language', $language);
         $mform->addHelpButton('language', 'sitelang', 'local_hub');
 
-        $mform->addElement('text', 'search' , get_string('keywords', 'local_hub'));
+        $mform->addElement('text', 'search', get_string('keywords', 'local_hub'));
         $mform->addHelpButton('search', 'sitekeywords', 'local_hub');
-         $mform->setDefault('search', $search);
+        $mform->setDefault('search', $search);
 
         $this->add_action_buttons(false, get_string('sitesearch', 'local_hub'));
     }
@@ -378,17 +398,17 @@ class send_message_form extends moodleform {
 
     public function definition() {
         $strrequired = get_string('required');
-        $mform =& $this->_form;
+        $mform = & $this->_form;
 
         $publishername = $this->_customdata['publishername'];
         $coursename = $this->_customdata['coursename'];
 
         $mform->addElement('header', '', get_string('msgtopublisher', 'local_hub', $coursename));
 
-        $mform->addElement('hidden', 'id' , $this->_customdata['id']);
-        $mform->addElement('hidden', 'admin' , $this->_customdata['admin']);
+        $mform->addElement('hidden', 'id', $this->_customdata['id']);
+        $mform->addElement('hidden', 'admin', $this->_customdata['admin']);
 
-        $mform->addElement('static', 'sentto' , get_string('sentto', 'local_hub'), $publishername);
+        $mform->addElement('static', 'sentto', get_string('sentto', 'local_hub'), $publishername);
 
         $options = array('question' => get_string('msgtypequestion', 'local_hub'),
             'improvement' => get_string('msgtypeimprovement', 'local_hub'),

@@ -415,6 +415,7 @@ class local_hub_external extends external_api {
                                 'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
                                 'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
                                 'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
+                                'orderby' => new external_value(PARAM_ALPHA, 'orderby method: newest, eldest, publisher, fullname', VALUE_OPTIONAL),
                                 'allsitecourses' => new external_value(PARAM_INTEGER,
                                         'if 1 return all not visible and visible courses whose siteid is the site
                                                             matching token. And course of this site only. In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
@@ -460,6 +461,28 @@ class local_hub_external extends external_api {
         $cleanedoptions['search'] = $params['search'];
         $cleanedoptions['downloadable'] = $params['downloadable'];
         $cleanedoptions['enrollable'] = $params['enrollable'];
+
+        //sort method
+        if (!empty($params['options']['orderby'])) {
+            switch ($params['options']['orderby']) {
+                case 'newest':
+                    $cleanedoptions['orderby'] = 'timemodified DESC';
+                    break;
+                case 'eldest':
+                    $cleanedoptions['orderby'] = 'timemodified ASC';
+                    break;
+                case 'publisher':
+                    $cleanedoptions['orderby'] = 'publishername ASC';
+                    break;
+                case 'fullname':
+                    $cleanedoptions['orderby'] = 'fullname ASC';
+                    break;
+                default:
+                    unset($cleanedoptions['orderby']);
+                    break;
+            }
+        }
+
         $hub = new local_hub();
         $courses = $hub->get_courses($cleanedoptions);
 
