@@ -133,6 +133,9 @@ class local_hub_external extends external_api {
         $params = self::validate_parameters(self::update_site_info_parameters(),
                         array('siteinfo' => $siteinfo));
 
+        //add ip information
+        $params['siteinfo']['ip'] = getremoteaddr();
+
         //retieve site url
         $token = optional_param('wstoken', '', PARAM_ALPHANUM);
         $localhub = new local_hub();
