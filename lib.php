@@ -26,6 +26,11 @@ define('HUB_COURSE_PER_PAGE', 10);
 define('HUB_COURSE_RATING_SCALE', 10);
 
 /**
+ * Maximum number of course per web service request
+ */
+define('HUB_MAXWSCOURSESRESULT', 25);
+
+/**
  * Maximum number of course per day default
  */
 define('HUB_MAXCOURSESPERSITEPERDAY', 20);

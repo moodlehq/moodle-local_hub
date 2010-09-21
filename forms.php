@@ -166,10 +166,8 @@ class course_search_form extends moodleform {
         if (isset($this->_customdata['orderby'])) {
             $orderby = $this->_customdata['orderby'];
         } else {
-            $siteid = 'newest';
+            $orderby = 'newest';
         }
-
-
 
         $mform->addElement('header', 'site', get_string('search', 'local_hub'));
 

@@ -169,6 +169,12 @@ class hub_settings_form extends moodleform {
             $hubmaxpublication = HUB_MAXCOURSESPERSITEPERDAY;
         }
 
+        //max course publication per site per day (default) value
+        $hubmaxwscourseresult = get_config('local_hub', 'maxwscourseresult');
+        if ($hubmaxwscourseresult === false) {
+            $hubmaxwscourseresult = HUB_MAXWSCOURSESRESULT;
+        }
+
         //enable rss feed
         $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
 
@@ -262,6 +268,13 @@ class hub_settings_form extends moodleform {
         $mform->disabledIf('password', 'privacy', 'eq', HUBALLOWGLOBALSEARCH);
         $mform->addHelpButton('password', 'hubpassword', 'local_hub');
 
+        $mform->addElement('text', 'maxwscourseresult',
+                get_string('maxwscourseresult', 'local_hub'));
+        $mform->addHelpButton('maxwscourseresult',
+                'maxwscourseresult', 'local_hub');
+        $mform->setAdvanced('maxwscourseresult');
+        $mform->setDefault('maxwscourseresult', $hubmaxwscourseresult);
+
         $mform->addElement('text', 'maxcoursesperday',
                 get_string('maxcoursesperday', 'local_hub'));
         $mform->addHelpButton('maxcoursesperday',
@@ -290,6 +303,11 @@ class hub_settings_form extends moodleform {
             if (strcmp(clean_param($name, PARAM_TEXT), $name) != 0) {
                 $errors['name'] = get_string('mustbetext', 'local_hub');
             }
+        }
+
+        $maxwscourseresult = $this->_form->_submitValues['maxwscourseresult'];
+        if (empty($maxwscourseresult) or $maxwscourseresult < 1) {
+           $errors['maxwscourseresult'] = get_string('maxwscourseresultempty', 'local_hub');
         }
 
         $desc = $this->_form->_submitValues['desc'];

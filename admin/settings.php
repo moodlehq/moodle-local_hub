@@ -61,6 +61,7 @@ if (!empty($fromform) and confirm_sesskey()) {
     set_config('description', $fromform->desc, 'local_hub');
     set_config('contactname', $fromform->contactname, 'local_hub');
     set_config('contactemail', $fromform->contactemail, 'local_hub');
+    set_config('maxwscourseresult', $fromform->maxwscourseresult, 'local_hub');
     set_config('maxcoursesperday', $fromform->maxcoursesperday, 'local_hub');
     set_config('enablerssfeeds', 
             empty($fromform->enablerssfeeds)?0:$fromform->enablerssfeeds, 'local_hub');

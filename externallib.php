@@ -416,9 +416,12 @@ class local_hub_external extends external_api {
                                 'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
                                 'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
                                 'orderby' => new external_value(PARAM_ALPHA, 'orderby method: newest, eldest, publisher, fullname', VALUE_OPTIONAL),
+                                'givememore' => new external_value(PARAM_INT, 'next range of result - range size being set by the hub server ', VALUE_OPTIONAL),
                                 'allsitecourses' => new external_value(PARAM_INTEGER,
                                         'if 1 return all not visible and visible courses whose siteid is the site
-                                                            matching token. And course of this site only. In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
+                                         matching token. Only courses of this site are returned.
+                                         givememore parameter is ignored if this param = 1.
+                                         In case of public token access, this param option is ignored', VALUE_DEFAULT, 0),
                             ), 'course info')
                 )
         );
@@ -483,8 +486,26 @@ class local_hub_external extends external_api {
             }
         }
 
+        //retrieve the range of courses to return
+        $maxcourses = get_config('local_hub', 'maxwscourseresult');
+        if (empty($maxcourses)) {
+            throw new moodle_exception('nocoursereturn', 'local_hub');
+        }
+            
         $hub = new local_hub();
-        $courses = $hub->get_courses($cleanedoptions);
+        //the site is requesting all his own course
+        if (!empty($params['options']['siteid'])) {
+            $maxcourses = 0;
+            $limitfrom = 0;
+        } else {
+            //the site is doing a normal courses request (not focussed on its own courses)
+            //the hub server limit the return number of course
+            $limitfrom = isset($params['options']['givememore'])?$params['options']['givememore']:0;
+        }
+
+        $courses = $hub->get_courses($cleanedoptions, $limitfrom, $maxcourses);
+        $coursetotal = $hub->get_courses($cleanedoptions, 0, 0, true);
+        
 
         //load ratings and comments
         if (!empty($courses)) {
@@ -497,11 +518,10 @@ class local_hub_external extends external_api {
             $ratingoptions->scaleid = HUB_COURSE_RATING_SCALE;
             $rm = new rating_manager();
             $courses = $rm->get_ratings($ratingoptions);
-
         }
 
         //create result
-        $result = array();
+        $coursesresult = array();
         foreach ($courses as $course) {
             $courseinfo = array();
             $courseinfo['id'] = $course->id;
@@ -578,10 +598,10 @@ class local_hub_external extends external_api {
                 $courseinfo['comments'][] = $coursecomment;
             }
 
-            $result[] = $courseinfo;
+            $coursesresult[] = $courseinfo;
         }
 
-        return $result;
+        return array('courses' => $coursesresult, 'coursetotal' => $coursetotal);
     }
 
     /**
@@ -589,59 +609,60 @@ class local_hub_external extends external_api {
      * @return boolean
      */
     public static function get_courses_returns() {
-        return new external_multiple_structure(
-                new external_single_structure(
-                        array(
-                            'id' => new external_value(PARAM_INTEGER, 'id'),
-                            'fullname' => new external_value(PARAM_TEXT, 'course name'),
-                            'shortname' => new external_value(PARAM_TEXT, 'course short name'),
-                            'description' => new external_value(PARAM_TEXT, 'course description'),
-                            'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
-                            'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
-                            'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email', VALUE_OPTIONAL),
-                            'privacy' => new external_value(PARAM_INT, 'privacy: published or not', VALUE_OPTIONAL),
-                            'sitecourseid' => new external_value(PARAM_INT, 'course id on the site', VALUE_OPTIONAL),
-                            'contributornames' => new external_value(PARAM_TEXT, 'contributor names', VALUE_OPTIONAL),
-                            'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
-                            'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
-                            'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name'),
-                            'subject' => new external_value(PARAM_ALPHANUM, 'subject'),
-                            'audience' => new external_value(PARAM_ALPHA, 'audience'),
-                            'educationallevel' => new external_value(PARAM_ALPHA, 'educational level'),
-                            'creatornotes' => new external_value(PARAM_RAW, 'creator notes'),
-                            'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
-                            'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
-                            'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
-                            'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
-                            'screenshots' => new external_value(PARAM_INT, 'total number of screenshots'),
-                            'timemodified' => new external_value(PARAM_INT, 'time of last modification - timestamp'),
-                            'contents' => new external_multiple_structure(new external_single_structure(
-                                            array(
-                                                'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
-                                                'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
-                                                'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
-                                    )), 'contents', VALUE_OPTIONAL),
-                            'rating' => new external_single_structure (
+        return new external_single_structure(
+            array('courses' => new external_multiple_structure(
+                    new external_single_structure(
+                    array(
+                        'id' => new external_value(PARAM_INTEGER, 'id'),
+                        'fullname' => new external_value(PARAM_TEXT, 'course name'),
+                        'shortname' => new external_value(PARAM_TEXT, 'course short name'),
+                        'description' => new external_value(PARAM_TEXT, 'course description'),
+                        'language' => new external_value(PARAM_ALPHANUMEXT, 'course language'),
+                        'publishername' => new external_value(PARAM_TEXT, 'publisher name'),
+                        'publisheremail' => new external_value(PARAM_EMAIL, 'publisher email', VALUE_OPTIONAL),
+                        'privacy' => new external_value(PARAM_INT, 'privacy: published or not', VALUE_OPTIONAL),
+                        'sitecourseid' => new external_value(PARAM_INT, 'course id on the site', VALUE_OPTIONAL),
+                        'contributornames' => new external_value(PARAM_TEXT, 'contributor names', VALUE_OPTIONAL),
+                        'coverage' => new external_value(PARAM_TEXT, 'coverage', VALUE_OPTIONAL),
+                        'creatorname' => new external_value(PARAM_TEXT, 'creator name'),
+                        'licenceshortname' => new external_value(PARAM_ALPHANUMEXT, 'licence short name'),
+                        'subject' => new external_value(PARAM_ALPHANUM, 'subject'),
+                        'audience' => new external_value(PARAM_ALPHA, 'audience'),
+                        'educationallevel' => new external_value(PARAM_ALPHA, 'educational level'),
+                        'creatornotes' => new external_value(PARAM_RAW, 'creator notes'),
+                        'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
+                        'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
+                        'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
+                        'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
+                        'screenshots' => new external_value(PARAM_INT, 'total number of screenshots'),
+                        'timemodified' => new external_value(PARAM_INT, 'time of last modification - timestamp'),
+                        'contents' => new external_multiple_structure(new external_single_structure(
                                         array(
-                                            'aggregate' =>  new external_value(PARAM_FLOAT, 'Rating average', VALUE_OPTIONAL),
-                                            'scaleid' => new external_value(PARAM_INT, 'Rating scale'),
-                                            'count' => new external_value(PARAM_INT, 'Rating count'),
-                                    ), 'rating', VALUE_OPTIONAL),
+                                            'moduletype' => new external_value(PARAM_ALPHA, 'the type of module (activity/block)'),
+                                            'modulename' => new external_value(PARAM_TEXT, 'the name of the module (forum, resource etc)'),
+                                            'contentcount' => new external_value(PARAM_INT, 'how many time the module is used in the course'),
+                                )), 'contents', VALUE_OPTIONAL),
+                        'rating' => new external_single_structure (
+                                    array(
+                                        'aggregate' =>  new external_value(PARAM_FLOAT, 'Rating average', VALUE_OPTIONAL),
+                                        'scaleid' => new external_value(PARAM_INT, 'Rating scale'),
+                                        'count' => new external_value(PARAM_INT, 'Rating count'),
+                                ), 'rating', VALUE_OPTIONAL),
 
-                            
-                            'comments' => new external_multiple_structure(new external_single_structure (
-                                            array(
-                                                'comment' => new external_value(PARAM_TEXT, 'the comment'),
-                                                'commentator' => new external_value(PARAM_TEXT, 'the name of commentator'),
-                                                'date' => new external_value(PARAM_INT, 'date of the comment'),
-                                    )), 'contents', VALUE_OPTIONAL),
-                            'outcomes' => new external_multiple_structure(new external_single_structure(
-                                                        array(
-                                                            'fullname' => new external_value(PARAM_TEXT, 'the outcome fullname')
-                                                )), 'outcomes', VALUE_OPTIONAL)
-                        ), 'course info')
-        );
-    }
+
+                        'comments' => new external_multiple_structure(new external_single_structure (
+                                        array(
+                                            'comment' => new external_value(PARAM_TEXT, 'the comment'),
+                                            'commentator' => new external_value(PARAM_TEXT, 'the name of commentator'),
+                                            'date' => new external_value(PARAM_INT, 'date of the comment'),
+                                )), 'contents', VALUE_OPTIONAL),
+                        'outcomes' => new external_multiple_structure(new external_single_structure(
+                                                    array(
+                                                        'fullname' => new external_value(PARAM_TEXT, 'the outcome fullname')
+                                            )), 'outcomes', VALUE_OPTIONAL)
+                    ), 'course info')),
+                'coursetotal' => new external_value(PARAM_INTEGER, 'total number of courses')), 'courses result');
+}
 
     /**
      * Returns description of method parameters
