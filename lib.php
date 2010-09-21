@@ -1531,6 +1531,41 @@ class local_hub {
             }
         }
 
+          
+
+        //create rss feed link
+        $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
+        if (!empty($enablerssfeeds)) {
+            require($CFG->libdir . '/rsslib.php');
+            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
+            $educationallevel = key_exists('educationallevel', $options) ? $options['educationallevel'] : 'all';
+            if (key_exists('downloadable', $options)) {
+                $downloadable = empty($options['downloadable']) ? 0 : 1;
+            } else {
+                $downloadable = 'all';
+            }
+            $subject = key_exists('subject', $options) ? $options['subject'] : 'all';
+            $licence = key_exists('licence', $options) ? $options['licence'] : 'all';
+            $language = key_exists('language', $options) ? $options['language'] : 'all';
+            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
+            $search = empty($search) ? 0 : urlencode($search);
+            //retrieve guest user if user not logged in
+            $userid = empty($USER->id) ? $CFG->siteguest : $USER->id;
+
+            //add the link tage to the header
+            $rsslink = rss_get_url(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
+                    $downloadable . '/' . $audience . '/' . $educationallevel
+                    . '/' . $subject . '/' . $licence
+                    . '/' . $language . '/' . $search . '/');
+            $PAGE->add_alternate_version('RSS', $rsslink, 'application/rss+xml');
+            //create the rss icon
+            $rssicon = rss_get_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
+                    $downloadable . '/' . $audience . '/' . $educationallevel
+                    . '/' . $subject . '/' . $licence
+                    . '/' . $language . '/' . $search . '/');
+            $rssicon = html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
+        }
+
         /// OUTPUT
 
         echo $OUTPUT->header();
@@ -1554,29 +1589,8 @@ class local_hub {
             echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
         }
 
-
-        //create rss feed link
-        $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
-        if (!empty($enablerssfeeds)) {
-            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
-            $educationallevel = key_exists('educationallevel', $options) ? $options['educationallevel'] : 'all';
-            if (key_exists('downloadable', $options)) {
-                $downloadable = empty($options['downloadable']) ? 0 : 1;
-            } else {
-                $downloadable = 'all';
-            }
-            $subject = key_exists('subject', $options) ? $options['subject'] : 'all';
-            $licence = key_exists('licence', $options) ? $options['licence'] : 'all';
-            $language = key_exists('language', $options) ? $options['language'] : 'all';
-            $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
-            $search = empty($search) ? 0 : urlencode($search);
-            //retrieve guest user if user not logged in
-            $userid = empty($USER->id) ? $CFG->siteguest : $USER->id;
-            rss_print_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
-                    $downloadable . '/' . $audience . '/' . $educationallevel
-                    . '/' . $subject . '/' . $licence
-                    . '/' . $language . '/' . $search . '/');
-        }
+        echo $rssicon;
+        
         echo $OUTPUT->footer();
     }
 
