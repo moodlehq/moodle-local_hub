@@ -556,7 +556,7 @@ class local_hub {
                 }
             }
         }
-     
+
         return $courses;
     }
 
@@ -1531,8 +1531,6 @@ class local_hub {
             }
         }
 
-          
-
         //create rss feed link
         $enablerssfeeds = get_config('local_hub', 'enablerssfeeds');
         if (!empty($enablerssfeeds)) {
@@ -1554,27 +1552,29 @@ class local_hub {
 
             //add the link tage to the header
             $rsslink = rss_get_url(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
-                    $downloadable . '/' . $audience . '/' . $educationallevel
-                    . '/' . $subject . '/' . $licence
-                    . '/' . $language . '/' . $search . '/');
+                            $downloadable . '/' . $audience . '/' . $educationallevel
+                            . '/' . $subject . '/' . $licence
+                            . '/' . $language . '/' . $search . '/');
             $PAGE->add_alternate_version('RSS', $rsslink, 'application/rss+xml');
             //create the rss icon
             $rssicon = rss_get_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
-                    $downloadable . '/' . $audience . '/' . $educationallevel
-                    . '/' . $subject . '/' . $licence
-                    . '/' . $language . '/' . $search . '/');
-            $rssicon = html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
+                            $downloadable . '/' . $audience . '/' . $educationallevel
+                            . '/' . $subject . '/' . $licence
+                            . '/' . $language . '/' . $search . '/');
         }
 
         /// OUTPUT
-
         echo $OUTPUT->header();
 
+        //notification message sent to publisher
         if (optional_param('messagesent', 0, PARAM_INTEGER)) {
             echo $OUTPUT->notification(get_string('messagesentsuccess', 'local_hub'), 'notifysuccess');
         }
 
+        //search form
         $coursesearchform->display();
+
+        //Course listing
         //set to course to null if you didn't do any search (so the render doesn't display 'no search result')
         if (!optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)
                 and empty($courseid)) {
@@ -1582,6 +1582,7 @@ class local_hub {
         }
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
         echo highlight($search, $renderer->course_list($courses));
+
         //paging bar
         if ($coursetotal > HUB_COURSE_PER_PAGE) {
             $baseurl = new moodle_url('', $options);
@@ -1589,8 +1590,18 @@ class local_hub {
             echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
         }
 
-        echo $rssicon;
-        
+        //rss icon
+        echo html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
+
+        //permalink
+        if (!empty($courses)) {     
+            $permalink = html_writer::tag('div',
+                    html_writer::tag('a', get_string('permalink', 'local_hub'),
+                            array('href' => new moodle_url('', $options))),
+                    array('class' => 'hubcoursepermalink'));
+            echo $permalink;
+        }
+
         echo $OUTPUT->footer();
     }
 

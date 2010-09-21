@@ -244,6 +244,7 @@ $string['password'] = 'Password';
 $string['periodforteennight'] = 'Last 14 days';
 $string['periodmonth'] = 'Last 30 days';
 $string['periodweek'] = 'Last 7 days';
+$string['permalink'] = 'Permalink';
 $string['postaladdress'] = 'Postal address';
 $string['postsnumber'] = 'Number of posts ({$a})';
 $string['prioritise'] = 'Prioritised';
