@@ -1487,6 +1487,10 @@ class local_hub {
                 $page = optional_param('page', 0, PARAM_INT);
                 $courses = $this->get_courses($options, $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
                 $coursetotal = $this->get_courses($options, 0, 0, true);
+
+                //reset the options
+                $options['orderby'] = $fromform->orderby;
+                unset($options['onlyvisible']);
             }
         }
 
