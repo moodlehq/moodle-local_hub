@@ -665,6 +665,7 @@ class local_hub_external extends external_api {
 }
 
     /**
+     * TODO: not in use yet, will be prompt to change
      * Returns description of method parameters
      * @return external_function_parameters
      */
@@ -681,6 +682,7 @@ class local_hub_external extends external_api {
     }
 
     /**
+     * TODO: not in use yet, will be prompt to change
      * Get sites
      * @return array sites
      */
@@ -690,7 +692,8 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('local/hub:view', $context);
+        require_capability('local/hub:view', $context); //TODO: will need to be change for hub:siteview
+        //hub:view should concern only courses
 
         $params = self::validate_parameters(self::get_sites_parameters(),
                         array('search' => $search, 'options' => $options));
@@ -715,6 +718,7 @@ class local_hub_external extends external_api {
     }
 
     /**
+     * TODO: not in use yet, will be prompt to change
      * Returns description of method result value
      * @return boolean
      */

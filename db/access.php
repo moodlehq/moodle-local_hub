@@ -52,7 +52,11 @@ $capabilities = array(
         ),
         'local/hub:view' => array(
                 'captype' => 'read',
-                'contextlevel' => CONTEXT_SYSTEM
+                'contextlevel' => CONTEXT_SYSTEM,
+                'archetypes' => array(
+                    'guest' => CAP_ALLOW,
+                    'user' => CAP_ALLOW
+                )
         ),
         'local/hub:unregistercourse' => array(
                 'captype' => 'write',
