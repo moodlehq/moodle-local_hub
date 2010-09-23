@@ -23,6 +23,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 define('HUB_COURSE_PER_PAGE', 10);
+
+//NEVER change this value after installation, otherwise you will need to change all rating in the DB
 define('HUB_COURSE_RATING_SCALE', 10);
 
 /**
@@ -328,7 +330,7 @@ class local_hub {
      * @param array $options all different search options
      *  string  'search' string that will be compared to course name and site description
      *  string  'options' language, license, audience, subject...
-     *  boolean 'onlyvisible' - set to false to return full list
+     *  boolean 'onlyvisible' - set to true to return only visible course (not set => all course returned)
      *  boolean 'downloadable' - set to true to return downloadable course
      *  boolean 'enrollable' - set to true to return enrollable course
      *  boolean 'onlydeleted' - set to true to return deleted course only,
@@ -339,8 +341,8 @@ class local_hub {
      *  string 'audience' - all course with this audience
      *  string 'licenceshortname' - all course with this licence
      *  string 'educationallevel' - select
-     *  string 'visibility' - this option is overrided by the onlyvisible parameter
-     *                        (only use for admin pages)
+     *  string 'visibility' - if 'onlyvisible' is equal to true, then this option is not used.
+     *                        This option should only be used for admin pages.
      *  array 'ids' - return all the course for these given id on the hub
      *  array 'sitecourseids' - return all the course for these given id on the site
      *                          (most of the time you will give a siteid)
@@ -352,7 +354,10 @@ class local_hub {
      *  string 'orderby' - let you override the default order by
      * @param int $limitfrom
      * @param int $limitnum
-     * @param bool $countresult if set to true return the count, otherwise result the raw
+     * @param bool $countresult if set to true return only the course total
+     *                          (then limitnum and limitfrom are ignored),
+     *                          otherwise return the courses. It exist mainly for pagination, so we don't
+     *                          need a second cout_courses() function almost similar to this one.
      * @return array of courses/int
      */
     public function get_courses($options = array(), $limitfrom=0, $limitnum=0, $countresult = false) {
@@ -534,18 +539,31 @@ class local_hub {
             $wheresql .= " deleted = 1";
         }
 
-        if (!empty($options['orderby'])) {
-            $ordersql = $options['orderby'];
-        }
-
         if ($countresult) {
             $courses = $DB->count_records_select('hub_course_directory', $wheresql, $sqlparams);
         } else {
-            $courses = $DB->get_records_select('hub_course_directory', $wheresql, $sqlparams,
-                            $ordersql, '*', $limitfrom, $limitnum);
+
+            //retrieve rating
+            $extracolumns = ' , r.ratingaverage, r.ratingcount ';
+            $joinsql = ' LEFT JOIN (
+                                    SELECT itemid, AVG(rating) ratingaverage, COUNT(id) ratingcount
+                                    FROM {rating} GROUP BY itemid
+                                  ) r ON r.itemid = c.id ';
+
+            //sort result
+            $ordersql = '';
+            if (!empty($options['orderby'])) {
+                $ordersql = ' ORDER BY ' . $options['orderby'];
+            }
+
+            $sql = 'SELECT c.* ' . $extracolumns . 'FROM {hub_course_directory} c ' . $joinsql . ' WHERE '
+                    . $wheresql . $ordersql;
+
+            $courses = $DB->get_records_sql($sql, $sqlparams, $limitfrom, $limitnum);
         }
 
-        //retrieve outcomes
+        //retrieve the outcomes
+        //TODO: improve this, incorporating it into the request above
         if (!$countresult) {
             if (!empty($courses)) {
                 foreach ($courses as &$course) {
@@ -1475,6 +1493,9 @@ class local_hub {
                     case 'fullname':
                         $options['orderby'] = 'fullname ASC';
                         break;
+                    case 'ratingaverage':
+                        $options['orderby'] = 'ratingaverage DESC';
+                        break;
                     default:
                         break;
                 }
@@ -1514,7 +1535,7 @@ class local_hub {
             $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
             $ratingoptions->scaleid = 10;
             $ratingoptions->userid = $USER->id;
-            $ratingoptions->returnurl = "$CFG->wwwroot/local/hub/index.php";
+            $ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/index.php";
 
             $rm = new rating_manager();
             $courses = $rm->get_ratings($ratingoptions);
@@ -1598,11 +1619,11 @@ class local_hub {
         echo html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
 
         //permalink
-        if (!empty($courses)) {     
+        if (!empty($courses)) {
             $permalink = html_writer::tag('div',
-                    html_writer::tag('a', get_string('permalink', 'local_hub'),
-                            array('href' => new moodle_url('', $options))),
-                    array('class' => 'hubcoursepermalink'));
+                            html_writer::tag('a', get_string('permalink', 'local_hub'),
+                                    array('href' => new moodle_url('', $options))),
+                            array('class' => 'hubcoursepermalink'));
             echo $permalink;
         }
 

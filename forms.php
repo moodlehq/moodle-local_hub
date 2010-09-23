@@ -272,6 +272,8 @@ class course_search_form extends moodleform {
         $mform->addElement('radio', 'orderby', null, get_string('orderbyeldest', 'local_hub'), 'eldest');
         $mform->addElement('radio', 'orderby', null, get_string('orderbyname', 'local_hub'), 'fullname');
         $mform->addElement('radio', 'orderby', null, get_string('orderbypublisher', 'local_hub'), 'publisher');
+        $mform->addElement('radio', 'orderby', null, get_string('orderbyratingaverage', 'local_hub'),
+                'ratingaverage');
         $mform->setDefault('orderby', $orderby);
         $mform->setType('orderby', PARAM_ALPHA);
 

@@ -415,7 +415,7 @@ class local_hub_external extends external_api {
                                 'audience' => new external_value(PARAM_ALPHA, 'audience', VALUE_OPTIONAL),
                                 'educationallevel' => new external_value(PARAM_ALPHA, 'educational level', VALUE_OPTIONAL),
                                 'language' => new external_value(PARAM_ALPHANUMEXT, 'language', VALUE_OPTIONAL),
-                                'orderby' => new external_value(PARAM_ALPHA, 'orderby method: newest, eldest, publisher, fullname', VALUE_OPTIONAL),
+                                'orderby' => new external_value(PARAM_ALPHA, 'orderby method: newest, eldest, publisher, fullname, ratingaverage', VALUE_OPTIONAL),
                                 'givememore' => new external_value(PARAM_INT, 'next range of result - range size being set by the hub server ', VALUE_OPTIONAL),
                                 'allsitecourses' => new external_value(PARAM_INTEGER,
                                         'if 1 return all not visible and visible courses whose siteid is the site
@@ -480,6 +480,9 @@ class local_hub_external extends external_api {
                 case 'fullname':
                     $cleanedoptions['orderby'] = 'fullname ASC';
                     break;
+                case 'ratingaverage':
+                    $cleanedoptions['orderby'] = 'ratingaverage DESC';
+                    break;
                 default:
                     unset($cleanedoptions['orderby']);
                     break;
@@ -505,19 +508,11 @@ class local_hub_external extends external_api {
 
         $courses = $hub->get_courses($cleanedoptions, $limitfrom, $maxcourses);
         $coursetotal = $hub->get_courses($cleanedoptions, 0, 0, true);
-        
+
 
         //load ratings and comments
         if (!empty($courses)) {
             require_once($CFG->dirroot . '/comment/lib.php');
-            require_once($CFG->dirroot . '/rating/lib.php');
-            $ratingoptions = new stdclass();
-            $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
-            $ratingoptions->items = $courses;
-            $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
-            $ratingoptions->scaleid = HUB_COURSE_RATING_SCALE;
-            $rm = new rating_manager();
-            $courses = $rm->get_ratings($ratingoptions);
         }
 
         //create result
@@ -575,12 +570,12 @@ class local_hub_external extends external_api {
                 }
             }
 
-            //get ratings
-            if (isset($course->rating->aggregate)) {
-                $courseinfo['rating']['aggregate'] =  clean_param($course->rating->aggregate, PARAM_FLOAT);
-            }
-            $courseinfo['rating']['count'] = $course->rating->count;
-            $courseinfo['rating']['scaleid'] = $course->rating->settings->scale->id;
+            //set ratings
+            if ($course->ratingcount) {
+                $courseinfo['rating']['aggregate'] = (float) $course->ratingaverage;
+            }        
+            $courseinfo['rating']['count'] = (int) $course->ratingcount;
+            $courseinfo['rating']['scaleid'] = HUB_COURSE_RATING_SCALE;
 
             //get comments
             $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
@@ -598,7 +593,7 @@ class local_hub_external extends external_api {
                 $courseinfo['comments'][] = $coursecomment;
             }
 
-            $coursesresult[] = $courseinfo;
+            $coursesresult[] = $courseinfo;           
         }
 
         return array('courses' => $coursesresult, 'coursetotal' => $coursetotal);
