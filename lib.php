@@ -1616,7 +1616,9 @@ class local_hub {
         }
 
         //rss icon
-        echo html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
+        if (!empty($enablerssfeeds)) {
+            echo html_writer::tag('div', $rssicon, array('class' => 'hubrsslink'));
+        }
 
         //permalink
         if (!empty($courses)) {
