@@ -27,7 +27,7 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . '/lib/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . '/course/publish/lib.php');
 

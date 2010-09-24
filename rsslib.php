@@ -93,7 +93,7 @@ function hub_rss_get_feed($context, $args) {
     $rssfeedinfo = local_hub_rss_generate_feed_info($courses);
 
     //generate the rss content
-    require_once($CFG->dirroot . "/lib/rsslib.php");
+    require_once($CFG->libdir . "/rsslib.php");
 
 
     //First the RSS header
@@ -171,7 +171,7 @@ function local_hub_rss_generate_feed_info($courses) {
             $course->lang = '';
         }
         //licence
-        require_once($CFG->dirroot . "/lib/licenselib.php");
+        require_once($CFG->libdir . "/licenselib.php");
         $licensemanager = new license_manager();
         $licenses = $licensemanager->get_licenses();
         foreach ($licenses as $license) {

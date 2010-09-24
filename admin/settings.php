@@ -141,7 +141,7 @@ if (!empty($fromform) and confirm_sesskey()) {
 
 //check if Recaptcha is enabled
 if (!$CFG->recaptchapublickey or !$CFG->recaptchaprivatekey) {
-    $recaptchaurl = new moodle_url('/admin/search.php', array('query' => 'recaptcha'));
+    $recaptchaurl = new moodle_url('/' . $CFG->admin . '/search.php', array('query' => 'recaptcha'));
     $recaptchalink = html_writer::tag('a',
                     get_string('recaptcha', 'local_hub'),
                     array('href' => $recaptchaurl));

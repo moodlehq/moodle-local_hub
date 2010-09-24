@@ -27,7 +27,7 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-require_once($CFG->dirroot . '/lib/formslib.php');
+require_once($CFG->libdir . '/formslib.php');
 require_once($CFG->dirroot . '/local/hub/lib.php');
 
 /**
@@ -247,7 +247,7 @@ class course_search_form extends moodleform {
         $this->init_javascript_enhancement('subject', 'smartselect', 
                 array('selectablecategories' => true, 'mode' => 'compact'));
 
-        require_once($CFG->dirroot . "/lib/licenselib.php");
+        require_once($CFG->libdir . "/licenselib.php");
         $licensemanager = new license_manager();
         $licences = $licensemanager->get_licenses();
         $options = array();

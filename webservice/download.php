@@ -25,7 +25,7 @@
  */
 require('../../../config.php');
 require_once($CFG->dirroot . '/course/publish/lib.php'); //HUB_SCREENSHOT_FILE_TYPE and HUB_BACKUP_FILE_TYPE
-require_once($CFG->dirroot . '/lib/filelib.php');
+require_once($CFG->libdir . '/filelib.php');
 require_once($CFG->dirroot . '/local/hub/lib.php'); //HUBLOGOIMAGEWIDTH, HUBLOGOIMAGEHEIGHT
 
 $courseid = optional_param('courseid', '', PARAM_INTEGER);
