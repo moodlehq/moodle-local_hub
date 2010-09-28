@@ -806,8 +806,17 @@ class local_hub {
      * @param object $communication
      */
     public function confirm_communication($communication) {
-        global $DB;
         $communication->confirmed = 1;
+        $this->update_communication($communication);
+    }
+
+
+    /**
+     * update a communication object
+     * @param object $communication
+     */
+    public function update_communication($communication) {
+        global $DB;
         $DB->update_record('hub_communications', $communication);
     }
 
@@ -1066,9 +1075,11 @@ class local_hub {
                     $siteinfo->name != $emailinfo->oldname) {
 
                 //check if the site url already exist
-                $existingurlsite = $this->get_site_by_url($siteinfo->url);
-                if (!empty($existingurlsite)) {
-                    throw new moodle_exception('urlalreadyexist', 'local_hub', $CFG->wwwroot);
+                if ($siteinfo->url != $emailinfo->oldurl) {
+                    $existingurlsite = $this->get_site_by_url($siteinfo->url);
+                    if (!empty($existingurlsite)) {
+                        throw new moodle_exception('urlalreadyexist', 'local_hub', $CFG->wwwroot);
+                    }
                 }
 
                 //make the site not visible (hub admin need to reconfirm it)
@@ -1122,6 +1133,15 @@ class local_hub {
         //Add or update the site into the site directory (hub)
         if (!empty($siteurltoupdate)) {
             $this->update_site($siteinfo);
+
+            //update the communication url if it changed
+            if (!empty($currentsiteinfo) and $siteinfo->url != $currentsiteinfo->url) {
+                $newcommunication = $this->get_communication(WSSERVER,
+                        REGISTEREDSITE, $emailinfo->oldurl);
+                $newcommunication->remoteurl = $siteinfo->url;
+                $this->update_communication($newcommunication);
+            }
+
         } else {
             $site = $this->add_site($siteinfo);
         }
