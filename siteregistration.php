@@ -48,7 +48,7 @@ $PAGE->set_heading(get_string('siteregistration', 'local_hub'));
 
 $name                       = optional_param('name', '', PARAM_TEXT);
 $url                        = optional_param('url', '', PARAM_URL);
-$token                      = optional_param('token', '', PARAM_TEXT);
+$token                      = optional_param('token', '', PARAM_TEXT); //this is the site secret
 $description                = optional_param('description', '', PARAM_TEXT);
 $contactname                = optional_param('contactname', '', PARAM_TEXT);
 $contactemail               = optional_param('contactemail', '', PARAM_EMAIL);
@@ -138,7 +138,7 @@ if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL 
     }
 
     $siteinfo = new stdClass();
-    $siteinfo->token = $fromform->token;
+    $siteinfo->secret = $fromform->token;
     $siteinfo->url = $fromform->url;
     $siteinfo->description = $fromform->description;
     $siteinfo->name = $fromform->name;

@@ -200,5 +200,18 @@ function xmldb_local_hub_upgrade($oldversion) {
    
     }
 
+    if ($oldversion < 2010092800) {
+
+        // Rename field token on table hub_site_directory to NEWNAMEGOESHERE
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('token', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'url');
+
+        // Launch rename field token
+        $dbman->rename_field($table, $field, 'secret');
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010092800, 'local', 'hub');
+    }
+
     return $result;
 }

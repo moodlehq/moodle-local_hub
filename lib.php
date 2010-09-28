@@ -681,13 +681,13 @@ class local_hub {
     }
 
     /**
-     * Return a site for a given token
-     * @param string $token
+     * Return a site for a given secret
+     * @param string $secret
      * @return object site , false if null
      */
-    public function get_site_by_token($token) {
+    public function get_site_by_secret($secret) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('token' => $token, 'deleted' => 0));
+        return $DB->get_record('hub_site_directory', array('secret' => $secret, 'deleted' => 0));
     }
 
     /**
@@ -1098,11 +1098,10 @@ class local_hub {
                         get_string('emailmessagesiteurlchanged', 'local_hub', $emailinfo));
             }
         } else {
-            //if creation mode, check that the token don't exist already
-            $checkedhub = $this->get_site_by_token($siteinfo->token);
-            if (!empty($checkedhub)) { //no registration process failed but the token still exist
-                //probably token already attributed, should never happen
-                throw new moodle_exception('sitetokenalreadyexist');
+            //if creation mode, check that the secret doesn't exist already
+            $checkedhub = $this->get_site_by_secret($siteinfo->secret);
+            if (!empty($checkedhub)) { //no registration process failed but the secret still exist
+                throw new moodle_exception('sitesecretalreadyexist');
             }
         }
 
