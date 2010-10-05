@@ -716,7 +716,7 @@ class local_hub {
      */
     public function get_registered_courses_total() {
         global $DB;
-        return $DB->count_records('hub_course_directory', array('privacy' => 1));
+        return $DB->count_records('hub_course_directory', array('privacy' => 1, 'deleted' => 0));
     }
 
     /**
