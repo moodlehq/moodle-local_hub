@@ -34,7 +34,7 @@ require('../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
 require_once($CFG->dirroot.'/local/hub/lib.php');
 
-admin_externalpage_setup('registrationconfirmed');
+admin_externalpage_setup('hubregistration');
 
 $newtoken        = optional_param('newtoken', '', PARAM_ALPHANUM);
 $url             = optional_param('url', '', PARAM_URL);
