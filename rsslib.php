@@ -61,7 +61,7 @@ function hub_rss_get_feed($context, $args) {
     $filename = 'rsssearch_' . $args[3] . '_' . $args[4] . '_' . $args[5]
             . '_' . $args[6] . '_' . $args[7] . '_' . $args[8] . '_' . $args[9];
     $cachedfilepath = rss_get_file_full_name('local_hub', $filename);
-   
+
     //get the courses from the search
     if ($args[7] != 'all') {
         $options['licenceshortname'] = $args[7];
@@ -84,11 +84,11 @@ function hub_rss_get_feed($context, $args) {
     $options['onlyvisible'] = true;
     $options['downloadable'] = $args[3];
     $options['enrollable'] = !$args[3];
-    
+
     $hub = new local_hub();
     $options['orderby'] = 'timemodified DESC, fullname ASC';
     $courses = $hub->get_courses($options);
-    
+
     //generate the information for rss
     $rssfeedinfo = local_hub_rss_generate_feed_info($courses);
 
@@ -121,9 +121,9 @@ function hub_rss_get_feed($context, $args) {
 }
 
 /**
- *
- * @param <type> $courses
- * @return stdClass
+ * Generate courses feed content
+ * @param object $courses
+ * @return array
  */
 function local_hub_rss_generate_feed_info($courses) {
     global $CFG;
@@ -135,7 +135,8 @@ function local_hub_rss_generate_feed_info($courses) {
         $courserss->author = get_config('local_hub', 'name');
         $courserss->pubdate = time();
 
-        $courseurl = new moodle_url($CFG->wwwroot . '/index.php', array('redirectcourseid' => $course->id, 'rss' => true));
+        $courseurl = new moodle_url($CFG->wwwroot . '/index.php',
+                array('redirectcourseid' => $course->id, 'rss' => true));
 
         $courserss->link = $courseurl->out(false);
 
@@ -143,25 +144,26 @@ function local_hub_rss_generate_feed_info($courses) {
         $course->subject = get_string($course->subject, 'edufields');
         $course->audience = get_string('audience' . $course->audience, 'hub');
         $course->educationallevel = get_string('edulevel' . $course->educationallevel, 'hub');
-        if (!empty($course->contributornames)) {
-            $course->contributorname = get_string('contributors', 'block_community', $course->contributorname);
-        }
-        if (empty($course->coverage)) {
-            $course->coverage = '';
-        }
+
         $deschtml = '';
         $deschtml .= $course->description; //the description
-        //create the additional description
-        $additionaldesc = ' - ';
-        if ($course->contributornames) {
-            $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);
-            $additionaldesc .= ' - ';
-        }
-        if ($course->coverage) {
 
-            $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);
+
+        //create the additional description
+        $additionaldesc = html_writer::empty_tag('br');
+        $additionaldesc .= get_string('userinfo', 'local_hub', $course);
+        if ($course->contributornames) {
             $additionaldesc .= ' - ';
+            $additionaldesc .= get_string('contributors', 'local_hub', $course->contributornames);       
         }
+
+        if (empty($course->coverage)) {
+            $course->coverage = '';
+        } else {
+            $additionaldesc .= ' - ';
+            $additionaldesc .= get_string('coverage', 'local_hub', $course->coverage);        
+        }
+
         //retrieve language string
         //construct languages array
         if (!empty($course->language)) {
@@ -179,8 +181,11 @@ function local_hub_rss_generate_feed_info($courses) {
                 $course->license = $license->fullname;
             }
         }
-
-        $additionaldesc .= get_string('additionalcoursedesc', 'local_hub', $course);
+        //time modified
+        $course->timeupdated = userdate($course->timemodified);
+        $additionaldesc .= ' - ' . get_string('fileinfo', 'local_hub', $course);
+        //subject/audience/level
+        $additionaldesc .= ' - ' . get_string('contentinfo', 'local_hub', $course);
         $deschtml .= html_writer::tag('span', $additionaldesc, array('class' => 'additionaldesc'));
 
         $courserss->description = $deschtml;
@@ -189,4 +194,4 @@ function local_hub_rss_generate_feed_info($courses) {
     }
     return $rssfeedinfo;
 }
-?>
+
