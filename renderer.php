@@ -540,7 +540,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
             $table->align = array('center', 'left', 'left', 'center', 'center', 'center',
                 'center', 'center');
-            $table->size = array('5%', '25%', '40%', '5%', '5%');
+            $table->size = array('1%', '25%', '40%', '5%', '5%');
         } else {
             $table->head = array('', get_string('sitename', 'local_hub'),
                 get_string('sitedesc', 'local_hub'),
@@ -573,9 +573,13 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //create image tag
-                $imageurl = new moodle_url($site->imageurl);
-                $imagehtml = html_writer::empty_tag('img', array('src' => $imageurl,
+                if (!empty($site->imageurl)) {
+                    $imageurl = new moodle_url($site->imageurl);
+                    $imagehtml = html_writer::empty_tag('img', array('src' => $imageurl,
                             'alt' => $site->name));
+                } else {
+                    $imagehtml = '';
+                }
 
                 //create description to display
                 $deschtml = $site->description; //the description
