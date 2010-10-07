@@ -1641,9 +1641,17 @@ class local_hub {
 
         //permalink
         if (!empty($courses)) {
+             $permalinkparams = array();
+            //special case: course list is a unique course for a given ID
+            if (!empty($courseid)) {
+                 $permalinkparams['courseid'] = $courseid;
+            } else {
+                 $permalinkparams = $options;
+            }
+
             $permalink = html_writer::tag('div',
                             html_writer::tag('a', get_string('permalink', 'local_hub'),
-                                    array('href' => new moodle_url('', $options))),
+                                    array('href' => new moodle_url('', $permalinkparams))),
                             array('class' => 'hubcoursepermalink'));
             echo $permalink;
         }
