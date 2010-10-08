@@ -169,6 +169,12 @@ class hub_settings_form extends moodleform {
             $hubmaxpublication = HUB_MAXCOURSESPERSITEPERDAY;
         }
 
+        //front page search form is displayed
+        $searchfornologin = get_config('local_hub', 'searchfornologin');
+        if ($searchfornologin === false) {
+            $searchfornologin = 1;
+        }
+
         //max course publication per site per day (default) value
         $hubmaxwscourseresult = get_config('local_hub', 'maxwscourseresult');
         if ($hubmaxwscourseresult === false) {
@@ -287,6 +293,12 @@ class hub_settings_form extends moodleform {
         $mform->addHelpButton('enablerssfeeds', 'enablerssfeeds', 'local_hub');
         $mform->setAdvanced('enablerssfeeds');
         $mform->setDefault('enablerssfeeds', $enablerssfeeds);
+
+        $mform->addElement('checkbox', 'searchfornologin',
+                get_string('searchfornologin', 'local_hub'), '');
+        $mform->setDefault('searchfornologin', $searchfornologin);
+        $mform->addHelpButton('searchfornologin', 'searchfornologin', 'local_hub');
+        $mform->setAdvanced('searchfornologin');
 
         $this->add_action_buttons(false, get_string('update'));
     }

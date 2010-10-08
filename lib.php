@@ -1403,12 +1403,19 @@ class local_hub {
     }
 
     /**
-     * TODO: it is a bit a hacky way...
      * This function display the hub homepage
      * It is called early when loading any Moodle page.
+     * @return integer return true if Moodle index.php home page must continue normal display
      */
     public function display_homepage() {
         global $PAGE, $SITE, $OUTPUT, $CFG, $USER;
+
+        //check if the front page search should not be displayed
+        //=> hand over the home page to Moodle index.php
+        $searchfornologin = get_config('local_hub', 'searchfornologin');
+        if (($searchfornologin === '0') and !isloggedin()) {
+            return true;
+        }
 
         require_once($CFG->dirroot . "/local/hub/forms.php");
 
