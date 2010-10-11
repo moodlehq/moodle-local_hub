@@ -451,27 +451,31 @@ class hub_course_settings_form extends moodleform {
         $mform->addElement('hidden', 'id', $course->id);
 
         $mform->addElement('text', 'fullname',
-                get_string('coursename', 'local_hub'));
+                get_string('coursename', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
         $mform->addHelpButton('fullname',
                 'coursename', 'local_hub');
         $mform->setDefault('fullname', $course->fullname);
 
         if (!empty($course->courseurl)) {
             $mform->addElement('text', 'courseurl',
-                    get_string('courseurl', 'local_hub'));
+                    get_string('courseurl', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
             $mform->addHelpButton('courseurl',
                     'courseurl', 'local_hub');
             $mform->setDefault('courseurl', $course->courseurl);
         } else {
             $mform->addElement('text', 'demourl',
-                    get_string('demourl', 'local_hub'));
+                    get_string('demourl', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
             $mform->addHelpButton('demourl',
                     'demourl', 'local_hub');
             $mform->setDefault('demourl', $course->demourl);
         }
 
         $mform->addElement('textarea', 'description',
-                get_string('coursedesc', 'local_hub'));
+                get_string('coursedesc', 'local_hub'),
+                array('rows' => 10, 'cols' => 56, 'class' => 'coursesettingstextarea'));
         $mform->addHelpButton('description',
                 'coursedesc', 'local_hub');
         $mform->setDefault('description', $course->description);

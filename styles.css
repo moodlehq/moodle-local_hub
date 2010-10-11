@@ -111,6 +111,10 @@
 #page-admin-local-hub-admin-managecourses .hubbulkbutton { margin-left: 15px; margin-top: 13px;}
 #page-admin-local-hub-admin-managecourses .hubcourseoutcomes {}
 
+/* COURSE SETTINGS */
+#page-admin-local-hub-admin-coursesettings .coursesettingstextarea {padding: 2px;}
+#page-admin-local-hub-admin-coursesettings .coursesettingstextfield {width: 400px;}
+
 
 /* FRONT PAGE */
 #page-site-index .additionaldesc {font-size: 80%; color: #B8860B;}
