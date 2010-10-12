@@ -378,9 +378,9 @@ class local_hub {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
-            $wheresql .= " (fullname " . $DB->sql_ilike() . " :namesearch OR description "
-                    . $DB->sql_ilike() . " :descsearch OR coverage "
-                    . $DB->sql_ilike() . " :coveragesearch)";
+            $wheresql .= " ( " . $DB->sql_like('fullname', ':namesearch', false)
+                    . " OR " . $DB->sql_like('description', ':descsearch', false)
+                    . "  OR " . $DB->sql_like('coverage', ':coveragesearch', false) . " )";
             $sqlparams['namesearch'] = '%' . $options['search'] . '%';
             $sqlparams['descsearch'] = '%' . $options['search'] . '%';
             $sqlparams['coveragesearch'] = '%' . $options['search'] . '%';
@@ -603,8 +603,8 @@ class local_hub {
             if (!empty($wheresql)) {
                 $wheresql .= " AND";
             }
-            $wheresql .= " (name " . $DB->sql_ilike() . " :namesearch OR description "
-                    . $DB->sql_ilike() . " :descsearch)";
+            $wheresql .= " (" . $DB->sql_like('name', ':namesearch', false)
+                    . " OR " . $DB->sql_like('description', ':descsearch', false) . " )";
             $sqlparams['namesearch'] = '%' . $options['search'] . '%';
             $sqlparams['descsearch'] = '%' . $options['search'] . '%';
         }
@@ -809,7 +809,6 @@ class local_hub {
         $communication->confirmed = 1;
         $this->update_communication($communication);
     }
-
 
     /**
      * update a communication object
@@ -1136,11 +1135,10 @@ class local_hub {
             //update the communication url if it changed
             if (!empty($currentsiteinfo) and $siteinfo->url != $currentsiteinfo->url) {
                 $newcommunication = $this->get_communication(WSSERVER,
-                        REGISTEREDSITE, $emailinfo->oldurl);
+                                REGISTEREDSITE, $emailinfo->oldurl);
                 $newcommunication->remoteurl = $siteinfo->url;
                 $this->update_communication($newcommunication);
             }
-
         } else {
             $site = $this->add_site($siteinfo);
         }
@@ -1386,7 +1384,7 @@ class local_hub {
 
         $directory = make_upload_directory($userdir);
 
-        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".mbz");  
+        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".mbz");
     }
 
     /**
@@ -1661,12 +1659,12 @@ class local_hub {
 
         //permalink
         if (!empty($courses)) {
-             $permalinkparams = array();
+            $permalinkparams = array();
             //special case: course list is a unique course for a given ID
             if (!empty($courseid)) {
-                 $permalinkparams['courseid'] = $courseid;
+                $permalinkparams['courseid'] = $courseid;
             } else {
-                 $permalinkparams = $options;
+                $permalinkparams = $options;
             }
 
             $permalink = html_writer::tag('div',

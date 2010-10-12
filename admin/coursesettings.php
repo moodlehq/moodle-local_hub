@@ -64,6 +64,18 @@ if (!empty($fromform)) {
         $course->demourl = $fromform->demourl;
     }
 
+    $course->publishername = $fromform->publishername;
+    $course->publisheremail = $fromform->publisheremail;
+    $course->creatorname = $fromform->creatorname;
+    $course->contributornames = $fromform->contributornames;
+    $course->coverage = $fromform->coverage;
+    $course->licenceshortname = $fromform->licence;
+    $course->subject = $fromform->subject;
+    $course->audience = $fromform->audience;
+    $course->educationallevel = $fromform->educationallevel;
+    //setdefault is currently not supported by editor making this required field not usable MDL-20988
+//    $course->creatornotes = $fromform->creatornotes;
+
     $hub->update_course($course);
 
     redirect(new moodle_url('/local/hub/admin/managecourses.php',

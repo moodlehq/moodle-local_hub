@@ -439,6 +439,9 @@ class hub_site_settings_form extends moodleform {
 class hub_course_settings_form extends moodleform {
 
     public function definition() {
+        global $CFG;
+
+        $strrequired = get_string('required');
 
         //retrieve the publication
         $hub = new local_hub();
@@ -456,6 +459,7 @@ class hub_course_settings_form extends moodleform {
         $mform->addHelpButton('fullname',
                 'coursename', 'local_hub');
         $mform->setDefault('fullname', $course->fullname);
+        $mform->addRule('fullname', $strrequired, 'required', null, 'client');
 
         if (!empty($course->courseurl)) {
             $mform->addElement('text', 'courseurl',
@@ -464,6 +468,7 @@ class hub_course_settings_form extends moodleform {
             $mform->addHelpButton('courseurl',
                     'courseurl', 'local_hub');
             $mform->setDefault('courseurl', $course->courseurl);
+            $mform->addRule('courseurl', $strrequired, 'required', null, 'client');
         } else {
             $mform->addElement('text', 'demourl',
                     get_string('demourl', 'local_hub'),
@@ -471,6 +476,7 @@ class hub_course_settings_form extends moodleform {
             $mform->addHelpButton('demourl',
                     'demourl', 'local_hub');
             $mform->setDefault('demourl', $course->demourl);
+            $mform->addRule('demourl', $strrequired, 'required', null, 'client');
         }
 
         $mform->addElement('textarea', 'description',
@@ -478,6 +484,7 @@ class hub_course_settings_form extends moodleform {
                 array('rows' => 10, 'cols' => 56, 'class' => 'coursesettingstextarea'));
         $mform->addHelpButton('description',
                 'coursedesc', 'local_hub');
+        $mform->addRule('description', $strrequired, 'required', null, 'client');
         $mform->setDefault('description', $course->description);
 
         $languages = get_string_manager()->get_list_of_languages();
@@ -485,6 +492,101 @@ class hub_course_settings_form extends moodleform {
         $mform->addElement('select', 'language', get_string('courselang', 'local_hub'), $languages);
         $mform->setDefault('language', $course->language);
         $mform->addHelpButton('language', 'courselang', 'local_hub');
+
+        $mform->addElement('text', 'publishername', get_string('publishername', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
+        $mform->setDefault('publishername', $course->publishername);
+        $mform->addRule('publishername', $strrequired, 'required', null, 'client');
+        $mform->addHelpButton('publishername', 'publishername', 'local_hub');
+
+        $mform->addElement('text', 'publisheremail', get_string('publisheremail', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
+        $mform->setDefault('publisheremail', $course->publisheremail);
+        $mform->addRule('publisheremail', $strrequired, 'required', null, 'client');
+        $mform->addHelpButton('publisheremail', 'publisheremail', 'local_hub');
+
+        $mform->addElement('text', 'creatorname', get_string('creatorname', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
+        $mform->addRule('creatorname', $strrequired, 'required', null, 'client');
+        $mform->setType('creatorname', PARAM_TEXT);
+        $mform->setDefault('creatorname', $course->creatorname);
+        $mform->addHelpButton('creatorname', 'creatorname', 'local_hub');
+
+        $mform->addElement('text', 'contributornames', get_string('contributornames', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
+        $mform->setDefault('contributornames', $course->contributornames);
+        $mform->addHelpButton('contributornames', 'contributornames', 'local_hub');
+
+        $mform->addElement('text', 'coverage', get_string('tags', 'local_hub'),
+                array('class' => 'coursesettingstextfield'));
+        $mform->setType('coverage', PARAM_TEXT);
+        $mform->setDefault('coverage', $course->coverage);
+        $mform->addHelpButton('coverage', 'tags', 'local_hub');
+
+        require_once($CFG->libdir . "/licenselib.php");
+        $licensemanager = new license_manager();
+        $licences = $licensemanager->get_licenses();
+        $options = array();
+        foreach ($licences as $license) {
+            $options[$license->shortname] = get_string($license->shortname, 'license');
+        }
+        $mform->addElement('select', 'licence', get_string('licence', 'local_hub'), $options);
+        $mform->setDefault('licence', $course->licenceshortname);
+        unset($options);
+        $mform->addHelpButton('licence', 'licence', 'local_hub');
+        require_once($CFG->dirroot . "/course/publish/lib.php");
+        $publicationmanager = new course_publish_manager();
+        $options = $publicationmanager->get_sorted_subjects();
+
+        //prepare data for the smartselect
+        foreach ($options as $key => &$option) {
+            $keylength = strlen($key);
+            if ($keylength == 10) {
+                $option = "&nbsp;&nbsp;" . $option;
+            } else if ($keylength == 12) {
+                $option = "&nbsp;&nbsp;&nbsp;&nbsp;" . $option;
+            }
+        }
+
+        $options = array('none' => get_string('none', 'local_hub')) + $options;
+        $mform->addElement('select', 'subject', get_string('subject', 'local_hub'), $options);
+        unset($options);
+        $mform->addHelpButton('subject', 'subject', 'local_hub');
+        $mform->setDefault('subject', $course->subject);
+        $mform->addRule('subject', $strrequired, 'required', null, 'client');
+        $this->init_javascript_enhancement('subject', 'smartselect',
+                array('selectablecategories' => false, 'mode' => 'compact'));
+
+        $options = array();
+        $options[HUB_AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'local_hub');
+        $options[HUB_AUDIENCE_STUDENTS] = get_string('audiencestudents', 'local_hub');
+        $options[HUB_AUDIENCE_ADMINS] = get_string('audienceadmins', 'local_hub');
+        $mform->addElement('select', 'audience', get_string('audience', 'local_hub'), $options);
+        $mform->setDefault('audience', $course->audience);
+        unset($options);
+        $mform->addHelpButton('audience', 'audience', 'local_hub');
+
+        $options = array();
+        $options[HUB_EDULEVEL_PRIMARY] = get_string('edulevelprimary', 'local_hub');
+        $options[HUB_EDULEVEL_SECONDARY] = get_string('edulevelsecondary', 'local_hub');
+        $options[HUB_EDULEVEL_TERTIARY] = get_string('eduleveltertiary', 'local_hub');
+        $options[HUB_EDULEVEL_GOVERNMENT] = get_string('edulevelgovernment', 'local_hub');
+        $options[HUB_EDULEVEL_ASSOCIATION] = get_string('edulevelassociation', 'local_hub');
+        $options[HUB_EDULEVEL_CORPORATE] = get_string('edulevelcorporate', 'local_hub');
+        $options[HUB_EDULEVEL_OTHER] = get_string('edulevelother', 'local_hub');
+        $mform->addElement('select', 'educationallevel', get_string('educationallevel', 'local_hub'), $options);
+        $mform->setDefault('educationallevel', $course->educationallevel);
+        unset($options);
+        $mform->addHelpButton('educationallevel', 'educationallevel', 'local_hub');
+
+
+        //setdefault is currently not supported making this required field not usable MDL-20988
+//        $editoroptions = array('maxfiles' => 0, 'maxbytes' => 0, 'trusttext' => false, 'forcehttps' => false);
+//        $mform->addElement('editor', 'creatornotes', get_string('creatornotes', 'hub'), '', $editoroptions);
+//        $mform->addRule('creatornotes', $strrequired, 'required', null, 'client');
+//        $mform->setDefault('creatornotes', $course->creatornotes);
+//        $mform->setType('creatornotes', PARAM_CLEANHTML);
+//        $mform->addHelpButton('creatornotes', 'creatornotes', 'hub');
 
         $this->add_action_buttons(false, get_string('update'));
     }
