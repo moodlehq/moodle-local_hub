@@ -1386,7 +1386,7 @@ class local_hub {
 
         $directory = make_upload_directory($userdir);
 
-        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".mbz");
+        move_uploaded_file($file['tmp_name'], $directory . '/backup_' . $courseid . ".mbz");  
     }
 
     /**
@@ -1400,6 +1400,19 @@ class local_hub {
 
         $directory = "hub/$level1/$courseid";
         return file_exists($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".mbz");
+    }
+
+    /**
+     * TODO: temporary function till file download design done  (course unique ref not used)
+     * Return backup size
+     * @param int $courseid
+     * @return int
+     */
+    public function get_backup_size($courseid) {
+        global $CFG;
+        $level1 = floor($courseid / 1000) * 1000;
+        $directory = "hub/$level1/$courseid";
+        return filesize($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".mbz");
     }
 
     /**

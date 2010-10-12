@@ -593,6 +593,11 @@ class local_hub_external extends external_api {
                 $courseinfo['comments'][] = $coursecomment;
             }
 
+            //get backup size
+            if (!$course->enrollable and $hub->backup_exits($course->id)) {             
+                $courseinfo['backupsize'] = $hub->get_backup_size($course->id);
+            }
+
             $coursesresult[] = $courseinfo;           
         }
 
@@ -628,6 +633,7 @@ class local_hub_external extends external_api {
                         'creatornotesformat' => new external_value(PARAM_INTEGER, 'notes format'),
                         'demourl' => new external_value(PARAM_URL, 'demo URL', VALUE_OPTIONAL),
                         'courseurl' => new external_value(PARAM_URL, 'course URL', VALUE_OPTIONAL),
+                        'backupsize' => new external_value(PARAM_INT, 'course backup size in bytes', VALUE_OPTIONAL),
                         'enrollable' => new external_value(PARAM_BOOL, 'is the course enrollable'),
                         'screenshots' => new external_value(PARAM_INT, 'total number of screenshots'),
                         'timemodified' => new external_value(PARAM_INT, 'time of last modification - timestamp'),
