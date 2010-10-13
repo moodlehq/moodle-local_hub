@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,10 +24,9 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require('../../../config.php');
-require_once($CFG->dirroot.'/local/hub/lib.php');
-require_once($CFG->dirroot.'/course/publish/lib.php'); //HUB_SCREENSHOT_FILE_TYPE and HUB_BACKUP_FILE_TYPE
+require_once($CFG->dirroot . '/local/hub/lib.php');
+require_once($CFG->dirroot . '/course/publish/lib.php'); //HUB_SCREENSHOT_FILE_TYPE and HUB_BACKUP_FILE_TYPE
 
 
 $token = optional_param('token', '', PARAM_ALPHANUM);
@@ -38,8 +38,15 @@ $courseid = optional_param('courseid', '', PARAM_ALPHANUM);
 $hub = new local_hub();
 $communication = $hub->get_communication(WSSERVER, REGISTEREDSITE, '', $token);
 if (!empty($token) && !empty($communication) and get_config('local_hub', 'hubenabled')) {
+
+    //retrieve the site
+    $siteurl = $communication->remoteurl;
+    $site = $hub->get_site_by_url($siteurl);
+
     //check that the course exist
-    $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
+    $course = $DB->get_record('hub_course_directory',
+                    array('id' => $courseid, 'siteid' => $site->id));
+
     if (!empty($course) && !empty($_FILES)) {
         switch ($filetype) {
             case HUB_BACKUP_FILE_TYPE:
