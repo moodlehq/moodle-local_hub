@@ -39,17 +39,22 @@ if (!empty($courseid) and !empty($filetype) and get_config('local_hub', 'hubenab
     switch ($filetype) {
 
         case HUB_BACKUP_FILE_TYPE:
-            //check that the file is downloadable
+            //check that the file is downloadable / set as visible
             $course = $DB->get_record('hub_course_directory', array('id' => $courseid));
             if (!empty($course) &&
                     ($course->privacy or (!empty($USER) and is_siteadmin($USER->id)))) {
 
-                //check the hub password if the hub is set as PRIVATE
+                //if the hub is set as PRIVATE, allow the download
+                //either if the download is requested by a logged in user,
+                //either if the download is requested by a site (server side request)
                 $hubprivacy = get_config('local_hub', 'privacy');
-                $hubpassword = get_config('local_hub', 'password');
-                $password = optional_param('hubpassword', '', PARAM_TEXT);
-                if ($hubprivacy != HUBPRIVATE
-                        or (strcmp($hubpassword, $password) === 0)) {
+                $token = optional_param('token', '', PARAM_ALPHANUM);
+                if (!empty($token)) {
+                    // check the communication token
+                    $hub = new local_hub();
+                    $communication = $hub->get_communication(WSSERVER, REGISTEREDSITE, '', $token);
+                }
+                if ($hubprivacy != HUBPRIVATE or isloggedin() or !empty($communication)) {
                     $level1 = floor($courseid / 1000) * 1000;
                     $userdir = "hub/$level1/$courseid";
                     $remotemoodleurl = optional_param('remotemoodleurl', '', PARAM_URL);

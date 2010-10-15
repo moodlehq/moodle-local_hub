@@ -1423,8 +1423,12 @@ class local_hub {
 
         //check if the front page search should not be displayed
         //=> hand over the home page to Moodle index.php
+        //Two cases possible:
+        //1- the hub is private and the users are not logged in
+        //2- the hub is set with no search form on the login page
+        $hubprivacy = get_config('local_hub', 'privacy');
         $searchfornologin = get_config('local_hub', 'searchfornologin');
-        if (($searchfornologin === '0') and !isloggedin()) {
+        if (($hubprivacy == HUBPRIVATE or $searchfornologin === '0') and !isloggedin()) {
             return true;
         }
 
