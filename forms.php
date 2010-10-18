@@ -260,7 +260,14 @@ class course_search_form extends moodleform {
         $mform->addHelpButton('licence', 'licence', 'local_hub');
         $mform->setDefault('licence', $licence);
 
-        $languages = get_string_manager()->get_list_of_languages();
+        //search for only language that exist in the course DB
+        require_once($CFG->dirroot . "/local/hub/lib.php");
+        $hub = new local_hub();
+        $courseslanguages = $hub->get_courses_languages();
+        $alllanguages = get_string_manager()->get_list_of_languages();
+        foreach ($courseslanguages as $languagecode => $lang) {
+            $languages[$languagecode] = $alllanguages[$languagecode];
+        }
         asort($languages, SORT_LOCALE_STRING);
         $languages = array_merge(array('all' => get_string('any')), $languages);
         $mform->addElement('select', 'language', get_string('language'), $languages);
@@ -278,9 +285,7 @@ class course_search_form extends moodleform {
         $mform->setType('orderby', PARAM_ALPHA);
 
 
-        if (key_exists('adminform', $this->_customdata)) {
-            require_once($CFG->dirroot . "/local/hub/lib.php");
-            $hub = new local_hub();
+        if (key_exists('adminform', $this->_customdata)) {         
             $sites = $hub->get_sites();
             $siteids = array();
             foreach ($sites as $site) {

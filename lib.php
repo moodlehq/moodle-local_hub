@@ -1197,6 +1197,15 @@ class local_hub {
     }
 
     /**
+     * Get all existing course languages
+     */
+    function get_courses_languages() {
+        global $DB;
+        return $DB->get_records('hub_course_directory',
+                array('deleted' => 0), '', 'DISTINCT language');
+    }
+
+    /**
      * Create a user, role and token. Return the created token id.
      * @param string $rolename the role to create/use - will be assign to the user
      * @param string $servicename service to link to the new token
