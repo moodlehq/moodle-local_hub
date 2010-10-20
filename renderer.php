@@ -289,9 +289,9 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('href' => $courseurl, 'class' => 'hubcoursedownload'));
 
                 //create title html
-                $coursename = html_writer::tag('div', $course->fullname,
+                $coursename = html_writer::tag('h3', $course->fullname,
                                 array('class' => 'hubcoursetitle'));
-                $coursenamehtml = html_writer::tag('h3', $coursename,
+                $coursenamehtml = html_writer::tag('div', $coursename,
                                 $course->privacy ? array() : array('class' => 'dimmed_text'))
                         . $sitehtml;
 
