@@ -546,7 +546,7 @@ class local_hub {
             //retrieve rating
             $extracolumns = ' , r.ratingaverage, r.ratingcount ';
             $joinsql = ' LEFT JOIN (
-                                    SELECT itemid, AVG(rating) ratingaverage, COUNT(id) ratingcount
+                                    SELECT itemid, AVG(rating) AS ratingaverage, COUNT(id) AS ratingcount
                                     FROM {rating} GROUP BY itemid
                                   ) r ON r.itemid = c.id ';
 
