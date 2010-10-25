@@ -292,33 +292,22 @@ class local_hub_renderer extends plugin_renderer_base {
                 $coursename = html_writer::tag('h3', $course->fullname,
                                 array('class' => 'hubcoursetitle'));
                 $coursenamehtml = html_writer::tag('div', $coursename,
-                                $course->privacy ? array() : array('class' => 'dimmed_text'))
+                                $course->privacy ? array('class' => 'hubcoursetitlepanel') :
+                        array('class' => 'dimmed_text', 'class' => 'hubcoursetitlepanel'))
                         . $sitehtml;
 
                 // create screenshots html
                 $screenshothtml = '';
-
                 if (!empty($course->screenshots)) {
-                    $images = array();
                     $baseurl = new moodle_url($CFG->wwwroot . '/local/hub/webservice/download.php',
                                     array('courseid' => $course->id,
                                         'filetype' => HUB_SCREENSHOT_FILE_TYPE));
-                    for ($i = 1; $i <= $course->screenshots; $i = $i + 1) {
-                        $params['screenshotnumber'] = $i;
-                        $images[] = array(
-                            'thumburl' => new moodle_url($baseurl, array('screenshotnumber' => $i)),
-                            'imageurl' => new moodle_url($baseurl,
-                                    array('screenshotnumber' => $i, 'imagewidth' => 'original')),
-                            'title' => $course->fullname,
-                            'alt' => $course->fullname
-                        );
-                    }
-                    $imagegallery = new image_gallery($images, $course->shortname);
-                    $imagegallery->displayfirstimageonly = true;
-                    $screenshothtml = $this->output->render($imagegallery);
-                }
+                    $screenshothtml = html_writer::empty_tag('img',
+                                array('src' => $baseurl, 'alt' => $course->fullname));
+                }            
                 $coursescreenshot = html_writer::tag('div', $screenshothtml,
-                                array('class' => 'coursescreenshot'));
+                                array('class' => 'coursescreenshot',
+                                    'id' => 'image-' . $course->id));
 
 
                 //create description html

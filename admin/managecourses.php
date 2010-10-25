@@ -187,6 +187,21 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
     $courses = $hub->get_courses($options,
                     $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
 
+    //load javascript
+    $courseids = array(); //all result courses
+    $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
+    if (!empty($courses)) {
+        foreach ($courses as $course) {
+            $courseids[] = $course->id;
+            $courseimagenumbers[] = $course->screenshots;
+        }
+    }
+    $PAGE->requires->yui_module('moodle-block_community-imagegallery',
+            'M.blocks_community.init_imagegallery',
+            array(array('imageids' => $courseids,
+                    'imagenumbers' => $courseimagenumbers,
+                    'huburl' => $CFG->wwwroot)));
+
     //add site name to each courses
     $sites = $hub->get_sites();
 

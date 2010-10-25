@@ -110,6 +110,7 @@
 #page-admin-local-hub-admin-managecourses .hubbulkselect {margin-top: 13px; margin-left: 15px; float: left;}
 #page-admin-local-hub-admin-managecourses .hubbulkbutton { margin-left: 15px; margin-top: 13px;}
 #page-admin-local-hub-admin-managecourses .hubcourseoutcomes {}
+#page-admin-local-hub-admin-managecourses .hubcoursetitlepanel{margin-bottom: 6px;}
 
 /* COURSE SETTINGS */
 #page-admin-local-hub-admin-coursesettings .coursesettingstextarea {padding: 2px;}
@@ -232,3 +233,4 @@
     margin-right:6px;
     margin-top:15px;
 }
+#page-site-index .hubcoursetitlepanel{margin-bottom: 6px;}

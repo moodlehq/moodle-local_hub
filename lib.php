@@ -1567,6 +1567,21 @@ class local_hub {
 
         if (!empty($courses)) {
 
+            //load javascript
+            $courseids = array(); //all result courses
+            $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
+            if (!empty($courses)) {
+                foreach ($courses as $course) {
+                    $courseids[] = $course->id;
+                    $courseimagenumbers[] = $course->screenshots;
+                }
+            }
+            $PAGE->requires->yui_module('moodle-block_community-imagegallery',
+                    'M.blocks_community.init_imagegallery',
+                    array(array('imageids' => $courseids,
+                            'imagenumbers' => $courseimagenumbers,
+                            'huburl' => $CFG->wwwroot)));
+
             //get courses content
             foreach ($courses as $course) {
                 $contents = $this->get_course_contents($course->id);
