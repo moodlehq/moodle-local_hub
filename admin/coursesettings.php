@@ -73,8 +73,8 @@ if (!empty($fromform)) {
     $course->subject = $fromform->subject;
     $course->audience = $fromform->audience;
     $course->educationallevel = $fromform->educationallevel;
-    //setdefault is currently not supported by editor making this required field not usable MDL-20988
-//    $course->creatornotes = $fromform->creatornotes;
+    $course->creatornotes = $fromform->creatornotes['text'];
+    $course->creatornotesformat = $fromform->creatornotes['format'];
 
     $hub->update_course($course);
 

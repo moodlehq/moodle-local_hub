@@ -581,12 +581,18 @@ class hub_course_settings_form extends moodleform {
 
 
         //setdefault is currently not supported making this required field not usable MDL-20988
-//        $editoroptions = array('maxfiles' => 0, 'maxbytes' => 0, 'trusttext' => false, 'forcehttps' => false);
-//        $mform->addElement('editor', 'creatornotes', get_string('creatornotes', 'hub'), '', $editoroptions);
-//        $mform->addRule('creatornotes', $strrequired, 'required', null, 'client');
-//        $mform->setDefault('creatornotes', $course->creatornotes);
-//        $mform->setType('creatornotes', PARAM_CLEANHTML);
-//        $mform->addHelpButton('creatornotes', 'creatornotes', 'hub');
+        $editoroptions = array('maxfiles' => 0, 'maxbytes' => 0, 'trusttext' => false, 'forcehttps' => false);
+        $mform->addElement('editor', 'creatornotes', get_string('creatornotes', 'hub'), '', $editoroptions);
+        $mform->addRule('creatornotes', $strrequired, 'required', null, 'client');
+        $mform->setType('creatornotes', PARAM_CLEANHTML);
+        $mform->addHelpButton('creatornotes', 'creatornotes', 'hub');
+        
+        //set default value for creatornotes editor
+        $data = new stdClass();
+        $data->creatornotes = array();
+        $data->creatornotes['text'] = $course->creatornotes;
+        $data->creatornotes['format'] = $course->creatornotesformat;
+        $this->set_data($data);
 
         $this->add_action_buttons(false, get_string('update'));
     }
