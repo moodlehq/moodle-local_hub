@@ -136,7 +136,7 @@ class course_search_form extends moodleform {
         if (isset($this->_customdata['language'])) {
             $language = $this->_customdata['language'];
         } else {
-            $language = 'all';
+            $language = current_language();
         }
         if (isset($this->_customdata['educationallevel'])) {
             $educationallevel = $this->_customdata['educationallevel'];
