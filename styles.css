@@ -42,7 +42,7 @@
 #page-admin-local-hub-admin-managecourses .courselinks {float: right;width: 180px}
 #page-admin-local-hub-admin-managecourses .hubadminoperations {}
 #page-admin-local-hub-admin-managecourses .courseoperations {margin-top:9px; text-align:center}
-#page-admin-local-hub-admin-managecourses .coursescreenshot {text-align:center;}
+#page-admin-local-hub-admin-managecourses .coursescreenshot {text-align:center; cursor: pointer;}
 #page-admin-local-hub-admin-managecourses .fullhubcourse {margin-bottom: 20px;}
 #page-admin-local-hub-admin-managecourses .hubcoursedelete {float: left;}
 #page-admin-local-hub-admin-managecourses .hubcoursevisible {float: left;padding-right: 4px;}
@@ -120,7 +120,7 @@
 /* FRONT PAGE */
 #page-site-index .additionaldesc {font-size: 80%; color: #B8860B;}
 #page-site-index .comment-link {font-size: 80%; color: #555555;}
-#page-site-index .coursescreenshot {text-align:center;}
+#page-site-index .coursescreenshot {text-align:center; cursor: pointer;}
 #page-site-index .pagingbar {text-align: center;}
 #page-site-index .coursecomment {float: right;}
 #page-site-index .courseoperations {margin-top:9px; text-align:center}
