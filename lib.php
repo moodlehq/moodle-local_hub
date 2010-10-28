@@ -1507,7 +1507,7 @@ class local_hub {
             $courses = $this->get_courses($options);
             $coursetotal = 1;
         } else {
-            if (!empty($fromform)) {
+            if (!empty($fromform) and optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)) {
                 $downloadable = optional_param('downloadable', false, PARAM_INTEGER);
 
                 if (!empty($fromform->coverage)) {
@@ -1570,12 +1570,10 @@ class local_hub {
             //load javascript
             $courseids = array(); //all result courses
             $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
-            if (!empty($courses)) {
-                foreach ($courses as $course) {
+            foreach ($courses as $course) {
                     $courseids[] = $course->id;
                     $courseimagenumbers[] = $course->screenshots;
-                }
-            }
+            }         
             $PAGE->requires->yui_module('moodle-block_community-imagegallery',
                     'M.blocks_community.init_imagegallery',
                     array(array('imageids' => $courseids,
@@ -1665,11 +1663,6 @@ class local_hub {
         $coursesearchform->display();
 
         //Course listing
-        //set to course to null if you didn't do any search (so the render doesn't display 'no search result')
-        if (!optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)
-                and empty($courseid)) {
-            $courses = null;
-        }
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
         echo highlight($search, $renderer->course_list($courses));
 
