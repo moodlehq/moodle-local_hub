@@ -1664,13 +1664,16 @@ class local_hub {
 
         //Course listing
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
-        echo highlight($search, $renderer->course_list($courses));
+                                      //and paramlink
+        if (!empty($courses)) {
+            echo highlight($search, $renderer->course_list($courses));
 
-        //paging bar
-        if ($coursetotal > HUB_COURSE_PER_PAGE) {
-            $baseurl = new moodle_url('', $options);
-            $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
-            echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+            //paging bar
+            if ($coursetotal > HUB_COURSE_PER_PAGE) {
+                $baseurl = new moodle_url('', $options);
+                $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
+                echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+            }
         }
 
         //rss icon
