@@ -75,13 +75,13 @@ if (!empty($fromform)) {
     $course->educationallevel = $fromform->educationallevel;
     $course->creatornotes = $fromform->creatornotes['text'];
     $course->creatornotesformat = $fromform->creatornotes['format'];
+    $course->privacy = empty($fromform->visible)?0:$fromform->visible;
 
     $hub->update_course($course);
 
     redirect(new moodle_url('/local/hub/admin/managecourses.php',
-            array('coursesettings' => $course->fullname, 'sesskey' => sesskey(),
-                'search' => $course->fullname, 'visibility' => COURSEVISIBILITY_ALL,
-                'lastmodified' => 'all')));
+            array('coursesettings' => $course->fullname, 
+                'sesskey' => sesskey(), 'courseid' => $course->id)));
 }
 
 //OUTPUT

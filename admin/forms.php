@@ -453,6 +453,10 @@ class hub_course_settings_form extends moodleform {
 
         $mform->addElement('hidden', 'id', $course->id);
 
+        $mform->addElement('checkbox', 'visible', get_string('coursevisibility', 'local_hub'));
+        $mform->addHelpButton('visible', 'coursevisibility', 'local_hub');
+        $mform->setDefault('visible', $course->privacy);
+
         $mform->addElement('text', 'fullname',
                 get_string('coursename', 'local_hub'),
                 array('class' => 'coursesettingstextfield'));

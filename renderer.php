@@ -205,7 +205,7 @@ class local_hub_renderer extends plugin_renderer_base {
             }
         } else {
             $courseiteration = 0;
-            foreach ($courses as $course) {
+            foreach ($courses as $course) {             
                 $courseiteration = $courseiteration + 1;
 
                 //create html specific to hub administrator
@@ -237,10 +237,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     }
                     $hideimgtag = html_writer::empty_tag('img', $imgparams);
                     $visibleurlparams = array('sesskey' => sesskey(), 'visible' => $makevisible,
-                        'id' => $course->id);
-                    if (!empty($optionalurlparams)) {
-                        $visibleurlparams = array_merge($visibleurlparams, $optionalurlparams);
-                    }
+                        'courseid' => $course->id);
                     $visibleurl = new moodle_url("/local/hub/admin/managecourses.php",
                                     $visibleurlparams);
                     $visiblehtml = html_writer::tag('div',
@@ -251,7 +248,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     $settingsurl = new moodle_url("/local/hub/admin/coursesettings.php",
                                     array('sesskey' => sesskey(), 'id' => $course->id));
                     $settingslinkhtml = html_writer::tag('div',
-                                    html_writer::tag('a', get_string('settings'),
+                                    html_writer::tag('a', get_string('edit'),
                                             array('href' => $settingsurl)),
                                     array('class' => 'hubcoursesettings'));
                 } else {

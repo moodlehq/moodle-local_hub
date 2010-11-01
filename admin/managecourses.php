@@ -44,7 +44,7 @@ if (!extension_loaded('xmlrpc')) {
 $hub = new local_hub();
 $renderer = $PAGE->get_renderer('local_hub');
 
-//bulk operations
+/// BULK OPERATIONS
 $bulkoperation = optional_param('bulkselect', false, PARAM_ALPHANUM);
 $confirm = optional_param('confirm', false, PARAM_INTEGER);
 if (!empty($bulkoperation) and confirm_sesskey()) {
@@ -56,8 +56,11 @@ if (!empty($bulkoperation) and confirm_sesskey()) {
         }
     }
     if (!$confirm) {
-        $contenthtml = $renderer->course_bulk_operation_confirmation($bulkcourses, $bulkoperation);
-        $skipmainform = true;
+        echo $OUTPUT->header();
+        echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
+        echo $renderer->course_bulk_operation_confirmation($bulkcourses, $bulkoperation);
+        echo $OUTPUT->footer();
+        die();
     } else if ($bulkoperation == 'bulkdelete') {
         foreach ($bulkcourses as $bulkcourse) {
             $hub->delete_course($bulkcourse->id);
@@ -75,45 +78,60 @@ if (!empty($bulkoperation) and confirm_sesskey()) {
 }
 
 
-/// Check if the page has been called by visible icon
+/// VISIBLE OPERATION
+$courseid = optional_param('courseid', null, PARAM_INT);
 $visible = optional_param('visible', -1, PARAM_INTEGER);
 if ($visible != -1 and confirm_sesskey()) {
-    $id = optional_param('id', '', PARAM_INTEGER);
-    $course = $hub->get_course($id);
+    $course = $hub->get_course($courseid);
     if (!empty($course)) {
         $course->privacy = $visible;
         $hub->update_course($course);
+        if (!empty($course->privacy)) {
+            $notificationstring = get_string('coursevisible', 'local_hub', $course->fullname);
+        } else {
+            $notificationstring = get_string('coursenotvisible', 'local_hub', $course->fullname);
+        }
+        $notification = $OUTPUT->notification($notificationstring, 'notifysuccess');
     }
 }
 
 $search = optional_param('search', '', PARAM_TEXT);
+$options = array();
+$courses = null;
 
-if (empty($skipmainform)) { //all other cases we go back to site list page (no need confirmation)
-    $fromformdata['coverage'] = optional_param('coverage', 'all', PARAM_TEXT);
-    $fromformdata['licence'] = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['siteid'] = optional_param('siteid', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['lastmodified'] = optional_param('lastmodified', HUB_LASTMODIFIED_WEEK, PARAM_ALPHANUMEXT);
-    $fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
-    $fromformdata['visibility'] = optional_param('visibility', COURSEVISIBILITY_NOTVISIBLE, PARAM_ALPHANUMEXT);
-    $fromformdata['downloadable'] = optional_param('downloadable', 'all', PARAM_ALPHANUM);
-    $fromformdata['orderby'] = optional_param('orderby', 'newest', PARAM_ALPHA);
-    $fromformdata['adminform'] = 1;
-    $fromformdata['search'] = $search;
+/// FORM DATA
+$fromformdata['coverage'] = optional_param('coverage', 'all', PARAM_TEXT);
+$fromformdata['licence'] = optional_param('licence', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['subject'] = optional_param('subject', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['siteid'] = optional_param('siteid', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['lastmodified'] = optional_param('lastmodified', HUB_LASTMODIFIED_WEEK, PARAM_ALPHANUMEXT);
+$fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
+$fromformdata['visibility'] = optional_param('visibility', COURSEVISIBILITY_NOTVISIBLE, PARAM_ALPHANUMEXT);
+$fromformdata['downloadable'] = optional_param('downloadable', 'all', PARAM_ALPHANUM);
+$fromformdata['orderby'] = optional_param('orderby', 'newest', PARAM_ALPHA);
+$fromformdata['adminform'] = 1;
+$fromformdata['search'] = $search;
 
-    //forms
-    $coursesearchform = new course_search_form('', $fromformdata);
-    $fromform = $coursesearchform->get_data();
+$coursesearchform = new course_search_form('', $fromformdata);
+$fromform = $coursesearchform->get_data();
 
-    $coursesearchform->set_data($fromformdata);
-    $fromform = (object) $fromformdata;
+$coursesearchform->set_data($fromformdata);
+$fromform = (object) $fromformdata;
 
-    //Retrieve courses by web service
-    $courses = null;
-    $options = array();
 
+/// COURSE DATA
+if (!empty($courseid)) {
+    $options['ids'] = array($courseid);
+    $options['downloadable'] = true;
+    $options['enrollable'] = true;
+    $courses = $hub->get_courses($options);
+    unset($options['ids']);
+    unset($options['downloadable']);
+    unset($options['enrollable']);
+    $coursetotal = 1;
+} else {
     if (!empty($fromform->coverage)) {
         $options['coverage'] = $fromform->coverage;
     }
@@ -186,69 +204,78 @@ if (empty($skipmainform)) { //all other cases we go back to site list page (no n
 
     $courses = $hub->get_courses($options,
                     $page * HUB_COURSE_PER_PAGE, HUB_COURSE_PER_PAGE);
-
-    //load javascript
-    $courseids = array(); //all result courses
-    $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
-    if (!empty($courses)) {
-        foreach ($courses as $course) {
-            $courseids[] = $course->id;
-            $courseimagenumbers[] = $course->screenshots;
-        }
-    }
-    $PAGE->requires->yui_module('moodle-block_community-imagegallery',
-            'M.blocks_community.init_imagegallery',
-            array(array('imageids' => $courseids,
-                    'imagenumbers' => $courseimagenumbers,
-                    'huburl' => $CFG->wwwroot)));
-
-    //add site name to each courses
-    $sites = $hub->get_sites();
-
-    foreach ($courses as &$course) {
-        $course->site = $sites[$course->siteid];
-    }
-
+   
     $coursetotal = $hub->get_courses($options, 0, 0, true);
 
-    //get courses content
-    foreach ($courses as &$course) {
-        $contents = $hub->get_course_contents($course->id);
-        if (!empty($contents)) {
-            foreach ($contents as $content) {
-                $course->contents[] = $content;
-            }
+    //$options will be used to call the same url with same GET param
+    //$options was formatted for get_courses called
+    $options['downloadable'] = $fromform->downloadable;
+    $options['lastmodified'] = $fromform->lastmodified;
+}
+
+
+//complete course data with site name and course content
+$sites = $hub->get_sites();
+$courseids = array(); //all result courses
+$courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
+foreach ($courses as &$course) {
+    //get site name for each courses
+    $course->site = $sites[$course->siteid];
+
+    //get course content for each course
+    $contents = $hub->get_course_contents($course->id);
+    if (!empty($contents)) {
+        foreach ($contents as $content) {
+            $course->contents[] = $content;
         }
     }
 
-/// (search, none language, no onlyvisible)
-    $options['search'] = $search;
-    //$options['downloadable'] = $downloadable;
-    if (!empty($fromform)) {
-
-        $options['lastmodified'] = $fromform->lastmodified;
-    }
-    $options['downloadable'] = $fromform->downloadable; //need to overwrite download, could be == 'all'
-    $contenthtml = $renderer->course_list($courses, true, $options);
-
-    //paging bar
-    if ($coursetotal > HUB_COURSE_PER_PAGE) {
-        $baseurl = new moodle_url('', $options);
-        $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
-        $contenthtml .= html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
-    }
+    //some information for the YUI imagegallery javascript
+    $courseids[] = $course->id;
+    $courseimagenumbers[] = $course->screenshots;
 }
 
+
+
+/// OUTPUT
+
+//load javascript for YUI imagegallery javascript screenshot
+$PAGE->requires->yui_module('moodle-block_community-imagegallery',
+        'M.blocks_community.init_imagegallery',
+        array(array('imageids' => $courseids,
+                'imagenumbers' => $courseimagenumbers,
+                'huburl' => $CFG->wwwroot)));
+
+//display header
 echo $OUTPUT->header();
+
 //display a message if we come back from site settings page
 $updatecourse = optional_param('coursesettings', '', PARAM_TEXT);
 if (!empty($updatecourse) and confirm_sesskey()) {
     echo $OUTPUT->notification(get_string('coursesettingsupdated', 'local_hub', $updatecourse),
             'notifysuccess');
 }
-echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
-if (empty($skipmainform)) {
-    $coursesearchform->display();
+
+//display some notification
+if (!empty($notification)) {
+    echo $notification;
 }
-echo $contenthtml;
+
+//display heading title
+echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
+
+//display course search form
+$coursesearchform->display();
+
+//display course result list
+echo $renderer->course_list($courses, true, $options);
+
+//display paging bar
+if ($coursetotal > HUB_COURSE_PER_PAGE) {
+    $baseurl = new moodle_url('', $options);
+    $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
+    echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+}
+
+//display footer
 echo $OUTPUT->footer();
