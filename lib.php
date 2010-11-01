@@ -1665,6 +1665,12 @@ class local_hub {
         //Course listing
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
                                       //and paramlink
+
+        //set language value back to 'all'
+        if (!key_exists('language', $options)) {
+            $options['language'] = 'all';
+        }
+
         if (!empty($courses)) {
             echo highlight($search, $renderer->course_list($courses));
 
