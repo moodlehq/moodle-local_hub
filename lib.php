@@ -1729,10 +1729,10 @@ class local_hub {
         if (!key_exists('language', $options)) {
             $options['language'] = 'all';
         }
+       
+        echo highlight($search, $renderer->course_list($courses));
 
         if (!empty($courses)) {
-            echo highlight($search, $renderer->course_list($courses));
-
             //paging bar
             if ($coursetotal > HUB_COURSE_PER_PAGE) {
                 $baseurl = new moodle_url('', $options);
