@@ -598,6 +598,30 @@ class hub_course_settings_form extends moodleform {
         $data->creatornotes['format'] = $course->creatornotesformat;
         $this->set_data($data);
 
+        //select screenshots to keep
+        for ($screenshotnumber = 1; $screenshotnumber <= $course->screenshots; $screenshotnumber++) {
+            $baseurl = new moodle_url($CFG->wwwroot . '/local/hub/webservice/download.php',
+                                    array('courseid' => $course->id,
+                                        'filetype' => HUB_SCREENSHOT_FILE_TYPE,
+                                        'screenshotnumber' => $screenshotnumber,
+                                        'alwaysreload' => time()));
+            $screenshothtml = html_writer::empty_tag('img',
+                            array('src' => $baseurl, 'alt' => $course->fullname));
+            $coursescreenshot = html_writer::tag('div', $screenshothtml,
+                            array('class' => ''));
+            $mform->addElement('checkbox', 'screenshot_' . $screenshotnumber,
+                    get_string('keepscreenshot', 'local_hub'), $coursescreenshot);
+            $mform->addHelpButton('screenshot_' . $screenshotnumber, 'keepscreenshot', 'local_hub');
+            $mform->setDefault('screenshot_' . $screenshotnumber, 1);
+        }
+
+        $mform->addElement('filemanager', 'addscreenshots', get_string('addscreenshots', 'local_hub'), null,
+                array('subdirs' => 0,
+                    'maxbytes' => 1000000,
+                    'maxfiles' => MAXSCREENSHOTSNUMBER
+        ));
+        $mform->addHelpButton('addscreenshots', 'addscreenshots', 'local_hub');
+
         $this->add_action_buttons(false, get_string('update'));
     }
 

@@ -54,7 +54,9 @@ $coursesettingsform = new hub_course_settings_form('',
 $fromform = $coursesettingsform->get_data();
 
 //Save settings and redirect to search site page
-if (!empty($fromform)) {    
+if (!empty($fromform) and confirm_sesskey()) {
+
+    //update the course values
     $course->fullname = $fromform->fullname;
     $course->description = $fromform->description;
     $course->language = $fromform->language;
@@ -63,7 +65,6 @@ if (!empty($fromform)) {
     } else {
         $course->demourl = $fromform->demourl;
     }
-
     $course->publishername = $fromform->publishername;
     $course->publisheremail = $fromform->publisheremail;
     $course->creatorname = $fromform->creatorname;
@@ -77,10 +78,45 @@ if (!empty($fromform)) {
     $course->creatornotesformat = $fromform->creatornotes['format'];
     $course->privacy = empty($fromform->visible)?0:$fromform->visible;
 
+    //delete screenshots that are not needed anymore
+    for ($screenshotnumber = 1; $screenshotnumber <= $course->screenshots; $screenshotnumber++) {
+        if(!isset($fromform->{'screenshot_' . $screenshotnumber})) {
+            $hub->delete_screenshot($course->id, $screenshotnumber);
+        }
+    }
+
+    //sanitize course screenshots
+    $screenshottotal = $hub->sanitize_screenshots($course->id);
+
+    //save the new screenshots and update the course screenshots value
+    if (!empty($fromform->addscreenshots)) {
+        $screenshots = $fromform->addscreenshots;
+        $fs = get_file_storage();
+        $files = $fs->get_area_files(get_context_instance(CONTEXT_USER, $USER->id)->id, 'user', 'draft', $screenshots);
+        if (!empty($files)) {
+            $level1 = floor($course->id / 1000) * 1000;
+            $directory = "hub/$level1/$course->id";
+            foreach ($files as $file) {
+                if ($file->is_valid_image()) {
+                    $screenshottotal = $screenshottotal + 1;
+                    if ($screenshottotal <= MAXSCREENSHOTSNUMBER) {
+                        $pathname = $CFG->dataroot . '/' . $directory . '/screenshot_' . $course->id . "_" . $screenshottotal;
+                        $file->copy_content_to($pathname);
+                    } else {
+                        throw new moodle_exception('trytoaddtoomanyscreenshots', 'local_hub');
+                    }
+                }
+            }
+        }
+    }
+    $course->screenshots = $screenshottotal;
+
+    //update the course in the DB
     $hub->update_course($course);
 
+    //redirect to the search form
     redirect(new moodle_url('/local/hub/admin/managecourses.php',
-            array('coursesettings' => $course->fullname, 
+            array('coursesettings' => $course->fullname,
                 'sesskey' => sesskey(), 'courseid' => $course->id)));
 }
 

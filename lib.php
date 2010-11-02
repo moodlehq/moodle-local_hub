@@ -1334,7 +1334,7 @@ class local_hub {
     /**
      * TODO: this is temporary till the way to send file by ws is defined
      * Add a screenshots to a course
-     * @param array $file
+     * @param array $file - $file['tmp_name'] should be the filename
      * @param integer $courseid
      */
     public function add_screenshot($file, $courseid, $screenshotnumber) {
@@ -1363,6 +1363,19 @@ class local_hub {
     }
 
     /**
+     * Delete a screenshot
+     * @param int $courseid
+     * @param int $screenshotnumber
+     */
+    public function delete_screenshot($courseid, $screenshotnumber) {
+        global $CFG;
+        $level1 = floor($courseid / 1000) * 1000;
+        $directory = "hub/$level1/$courseid";
+        $filepath = $CFG->dataroot . '/' . $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber;
+        unlink($filepath);
+    }
+
+    /**
      * TODO: temporary,  add_screenshot() function
      * Check if a screenshot exists
      * @param int $courseid
@@ -1375,6 +1388,52 @@ class local_hub {
 
         $directory = "hub/$level1/$courseid";
         return file_exists($CFG->dataroot . '/' . $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
+    }
+
+    /**
+     * Sanitize screenshot for a course
+     * => rename screenshot files from 1 to number of screenshot files
+     * => update database screenshots field (with the number of screenshot files)
+     * @param int $courseid
+     * @return $newscreenshotnumber int the new screenshot total
+     */
+    public function sanitize_screenshots($courseid) {
+        global $CFG, $DB;
+        $level1 = floor($courseid / 1000) * 1000;
+        $directory = "hub/$level1/$courseid";
+
+        $existingscreenshots = array();
+        for ($screenshotnumber = 1; $screenshotnumber <= MAXSCREENSHOTSNUMBER; $screenshotnumber++) {
+            if ($this->screenshot_exists($courseid, $screenshotnumber)) {
+                $existingscreenshots[] = $screenshotnumber;
+            }
+        }
+
+        //create tmp screenshot with the right number + delete old screenshot
+        $newscreenshotnumber = 0;
+        foreach ($existingscreenshots as $screenshotnumber) {
+            $newscreenshotnumber++;
+            $filepath = $CFG->dataroot . '/' . $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber;
+            copy($filepath,
+                    $CFG->dataroot . '/' . $directory . '/tmp_screenshot_' . $courseid . "_" . $newscreenshotnumber);
+            unlink($filepath);
+        }
+
+        //rename the tmp screenshot into real screenshot
+        for ($screenshotnumber = 1; $screenshotnumber <= $newscreenshotnumber; $screenshotnumber++) {
+            $filepath = $CFG->dataroot . '/' . $directory . '/tmp_screenshot_' . $courseid . "_" . $screenshotnumber;
+            copy($filepath,
+                    $CFG->dataroot . '/' . $directory . '/screenshot_' . $courseid . "_" . $screenshotnumber);
+            unlink($filepath);
+        }
+
+        //update course screenshots field
+        $course = new stdClass();
+        $course->id = $courseid;
+        $course->screenshots = $newscreenshotnumber;
+        $DB->update_record('hub_course_directory', $course);
+
+        return $newscreenshotnumber;
     }
 
     /**

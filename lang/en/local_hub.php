@@ -27,6 +27,8 @@ $string['additionaldesc'] = 'Courses: {$a->courses} - Users: {$a->users} - Enrol
     - Questions: {$a->questions} - Average number of participants: {$a->participantnumberaverage} - Average number of course modules: {$a->modulenumberaverage}';
 $string['additionaladmindesc'] = 'Registered: {$a->timeregistered} - Modified: {$a->timemodified} - Privacy: {$a->privacy} -
     Contactable: {$a->contactable} - Email: {$a->emailalert}';
+$string['addscreenshots'] = 'Add screenshots';
+$string['addscreenshots_help'] = 'Add new screenshots.';
 $string['allowglobalsearch'] = 'Publish this hub and allow global search of all courses';
 $string['allowpublicsearch'] = 'Publish this hub so people can join it';
 $string['audience'] = 'Designed for';
@@ -186,6 +188,8 @@ $string['image'] = 'Image';
 $string['information'] = 'Information';
 $string['keepcurrentimage'] = 'Keep current image';
 $string['keepcurrentimage_help'] = 'Keep the current image saved on the disk. Even if you choose an image below, the current image will be kept. If you uncheck this, and do not select an new image, the current image will just be deleted.';
+$string['keepscreenshot'] = 'Keep screenshot';
+$string['keepscreenshot_help'] = 'Uncheck it to delete the screenshot.';
 $string['keywords'] = 'Keywords';
 $string['keywords_help'] = 'You can search for courses containing specific text in the name, description and other fields of the database.';
 $string['language'] = 'Language';
