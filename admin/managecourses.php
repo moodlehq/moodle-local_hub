@@ -207,10 +207,11 @@ if (!empty($courseid)) {
    
     $coursetotal = $hub->get_courses($options, 0, 0, true);
 
-    //$options will be used to call the same url with same GET param
-    //$options was formatted for get_courses called
+    //$options will be reused to call the same url with same GET param,
+    //need to reinitialize
     $options['downloadable'] = $fromform->downloadable;
     $options['lastmodified'] = $fromform->lastmodified;
+    $options['orderby'] = $fromform->orderby;
 }
 
 

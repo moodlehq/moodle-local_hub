@@ -81,7 +81,9 @@ if (!empty($fromform) and confirm_sesskey()) {
     //delete screenshots that are not needed anymore
     for ($screenshotnumber = 1; $screenshotnumber <= $course->screenshots; $screenshotnumber++) {
         if(!isset($fromform->{'screenshot_' . $screenshotnumber})) {
-            $hub->delete_screenshot($course->id, $screenshotnumber);
+            if ($hub->screenshot_exists($course->id, $screenshotnumber)) {
+                $hub->delete_screenshot($course->id, $screenshotnumber);
+            }
         }
     }
 
