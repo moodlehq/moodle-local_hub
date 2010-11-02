@@ -44,7 +44,7 @@ $PAGE->navbar->add(get_string('administrationsite'));
 $PAGE->navbar->add(get_string('hub', 'local_hub'));
 $PAGE->navbar->add(get_string('managecourses', 'local_hub'),
         new moodle_url('/local/hub/admin/managecourses.php',
-                array('search' => $course->fullname, 'sesskey' => sesskey())));
+                array('sesskey' => sesskey())));
 $PAGE->navbar->add(get_string('coursesettings', 'local_hub'),
         new moodle_url('/local/hub/admin/coursesettings.php', array('id' => $id)));
 
