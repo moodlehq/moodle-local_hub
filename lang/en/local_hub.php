@@ -311,6 +311,7 @@ $string['selecthub'] = 'Select hub';
 $string['sendfollowinginfo'] = 'Send the following information:';
 $string['sendmessage'] = 'Send message';
 $string['sentto'] = 'Sent to';
+$string['seecreatornotes'] = 'See creator notes';
 $string['settings'] = 'Settings';
 $string['settingsupdated'] = 'Settings have been updated.';
 $string['site'] = 'Site';

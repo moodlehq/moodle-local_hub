@@ -112,6 +112,22 @@
 #page-admin-local-hub-admin-managecourses .hubcourseoutcomes {}
 #page-admin-local-hub-admin-managecourses .hubcoursetitlepanel{margin-bottom: 6px;}
 #page-admin-local-hub-admin-managecourses .pagingbar a {padding-left: 0px;}
+#page-admin-local-hub-admin-managecourses .creatornotestitle {
+    color:#B8860B;
+    font-size:80%;
+    font-weight:bold;
+    margin-top:5px;
+}
+#page-admin-local-hub-admin-managecourses .creatornotes {
+    color:#B8860B;
+    font-size:80%;
+}
+#page-admin-local-hub-admin-managecourses .seecreatornotes {
+    color:#B8860B;
+    font-size:80%;
+    font-weight:bold;
+    cursor: pointer;
+}
 
 /* COURSE SETTINGS */
 #page-admin-local-hub-admin-coursesettings .coursesettingstextarea {padding: 2px;}
@@ -129,9 +145,9 @@
 #page-site-index .courselinks {float: right;width: 180px}
 #page-site-index .ratingaggregate {float: left; padding-right: 4px;}
 #page-site-index .hubcourserating { padding-top: 3px; font-size: 80%; font-weight: bold;
-   color:#8B8989;}
+                                    color:#8B8989;}
 #page-site-index .hubcoursecomments { padding-top: 3px; 
-   color:#8B8989;}
+                                      color:#8B8989;}
 #page-site-index .coursedescription {width: 70%; float: left;}
 #page-site-index .hubcoursetitle {
     -webkit-box-shadow: rgba(0, 0, 0, 0.546875) 0px 0px 4px;
@@ -200,15 +216,15 @@
 #page-site-index  .coursesitelink {}
 
 #page-site-index .norating {
-   font-weight: bold;
-   color:#8B8989;
-   font-size: 80%;
+    font-weight: bold;
+    color:#8B8989;
+    font-size: 80%;
 }
 
 #page-site-index .nocomments {
-   font-weight: bold;
-   color:#8B8989;
-   font-size: 80%;
+    font-weight: bold;
+    color:#8B8989;
+    font-size: 80%;
 }
 
 #page-site-index .hubcoursemail {
@@ -237,36 +253,52 @@
 #page-site-index .hubcoursetitlepanel{margin-bottom: 6px;}
 
 #page-site-index .moodle-dialogue {
--moz-border-radius:12px 12px 12px 12px;
--moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.6);
--webkit-border-radius:12px 12px 12px 12px;
--webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.6);
-border-width:0 0 0 0;
+    -moz-border-radius:12px 12px 12px 12px;
+    -moz-box-shadow:0 1px 3px rgba(0, 0, 0, 0.6);
+    -webkit-border-radius:12px 12px 12px 12px;
+    -webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.6);
+    border-width:0 0 0 0;
 }
 
 #page-site-index .moodle-dialogue-base .moodle-dialogue-wrap {
--moz-border-radius:12px 12px 0px 0px;
--webkit-border-radius:12px 12px 0px 0px;
-background-color:#FFFFFF;
-border:1px solid #555555;
+    -moz-border-radius:12px 12px 0px 0px;
+    -webkit-border-radius:12px 12px 0px 0px;
+    background-color:#FFFFFF;
+    border:1px solid #555555;
 }
 
 #page-site-index .moodle-dialogue-base .moodle-dialogue-hd {
--moz-border-radius:12px 12px 0 0;
--webkit-border-radius:12px 12px 0 0;
-background-color:#F6F6F6;
-border:1px solid #CCCCCC;
-overflow: auto;
+    -moz-border-radius:12px 12px 0 0;
+    -webkit-border-radius:12px 12px 0 0;
+    background-color:#F6F6F6;
+    border:1px solid #CCCCCC;
+    overflow: auto;
 }
 
 #page-site-index .moodle-dialogue-base .moodle-dialogue-bd {
-padding:0px;
-margin-bottom: -5px;
+    padding:0px;
+    margin-bottom: -5px;
 }
 
 #page-site-index .moodle-dialogue-base .closebutton {
-margin-top:4px;
-width:30px;
+    margin-top:4px;
+    width:30px;
 }
 
 #page-site-index .pagingbar a {padding-left: 0px;}
+#page-site-index .creatornotestitle {
+    color:#B8860B;
+    font-size:80%;
+    font-weight:bold;
+    margin-top:5px;
+}
+#page-site-index .creatornotes {
+    color:#B8860B;
+    font-size:80%;
+}
+#page-site-index .seecreatornotes {
+    color:#B8860B;
+    font-size:80%;
+    font-weight:bold;
+    cursor: pointer;
+}

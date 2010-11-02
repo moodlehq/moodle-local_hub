@@ -258,9 +258,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     if (is_siteadmin ()) {
                         //create Edit course link
                         $managecourseurl = new moodle_url($CFG->wwwroot . '/local/hub/admin/managecourses.php',
-                                        array('search' => $course->fullname,
-                                            'sesskey' => sesskey(), 'visibility' => COURSEVISIBILITY_ALL,
-                                            'lastmodified' => 'all'));
+                                        array('courseid' => $course->id, 'sesskey' => sesskey()));
                         $courseatag = html_writer::tag('a', get_string('editcourse', 'local_hub'),
                                         array('href' => $managecourseurl));
                         $sitehtml = html_writer::tag('div', $courseatag,
@@ -443,6 +441,21 @@ class local_hub_renderer extends plugin_renderer_base {
                     }
                 }
 
+                //creator notes
+                if (count($courses) == 1) {
+                    //creator notes
+                    $creatornotes = html_writer::tag('div', get_string('creatornotes', 'local_hub') . ':',
+                            array('class' => 'creatornotestitle'));
+                    $creatornotes .= html_writer::tag('div',
+                            format_text($course->creatornotes, $course->creatornotesformat),
+                            array('class' => 'creatornotes'));
+                } else {
+                    //more details button
+                    $creatornotesurl = new moodle_url('', array('courseid' => $course->id));
+                    $creatornotes = html_writer::tag('a', get_string('seecreatornotes', 'local_hub'),
+                            array('class' => 'seecreatornotes', 'href' => $creatornotesurl));
+                }
+
                 //the main DIV tags
                 $buttonsdiv = html_writer::tag('div',
                                 $downloadbuttonhtml . $visitlinkhtml,
@@ -453,10 +466,9 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 $coursedescdiv = html_writer::tag('div',
                                 $deschtml . $additionaldeschtml
-                                . $comment . $rating,
+                                . $comment . $rating . $creatornotes,
                                 array('class' => 'coursedescription'));
-                $coursehtml =
-                        $coursenamehtml . html_writer::tag('div',
+                $coursehtml = $coursenamehtml . html_writer::tag('div',
                                 $coursedescdiv . $screenshotbuttonsdiv,
                                 array('class' => 'hubcourseinfo clearfix'));
                 $coursehtml .= html_writer::tag('div',
