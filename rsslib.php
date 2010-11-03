@@ -87,7 +87,7 @@ function hub_rss_get_feed($context, $args) {
 
     $hub = new local_hub();
     $options['orderby'] = 'timemodified DESC, fullname ASC';
-    $courses = $hub->get_courses($options);
+    $courses = $hub->get_courses($options, 0 , 10);
 
     //generate the information for rss
     $rssfeedinfo = local_hub_rss_generate_feed_info($courses);
@@ -132,11 +132,11 @@ function local_hub_rss_generate_feed_info($courses) {
     foreach ($courses as $course) {
         $courserss = new stdClass();
         $courserss->title = $course->fullname;
-        $courserss->author = get_config('local_hub', 'name');
-        $courserss->pubdate = time();
+        $courserss->author = $course->creatorname;
+        $courserss->pubdate = $course->timemodified;
 
         $courseurl = new moodle_url($CFG->wwwroot . '/index.php',
-                array('redirectcourseid' => $course->id, 'rss' => true));
+                array('courseid' => $course->id, 'rss' => true));
 
         $courserss->link = $courseurl->out(false);
 
