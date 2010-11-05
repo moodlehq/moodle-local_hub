@@ -268,14 +268,29 @@ echo $OUTPUT->heading(get_string('managecourses', 'local_hub'), 3, 'main');
 //display course search form
 $coursesearchform->display();
 
-//display course result list
-echo $renderer->course_list($courses, true, $options);
+if (isset($courses) and empty($courseid)) {
+    if (empty($coursetotal)) {
+        $coursetotalhtml = get_string('nocourse', 'local_hub');
+    } else {
+        $coursetotalhtml = get_string('coursetotal', 'local_hub', $coursetotal);
+    }
+    echo html_writer::tag('div', $coursetotalhtml, array('class' => 'hubcoursetotal'));
+}
 
-//display paging bar
+//display the top paging bar
 if ($coursetotal > HUB_COURSE_PER_PAGE) {
     $baseurl = new moodle_url('', $options);
     $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
-    echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+    $pagingbarhtml = html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+    echo $pagingbarhtml;
+}
+
+//display course result list
+echo $renderer->course_list($courses, true, $options);
+
+//display the bottom paging bar
+if (!empty($pagingbarhtml)) {
+    echo $pagingbarhtml;
 }
 
 //display footer

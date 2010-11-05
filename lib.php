@@ -1729,15 +1729,29 @@ class local_hub {
         if (!key_exists('language', $options)) {
             $options['language'] = 'all';
         }
-       
-        echo highlight($search, $renderer->course_list($courses));
+
+        if (isset($courses) and empty($courseid)) {
+            if (empty($coursetotal)) {
+                $coursetotalhtml = get_string('nocourse', 'local_hub');
+            } else {
+                $coursetotalhtml = get_string('coursetotal', 'local_hub', $coursetotal);
+            }
+            echo html_writer::tag('div', $coursetotalhtml, array('class' => 'hubcoursetotal'));
+        }
 
         if (!empty($courses)) {
             //paging bar
             if ($coursetotal > HUB_COURSE_PER_PAGE) {
                 $baseurl = new moodle_url('', $options);
                 $pagingbarhtml = $OUTPUT->paging_bar($coursetotal, $page, HUB_COURSE_PER_PAGE, $baseurl);
-                echo html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+                $pagingbarhtml = html_writer::tag('div', $pagingbarhtml, array('class' => 'pagingbar'));
+                echo $pagingbarhtml;
+            }
+
+            echo highlight($search, $renderer->course_list($courses));
+
+            if  (!empty($pagingbarhtml)) {
+                echo $pagingbarhtml;
             }
         }
 

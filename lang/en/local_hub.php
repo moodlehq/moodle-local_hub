@@ -85,6 +85,7 @@ $string['coursesettingsupdated'] = '{$a} has been updated.';
 $string['courseshortname'] = 'Shortname';
 $string['coursesnumber'] = 'Number of courses ({$a})';
 $string['coursetimemodified'] = 'Time modified: {$a}';
+$string['coursetotal'] = '{$a} courses have been found.';
 $string['courseurl'] = 'Course URL';
 $string['courseurl_help'] = 'course URL';
 $string['coursevisibility'] = 'Visible';

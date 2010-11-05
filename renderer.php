@@ -199,13 +199,9 @@ class local_hub_renderer extends plugin_renderer_base {
 
         $renderedhtml = '';
 
-        if (empty($courses)) {
-            if (isset($courses)) {
-                $renderedhtml .= get_string('nocourse', 'local_hub');
-            }
-        } else {
+        if (!empty($courses)) {
             $courseiteration = 0;
-            foreach ($courses as $course) {             
+            foreach ($courses as $course) {
                 $courseiteration = $courseiteration + 1;
 
                 //create html specific to hub administrator
@@ -288,7 +284,7 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('class' => 'hubcoursetitle'));
                 $coursenamehtml = html_writer::tag('div', $coursename,
                                 $course->privacy ? array('class' => 'hubcoursetitlepanel') :
-                        array('class' => 'dimmed_text', 'class' => 'hubcoursetitlepanel'))
+                                        array('class' => 'dimmed_text', 'class' => 'hubcoursetitlepanel'))
                         . $sitehtml;
 
                 // create screenshots html
@@ -298,8 +294,8 @@ class local_hub_renderer extends plugin_renderer_base {
                                     array('courseid' => $course->id,
                                         'filetype' => HUB_SCREENSHOT_FILE_TYPE));
                     $screenshothtml = html_writer::empty_tag('img',
-                                array('src' => $baseurl, 'alt' => $course->fullname));
-                }            
+                                    array('src' => $baseurl, 'alt' => $course->fullname));
+                }
                 $coursescreenshot = html_writer::tag('div', $screenshothtml,
                                 array('class' => 'coursescreenshot',
                                     'id' => 'image-' . $course->id));
@@ -319,10 +315,10 @@ class local_hub_renderer extends plugin_renderer_base {
                 $courseuserinfo .= html_writer::tag('a',
                                 html_writer::empty_tag('img',
                                         array('src' => $this->output->pix_url('i/email'),
-                                                'class' => 'hubcoursemail',
+                                            'class' => 'hubcoursemail',
                                             'alt' => get_string('msgtopublisher', 'local_hub', $course->fullname))),
                                 array('href' => new moodle_url('/local/hub/sendmessage.php',
-                                        array('id' => $course->id, 'admin' => $withwriteaccess))));
+                                            array('id' => $course->id, 'admin' => $withwriteaccess))));
                 $courseuserinfohtml = html_writer::tag('div', $courseuserinfo,
                                 array('class' => 'hubcourseuserinfo'));
 
@@ -392,15 +388,15 @@ class local_hub_renderer extends plugin_renderer_base {
 //                    $blocksandactivities .= html_writer::tag('span',
 //                                    get_string('blocks', 'local_hub') . " : " . $blockhtml);
                 }
- 
+
                 //Create outcomes html
-                $outcomes= '';
+                $outcomes = '';
                 if (!empty($course->outcomes)) {
                     $outcomes = get_string('outcomes', 'local_hub',
-                            implode(', ', $course->outcomes));
+                                    implode(', ', $course->outcomes));
                 }
                 $outcomeshtml = html_writer::tag('div', $outcomes, array('class' => 'hubcourseoutcomes'));
- 
+
                 //create additional information html
                 $additionaldesc = $courseuserinfohtml . $coursecontentinfohtml
                         . $coursefileinfohtml . $blocksandactivities . $outcomeshtml;
@@ -445,15 +441,15 @@ class local_hub_renderer extends plugin_renderer_base {
                 if (count($courses) == 1) {
                     //creator notes
                     $creatornotes = html_writer::tag('div', get_string('creatornotes', 'local_hub') . ':',
-                            array('class' => 'creatornotestitle'));
+                                    array('class' => 'creatornotestitle'));
                     $creatornotes .= html_writer::tag('div',
-                            format_text($course->creatornotes, $course->creatornotesformat),
-                            array('class' => 'creatornotes'));
+                                    format_text($course->creatornotes, $course->creatornotesformat),
+                                    array('class' => 'creatornotes'));
                 } else {
                     //more details button
                     $creatornotesurl = new moodle_url('', array('courseid' => $course->id));
                     $creatornotes = html_writer::tag('a', get_string('seecreatornotes', 'local_hub'),
-                            array('class' => 'seecreatornotes', 'href' => $creatornotesurl));
+                                    array('class' => 'seecreatornotes', 'href' => $creatornotesurl));
                 }
 
                 //the main DIV tags
@@ -481,33 +477,32 @@ class local_hub_renderer extends plugin_renderer_base {
 
             $renderedhtml = html_writer::tag('div', $renderedhtml,
                             array('class' => 'hubcourseresult'));
-        }
 
-        //add the select bulk operation
-        if ($withwriteaccess) {
-            $selecthtml = html_writer::select(array(
-                        'bulkdelete' => get_string('bulkdelete', 'local_hub'),
-                        'bulkvisible' => get_string('bulkvisible', 'local_hub'),
-                        'bulknotvisible' => get_string('bulknotvisible', 'local_hub')),
-                            'bulkselect', '',
-                            array('' => get_string('bulkselectoperation', 'local_hub')));
-            $renderedhtml .= html_writer::tag('div', $selecthtml,
-                            array('class' => 'hubbulkselect'));
+            //add the select bulk operation
+            if ($withwriteaccess) {
+                $selecthtml = html_writer::select(array(
+                            'bulkdelete' => get_string('bulkdelete', 'local_hub'),
+                            'bulkvisible' => get_string('bulkvisible', 'local_hub'),
+                            'bulknotvisible' => get_string('bulknotvisible', 'local_hub')),
+                                'bulkselect', '',
+                                array('' => get_string('bulkselectoperation', 'local_hub')));
+                $renderedhtml .= html_writer::tag('div', $selecthtml,
+                                array('class' => 'hubbulkselect'));
 
-            //perform button
-            $optionalurlparams['sesskey'] = sesskey();
-            $bulkformparam['method'] = 'post';
-            $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
-            $bulkbutton = html_writer::empty_tag('input',
-                            array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
-                                'type' => 'submit',
-                                'value' => get_string('bulkoperationperform', 'local_hub')));
-            $renderedhtml .= html_writer::tag('div', $bulkbutton,
-                            array('class' => 'hubbulkbutton'));
-            $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
-            $renderedhtml = html_writer::tag('div', $renderedhtml);
+                //perform button
+                $optionalurlparams['sesskey'] = sesskey();
+                $bulkformparam['method'] = 'post';
+                $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
+                $bulkbutton = html_writer::empty_tag('input',
+                                array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
+                                    'type' => 'submit',
+                                    'value' => get_string('bulkoperationperform', 'local_hub')));
+                $renderedhtml .= html_writer::tag('div', $bulkbutton,
+                                array('class' => 'hubbulkbutton'));
+                $renderedhtml = html_writer::tag('form', $renderedhtml, $bulkformparam);
+                $renderedhtml = html_writer::tag('div', $renderedhtml);
+            }
         }
-       
         return $renderedhtml;
     }
 
