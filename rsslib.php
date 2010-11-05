@@ -79,9 +79,17 @@ function hub_rss_get_feed($context, $args) {
         $options['language'] = $args[8];
     }
 
+    //if the RSS invisible secret is passed as parameter, display not visible course
+    $rsssecret = get_config('local_hub', 'rsssecret');
+    if (!empty($rsssecret) and
+            ($rsssecret == optional_param('rsssecret', false, PARAM_RAW))) {
+        $options['visibility'] = COURSEVISIBILITY_NOTVISIBLE;
+    } else {
+        $options['visibility'] = COURSEVISIBILITY_VISIBLE;
+    }
+
     //get courses
     $options['search'] = empty($args[9]) ? '' : urldecode($args[9]);
-    $options['onlyvisible'] = true;
     $options['downloadable'] = $args[3];
     $options['enrollable'] = !$args[3];
 

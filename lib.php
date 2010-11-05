@@ -121,12 +121,12 @@ define('WSCLIENT', 'client');
 define('COURSEVISIBILITY_ALL', '2');
 
 /**
- * Course visibility: all
+ * Course visibility: visible
  */
 define('COURSEVISIBILITY_VISIBLE', '1');
 
 /**
- * Course visibility: all
+ * Course visibility: not visible
  */
 define('COURSEVISIBILITY_NOTVISIBLE', '0');
 

@@ -66,6 +66,8 @@ if (!empty($fromform) and confirm_sesskey()) {
     set_config('searchfornologin', empty($fromform->searchfornologin)?0:1, 'local_hub');
     set_config('enablerssfeeds', 
             empty($fromform->enablerssfeeds)?0:$fromform->enablerssfeeds, 'local_hub');
+    set_config('rsssecret',
+            empty($fromform->rsssecret)?'':$fromform->rsssecret, 'local_hub');
     
     set_config('language', $fromform->lang, 'local_hub');
 

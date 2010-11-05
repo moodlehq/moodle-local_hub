@@ -303,6 +303,8 @@ $string['registrationupdated'] = 'Registration has been updated.';
 $string['registrationupdatedfailed'] = 'Registration update failed.';
 $string['resourcesnumber'] = 'Number of resources ({$a})';
 $string['roleassignmentsnumber'] = 'Number of role assignments ({$a})';
+$string['rsssecret'] = 'RSS secret';
+$string['rsssecret_help'] = 'If the RSS secret is in the RSS URL (add \'?rsssecret=YOUR_RSS_SECRET\'), the rss feed will return not published courses instead of published ones. This is particularly usefull for the hub administrator to be easily alerted of new courses. You will need one RSS feed for enrollable courses and one for downloadable courses. ';
 $string['screenshots'] = 'Screenshots';
 $string['search'] = 'Search for courses';
 $string['searchfornologin'] = 'Public front page search';

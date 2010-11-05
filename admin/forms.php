@@ -191,6 +191,12 @@ class hub_settings_form extends moodleform {
             $password = '';
         }
 
+        //rss secret - secret to display invisible course only
+        $rsssecret = get_config('local_hub', 'rsssecret');
+        if ($rsssecret === false) {
+            $rsssecret = '';
+        }
+
         $enabled = get_config('local_hub', 'hubenabled');
 
         $languages = get_string_manager()->get_list_of_languages();
@@ -299,6 +305,13 @@ class hub_settings_form extends moodleform {
         $mform->setDefault('searchfornologin', $searchfornologin);
         $mform->addHelpButton('searchfornologin', 'searchfornologin', 'local_hub');
         $mform->setAdvanced('searchfornologin');
+
+        $mform->addElement('text', 'rsssecret',
+                get_string('rsssecret', 'local_hub'));
+        $mform->addHelpButton('rsssecret',
+                'rsssecret', 'local_hub');
+        $mform->setAdvanced('rsssecret');
+        $mform->setDefault('rsssecret', $rsssecret);
 
         $this->add_action_buttons(false, get_string('update'));
     }
