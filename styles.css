@@ -302,3 +302,11 @@
     font-weight:bold;
     cursor: pointer;
 }
+
+#page-site-index .mform .fitem .felement {
+    margin-left: 150px;
+}
+
+#page-site-index .mform .fitem .fitemtitle {
+    width: 140px;
+}
