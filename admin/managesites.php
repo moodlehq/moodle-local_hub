@@ -83,7 +83,7 @@ if ($delete != -1 and $confirm and confirm_sesskey()) {
     $emailinfo->sitename = $sitetodelete->name;
     $emailinfo->siteurl = $sitetodelete->url;
     $emailinfo->unregisterpagelink = $sitetodelete->url .
-            '/admin/registration/index.php?hururl=' . $hubinfo['url'] . '&force=1&unregistration=1';
+            '/admin/registration/index.php?huburl=' . $hubinfo['url'] . '&force=1&unregistration=1';
     email_to_user($contactuser, get_admin(),
             get_string('emailtitlesitedeleted', 'local_hub', $emailinfo),
             get_string('emailmessagesitedeleted', 'local_hub', $emailinfo));
