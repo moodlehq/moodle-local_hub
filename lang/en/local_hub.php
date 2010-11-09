@@ -129,9 +129,8 @@ Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}
 ';
-$string['emailmessagesitedeleted'] = '{$a->sitename} at {$a->siteurl} has just been deleted from the {$a->hubname} hub at {$a->huburl}.
-
-A {$a->hubname} administrator deleted {$a->sitename} from the hub database. If you are allowed and want to register a new time on the hub, you will need first to force unregister from this hub. Please go to {$a->unregisterpagelink} on {$a->sitename}.
+$string['emailmessagesitedeleted'] = 'An administrator from {$a->hubname} ($a->huburl) deleted {$a->sitename} ({$a->siteurl}) from the hub listing.
+If you want to register again on this hub, you must first reset your registration on your server. Go to {$a->unregisterpagelink}.
 ';
 $string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})
 Its new url {$a->url} has been updated from ({$a->oldurl}).
@@ -143,7 +142,7 @@ Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
-$string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from a hub';
+$string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from {$a->hubname} hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his name or url (please check it).';
 $string['enabled'] = 'Enabled';
 $string['enabled_help'] = 'You can enabled/disabled the hub server.';
@@ -225,7 +224,7 @@ You can reply directly via email or use messaging on the hub
 ({$a->userurl}).
 ';
 $string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
-$string['msgtopublisher'] = 'Send message to {$a}\'s publisher';
+$string['msgtopublisher'] = 'Send message about {$a}';
 $string['msgtype'] = 'Category';
 $string['msgtype_help'] = 'Select a broad category that describes your message.';
 $string['msgtypeappreciation'] = 'Appreciation / congratulation';
@@ -314,6 +313,8 @@ $string['selecthub'] = 'Select hub';
 $string['sendfollowinginfo'] = 'Send the following information:';
 $string['sendmessage'] = 'Send message';
 $string['sentto'] = 'Sent to';
+$string['senttohub'] = '{$a} hub administrator';
+$string['senttopublisher'] = 'Course publisher: {$a}';
 $string['seecreatornotes'] = 'See creator notes';
 $string['settings'] = 'Settings';
 $string['settingsupdated'] = 'Settings have been updated.';
