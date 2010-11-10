@@ -265,6 +265,7 @@ class course_search_form extends moodleform {
         $hub = new local_hub();
         $courseslanguages = $hub->get_courses_languages();
         $alllanguages = get_string_manager()->get_list_of_languages();
+        $languages = array();
         foreach ($courseslanguages as $languagecode => $lang) {
             $languages[$languagecode] = $alllanguages[$languagecode];
         }
@@ -413,7 +414,9 @@ class send_message_form extends moodleform {
         $mform->addElement('hidden', 'id', $this->_customdata['id']);
         $mform->addElement('hidden', 'admin', $this->_customdata['admin']);
 
-        $mform->addElement('static', 'sentto', get_string('sentto', 'local_hub'), $publishername);
+        $sentoptions = array('publisher' => get_string('senttopublisher', 'local_hub', $publishername),
+            'hub' =>  get_string('senttohub', 'local_hub', get_config('local_hub', 'name')));
+        $mform->addElement('select', 'sentto', get_string('sentto', 'local_hub'), $sentoptions);
 
         $options = array('question' => get_string('msgtypequestion', 'local_hub'),
             'improvement' => get_string('msgtypeimprovement', 'local_hub'),

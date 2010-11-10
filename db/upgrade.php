@@ -213,5 +213,39 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2010092800, 'local', 'hub');
     }
 
+     if ($oldversion < 2010110900) {
+
+        // Define field senttouserid to be added to hub_course_feedbacks
+        $table = new xmldb_table('hub_course_feedbacks');
+        $field = new xmldb_field('senttouserid', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, null, null, null, 'time');
+
+        // Conditionally launch add field senttouserid
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+         // Define field senttoemail to be added to hub_course_feedbacks
+        $table = new xmldb_table('hub_course_feedbacks');
+        $field = new xmldb_field('senttoemail', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'senttouserid');
+
+        // Conditionally launch add field senttoemail
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010110900, 'local', 'hub');
+    }
+
+    if ($oldversion < 2010110901) {
+        global $DB;
+        $messageprovider = new stdClass();
+        $messageprovider->name = 'coursehubmessage';
+        $messageprovider->component = 'local/hub';
+        $DB->insert_record('message_providers', $messageprovider);
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010110901, 'local', 'hub');
+    }
+
     return $result;
 }

@@ -141,7 +141,7 @@ class local_hub {
      *      $feedback->courseid integer - mandatory
      *      $feedback->type string ('question', 'issue', 'improvement', 'appreciation')
      *      $feedback->text string
-     *      $feedback->userid integer if not given, tue current user is used
+     *      $feedback->userid integer if not given, the current user is used
      */
     public function add_feedback($feedback) {
         global $DB, $USER;

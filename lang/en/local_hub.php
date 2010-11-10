@@ -223,7 +223,8 @@ Message:
 You can reply directly via email or use messaging on the hub
 ({$a->userurl}).
 ';
-$string['msgforcoursetitle'] = 'Message about \'{$a->fullname}\'';
+$string['msgforcoursetitle'] = 'Message about {$a}';
+$string['msgforcoursetitlewithlink'] = 'Message about \'{$a->fullname}\'';
 $string['msgtopublisher'] = 'Send message about {$a}';
 $string['msgtype'] = 'Category';
 $string['msgtype_help'] = 'Select a broad category that describes your message.';

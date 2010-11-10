@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20100928" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20101109" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -95,7 +95,9 @@
         <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" PREVIOUS="courseid" NEXT="text"/>
         <FIELD NAME="text" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="type" NEXT="userid"/>
         <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the user that wrote the feedback" PREVIOUS="text" NEXT="time"/>
-        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the time when the feedback was created" PREVIOUS="userid"/>
+        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the time when the feedback was created" PREVIOUS="userid" NEXT="senttouserid"/>
+        <FIELD NAME="senttouserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="user id to who the message is sent" PREVIOUS="time" NEXT="senttoemail"/>
+        <FIELD NAME="senttoemail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="email where the message has been sent" PREVIOUS="senttouserid"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

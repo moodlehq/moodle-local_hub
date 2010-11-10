@@ -31,7 +31,7 @@ require_once($CFG->dirroot . "/local/hub/forms.php");
 require_login();
 
 $hub = new local_hub();
-$id = optional_param('id', 0, PARAM_INTEGER);
+$id = required_param('id', 0, PARAM_INTEGER);
 $admin = optional_param('admin', 0, PARAM_INTEGER); //access from admin page
 $hubcourse = $hub->get_course($id);
 
@@ -69,33 +69,64 @@ if (!empty($cancel)) {
 }
 
 //Send email operation => redirect to the index/admin course page
-if ($data = $sendmessageform->get_data() and confirm_sesskey()) {
+$data = $sendmessageform->get_data();
+if (!empty($data) and confirm_sesskey()) {
 
-    //add feedback
+    //create feedback
     $feedback = new stdClass();
     $feedback->courseid = $id;
     $feedback->type = $data->type;
     $feedback->text = $data->message;
+
+    switch ($data->sentto) {
+        case 'publisher':
+            //send email to publisher (message API does not support email as recipient)
+            //TODO: if the email exist in user database, send message to the user using message API
+            //      => create new kind of message for it: $eventdata->name = 'messageforpublisher';
+            $sentouser = new stdClass();
+            $sentouser->maildisplay = true;
+            $sentouser->email = $hubcourse->publisheremail;
+            $sentouser->firstname = $hubcourse->publishername;
+            $sentouser->lastname = '';
+            $hubcourse->hubname = $SITE->fullname;
+            $hubcourse->sitename = $hub->get_site($hubcourse->siteid)->name;
+            $hubcourse->huburl = new moodle_url('/');
+            $hubcourse->huburl = $hubcourse->huburl->out();
+            $hubcourse->hubcourseurl = new moodle_url('/', array('courseid' => $hubcourse->id));
+            $hubcourse->hubcourseurl = $hubcourse->hubcourseurl->out();
+            $hubcourse->userurl = new moodle_url('/message/index.php', array('id' => $USER->id));
+            $hubcourse->userurl = $hubcourse->userurl->out();
+            $hubcourse->userfullname = $USER->firstname . ' ' . $USER->lastname;
+            $hubcourse->message = $data->message;
+            $feedback->senttoemail = $sentouser->email;
+            email_to_user($sentouser, $USER, get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname),
+                    get_string('msgforcourse', 'local_hub', $hubcourse));
+            break;
+        case 'hub':
+            //send message by message API
+            $courseurl = new moodle_url('/local/hub/admin/managecourses.php', array('courseid' => $id));
+            $courselink = html_writer::tag('a', $hubcourse->fullname, array('href' => $courseurl));
+            $eventdata = new stdClass();
+            $eventdata->component = 'local/hub';
+            $eventdata->name = 'coursehubmessage';
+            $eventdata->userfrom = $USER;
+            $eventdata->userto = get_admin();
+            $eventdata->subject = get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname);
+            $eventdata->fullmessage = $data->message . ' ' . $courseurl;
+            $eventdata->fullmessageformat = FORMAT_PLAIN;
+            $eventdata->fullmessagehtml = $data->message . html_writer::empty_tag('br') . $courselink;
+            $eventdata->smallmessage = get_string('msgforcoursetitle', 'local_hub', $courselink)
+                    . ': ' .$data->message;
+            $eventdata->timecreated = time();
+            $feedback->senttouserid = $eventdata->userto->id;
+            message_send($eventdata);
+            break;
+        default:
+            break;
+    }
+
+    //add feedback
     $hub->add_feedback($feedback);
-    
-    //send email
-    $publisher = new object;
-    $publisher->email = $hubcourse->publisheremail ;
-    $publisher->firstname = $hubcourse->publishername;
-    $publisher->lastname = '';
-    $publisher->maildisplay = true;
-    $hubcourse->hubname =  $SITE->fullname;
-    $hubcourse->sitename = $hub->get_site($hubcourse->siteid)->name;
-    $hubcourse->huburl = new moodle_url('/');
-    $hubcourse->huburl = $hubcourse->huburl->out();
-    $hubcourse->hubcourseurl = new moodle_url('/', array('courseid' => $hubcourse->id));
-    $hubcourse->hubcourseurl = $hubcourse->hubcourseurl->out();
-    $hubcourse->userurl = new moodle_url('/message/index.php', array('id' => $USER->id));
-    $hubcourse->userurl = $hubcourse->userurl->out();
-    $hubcourse->userfullname = $USER->firstname . ' ' . $USER->lastname;
-    $hubcourse->message =  $data->message;
-    email_to_user($publisher, $USER, get_string('msgforcoursetitle', 'local_hub', $hubcourse),
-            get_string('msgforcourse', 'local_hub', $hubcourse));
 
     //redirect either to the courses manage page either to the front page
     if ($admin) {
