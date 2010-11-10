@@ -313,6 +313,7 @@ $string['searchfornologin_help'] = 'If enabled, the course search form will be d
 $string['selecthub'] = 'Select hub';
 $string['sendfollowinginfo'] = 'Send the following information:';
 $string['sendmessage'] = 'Send message';
+$string['sendto'] = 'Send to';
 $string['sentto'] = 'Sent to';
 $string['senttohub'] = '{$a} hub administrator';
 $string['senttopublisher'] = 'Course publisher: {$a}';

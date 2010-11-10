@@ -416,7 +416,7 @@ class send_message_form extends moodleform {
 
         $sentoptions = array('publisher' => get_string('senttopublisher', 'local_hub', $publishername),
             'hub' =>  get_string('senttohub', 'local_hub', get_config('local_hub', 'name')));
-        $mform->addElement('select', 'sentto', get_string('sentto', 'local_hub'), $sentoptions);
+        $mform->addElement('select', 'sentto', get_string('sendto', 'local_hub'), $sentoptions);
 
         $options = array('question' => get_string('msgtypequestion', 'local_hub'),
             'improvement' => get_string('msgtypeimprovement', 'local_hub'),
