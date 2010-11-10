@@ -70,7 +70,7 @@ class hub_registration_form extends moodleform {
                 get_string('language'), $languages[$hublanguage]);
         $mform->addElement('hidden', 'language', $hublanguage);
         $mform->addElement('static', 'hubdescriptionstring',
-                get_string('description', 'local_hub'), $hubdescription);
+                get_string('description', 'local_hub'), format_text($hubdescription));
         $mform->addElement('hidden', 'description', $hubdescription);
         $mform->addElement('static', 'contactnamestring',
                 get_string('contactname', 'local_hub'), $contactname);
