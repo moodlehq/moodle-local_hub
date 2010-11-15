@@ -250,8 +250,10 @@ function xmldb_local_hub_upgrade($oldversion) {
     if ($oldversion < 2010111200) {
         
         //give 'local/hub:viewsmallinfo' capability to registered sites
+        //TODO: this is a wrong way to get role, it should be by shortname
         $role = $DB->get_record('role', array('name' => 'Registered Hub User'));
         if (!empty($role)) {
+            //TODO: wrong way: we should not assign capability into upgrade script - see MDL-25222
             assign_capability('local/hub:viewsmallinfo', CAP_ALLOW, $role->id, get_system_context()->id);
         }
 
