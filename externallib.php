@@ -45,16 +45,34 @@ class local_hub_external extends external_api {
         // Ensure the current user is allowed to run this function
         $context = get_context_instance(CONTEXT_SYSTEM);
         self::validate_context($context);
-        require_capability('local/hub:viewinfo', $context);
+
+        //viewinfo: hub directory
+        //viewsmallinfo: registered site
+        if (!has_capability('local/hub:viewinfo', $context)
+                and !has_capability('local/hub:viewsmallinfo', $context)) {
+            throw new moodle_exception('nocapabalitytogetinfo', 'local_hub');
+        }
 
         //not useful to validate no params, but following line just here to remind u ;)
         self::validate_parameters(self::get_info_parameters(), array());
 
         $hub = new local_hub();
-        $hubinfo = $hub->get_info();
-        $hubinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
+        $hubinfo = $hub->get_info();      
+        $resultinfo = array();
+        $resultinfo['name'] = $hubinfo['name'];
+        $resultinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
+        $resultinfo['hublogo'] = $hubinfo['hublogo'];
+        $resultinfo['url'] = $hubinfo['url'];
+        $resultinfo['language'] = $hubinfo['language'];
+        if (has_capability('local/hub:viewinfo', $context)) {
+             $resultinfo['contactname'] = $hubinfo['contactname'];
+             $resultinfo['contactemail'] = $hubinfo['contactemail'];           
+             $resultinfo['privacy'] = $hubinfo['privacy'];           
+             $resultinfo['sites'] = $hubinfo['sites'];
+             $resultinfo['courses'] = $hubinfo['courses'];
+        }
 
-        return $hubinfo;
+        return $resultinfo;
     }
 
     /**
@@ -66,14 +84,14 @@ class local_hub_external extends external_api {
                 array(
                     'name' => new external_value(PARAM_TEXT, 'hub name'),
                     'description' => new external_value(PARAM_TEXT, 'hub description'),
-                    'contactname' => new external_value(PARAM_TEXT, 'hub server administrator name'),
-                    'contactemail' => new external_value(PARAM_EMAIL, 'hub server administrator email'),
+                    'contactname' => new external_value(PARAM_TEXT, 'hub server administrator name', VALUE_OPTIONAL),
+                    'contactemail' => new external_value(PARAM_EMAIL, 'hub server administrator email', VALUE_OPTIONAL),
                     'hublogo' => new external_value(PARAM_INT, 'does a hub logo exist'),
-                    'privacy' => new external_value(PARAM_ALPHA, 'hub privacy'),
+                    'privacy' => new external_value(PARAM_ALPHA, 'hub privacy', VALUE_OPTIONAL),
                     'language' => new external_value(PARAM_ALPHANUMEXT, 'hub main language'),
                     'url' => new external_value(PARAM_URL, 'hub url'),
-                    'sites' => new external_value(PARAM_NUMBER, 'number of registered sites on this hub'),
-                    'courses' => new external_value(PARAM_NUMBER, 'number total of courses from all registered sites on this hub'),
+                    'sites' => new external_value(PARAM_NUMBER, 'number of registered sites on this hub', VALUE_OPTIONAL),
+                    'courses' => new external_value(PARAM_NUMBER, 'number total of courses from all registered sites on this hub', VALUE_OPTIONAL),
                 )
                 , 'hub information');
     }

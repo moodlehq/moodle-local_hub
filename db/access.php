@@ -38,19 +38,26 @@
 
 $capabilities = array(
         'local/hub:viewinfo' => array(
+                'riskbitmask' => RISK_PERSONAL,
+                'captype' => 'read',
+                'contextlevel' => CONTEXT_SYSTEM,
+        ),
+        'local/hub:viewsmallinfo' => array(
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_SYSTEM,
         ),
         'local/hub:updateinfo' => array(
+                'riskbitmask' => RISK_SPAM | RISK_DATALOSS,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM,
         ),
         'local/hub:registercourse' => array(
-                'riskbitmask' => RISK_SPAM | RISK_PERSONAL,
+                'riskbitmask' => RISK_SPAM | RISK_DATALOSS,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM
         ),
         'local/hub:view' => array(
+                'riskbitmask' => RISK_PERSONAL,
                 'captype' => 'read',
                 'contextlevel' => CONTEXT_SYSTEM,
                 'archetypes' => array(
@@ -59,6 +66,7 @@ $capabilities = array(
                 )
         ),
         'local/hub:unregistercourse' => array(
+                'riskbitmask' => RISK_DATALOSS,
                 'captype' => 'write',
                 'contextlevel' => CONTEXT_SYSTEM
         ),

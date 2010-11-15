@@ -81,7 +81,8 @@ $services = array(
         ),
 
         'Registered site' => array(
-                'functions' => array ('hub_update_site_info', 'hub_register_courses', 'hub_get_courses', 'hub_unregister_courses', 'hub_unregister_site'),
+                'functions' => array ('hub_update_site_info', 'hub_register_courses', 
+                    'hub_get_courses', 'hub_unregister_courses', 'hub_unregister_site', 'hub_get_info'),
                 'enabled'=>1,
         ),
 

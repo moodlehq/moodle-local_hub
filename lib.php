@@ -1148,7 +1148,7 @@ class local_hub {
         if (empty($sitetohubcommunication)) {
             //create token for the hub
             $capabilities = array('local/hub:updateinfo', 'local/hub:registercourse',
-                'local/hub:view', 'local/hub:unregistercourse');
+                'local/hub:view', 'local/hub:unregistercourse', 'local/hub:viewsmallinfo');
             $tokenusedbysite = $this->create_hub_token('Registered Hub User', 'Registered site',
                             $siteinfo->url . '_registered_site_user',
                             $capabilities);

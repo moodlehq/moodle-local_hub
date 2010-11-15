@@ -112,11 +112,9 @@ if (!empty($fromform) and confirm_sesskey()) {
     set_config('privacy', $fromform->privacy, 'local_hub');
 
     //save the image
-    if (empty($fromform->keepcurrentimage)) {
-           
+    if (empty($fromform->keepcurrentimage)) {         
         $file = $hubsettingsform->save_temp_file('hubimage');
 
-        // if ($file->is_valid_image()) {
         $userdir = "hub/0/";
 
         //create directory if doesn't exist
@@ -127,8 +125,6 @@ if (!empty($fromform) and confirm_sesskey()) {
 
         set_config('hublogo', true, 'local_hub');
         $updatelogo = true;
-
-        //   }
     }
 
     if (empty($updatelogo) and empty($fromform->keepcurrentimage)) {

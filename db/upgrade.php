@@ -247,5 +247,17 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2010110901, 'local', 'hub');
     }
 
+    if ($oldversion < 2010111200) {
+        
+        //give 'local/hub:viewsmallinfo' capability to registered sites
+        $role = $DB->get_record('role', array('name' => 'Registered Hub User'));
+        if (!empty($role)) {
+            assign_capability('local/hub:viewsmallinfo', CAP_ALLOW, $role->id, get_system_context()->id);
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2010111200, 'local', 'hub');
+    }
+
     return $result;
 }

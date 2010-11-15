@@ -205,6 +205,16 @@ class hub_settings_form extends moodleform {
         $mform = & $this->_form;
         $mform->addElement('header', 'moodle', get_string('settings', 'local_hub'));
 
+        //get hub version
+        require_once($CFG->dirroot . '/local/hub/version.php');
+        $year = substr($plugin->version, 0, 4);
+        $month = substr($plugin->version, 4, 2);
+        $day = substr($plugin->version, 6, 2);
+        $versiondate = mktime(0, 0 ,0 , $day, $month, $year);
+        $mform->addElement('static', 'version', get_string('hubversion', 'local_hub'), 
+                userdate($versiondate, get_string('strftimedaydate', 'langconfig')) 
+                . ' (' . $plugin->version . ')');
+
         $mform->addElement('text', 'name', get_string('name', 'local_hub'),
                 array('class' => 'admintextfield'));
         $mform->setDefault('name', $hubname);
