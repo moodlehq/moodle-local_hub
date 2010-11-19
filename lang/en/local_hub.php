@@ -24,7 +24,7 @@
 
 $string['activities'] = 'Activities';
 $string['additionaldesc'] = 'Courses: {$a->courses} - Users: {$a->users} - Enrolments: {$a->enrolments} - Resources: {$a->resources} - Posts: {$a->posts}
-    - Questions: {$a->questions} - Average number of participants: {$a->participantnumberaverage} - Average number of course modules: {$a->modulenumberaverage}';
+    - Questions: {$a->questions} - Average number of participants: {$a->participantnumberavg} - Average number of course modules: {$a->modulenumberavg}';
 $string['additionaladmindesc'] = 'Registered: {$a->timeregistered} - Modified: {$a->timemodified} - Privacy: {$a->privacy} -
     Contactable: {$a->contactable} - Email: {$a->emailalert}';
 $string['addscreenshots'] = 'Add screenshots';

@@ -578,6 +578,8 @@ class local_hub_renderer extends plugin_renderer_base {
                 $deschtml = $site->description; //the description
                 /// courses and sites number display under the description, in smaller
                 $deschtml .= $brtag;
+                $site->participantnumberavg = number_format($site->participantnumberaverage, 2);
+                $site->modulenumberavg = number_format($site->modulenumberaverage, 2);
                 $additionaldesc = get_string('additionaldesc', 'local_hub', $site);
                 $deschtml .= html_writer::tag('span', $additionaldesc,
                                 array('class' => 'additionaldesc'));
