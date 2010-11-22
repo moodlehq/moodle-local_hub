@@ -1630,9 +1630,9 @@ class local_hub {
             $courseids = array(); //all result courses
             $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
             foreach ($courses as $course) {
-                    $courseids[] = $course->id;
-                    $courseimagenumbers[] = $course->screenshots;
-            }         
+                $courseids[] = $course->id;
+                $courseimagenumbers[] = $course->screenshots;
+            }
             $PAGE->requires->yui_module('moodle-block_community-imagegallery',
                     'M.blocks_community.init_imagegallery',
                     array(array('imageids' => $courseids,
@@ -1693,6 +1693,7 @@ class local_hub {
             $licence = key_exists('licence', $options) ? $options['licence'] : 'all';
             $language = key_exists('language', $options) ? $options['language'] : 'all';
             $audience = key_exists('audience', $options) ? $options['audience'] : 'all';
+            $orderby = key_exists('orderby', $options) ? $options['orderby'] : 'newest';
             $search = empty($search) ? 0 : urlencode($search);
             //retrieve guest user if user not logged in
             $userid = empty($USER->id) ? $CFG->siteguest : $USER->id;
@@ -1707,7 +1708,8 @@ class local_hub {
             $rssicon = rss_get_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
                             $downloadable . '/' . $audience . '/' . $educationallevel
                             . '/' . $subject . '/' . $licence
-                            . '/' . $language . '/' . $search . '/');
+                            . '/' . $language . '/' . $search . '/' . $orderby . '/',
+                            get_string('rsstooltip', 'local_hub'));
         }
 
         /// OUTPUT
@@ -1723,8 +1725,7 @@ class local_hub {
 
         //Course listing
         $options['submitbutton'] = 1; //need to set up the submitbutton to 1 for the paging bar (simulate search)
-                                      //and paramlink
-
+        //and paramlink
         //set language value back to 'all'
         if (!key_exists('language', $options)) {
             $options['language'] = 'all';
@@ -1750,7 +1751,7 @@ class local_hub {
 
             echo highlight($search, $renderer->course_list($courses));
 
-            if  (!empty($pagingbarhtml)) {
+            if (!empty($pagingbarhtml)) {
                 echo $pagingbarhtml;
             }
         }

@@ -37,6 +37,7 @@
  * $args[7] => licence - PARAM_ALPHA
  * $args[8] => language - PARAM_ALPHANUMEXT
  * $args[9] => search - PARAM_TEXT (url encoded)
+ * $args[10] => orderby - PARAM_ALPHA
  * @return string the full path to the cached RSS feed directory. Null if there is a problem.
  */
 function hub_rss_get_feed($context, $args) {
@@ -59,7 +60,7 @@ function hub_rss_get_feed($context, $args) {
 
     //TODO: cache
     $filename = 'rsssearch_' . $args[3] . '_' . $args[4] . '_' . $args[5]
-            . '_' . $args[6] . '_' . $args[7] . '_' . $args[8] . '_' . $args[9];
+            . '_' . $args[6] . '_' . $args[7] . '_' . $args[8] . '_' . $args[9] . '_' . $args[10];
     $cachedfilepath = rss_get_file_full_name('local_hub', $filename);
 
     //get the courses from the search
@@ -77,8 +78,16 @@ function hub_rss_get_feed($context, $args) {
     }
     if ($args[8] != 'all') {
         $options['language'] = $args[8];
+    }  
+    if ($args[3] != 'all') {
+        $options['downloadable'] = $args[3];
+        $options['enrollable'] = !$args[3];
+    } else {
+        $options['downloadable'] = true;
+        $options['enrollable'] = true;
     }
-
+    $options['search'] = empty($args[9]) ? '' : urldecode($args[9]);
+    
     //if the RSS invisible secret is passed as parameter, display not visible course
     $rsssecret = get_config('local_hub', 'rsssecret');
     if (!empty($rsssecret) and
@@ -88,13 +97,28 @@ function hub_rss_get_feed($context, $args) {
         $options['visibility'] = COURSEVISIBILITY_VISIBLE;
     }
 
-    //get courses
-    $options['search'] = empty($args[9]) ? '' : urldecode($args[9]);
-    $options['downloadable'] = $args[3];
-    $options['enrollable'] = !$args[3];
+    //order by
+    switch ($args[10]) {
+        case 'newest':
+            $options['orderby'] = 'timemodified DESC';
+            break;
+        case 'eldest':
+            $options['orderby'] = 'timemodified ASC';
+            break;
+        case 'publisher':
+            $options['orderby'] = 'publishername ASC';
+            break;
+        case 'fullname':
+            $options['orderby'] = 'fullname ASC';
+            break;
+        case 'ratingaverage':
+            $options['orderby'] = 'ratingaverage DESC';
+            break;
+        default:
+            break;
+    }
 
     $hub = new local_hub();
-    $options['orderby'] = 'timemodified DESC, fullname ASC';
     $courses = $hub->get_courses($options, 0 , 10);
 
     //generate the information for rss
@@ -107,7 +131,7 @@ function hub_rss_get_feed($context, $args) {
     //First the RSS header
     $searchurl = new moodle_url($CFG->wwwroot . '/', array('downloadable' => $args[3],
                 'audience' => $args[4], 'educationallevel' => $args[5], 'subject' => $args[6],
-                'licence' => $args[7], 'language' => $args[8], 'search' => $args[9],
+                'licence' => $args[7], 'language' => $args[8], 'search' => $args[9], 'orderby' => $args[10],
                 'submitbutton' => 'Search+for+courses'));
     $rsscontent = rss_standard_header(get_config('local_hub', 'name'),
                     $searchurl->out(),
@@ -153,9 +177,12 @@ function local_hub_rss_generate_feed_info($courses) {
         $course->audience = get_string('audience' . $course->audience, 'hub');
         $course->educationallevel = get_string('edulevel' . $course->educationallevel, 'hub');
 
-        $deschtml = '';
+        //add course type (enrollable/downloadable)
+        $typetext = empty($course->enrollable)?
+                get_string('typedownloadable', 'local_hub'):get_string('typeenrollable', 'local_hub');
+        $deschtml = get_string('coursetype', 'local_hub', $typetext);
+        $deschtml .= html_writer::empty_tag('br');
         $deschtml .= $course->description; //the description
-
 
         //create the additional description
         $additionaldesc = html_writer::empty_tag('br');
