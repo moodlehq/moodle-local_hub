@@ -527,7 +527,6 @@ class local_hub_renderer extends plugin_renderer_base {
                 get_string('sitedesc', 'local_hub'),
                 get_string('sitelang', 'local_hub'),
                 get_string('siteadmin', 'local_hub'),
-                get_string('visible'),
                 get_string('operation', 'local_hub'),
                 '');
 
@@ -558,12 +557,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 //create site name with link
                 $siteurl = new moodle_url($site->url);
                 $siteatag = html_writer::tag('a', $site->name, array('href' => $siteurl));
-                if ($site->visible) {
-                    $sitenamehtml = html_writer::tag('span', $siteatag, array());
-                } else {
-                    $sitenamehtml = html_writer::tag('span', $siteatag,
-                                    array('class' => 'dimmed_text'));
-                }
+                $sitenamehtml = html_writer::tag('span', $siteatag, array());
 
                 //create image tag
                 if (!empty($site->imageurl)) {
@@ -641,42 +635,42 @@ class local_hub_renderer extends plugin_renderer_base {
                     $trustedbutton = new single_button($trusturl, $trustmsg);
                     $trustbuttonhtml = $this->output->render($trustedbutton);
 
-                    //create prioritise button
-                    if ($site->prioritise) {
-                        $prioritisemsg = get_string('unprioritise', 'local_hub');
-                        $makeprioritise = false;
-                        $trustbuttonhtml = '';
-                    } else {
-                        $prioritisemsg = get_string('prioritise', 'local_hub');
-                        $makeprioritise = true;
-                    }
-                    $prioritiseurl = new moodle_url("/local/hub/admin/managesites.php",
-                                    array('sesskey' => sesskey(), 'prioritise' => $makeprioritise,
-                                        'id' => $site->id));
-                    $prioritisebutton = new single_button($prioritiseurl, $prioritisemsg);
-                    $prioritisebuttonhtml = $this->output->render($prioritisebutton);
+                    //create prioritise button TODO: MDL-25422
+//                    if ($site->prioritise) {
+//                        $prioritisemsg = get_string('unprioritise', 'local_hub');
+//                        $makeprioritise = false;
+//                        $trustbuttonhtml = '';
+//                    } else {
+//                        $prioritisemsg = get_string('prioritise', 'local_hub');
+//                        $makeprioritise = true;
+//                    }
+//                    $prioritiseurl = new moodle_url("/local/hub/admin/managesites.php",
+//                                    array('sesskey' => sesskey(), 'prioritise' => $makeprioritise,
+//                                        'id' => $site->id));
+//                    $prioritisebutton = new single_button($prioritiseurl, $prioritisemsg);
+//                    $prioritisebuttonhtml = $this->output->render($prioritisebutton);
 
-                    //visible
-                    if ($site->visible) {
-                        $hideimgtag = html_writer::empty_tag('img',
-                                        array('src' => $this->output->pix_url('i/hide'),
-                                            'class' => 'siteimage', 'alt' => get_string('disable')));
-                        $makevisible = false;
-                    } else {
-                        $hideimgtag = html_writer::empty_tag('img',
-                                        array('src' => $this->output->pix_url('i/show'),
-                                            'class' => 'siteimage', 'alt' => get_string('enable')));
-                        $makevisible = true;
-                    }
-                    if ($site->privacy != HUB_SITENOTPUBLISHED) {
-                        $visibleurl = new moodle_url("/local/hub/admin/managesites.php",
-                                        array('sesskey' => sesskey(), 'visible' => $makevisible,
-                                            'id' => $site->id));
-                        $visiblehtml = html_writer::tag('a', $hideimgtag,
-                                        array('href' => $visibleurl));
-                    } else {
-                        $visiblehtml = get_string('private', 'local_hub');
-                    }
+                    //visible TODO: MDL-25422
+//                    if ($site->visible) {
+//                        $hideimgtag = html_writer::empty_tag('img',
+//                                        array('src' => $this->output->pix_url('i/hide'),
+//                                            'class' => 'siteimage', 'alt' => get_string('disable')));
+//                        $makevisible = false;
+//                    } else {
+//                        $hideimgtag = html_writer::empty_tag('img',
+//                                        array('src' => $this->output->pix_url('i/show'),
+//                                            'class' => 'siteimage', 'alt' => get_string('enable')));
+//                        $makevisible = true;
+//                    }
+//                    if ($site->privacy != HUB_SITENOTPUBLISHED) {
+//                        $visibleurl = new moodle_url("/local/hub/admin/managesites.php",
+//                                        array('sesskey' => sesskey(), 'visible' => $makevisible,
+//                                            'id' => $site->id));
+//                        $visiblehtml = html_writer::tag('a', $hideimgtag,
+//                                        array('href' => $visibleurl));
+//                    } else {
+//                        $visiblehtml = get_string('private', 'local_hub');
+//                    }
 
                     //delete link
                     $deleteurl = new moodle_url("/local/hub/admin/managesites.php",
@@ -690,11 +684,9 @@ class local_hub_renderer extends plugin_renderer_base {
                     $settingslinkhtml = html_writer::tag('a', get_string('settings'),
                                     array('href' => $settingsurl));
 
-
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $language, $adminnamehtml,
-                        $visiblehtml, $deletelinkhtml . $brtag . $trustbuttonhtml
-                        . $prioritisebuttonhtml, $settingslinkhtml);
+                        $deletelinkhtml . $brtag . $trustbuttonhtml, $settingslinkhtml);
                 } else {
                     // add a row to the table
                     $cells = array($imagehtml, $sitenamehtml, $deschtml, $languages[$site->language]);
