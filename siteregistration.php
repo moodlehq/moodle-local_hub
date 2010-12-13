@@ -74,18 +74,19 @@ $moodleversion              = optional_param('moodleversion', '', PARAM_INT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
 
-$siteheaders = get_headers($url);
-if ( strpos($url, 'http://localhost') !== false or strpos($url, 'http://127.0.0.1') !== false or $siteheaders === false) {
+//check if the remote site is available
+$hub = new local_hub();
+if (!$hub->is_remote_site_valid($url)) {
     throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', $url);
 }
 
+//check if the registration password is correct
 $hubpassword = get_config('local_hub', 'password');
 if (!empty($hubpassword) and $hubpassword != $password) {
     throw new moodle_exception('wronghubpassword', 'local_hub', $url.'/admin/registration/hubselector.php');
 }
 
 //check if the site url is already registered
-$hub = new local_hub();
 $checkedsite = $hub->get_site_by_url($url);
 if (!empty($checkedsite)) {
     redirect(new moodle_url($url."/admin/registration/confirmregistration.php",

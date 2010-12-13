@@ -1480,6 +1480,21 @@ class local_hub {
         $directory = "hub/$level1/$courseid";
         return filesize($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".mbz");
     }
+    
+    /**
+     * Check if the remote site is valid (not localhost and available by the hub)
+     * @param string $url the site url
+     * @return boolean true if the site is valid 
+     */
+    public function is_remote_site_valid($url) {
+        $siteheaders = get_headers($url);
+        if ( strpos($url, 'http://localhost') !== false
+                or strpos($url, 'http://127.0.0.1') !== false 
+                or $siteheaders === false) {           
+            return false;
+        }
+        return true;
+    }
 
     /**
      * This function display the hub homepage
