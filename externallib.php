@@ -64,12 +64,12 @@ class local_hub_external extends external_api {
         $resultinfo['hublogo'] = $hubinfo['hublogo'];
         $resultinfo['url'] = $hubinfo['url'];
         $resultinfo['language'] = $hubinfo['language'];
+        $resultinfo['sites'] = $hubinfo['sites'];
+        $resultinfo['courses'] = $hubinfo['courses'];
         if (has_capability('local/hub:viewinfo', $context)) {
              $resultinfo['contactname'] = $hubinfo['contactname'];
              $resultinfo['contactemail'] = $hubinfo['contactemail'];           
-             $resultinfo['privacy'] = $hubinfo['privacy'];           
-             $resultinfo['sites'] = $hubinfo['sites'];
-             $resultinfo['courses'] = $hubinfo['courses'];
+             $resultinfo['privacy'] = $hubinfo['privacy'];                       
         }
 
         return $resultinfo;
