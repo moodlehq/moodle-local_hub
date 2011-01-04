@@ -111,28 +111,36 @@ if (!empty($fromform) and confirm_sesskey()) {
     }
     set_config('privacy', $fromform->privacy, 'local_hub');
 
-    //save the image
+    //save the hub logo
     if (empty($fromform->keepcurrentimage)) {         
         $file = $hubsettingsform->save_temp_file('hubimage');
 
-        $userdir = "hub/0/";
+        if (!empty($file)) {
 
-        //create directory if doesn't exist
-        $directory = make_upload_directory($userdir);
+            $userdir = "hub/0/";
 
-        //save the image into the directory
-        copy($file,  $directory . 'hublogo');
+            //create directory if doesn't exist
+            $directory = make_upload_directory($userdir);
 
-        set_config('hublogo', true, 'local_hub');
-        $updatelogo = true;
+            //save the image into the directory
+            copy($file,  $directory . 'hublogo');
+
+            set_config('hublogo', true, 'local_hub');
+
+            $updatelogo = true;
+
+        } else {
+            if (file_exists($CFG->dataroot . '/hub/0/hublogo')) {
+                unlink($CFG->dataroot . '/hub/0/hublogo');
+            }
+        }
     }
 
     if (empty($updatelogo) and empty($fromform->keepcurrentimage)) {
         set_config('hublogo', false, 'local_hub');
     }
 
-    //reload the form
-    $hubsettingsform = new hub_settings_form();
+    $hubsettingsform->update_hublogo();
 
     //display confirmation
     echo $OUTPUT->notification(get_string('settingsupdated', 'local_hub'), 'notifysuccess');

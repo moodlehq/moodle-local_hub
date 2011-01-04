@@ -261,19 +261,7 @@ class hub_settings_form extends moodleform {
         $mform->addRule('contactemail', get_string('required'), 'required');
         $mform->addHelpButton('contactemail', 'contactemail', 'local_hub');
 
-        $hublogo = get_config('local_hub', 'hublogo');
-        if (!empty($hublogo)) {
-            $params = array('filetype' => HUB_HUBSCREENSHOT_FILE_TYPE, 'time' => time());
-            $imageurl = new moodle_url($CFG->wwwroot .
-                            "/local/hub/webservice/download.php", $params);
-            $imagetag = html_writer::empty_tag('img',
-                            array('src' => $imageurl, 'alt' => $hubname,
-                                'class' => 'admincurrentimage'));
-            $mform->addElement('checkbox', 'keepcurrentimage',
-                    get_string('keepcurrentimage', 'local_hub'), ' ' . $imagetag);
-            $mform->addHelpButton('keepcurrentimage', 'keepcurrentimage', 'local_hub');
-            $mform->setDefault('keepcurrentimage', true);
-        }
+        $this->update_hublogo();
 
         $mform->addElement('filepicker', 'hubimage',
                 get_string('hubimage', 'local_hub'), null,
@@ -330,7 +318,6 @@ class hub_settings_form extends moodleform {
      * Validate fields
      */
     function validation($data, $files) {
-        global $CFG;
         $errors = parent::validation($data, $files);
 
         $name = $this->_form->_submitValues['name'];
@@ -367,6 +354,77 @@ class hub_settings_form extends moodleform {
         }
 
         return $errors;
+    }
+
+    /**
+     * Add/remove the hub logo form element
+     */
+    public function update_hublogo() {
+        $mform = & $this->_form;
+        $logocheckbox = '';
+        if ($mform->elementExists('keepcurrentimage')) {
+            $logocheckbox = $mform->getElement('keepcurrentimage');
+        }
+        $hublogo = get_config('local_hub', 'hublogo');
+        if (!empty($hublogo)) {
+
+            $params = array('filetype' => HUB_HUBSCREENSHOT_FILE_TYPE, 'time' => time());
+            $imageurl = new moodle_url("/local/hub/webservice/download.php", $params);
+
+            $hubname = get_config('local_hub', 'name');
+            if ($hubname === false) {
+                $hubname = $SITE->fullname;
+            }
+
+            $imagetag = html_writer::empty_tag('img', array('src' => $imageurl, 'alt' => $hubname,
+                        'class' => 'admincurrentimage'));
+            if (!empty($logocheckbox)) {
+                $logocheckbox->setText($imagetag);
+            } else {
+                $mform->addElement('checkbox', 'keepcurrentimage',
+                    get_string('keepcurrentimage', 'local_hub'), ' ' . $imagetag);
+                $mform->addHelpButton('keepcurrentimage', 'keepcurrentimage', 'local_hub');
+                $mform->setDefault('keepcurrentimage', true);
+                //need to move the element to the right position
+                //    =>fix the issue where saving settings add the element at the bottom of the form
+                $this->move_element_back_after('keepcurrentimage', 'contactemail');
+            }
+
+        } else { //if no logo, remove the hub logo element
+            if (!empty($logocheckbox)) {
+                $mform->removeElement('keepcurrentimage');
+            }
+        }
+    }
+
+    /**
+     * Move a mform element right after another element
+     * @param string $elementname
+     * @param string $previouselementname
+     */
+    protected function move_element_back_after($elementname, $previouselementname) {
+        $previouselementindex = $this->_form->_elementIndex[$previouselementname];
+        $elementindex = $this->_form->_elementIndex[$elementname];
+
+        //only move the $element if it is after the $previouselement
+        if ($previouselementindex + 1 < $elementindex) {
+
+            //backup elements currently between the previous element and the element to move
+            for ($i = $previouselementindex + 1;
+            ($i <= (count($this->_form->_elements) - 1)) and ($i != $elementindex); $i = $i +1) {
+                    $followingelements[$i + 1] = $this->_form->_elements[$i];
+            }
+
+            //move the element
+            $this->_form->_elementIndex[$elementname] = $previouselementindex + 1;
+            $this->_form->_elements[$previouselementindex + 1] = $this->_form->_elements[$elementindex];
+
+            //move the betweener elements after the moved element
+            foreach ($followingelements as $newindex => $element) {
+                $this->_form->_elementIndex[$element->_attributes['name']] = $newindex;
+                $this->_form->_elements[$newindex] = $element;
+            }
+        }
     }
 
 }
@@ -441,7 +499,6 @@ class hub_site_settings_form extends moodleform {
      * Set password to empty if hub not private
      */
     function validation($data, $files) {
-        global $CFG;
         $errors = parent::validation($data, $files);
 
         $publicationmax = $this->_form->_submitValues['publicationmax'];
