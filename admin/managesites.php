@@ -95,7 +95,7 @@ if ($delete != -1 and $confirm and confirm_sesskey()) {
 /// Check if the page has been called with trust argument
 $trust = optional_param('trust', -1, PARAM_INTEGER);
 if ($trust != -1 and confirm_sesskey()) {
-    $id = optional_param('id', '', PARAM_INTEGER);
+    $id = required_param('id', PARAM_INTEGER);
     $site = $hub->get_site($id);
     if (!empty($site)) {
         $site->trusted = $trust;
@@ -103,30 +103,31 @@ if ($trust != -1 and confirm_sesskey()) {
     }
 }
 
-/// Check if the page has been called by visible action
-$visible = optional_param('visible', -1, PARAM_INTEGER);
-if ($visible != -1 and confirm_sesskey()) {
-    $id = optional_param('id', '', PARAM_INTEGER);
-    $site = $hub->get_site($id);
-    if (!empty($site)) {
-        $site->visible = $visible;
-        $hub->update_site($site);
-    }
-}
-
-/// Check if the page has been called by prioritise action
-$prioritise = optional_param('prioritise', -1, PARAM_INTEGER);
-if ($prioritise != -1 and confirm_sesskey()) {
-    $id = optional_param('id', '', PARAM_INTEGER);
-    $site = $hub->get_site($id);
-    if (!empty($site)) {
-        $site->prioritise = $prioritise;
-        if ($prioritise) {
-            $site->trusted = true;
-        }
-        $hub->update_site($site);
-    }
-}
+//TODO: MDL-25422
+///// Check if the page has been called by visible action
+//$visible = optional_param('visible', -1, PARAM_INTEGER);
+//if ($visible != -1 and confirm_sesskey()) {
+//    $id = required_param('id', PARAM_INTEGER);
+//    $site = $hub->get_site($id);
+//    if (!empty($site)) {
+//        $site->visible = $visible;
+//        $hub->update_site($site);
+//    }
+//}
+//
+///// Check if the page has been called by prioritise action
+//$prioritise = optional_param('prioritise', -1, PARAM_INTEGER);
+//if ($prioritise != -1 and confirm_sesskey()) {
+//    $id = required_param('id', PARAM_INTEGER);
+//    $site = $hub->get_site($id);
+//    if (!empty($site)) {
+//        $site->prioritise = $prioritise;
+//        if ($prioritise) {
+//            $site->trusted = true;
+//        }
+//        $hub->update_site($site);
+//    }
+//}
 
 $search = optional_param('search', '', PARAM_TEXT);
 $renderer = $PAGE->get_renderer('local_hub');
@@ -141,11 +142,12 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
 
     //if the page result from any action from the renderer, set data to the previous search in order to
     //display the same result
-    if ((!empty($search) or $trust != -1 or $delete != -1 or $visible != -1 or $prioritise != -1)
+    if ((!empty($search) or $trust != -1 or $delete != -1 /*or $visible != -1 or $prioritise != -1*/)
             and confirm_sesskey()) {
         $fromformdata['trusted'] = optional_param('trusted', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['prioritise'] = optional_param('prioritise', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['visible'] = optional_param('visible', 'all', PARAM_ALPHANUMEXT);
+//TODO: MDL-25422
+//        $fromformdata['prioritised'] = optional_param('prioritised', 'all', PARAM_ALPHANUMEXT);
+//        $fromformdata['visibility'] = optional_param('visibility', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['countrycode'] = optional_param('countrycode', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['search'] = $search;
@@ -161,12 +163,13 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
         if ($fromform->trusted != 'all') {
             $options['trusted'] = $fromform->trusted;
         }
-        if ($fromform->prioritise != 'all') {
-            $options['prioritise'] = $fromform->prioritise;
-        }
-        if ($fromform->visible != 'all') {
-            $options['visible'] = $fromform->visible;
-        }
+//TODO: MDL-25422
+//        if ($fromform->prioritised != 'all') {
+//            $options['prioritise'] = $fromform->prioritised;
+//        }
+//        if ($fromform->visibility != 'all') {
+//            $options['visible'] = $fromform->visibility;
+//        }
         if ($fromform->countrycode != 'all') {
             $options['countrycode'] = $fromform->countrycode;
         }
