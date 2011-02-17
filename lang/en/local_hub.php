@@ -136,7 +136,7 @@ Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}
 ';
-$string['emailmessagesitedeleted'] = 'An administrator from {$a->hubname} ($a->huburl) deleted {$a->sitename} ({$a->siteurl}) from the hub listing.
+$string['emailmessagesitedeleted'] = 'An administrator from {$a->hubname} ({$a->huburl}) deleted {$a->sitename} ({$a->siteurl}) from the hub listing.
 If you want to register again on this hub, you must first reset your registration on your server. Go to {$a->unregisterpagelink}.
 ';
 $string['emailmessagesiteurlchanged'] = '{$a->name} site has been updated. (previous name: {$a->oldname})

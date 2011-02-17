@@ -1194,6 +1194,8 @@ class local_hub {
     }
 
     function delete_site($id, $unregistercourses = false) {
+        global $CFG;
+        
         $sitetodelete = $this->get_site($id);
 
         //unregister the courses first

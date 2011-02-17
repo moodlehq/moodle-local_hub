@@ -49,7 +49,7 @@ $delete = optional_param('delete', -1, PARAM_INTEGER);
 $confirm = optional_param('confirm', false, PARAM_INTEGER);
 if ($delete != -1 and $confirm and confirm_sesskey()) {
     $unregistercourses = optional_param('unregistercourses', false, PARAM_BOOL);
-    $hub->delete_site($id, $unregistercourses);
+    $hub->delete_site($delete, $unregistercourses);
 }
 
 
