@@ -759,8 +759,8 @@ class local_hub {
      * is the server into the communication, so the token
      * refered, is used by the remote entity to call the a hub function.
      * CLIENT mean that the hub use the token to call
-     * the remote entity function
-     * @param string $remoteentity the name of the remote entity
+     * the remote entity function (see the define values top of this file)
+     * @param string $remoteentity the kind of the remote entity (registered site, hubdirectory, any site - see the define values)
      * @param string $remoteurl the token of the remote entity
      * @param string $token the token used by this communication
      * @param int $deleted set to 1, return only deleted communication
@@ -1049,9 +1049,8 @@ class local_hub {
         $siteinfo->deleted = 0;
 
         //if update, check if the url changed, if yes it could be a potential hack attempt
-        //=> make the hub not visible and alert the administrator
+        //=> make the site not visible and alert the administrator
         if (!empty($siteurltoupdate)) {
-            $sameurl = 1;
 
             //retrieve current hub info
             $currentsiteinfo = $this->get_site_by_url($siteurltoupdate);
@@ -1084,8 +1083,6 @@ class local_hub {
                 //make the site not visible (hub admin need to reconfirm it)
                 $siteinfo->visible = 0;
 
-                $sameurl = 0;
-
                 //alert the administrator
                 $contactuser = new object;
                 $contactuser->email = $siteinfo->contactemail ? $siteinfo->contactemail : $CFG->noreplyaddress;
@@ -1099,8 +1096,8 @@ class local_hub {
         } else {
             //if creation mode, check that the secret doesn't exist already
             $checkedhub = $this->get_site_by_secret($siteinfo->secret);
-            if (!empty($checkedhub)) { //no registration process failed but the secret still exist
-                throw new moodle_exception('sitesecretalreadyexist');
+            if (!empty($checkedhub)) { //no registration process failed but the secret still exist              
+                throw new moodle_exception('sitesecretalreadyexist', 'local_hub');
             }
         }
 
@@ -1194,6 +1191,52 @@ class local_hub {
         }
 
         return $sitetohubcommunication->token;
+    }
+
+    function delete_site($id, $unregistercourses = false) {
+        $sitetodelete = $this->get_site($id);
+
+        //unregister the courses first
+        if (!empty($unregistercourses)) {
+            $this->delete_courses($sitetodelete->id);
+        }
+
+        $sitetohubcommunication = $this->get_communication(WSSERVER,
+                REGISTEREDSITE, $sitetodelete->url);
+
+        if (!empty($sitetohubcommunication)) {
+            //delete the token for this site
+            require_once($CFG->dirroot . '/webservice/lib.php');
+            $webservice_manager = new webservice();
+            $tokentodelete = $webservice_manager->get_user_ws_token($sitetohubcommunication->token);
+            $webservice_manager->delete_user_ws_token($tokentodelete->id);
+
+            //delete the communications to this hub
+            $this->delete_communication($sitetohubcommunication);
+        }
+
+        //send email to the site administrator
+        $contactuser = new object;
+        $contactuser->email = $sitetodelete->contactemail ?
+                $sitetodelete->contactemail : $CFG->noreplyaddress;
+        $contactuser->firstname = $sitetodelete->contactname ?
+                $sitetodelete->contactname : get_string('noreplyname');
+        $contactuser->lastname = '';
+        $contactuser->maildisplay = true;
+        $emailinfo = new stdClass();
+        $hubinfo = $this->get_info();
+        $emailinfo->hubname = $hubinfo['name'];
+        $emailinfo->huburl = $hubinfo['url'];
+        $emailinfo->sitename = $sitetodelete->name;
+        $emailinfo->siteurl = $sitetodelete->url;
+        $emailinfo->unregisterpagelink = $sitetodelete->url .
+                '/admin/registration/index.php?huburl=' .
+                $hubinfo['url'] . '&force=1&unregistration=1';
+        email_to_user($contactuser, get_admin(),
+                get_string('emailtitlesitedeleted', 'local_hub', $emailinfo),
+                get_string('emailmessagesitedeleted', 'local_hub', $emailinfo));
+
+        $this->unregister_site($sitetodelete);
     }
 
     /**

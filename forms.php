@@ -322,17 +322,7 @@ class site_search_form extends moodleform {
         } else {
             $trusted = 'all';
         }
-//TODO: MDL-25422
-//        if (isset($this->_customdata['prioritised'])) {
-//            $prioritise = $this->_customdata['prioritised'];
-//        } else {
-//            $prioritise = 'all';
-//        }
-//        if (isset($this->_customdata['visibility'])) {
-//            $visible = $this->_customdata['visibility'];
-//        } else {
-//            $visible = 'all';
-//        }
+
         if (isset($this->_customdata['countrycode'])) {
             $country = $this->_customdata['countrycode'];
         } else {
@@ -344,20 +334,7 @@ class site_search_form extends moodleform {
             $language = 'all';
         }
 
-
         $mform->addElement('header', 'site', get_string('sitesearch', 'local_hub'));
-
-        //visible field TODO: MDL-25422
-//        if (key_exists('adminform', $this->_customdata)) {
-//            $options = array();
-//            $options['all'] = get_string('visibilityall', 'local_hub');
-//            $options[1] = get_string('visibilityyes', 'local_hub');
-//            $options[0] = get_string('visibilityno', 'local_hub');
-//            $mform->addElement('select', 'visibility', get_string('sitevisibility', 'local_hub'), $options);
-//            $mform->setDefault('visibility', $visible);
-//            unset($options);
-//            $mform->addHelpButton('visibility', 'sitevisibility', 'local_hub');
-//        }
 
         $options = array();
         $options['all'] = get_string('any');
@@ -367,16 +344,6 @@ class site_search_form extends moodleform {
         $mform->setDefault('trusted', $trusted);
         unset($options);
         $mform->addHelpButton('trusted', 'trusted', 'local_hub');
-
-        //prioritise TODO: MDL-25422
-//        $options = array();
-//        $options['all'] = get_string('any');
-//        $options[1] = get_string('prioritiseyes', 'local_hub');
-//        $options[0] = get_string('prioritiseno', 'local_hub');
-//        $mform->addElement('select', 'prioritised', get_string('prioritise', 'local_hub'), $options);
-//        $mform->setDefault('prioritised', $prioritise);
-//        unset($options);
-//        $mform->addHelpButton('prioritised', 'prioritise', 'local_hub');
 
         $options = array();
         $options['all'] = get_string('any');

@@ -69,6 +69,99 @@ class local_hub_renderer extends plugin_renderer_base {
         return $this->output->confirm($confirmationmessage, $formcontinue, $formcancel);
     }
 
+    public function confirmfreshmoodlereg($freshregistration, $freshmoodletoken) {
+
+        $confirmationmsg = get_string('freshmoodleconfmsg', 'local_hub');
+
+        $table = new html_table();
+        $table->head = array('',get_string('previousregistration', 'local_hub'),
+            get_string('newregistration', 'local_hub'));
+
+        $freshregistration['oldsite'] = is_array($freshregistration['oldsite']) ?
+            $freshregistration['oldsite'] : (array) $freshregistration['oldsite'];
+        $freshregistration['newsite'] = is_array($freshregistration['newsite']) ?
+            $freshregistration['newsite'] : (array) $freshregistration['newsite'];
+
+        $displayedvalues = array('name' => true,
+                                 'url' => true,
+                                 'description' => true,
+                                 'contactname' => true,
+                                 'contactemail' => true,
+                                 'moodleversion' => true,
+                                 'moodlerelease' => true);
+
+        foreach ($freshregistration['newsite'] as $value => $newreg) {
+            if (key_exists($value, $displayedvalues)) {
+                $valuecell = new html_table_cell();
+                $valuecell->text = $value;
+                $oldregcell = new html_table_cell();
+                $oldregcell->text = $freshregistration['oldsite'][$value];
+                $newregcell = new html_table_cell();
+                $newregcell->text = $freshregistration['newsite'][$value];
+                $row = new html_table_row();
+                $row->cells = array($valuecell, $oldregcell, $newregcell);
+                $table->data[] = $row;
+            }
+        }
+        $confirmationmsgbox = html_writer::table($table) . $confirmationmsg;
+
+        $confirmationmsgbox = html_writer::tag('div', $confirmationmsgbox, array('class' => ''));
+
+        $optionsyes['freshmoodletoken'] = $freshmoodletoken;
+        $optionsyes['freshmoodletokenconf'] = true;
+
+        $formcontinue = new single_button(new moodle_url("/local/hub/siteregistration.php",
+                $optionsyes), get_string('replaceregistrationbutton', 'local_hub'), 'post');
+        $formcancel = new single_button(new moodle_url($freshregistration['oldsite']['url']),
+                        get_string('cancel'), 'get');
+        return $this->output->confirm($confirmationmsgbox, $formcontinue, $formcancel);
+    }
+
+    public function movedorcopiedsiteform($sitevalues, $originalsite) {
+        $movedorcopiedmsg = get_string('movedorcopiedmsg', 'local_hub', $originalsite);
+
+        $table = new html_table();
+        $table->head = array('',get_string('previousregistration', 'local_hub'),
+            get_string('newregistration', 'local_hub'));
+
+        $sitevalues = is_array($sitevalues) ? $sitevalues : (array) $sitevalues;
+        $originalsite = is_array($originalsite) ? $originalsite : (array) $originalsite;
+
+        $displayedvalues = array('name' => true,
+                                 'url' => true,
+                                 'description' => true,
+                                 'contactname' => true,
+                                 'contactemail' => true,
+                                 'moodleversion' => true,
+                                 'moodlerelease' => true);
+
+        foreach ($sitevalues as $value => $newreg) {
+            if (key_exists($value, $displayedvalues)) {
+                $valuecell = new html_table_cell();
+                $valuecell->text = $value;
+                $oldregcell = new html_table_cell();
+                $oldregcell->text = $originalsite[$value];
+                $newregcell = new html_table_cell();
+                $newregcell->text = $sitevalues[$value];
+                $row = new html_table_row();
+                $row->cells = array($valuecell, $oldregcell, $newregcell);
+                $table->data[] = $row;
+            }
+        }
+        $confirmationmsgbox = html_writer::table($table) . $movedorcopiedmsg;
+
+        $movedoption['action'] = 'moved';
+        $movedoption = array_merge($movedoption, $sitevalues);
+        $copiedoption['action'] = 'copied';
+        $copiedoption = array_merge($copiedoption, $sitevalues);
+
+        $formmoved = new single_button(new moodle_url("/local/hub/siteregistration.php",
+                $movedoption), get_string('moved', 'local_hub'), 'post');
+        $formcopied = new single_button(new moodle_url("/local/hub/siteregistration.php", $copiedoption),
+                        get_string('copied', 'local_hub'), 'post');
+        return $this->output->confirm($confirmationmsgbox, $formmoved, $formcopied);
+    }
+
     /**
      * Display a box confirmation message for removing a site from the directory
      * @param object $site - site to delete

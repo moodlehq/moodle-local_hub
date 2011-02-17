@@ -66,6 +66,7 @@ $string['contentinfo'] = 'Subject: {$a->subject} - Audience: {$a->audience} - Ed
 $string['contributornames'] = 'Contributor names';
 $string['contributornames_help'] = 'other people having contributed to the course.';
 $string['contributors'] = 'Contributors: {$a}';
+$string['copied'] = 'Copied';
 $string['country'] = 'Country';
 $string['country_help'] = 'Display only sites from the selected country.';
 $string['coursedesc'] = 'Description';
@@ -121,6 +122,11 @@ $string['edulevelsecondary'] = 'Secondary';
 $string['eduleveltertiary'] = 'Tertiary';
 $string['emailmessage'] = 'Message';
 $string['emailmessage_help'] = 'The message content.';
+$string['emailmessageurlalreadyexists'] = 'DO NOT CLICK THE LINK WITHOUT UNDERSTANDING, THIS COULD BE A SITE REGISTRATION STEALING ATTEMPT!
+
+{$a->hubname} hub detected a site trying to register with the {$a->existingsite}\'s url.
+This issue commonly appears when you try to register a fresh site on a registered url ({$a->url}).
+To register a freshly installed Moodle site, you need to delete the previous registration first: {$a->deletesiteregistration}';
 $string['emailmessagesiteadded'] = 'A new site just registered with the hub at {$a->huburl}
     
 Name: {$a->name}
@@ -142,6 +148,7 @@ Admin: {$a->contactname} ({$a->contactemail})
 Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}';
+$string['emailtitleurlalreadyexists'] = 'Another site try to register with {$a->existingsite} url.';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from {$a->hubname} hub';
 $string['emailtitlesiteurlchanged'] = '{$a} site has changed his name or url (please check it).';
@@ -164,6 +171,11 @@ $string['errorwrongpostdata'] = 'Some POST data are missing, please use the Mood
 $string['hideguestbutton'] = 'Moodle changed the option \'Guest login button\' to the value \'Hide\'.';
 $string['failunregistrationofprivate'] = 'Could not unregister from the hub, try again on the register page ({$a}).';
 $string['fileinfo'] = 'Language: {$a->lang} - License: {$a->license} -  Time updated: {$a->timeupdated}';
+$string['freshmoodleconfmsg'] = 'Are you sure to replace the previous registration by the new registration?';
+$string['freshmoodleregistrationerror'] = 'You are trying to register a new site with a url that was previously used by a registered site.
+We\'ve sent an email to this previously registered site administrator. This administrator will have the choice to delete the previous registration record from the hub.
+If he/she decide to do it, then you will be able to register your new site. Note: Usually you should be this administrator, but this step is required to avoid hacking. Thank you.';
+$string['freshtokenerror'] = 'Sorry, the token is invalid or has been used.';
 $string['hub'] = 'Hub';
 $string['hubcoursessearch'] = 'Hub courses';
 $string['hubdetails'] = 'Hub details';
@@ -213,6 +225,10 @@ $string['maxwscourseresultempty'] = 'Maximum course result must be > 0';
 $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
+$string['moved'] = 'Moved';
+$string['movedorcopiedmsg'] = 'We detected that you try to register a site that has been either moved, either copied.
+If you moved your site to a new url, then press \'Moved\'. The original registration will be overwritten. If you copied the site to another url then press \'Copied\'
+You will be redirected to your site to regenerate your site identifier and a new registration will be processed.';
 $string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
 --------------------------------------------------------------------------------------
@@ -242,6 +258,7 @@ $string['mustbeurl'] = 'Must be  a URL.';
 $string['name'] = 'Name';
 $string['name_help'] = 'The hub name will be displayed in the hub directory listing.';
 $string['never'] = 'never';
+$string['newregistration'] = 'New registration';
 $string['no'] = 'No';
 $string['nocomments'] = 'No comments';
 $string['nocourse'] = 'No courses match your search.';
@@ -271,6 +288,7 @@ $string['permalink'] = 'Permalink';
 $string['pluginname'] = 'Hub';
 $string['postaladdress'] = 'Postal address';
 $string['postsnumber'] = 'Number of posts ({$a})';
+$string['previousregistration'] = 'Previous registration';
 $string['prioritise'] = 'Prioritised';
 $string['prioritise_help'] = 'Display only prioritised sites.';
 $string['prioritiseno'] = 'No';
@@ -306,6 +324,7 @@ $string['registeronspecifichub'] = 'Register on a specific hub';
 $string['registration'] = 'Hub server registration';
 $string['registrationupdated'] = 'Registration has been updated.';
 $string['registrationupdatedfailed'] = 'Registration update failed.';
+$string['replaceregistrationbutton'] = 'REPLACE REGISTRATION!';
 $string['resourcesnumber'] = 'Number of resources ({$a})';
 $string['roleassignmentsnumber'] = 'Number of role assignments ({$a})';
 $string['rsssecret'] = 'RSS secret';
@@ -358,6 +377,7 @@ $string['siteregconfcomment'] = 'Your site needs a final confirmation on {$a} (i
 $string['siteregistration'] = 'Site registration';
 $string['siteregistrationupdated'] = 'Site registration updated';
 $string['sitesearch'] = 'Search for sites';
+$string['sitesecretalreadyexist'] = 'The hub could not process the registration because another site is already registered with the same identifier.';
 $string['sitesettings'] = 'Site settings';
 $string['sitesettingsform'] = '"{$a}" settings';
 $string['sitesettingsupdated'] = '{$a} settings have been updated.';

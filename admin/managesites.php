@@ -48,47 +48,8 @@ $hub = new local_hub();
 $delete = optional_param('delete', -1, PARAM_INTEGER);
 $confirm = optional_param('confirm', false, PARAM_INTEGER);
 if ($delete != -1 and $confirm and confirm_sesskey()) {
-
-    $sitetodelete = $hub->get_site($delete);
-
-    //unregister the courses first
     $unregistercourses = optional_param('unregistercourses', false, PARAM_BOOL);
-    if (!empty($unregistercourses)) {
-        $hub->delete_courses($sitetodelete->id);
-    }
-
-    $sitetohubcommunication = $hub->get_communication(WSSERVER, REGISTEREDSITE, $sitetodelete->url);
-
-    if (!empty($sitetohubcommunication)) {
-        //delete the token for this site
-        require_once($CFG->dirroot . '/webservice/lib.php');
-        $webservice_manager = new webservice();
-        $tokentodelete = $webservice_manager->get_user_ws_token($sitetohubcommunication->token);
-        $webservice_manager->delete_user_ws_token($tokentodelete->id);
-
-        //delete the communications to this hub
-        $hub->delete_communication($sitetohubcommunication);
-    }
-
-    //send email to the site administrator
-    $contactuser = new object;
-    $contactuser->email = $sitetodelete->contactemail ? $sitetodelete->contactemail : $CFG->noreplyaddress;
-    $contactuser->firstname = $sitetodelete->contactname ? $sitetodelete->contactname : get_string('noreplyname');
-    $contactuser->lastname = '';
-    $contactuser->maildisplay = true;
-    $emailinfo = new stdClass();
-    $hubinfo = $hub->get_info();
-    $emailinfo->hubname = $hubinfo['name'];
-    $emailinfo->huburl = $hubinfo['url'];
-    $emailinfo->sitename = $sitetodelete->name;
-    $emailinfo->siteurl = $sitetodelete->url;
-    $emailinfo->unregisterpagelink = $sitetodelete->url .
-            '/admin/registration/index.php?huburl=' . $hubinfo['url'] . '&force=1&unregistration=1';
-    email_to_user($contactuser, get_admin(),
-            get_string('emailtitlesitedeleted', 'local_hub', $emailinfo),
-            get_string('emailmessagesitedeleted', 'local_hub', $emailinfo));
-
-    $hub->unregister_site($sitetodelete);
+    $hub->delete_site($id, $unregistercourses);
 }
 
 
@@ -102,32 +63,6 @@ if ($trust != -1 and confirm_sesskey()) {
         $hub->update_site($site);
     }
 }
-
-//TODO: MDL-25422
-///// Check if the page has been called by visible action
-//$visible = optional_param('visible', -1, PARAM_INTEGER);
-//if ($visible != -1 and confirm_sesskey()) {
-//    $id = required_param('id', PARAM_INTEGER);
-//    $site = $hub->get_site($id);
-//    if (!empty($site)) {
-//        $site->visible = $visible;
-//        $hub->update_site($site);
-//    }
-//}
-//
-///// Check if the page has been called by prioritise action
-//$prioritise = optional_param('prioritise', -1, PARAM_INTEGER);
-//if ($prioritise != -1 and confirm_sesskey()) {
-//    $id = required_param('id', PARAM_INTEGER);
-//    $site = $hub->get_site($id);
-//    if (!empty($site)) {
-//        $site->prioritise = $prioritise;
-//        if ($prioritise) {
-//            $site->trusted = true;
-//        }
-//        $hub->update_site($site);
-//    }
-//}
 
 $search = optional_param('search', '', PARAM_TEXT);
 $renderer = $PAGE->get_renderer('local_hub');
@@ -145,9 +80,6 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     if ((!empty($search) or $trust != -1 or $delete != -1 /*or $visible != -1 or $prioritise != -1*/)
             and confirm_sesskey()) {
         $fromformdata['trusted'] = optional_param('trusted', 'all', PARAM_ALPHANUMEXT);
-//TODO: MDL-25422
-//        $fromformdata['prioritised'] = optional_param('prioritised', 'all', PARAM_ALPHANUMEXT);
-//        $fromformdata['visibility'] = optional_param('visibility', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['countrycode'] = optional_param('countrycode', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['language'] = optional_param('language', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['search'] = $search;
@@ -163,13 +95,7 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
         if ($fromform->trusted != 'all') {
             $options['trusted'] = $fromform->trusted;
         }
-//TODO: MDL-25422
-//        if ($fromform->prioritised != 'all') {
-//            $options['prioritise'] = $fromform->prioritised;
-//        }
-//        if ($fromform->visibility != 'all') {
-//            $options['visible'] = $fromform->visibility;
-//        }
+
         if ($fromform->countrycode != 'all') {
             $options['countrycode'] = $fromform->countrycode;
         }
