@@ -125,8 +125,8 @@ $string['emailmessage_help'] = 'The message content.';
 $string['emailmessageurlalreadyexists'] = 'DO NOT CLICK THE LINK WITHOUT UNDERSTANDING, THIS COULD BE A SITE REGISTRATION STEALING ATTEMPT!
 
 {$a->hubname} hub detected a site trying to register with the {$a->existingsite}\'s url.
-This issue commonly appears when you try to register a fresh site on a registered url ({$a->url}).
-To register a freshly installed Moodle site, you need to delete the previous registration first: {$a->deletesiteregistration}';
+This issue commonly appears when you try to register a Moodle site on a url registered ({$a->url}) by a different Moodle site.
+To register this freshly installed Moodle site (or moved site), you need to delete the previous registration first: {$a->deletesiteregistration}';
 $string['emailmessagesiteadded'] = 'A new site just registered with the hub at {$a->huburl}
     
 Name: {$a->name}
@@ -172,9 +172,11 @@ $string['hideguestbutton'] = 'Moodle changed the option \'Guest login button\' t
 $string['failunregistrationofprivate'] = 'Could not unregister from the hub, try again on the register page ({$a}).';
 $string['fileinfo'] = 'Language: {$a->lang} - License: {$a->license} -  Time updated: {$a->timeupdated}';
 $string['freshmoodleconfmsg'] = 'Are you sure to replace the previous registration by the new registration?';
-$string['freshmoodleregistrationerror'] = 'You are trying to register a new site with a url that was previously used by a registered site.
+$string['freshmoodleregistrationerror'] = 'You are trying to register a site with a url that was previously used by a registered site.
 We\'ve sent an email to this previously registered site administrator. This administrator will have the choice to delete the previous registration record from the hub.
-If he/she decide to do it, then you will be able to register your new site. Note: Usually you should be this administrator, but this step is required to avoid hacking. Thank you.';
+If he/she decide to do it, then you will be able to register your site. Note: Usually you should be this administrator, but this step is required to avoid hacking. Thank you.';
+$string['freshmoodleregistrationerror2'] = 'You are trying to register a site with a url that was previously used by another registered site. 
+A request has already been sent to the site administrator of this other site.';
 $string['freshtokenerror'] = 'Sorry, the token is invalid or has been used.';
 $string['hub'] = 'Hub';
 $string['hubcoursessearch'] = 'Hub courses';

@@ -69,7 +69,7 @@ class local_hub_renderer extends plugin_renderer_base {
         return $this->output->confirm($confirmationmessage, $formcontinue, $formcancel);
     }
 
-    public function confirmfreshmoodlereg($freshregistration, $freshmoodletoken) {
+    public function confirmfreshmoodlereg($freshregistration, $freshmoodletoken, $freshmoodleid) {
 
         $confirmationmsg = get_string('freshmoodleconfmsg', 'local_hub');
 
@@ -108,6 +108,7 @@ class local_hub_renderer extends plugin_renderer_base {
         $confirmationmsgbox = html_writer::tag('div', $confirmationmsgbox, array('class' => ''));
 
         $optionsyes['freshmoodletoken'] = $freshmoodletoken;
+        $optionsyes['id'] = $freshmoodleid;
         $optionsyes['freshmoodletokenconf'] = true;
 
         $formcontinue = new single_button(new moodle_url("/local/hub/siteregistration.php",
