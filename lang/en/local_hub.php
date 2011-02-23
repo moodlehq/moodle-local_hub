@@ -66,7 +66,7 @@ $string['contentinfo'] = 'Subject: {$a->subject} - Audience: {$a->audience} - Ed
 $string['contributornames'] = 'Contributor names';
 $string['contributornames_help'] = 'other people having contributed to the course.';
 $string['contributors'] = 'Contributors: {$a}';
-$string['copied'] = 'Copied';
+$string['copied'] = 'Register a new site';
 $string['country'] = 'Country';
 $string['country_help'] = 'Display only sites from the selected country.';
 $string['coursedesc'] = 'Description';
@@ -227,10 +227,11 @@ $string['maxwscourseresultempty'] = 'Maximum course result must be > 0';
 $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
-$string['moved'] = 'Moved';
-$string['movedorcopiedmsg'] = 'We detected that you try to register a site that has been either moved, either copied.
-If you moved your site to a new url, then press \'Moved\'. The original registration will be overwritten. If you copied the site to another url then press \'Copied\'
-You will be redirected to your site to regenerate your site identifier and a new registration will be processed.';
+$string['moved'] = 'Update registration url for an existing site';
+$string['movedorcopiedmsg'] = 'We detected that you try to register a Moodle 2 site that has already been registered on a different url.
+If you moved an existing Moodle 2 site to another url, then press \'Update registration url for an existing site\'. 
+Your original Moodle 2 registration will be updated. In any other cases (you duplicated an existing site, you moved a Moodle 1.9 site to this url, you just did a fresh install...) press \'Register a new site\'.
+You will be redirected to your site to regenerate your site identifier and a clean registration can be processed.';
 $string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
 --------------------------------------------------------------------------------------
