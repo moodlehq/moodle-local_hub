@@ -102,9 +102,20 @@ $sitevalues = array('name' => $name,
         'moodlerelease' => $moodlerelease,
         'password' => $password);
 
+$hub = new local_hub();
+
+//check the secret is not stolen
+if (!$hub->check_secret_validity($token)) {
+    echo $OUTPUT->header();
+    $renderer = $PAGE->get_renderer('local_hub');
+    echo $renderer->secretisstolen($sitevalues);
+    echo $OUTPUT->footer();
+    exit();
+}
+
+
 //fresh moodle install on same url / Moved Moodle install on a url where a Moodle site was previously registered
 //the user comes to this page from an email link with a special token valid one time.
-$hub = new local_hub();
 $freshmoodletoken = optional_param('freshmoodletoken', '', PARAM_ALPHANUMEXT);
 $freshmoodleid = optional_param('id', 0, PARAM_INT);
 $freshmoodletokenconf = optional_param('freshmoodletokenconf', 0, PARAM_INT);

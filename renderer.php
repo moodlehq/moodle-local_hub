@@ -33,6 +33,48 @@ require_once($CFG->dirroot . "/course/publish/lib.php");
 class local_hub_renderer extends plugin_renderer_base {
 
     /**
+     * Display a confirm box for a stolen token (admin page)
+     * @param string $site
+     * @return string html code
+     */
+    public function stolensecret_confirmation($site) {
+      
+        $optionsno = array();
+        $optionsyes = array();
+        $optionsyes['sesskey'] = sesskey();
+        $optionsyes['stolen'] = $site->id;
+        $optionsyes['confirm'] = true;
+        
+        $formcontinue = new single_button(new moodle_url("/local/hub/admin/stolensecret.php", 
+                $optionsyes), get_string('markstolen', 'local_hub'), 'post');
+        $formcancel = new single_button(new moodle_url("/local/hub/admin/stolensecret.php", 
+                $optionsno), get_string('cancel'), 'get');
+        return $this->output->confirm(get_string('markstolenmsg', 'local_hub'),
+                $formcontinue, $formcancel);
+    }
+    
+    /**
+     * Display a stolen token message to the site administrator
+     * @param object $site
+     * @return string html code
+     */
+    public function secretisstolen($site) {
+        global $CFG;
+      
+        $optionsyes = array();
+        $optionsyes['url'] = $CFG->wwwroot;
+        $optionsyes['token'] = $site['token'];
+        $optionsyes['hubname'] = get_config('local_hub', 'name');
+        
+        $formcontinue = new single_button(new moodle_url($site['url'] .
+                "/admin/registration/renewregistration.php", $optionsyes), 
+                get_string('continue'), 'post');
+        
+        return $this->output->box(get_string('secretisstolen', 'local_hub')) 
+                . $this->output->render($formcontinue);
+    }
+    
+    /**
      * Display a box message confirming a site registration (add or update)
      * @param string $confirmationmessage
      * @return string
@@ -608,7 +650,7 @@ class local_hub_renderer extends plugin_renderer_base {
      * @param boolean $withwriteaccess
      * @return string
      */
-    public function site_list($sites, $withwriteaccess=false) {
+    public function site_list($sites, $withwriteaccess=false, $displaysecret=false) {
         global $CFG;
 
         $renderedhtml = '';
@@ -693,6 +735,16 @@ class local_hub_renderer extends plugin_renderer_base {
                                     'local_hub', $admindisplayedinfo);
                     $deschtml .= html_writer::tag('span', $additionaladmindesc,
                                     array('class' => 'additionaladmindesc'));
+                    
+                    if ($displaysecret) {
+                        $markstolen = new moodle_url('/local/hub/admin/stolensecret.php', 
+                                array('stolen' => $site->id, 'sesskey' => sesskey()));
+                        $deschtml .= html_writer::tag('span', 
+                                get_string('secretvalue', 'local_hub', $site->secret) . ' ' .
+                                        html_writer::tag('a', get_string('markstolen', 'local_hub'),
+                                                array('href' => $markstolen, 'class' => 'markstolen')),
+                                    array('class' => 'sitesecret'));
+                    }
                 }
 
                 //retrieve language string

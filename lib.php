@@ -1192,6 +1192,41 @@ class local_hub {
 
         return $sitetohubcommunication->token;
     }
+    
+    /**
+     * Check if a secret is valid (not marked as stolen)
+     * @param string $secret 
+     * @return boolean true if the secret has not been marked as stolen
+     */
+    function check_secret_validity($secret) {
+        global $DB;
+        $stolensecret = $DB->get_record('hub_stolen_site_secrets', array('secret' => $secret));
+        
+        if (!empty($stolensecret)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    
+    /**
+     * Mark a site secret as stolen.
+     * @param int $siteid the site whose the secret has been stolen
+     */
+    function marksecretstolen($siteid) {
+        global $DB;
+        
+        $site = $this->get_site($siteid);
+        
+        if (!empty($site)) {
+            $stolensecret = new stdClass();
+            $stolensecret->secret = $site->secret;
+            $stolensecret->siteurl = $site->url;
+            $stolensecret->blockeddate = time();
+
+            $DB->insert_record('hub_stolen_site_secrets', $stolensecret);
+        }
+    }
 
     function delete_site($id, $unregistercourses = false) {
         global $CFG;

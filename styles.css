@@ -14,6 +14,10 @@
  along with Moodle.  If not, see <http://www.gnu.org/licenses/>.*//*
 */
 
+/* ADMIN: stolen secret */
+#page-admin-local-hub-admin-stolensecret .admintextfield {width: 400px;}
+#page-admin-local-hub-admin-stolensecret .sitesecret {display: block; margin-top: 6px;}
+#page-admin-local-hub-admin-stolensecret .markasstolen {display: block;}
 /* ADMIN: registration */
 #page-admin-local-hub-admin-register .buttoncenter {text-align: center}
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20101109" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20110225" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -125,7 +125,7 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_communications" COMMENT="All token known by the site in order to communicate between all different entities" PREVIOUS="hub_course_outcomes">
+    <TABLE NAME="hub_communications" COMMENT="All token known by the site in order to communicate between all different entities" PREVIOUS="hub_course_outcomes" NEXT="hub_stolen_site_secrets">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="type"/>
         <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="the type of communication SERVER or CLIENT" PREVIOUS="id" NEXT="token"/>
@@ -135,6 +135,17 @@
         <FIELD NAME="remotename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the remote entity" PREVIOUS="remoteurl" NEXT="confirmed"/>
         <FIELD NAME="confirmed" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="remotename" NEXT="deleted"/>
         <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if ever the site has been unregistered" PREVIOUS="confirmed"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+    </TABLE>
+    <TABLE NAME="hub_stolen_site_secrets" COMMENT="Reference any stolen site secret" PREVIOUS="hub_communications">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="secret"/>
+        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="siteurl"/>
+        <FIELD NAME="siteurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the site url when the token was declared stolen" PREVIOUS="secret" NEXT="blockeddate"/>
+        <FIELD NAME="blockeddate" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="the timestamp when the secret was declared stolen" PREVIOUS="siteurl"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>

@@ -32,6 +32,43 @@ require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . '/course/publish/lib.php');
 
 /**
+ * Form to search a site matching a token
+ */
+class hub_search_stolen_secret extends moodleform {
+
+    public function definition() {
+        global $CFG, $DB;
+
+        $mform = & $this->_form;
+        $mform->addElement('header', 'moodle', get_string('searchsite', 'local_hub'));
+
+        $mform->addElement('text', 'secret', get_string('secret', 'local_hub')
+                , array('class' => 'admintextfield'));
+        $mform->addElement('static', '', get_string('or', 'local_hub'));
+        $mform->addElement('text', 'sitename', get_string('sitename', 'local_hub')
+                , array('class' => 'admintextfield'));
+
+        $this->add_action_buttons(false, get_string('search'));
+    }
+
+    /**
+     * Validate fields
+     */
+    function validation($data, $files) {
+        $errors = parent::validation($data, $files);
+
+        $sitename = $this->_form->_submitValues['sitename'];
+        $secret = $this->_form->_submitValues['secret'];
+        if (empty($sitename) and empty($secret)) {
+            $errors['secret'] = get_string('errosecretandnameempty', 'local_hub');
+        }
+
+        return $errors;
+    }
+
+}
+
+/**
  * This form display registration form to Moodle.org
  * TODO: this form had some none hidden inputs originally, it has been changed since this time
  *       delete this Moodle form for a renderer with a single button

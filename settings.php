@@ -53,3 +53,7 @@ $ADMIN->add('local_hub', new admin_externalpage('sitesettings', get_string('site
 $ADMIN->add('local_hub', new admin_externalpage('hubcoursesettings', get_string('coursesettings', 'local_hub'),
         $CFG->wwwroot."/local/hub/admin/coursesettings.php",
         'moodle/site:config', true));
+
+$ADMIN->add('local_hub', new admin_externalpage('hubstolensecret', get_string('stolensecret', 'local_hub'),
+        $CFG->wwwroot."/local/hub/admin/stolensecret.php",
+        'moodle/site:config'));
