@@ -105,7 +105,7 @@ $sitevalues = array('name' => $name,
 $hub = new local_hub();
 
 //check the secret is not stolen
-if (!$hub->check_secret_validity($token)) {
+if (!$hub->check_secret_validity(md5($token))) {
     echo $OUTPUT->header();
     $renderer = $PAGE->get_renderer('local_hub');
     echo $renderer->secretisstolen($sitevalues);
@@ -189,7 +189,7 @@ if (!empty($sitewithsameurl)) {
 }
 
 //check if the secret already exists
-$sitewithsamesecret = $hub->get_site_by_secret($token);
+$sitewithsamesecret = $hub->get_site_by_secret(md5($token));
 if (!empty($sitewithsamesecret)) {
     $secretexists = true;
 } else {

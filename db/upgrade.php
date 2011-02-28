@@ -283,6 +283,30 @@ function xmldb_local_hub_upgrade($oldversion) {
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2011022500, 'local', 'hub');
     }
+    
+    if ($oldversion < 2011030101) {
+
+        //update all stolen secret to md5
+        $stolensecrets = $DB->get_records('hub_stolen_site_secrets');
+        if (!empty($stolensecrets)) {
+            foreach ($stolensecrets as $stolensecret) {
+                $stolensecret->secret = md5($stolensecret->secret);
+                $DB->update_record('hub_stolen_site_secrets', $stolensecret);
+            }
+        }
+        
+        //update all site secret to md5
+        $sites = $DB->get_records('hub_site_directory');
+        if (!empty($sites)) {
+            foreach ($sites as $site) {
+                $site->secret = md5($site->secret);
+                $DB->update_record('hub_site_directory', $site);
+            }
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2011030101, 'local', 'hub');
+    }
 
 
     return $result;

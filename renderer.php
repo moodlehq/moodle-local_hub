@@ -70,7 +70,10 @@ class local_hub_renderer extends plugin_renderer_base {
                 "/admin/registration/renewregistration.php", $optionsyes), 
                 get_string('continue'), 'post');
         
-        return $this->output->box(get_string('secretisstolen', 'local_hub')) 
+        $docurl = new moodle_url(get_docs_url(get_string('blockedsecretdocurl', 'local_hub')));
+        $doc = html_writer::tag('a', get_string('moreinfo', 'local_hub'), array('href' => $docurl));
+        
+        return $this->output->box(get_string('secretisstolen', 'local_hub', $doc)) 
                 . $this->output->render($formcontinue);
     }
     
