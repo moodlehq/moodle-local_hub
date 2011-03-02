@@ -1044,12 +1044,12 @@ class local_hub {
         if (is_array($siteinfo)) {
             $siteinfo = (object) $siteinfo;
         }
-        
+
         //md5 the secret
         if (isset($siteinfo->secret) and !empty($siteinfo->secret)) {
             $siteinfo->secret = md5($siteinfo->secret);
         }
-        
+
         //if we create or update a site, it can not be deleted
         $siteinfo->deleted = 0;
 

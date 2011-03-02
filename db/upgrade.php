@@ -283,7 +283,7 @@ function xmldb_local_hub_upgrade($oldversion) {
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2011022500, 'local', 'hub');
     }
-    
+
     if ($oldversion < 2011030101) {
 
         //update all stolen secret to md5
@@ -294,7 +294,7 @@ function xmldb_local_hub_upgrade($oldversion) {
                 $DB->update_record('hub_stolen_site_secrets', $stolensecret);
             }
         }
-        
+
         //update all site secret to md5
         $sites = $DB->get_records('hub_site_directory');
         if (!empty($sites)) {
