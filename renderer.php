@@ -510,14 +510,16 @@ class local_hub_renderer extends plugin_renderer_base {
                             if (!empty($blockhtml)) {
                                 $blockhtml .= ' - ';
                             }
-                            $blockhtml .= get_string('pluginname', 'block_' . $content->modulename)
-                                    . " (" . $content->contentcount . ")";
+                            $blockpath = get_component_directory('block_' . $content->modulename);
+                            $blockname = empty($blockpath)?$content->modulename:get_string('pluginname', 'block_' . $content->modulename);
+                            $blockhtml .= $blockname . " (" . $content->contentcount . ")";
                         } else {
                             if (!empty($activitieshtml)) {
                                 $activitieshtml .= ' - ';
                             }
-                            $activitieshtml .= get_string('modulename', $content->modulename)
-                                    . " (" . $content->contentcount . ")";
+                            $activitypath = get_component_directory($content->modulename);
+                            $activityname = empty($activitypath)?$content->modulename:get_string('modulename', $content->modulename);
+                            $activitieshtml .= $activityname . " (" . $content->contentcount . ")";
                         }
                     }
 
