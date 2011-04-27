@@ -1754,8 +1754,8 @@ class local_hub {
             $ratingoptions = new stdclass();
             $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
             $ratingoptions->items = $courses;
-            $ratingoptions->aggregate = RATING_AGGREGATE_AVERAGE; //the aggregation method
-            $ratingoptions->scaleid = 10;
+            $ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
+            $ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
             $ratingoptions->userid = $USER->id;
             $ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/index.php";
 

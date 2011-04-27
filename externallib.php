@@ -604,7 +604,9 @@ class local_hub_external extends external_api {
 
             //set ratings
             if ($course->ratingcount) {
-                $courseinfo['rating']['aggregate'] = (float) $course->ratingaverage;
+                //$courseinfo['rating']['aggregate'] = (float) $course->ratingaverage;
+                //the ratings has been changed from scale 0 to 10 to a "Featured" award
+                $courseinfo['rating']['aggregate'] = HUB_COURSE_RATING_SCALE;
             }        
             $courseinfo['rating']['count'] = (int) $course->ratingcount;
             $courseinfo['rating']['scaleid'] = HUB_COURSE_RATING_SCALE;

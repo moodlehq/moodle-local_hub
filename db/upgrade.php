@@ -307,6 +307,25 @@ function xmldb_local_hub_upgrade($oldversion) {
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2011030101, 'local', 'hub');
     }
+    
+    if ($oldversion < 2011042100) {
+        //create a new scale called featured
+        $scale = new stdClass();
+        $scale->courseid = 0;
+        $admin = get_admin();
+        $scale->userid = $admin->id;
+        $scale->name = 'coursefeatured';
+        $scale->scale = get_string('featured', 'local_hub');
+        $scale->description = get_string('featureddesc', 'local_hub');
+        $scale->descriptionformat = 1;
+        $scale->timemodified = time();
+        $scale->id = $DB->insert_record('scale', $scale);
+        //save the scale id into the config table
+        set_config('courseratingscaleid', $scale->id, 'local_hub');
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2011042100, 'local', 'hub');
+    }
 
 
     return $result;

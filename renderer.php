@@ -417,7 +417,21 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
                 $visitlinkhtml = html_writer::tag('a', $linktext,
                                 array('href' => $courseurl, 'class' => 'hubcoursedownload'));
-
+                
+                 //Create rating html
+                $featuredhtml = "";
+                $rating = "";
+                if (has_capability('moodle/rating:rate', $course->rating->context)) {
+                    $rating = html_writer::tag('div', $this->output->render($course->rating),
+                                    array('class' => 'hubcourserating'));
+                }
+                else if (!empty($course->rating) and ($course->rating->count > 0)) {   
+                    $featuredimg = array('src' => $CFG->wwwroot . '/local/hub/images/featured.png',
+                        'class' => '', 'title' => get_string('featureddesc', 'local_hub'));          
+                    $featuredhtml = html_writer::empty_tag('img', $featuredimg);
+                    $featuredhtml = html_writer::tag('div', $featuredhtml, array('class' => 'featuredimg'));
+                }
+                 
                 //create title html
                 $coursename = html_writer::tag('h3', $course->fullname,
                                 array('class' => 'hubcoursetitle'));
@@ -556,17 +570,38 @@ class local_hub_renderer extends plugin_renderer_base {
                                     array('href' => $addurl, 'class' => 'centeredbutton, hubcoursedownload'));
                 }
 
-                //Create rating html
-                if (!empty($course->rating) and
-                        ($course->rating->count > 0
-                        or has_capability('moodle/rating:rate', $course->rating->context))) {
-                    $rating = html_writer::tag('div', $this->output->render($course->rating),
-                                    array('class' => 'hubcourserating'));
-                } else {
-                    $rating = html_writer::tag('div', get_string('noratings', 'local_hub'),
-                                    array('class' => 'norating'));
-                }
-
+               
+                
+                //create addthis button
+                $courseurl = new moodle_url('', array('courseid' => $course->id));
+                $courseurl = $courseurl->out();
+                
+                //TODO: admin could be able to enter their own pubid into the administration settings page
+                $addthis = "<!-- AddThis Button BEGIN -->
+                    <div class=\"addthis_toolbox addthis_default_style addthis_32x32_style\">
+                    <a class=\"addthis_button_preferred_1\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                        addthis:title=\"".$course->fullname."\"></a>
+                    <a class=\"addthis_button_preferred_2\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                        addthis:title=\"".$course->fullname."\"></a>
+                    <a class=\"addthis_button_preferred_3\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                        addthis:title=\"".$course->fullname."\"></a>
+                    <a class=\"addthis_button_preferred_4\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                        addthis:title=\"".$course->fullname."\"></a>
+                    <a class=\"addthis_button_compact\"></a>
+                    <a class=\"addthis_counter addthis_bubble_style\"></a>
+                    </div>
+                    <script type=\"text/javascript\">
+                        var addthis_config = {
+                            \"services_exclude\" : \"print\",
+                            \"data_track_clickback\":true
+                        };
+                    </script>
+                    <!-- Note that the pubid is the default one from addthis -->
+                    <script type=\"text/javascript\" 
+                        src=\"http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4db7875a502228bd\"></script> 
+                    <!-- AddThis Button END -->";
+                $addthis = html_writer::tag('div', $addthis, array('class' => 'addthis'));
+                
                 //Create comments html
                 $comment = html_writer::tag('div', get_string('nocomments', 'local_hub'),
                                 array('class' => 'nocomments'));
@@ -599,12 +634,12 @@ class local_hub_renderer extends plugin_renderer_base {
                                 $downloadbuttonhtml . $visitlinkhtml,
                                 array('class' => 'courseoperations'));
                 $screenshotbuttonsdiv = html_writer::tag('div',
-                                $coursescreenshot . $buttonsdiv,
+                                $coursescreenshot . $buttonsdiv . $featuredhtml,
                                 array('class' => 'courselinks'));
 
                 $coursedescdiv = html_writer::tag('div',
                                 $deschtml . $additionaldeschtml
-                                . $comment . $rating . $creatornotes,
+                                . $comment . $rating . $creatornotes . $addthis,
                                 array('class' => 'coursedescription'));
                 $coursehtml = $coursenamehtml . html_writer::tag('div',
                                 $coursedescdiv . $screenshotbuttonsdiv,
