@@ -577,18 +577,24 @@ class local_hub_renderer extends plugin_renderer_base {
                 $courseurl = $courseurl->out();
                 
                 //TODO: admin could be able to enter their own pubid into the administration settings page
+
                 $addthis = "<!-- AddThis Button BEGIN -->
-                    <div class=\"addthis_toolbox addthis_default_style addthis_32x32_style\">
-                    <a class=\"addthis_button_preferred_1\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
-                        addthis:title=\"".$course->fullname."\"></a>
-                    <a class=\"addthis_button_preferred_2\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
-                        addthis:title=\"".$course->fullname."\"></a>
-                    <a class=\"addthis_button_preferred_3\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
-                        addthis:title=\"".$course->fullname."\"></a>
-                    <a class=\"addthis_button_preferred_4\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
-                        addthis:title=\"".$course->fullname."\"></a>
-                    <a class=\"addthis_button_compact\"></a>
-                    <a class=\"addthis_counter addthis_bubble_style\"></a>
+                    <div class=\"addthis_toolbox\">
+                       <div class=\"custom_images\">
+
+                          <a class=\"addthis_button_facebook\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                                            addthis:title=\"".$course->fullname."\">
+                                                <img src=\"".$CFG->wwwroot."/local/hub/images/facebook.png\" 
+                                                    width=\"40\" height=\"40\" border=\"0\" alt=\"".get_string('sharetofacebook', 'local_hub')."\" /></a>
+                          <a class=\"addthis_button_twitter\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                                            addthis:title=\"".$course->fullname."\">
+                                                <img src=\"".$CFG->wwwroot."/local/hub/images/twitter.png\" 
+                                                    width=\"40\" height=\"40\" border=\"0\" alt=\"".get_string('sharetotwitter', 'local_hub')."\" /></a>
+                          <a class=\"addthis_button_more\" addthis:url=\"".$CFG->wwwroot . $courseurl."\"
+                                            addthis:title=\"".$course->fullname."\">
+                                                <img src=\"".$CFG->wwwroot."/local/hub/images/addthis.png\" 
+                                                    width=\"40\" height=\"40\" border=\"0\" alt=\"".get_string('sharemore', 'local_hub')."\" /></a>
+                       </div>
                     </div>
                     <script type=\"text/javascript\">
                         var addthis_config = {

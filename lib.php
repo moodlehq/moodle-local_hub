@@ -1665,6 +1665,11 @@ class local_hub {
             $options['enrollable'] = true;
             $courses = $this->get_courses($options);
             $coursetotal = 1;
+            //Add the name of the course to the page title 
+            //(useful because some sites as Facebook is going to read it to build a shared link name)
+            foreach ($courses as $course) {
+                $PAGE->set_title($course->fullname . ' - ' . $SITE->fullname);
+            }
         } else {
             if (!empty($fromform) and optional_param('submitbutton', 0, PARAM_ALPHANUMEXT)) {
                 $downloadable = optional_param('downloadable', false, PARAM_INTEGER);
