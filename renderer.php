@@ -613,8 +613,8 @@ class local_hub_renderer extends plugin_renderer_base {
                                 array('class' => 'nocomments'));
                 if (!empty($course->comment)) {
                     //display only if there is some comment if there is some comment
-                    if ((!empty($course->comment->count) and $course->comment->count != '(0)')
-                            or has_capability('moodle/comment:post', $course->comment->args->context)) {
+                    $commentcount = $course->comment->count();
+                    if (($commentcount != 0) or has_capability('moodle/comment:post', $course->comment->get_context())) {
                         $comment = html_writer::tag('div', $course->comment->output(true),
                                         array('class' => 'hubcoursecomments'));
                     }

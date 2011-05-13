@@ -1911,3 +1911,33 @@ function hub_comment_permissions($params) {
     return array('view' => true,
         'post' => $post);
 }
+
+/**
+ * Validate comments so they don't get hacked by users
+ *
+ * @param stdClass $comment_param {
+ *              context  => context the context object
+ *              courseid => int course id
+ *              cm       => stdClass course module object
+ *              commentarea => string comment area
+ *              itemid      => int itemid
+ * }
+ * @return boolean true if validate, otherwise throw an exception
+ */
+function hub_comment_validate($comment_param) {
+    global $DB;
+
+    // validate comment area
+    if ($comment_param->commentarea != 'local_hub') {
+        throw new comment_exception('invalidcommentarea');
+    }
+    //validate item id
+    if (!$record = $DB->get_record('hub_course_directory', array('id'=>$comment_param->itemid))) {
+        throw new comment_exception('invalidcommentitemid');
+    }
+    //validate context id
+    if (get_context_instance(CONTEXT_COURSE, SITEID)->id != $comment_param->context->id) {
+        throw new comment_exception('invalidcontext');
+    }
+    return true;
+}
