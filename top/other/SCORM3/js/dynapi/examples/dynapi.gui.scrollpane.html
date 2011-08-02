@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>DynAPI Examples - ScrollPane</title>
+<script language="JavaScript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.util.thread.js');
+DynAPI.include('dynapi.util.pathanim.js');
+DynAPI.include('dynapi.gui.dynimage.js');
+DynAPI.include('dynapi.gui.button.js');
+DynAPI.include('dynapi.gui.scrollbar.js');
+DynAPI.include('dynapi.gui.viewport.js');
+DynAPI.include('dynapi.gui.scrollpane.js');
+DynAPI.include('dynapi.gui.label.js');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad = function() {
+	label1 = new Label('<table border=1><tr><td width=160 height=160>label 1 alk jskj slkj k dkjkj dk skslkdjf lskd f</td></tr></table>')
+	label1.setWrap(false)
+	label1.setPadding(5)
+	label1.setBgColor('cyan')
+	label1.setSize(160,160)
+	
+	label2 = new Label('<table border=1><tr><td width=200>label 2 aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk</td></tr></table>')
+	label2.setWidth(200)
+	label2.setWrap(false)
+	label2.setPadding(5)
+	label2.setBgColor('yellow')
+	label2.pack()
+
+	label3 = new Label('label 3 aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf  kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds  kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds ')
+	label3.setWrap(true)
+	label3.setPadding(5)
+	label3.setWidth(100)
+	label3.packHeight()
+	label3.setBgColor('magenta')
+	
+	label4 = new Label('<table border=1><tr><td width=600>label 4 aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk asdkfjd kfdjf dk dk fjd kfjds lkdjf ksdjf lskdf jsdlk aslk</td></tr></table>')
+	label4.setPadding(5)
+	label4.setBgColor('00eeb0')
+	label4.pack()
+	
+	scrollobj = new ScrollPane(label1)  // label1 will be set as the content
+	scrollobj.setSize(150,150)
+	scrollobj.moveTo(250,50)
+	scrollobj.setBgColor('#c0c0c0')
+
+	DynAPI.document.addChild(scrollobj)
+}
+
+//-->
+</script>
+</head>
+<body bgcolor="#ffffff">
+
+<br>set scroll size: <a href="javascript:scrollobj.setSize(150,150)">150</a>, <a href="javascript:scrollobj.setSize(250,250)">250</a>, <a href="javascript:scrollobj.setSize(350,350)">350</a>
+<br>set label1 size: <a href="javascript:label1.setSize(100,100)">100</a>, <a href="javascript:label1.setSize(140,140)">140</a>, <a href="javascript:label1.setSize(200,200)">200</a>
+
+<p><a href="javascript:scrollobj.setContent(label1)">Add Label #1 to ScrollPane</a>
+<br><a href="javascript:scrollobj.setContent(label2)">Add Label #2 to ScrollPane</a>
+<br><a href="javascript:scrollobj.setContent(label3)">Add Label #3 to ScrollPane</a>
+<br><a href="javascript:scrollobj.setContent(label4)">Add Label #4 to ScrollPane</a>
+
+</body>
+</html>

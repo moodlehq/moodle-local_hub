@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Moodle.org posts recently marked as useful</title>
+    <link>http://moodle.org/useful/</link>
+    <description>On moodle.org, in the Using Moodle course, anyone can mark a forum post as useful.  These are the latest ones.</description>
+    <generator>Moodle</generator>
+    <copyright>&amp;#169; 2009 Moodle.org</copyright>
+    <image>
+      <url>http://moodle.org/pix/i/rsssitelogo.gif</url>
+      <title>moodle</title>
+      <link>http://moodle.org</link>
+      <width>140</width>
+      <height>35</height>
+    </image>
+
+<item>
+<title>Re: Aardvark Makeover - Moodle 2.0 Theme</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174281#p783119</link>
+<pubDate>Wed, 29 Jun 2011 22:00:14 GMT</pubDate>
+<description>by Mary Evans &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Send me a user account with Admin permissions in a private message and I'll set the login for you!!! I can also check the problem with the pop-up too.&lt;/p&gt;
+&lt;p&gt;Mary&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174281#p783119</guid>
+</item>
+<item>
+<title>Re: Creating a &#039;child&#039; language pack for a non-English language</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177823#p780308</link>
+<pubDate>Wed, 22 Jun 2011 01:23:54 GMT</pubDate>
+<description>by Simon Coggins &lt;br /&gt;&lt;br /&gt;&lt;p&gt;That makes it a bit difficult to create a child language pack because you can't see the parent strings, so there's no easy way to know which ones might need changing.&lt;/p&gt;
+&lt;p&gt;I created a patch that seems to do what I want - it shows the parent strings when they are available and falls back to english when there is no string in the parent language.The patch is for moodle 1.9, but I've attached it here in case anyone else has a similar problem.&lt;/p&gt;
+&lt;p&gt;Simon&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177823#p780308</guid>
+</item>
+<item>
+<title>Re: Where to report issues with the tracker?</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=179054#p783650</link>
+<pubDate>Thu, 30 Jun 2011 14:56:15 GMT</pubDate>
+<description>by Mark Johnson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;When you create a bug, select &quot;Moodle Community Sites&quot; as the project you want to file the bug against.  tracker.moodle.org will then be available as a component.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=179054#p783650</guid>
+</item>
+<item>
+<title>Re: Comparative quiz performance available to students</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178731#p783096</link>
+<pubDate>Wed, 29 Jun 2011 20:35:00 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Have you tried the quiz results block?&lt;/p&gt;
+&lt;p&gt;It might be feasible to edit that block, or make another, similar block, to show the histogram of all results.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178731#p783096</guid>
+</item>
+<item>
+<title>Re: Testing CBM</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177867#p783003</link>
+<pubDate>Wed, 29 Jun 2011 16:00:04 GMT</pubDate>
+<description>by Tony Gardner-Medwin &lt;br /&gt;&lt;br /&gt;&lt;p&gt;This trial site is very useful! Thanks.&lt;/p&gt;
+&lt;p&gt;There are some issues with the implementation of CBM that will be I think important to deal with to avoid confusing people.&lt;/p&gt;
+&lt;p&gt;(1) A simple one - the criterion for choosing the highest certainty option should be P&amp;gt;80% not P&amp;gt;85% (i.e. if you estimate a probability of being correct &amp;gt;80%, then you will on average get a better mark by choosing C=3 rather than C=2). This is illustrated in graphs at &lt;a href=&quot;http://www.ucl.ac.uk/lapt/&quot;&gt;http://www.ucl.ac.uk/lapt/&lt;/a&gt; , or you can solve the equations if you prefer!&lt;/p&gt;
+&lt;p&gt;(2) Judging how likely you are to be correct (P, above) only makes sense if your response is being marked right or wrong. It doesn't make sense as a single judgment if there are several parts to your answer, as in MCQs with more than one response allowed, or in multiple matching Qs (as it happens, the first two examples on the trial site). Ideally (as in LAPT) multiple response Qs like these would ask for a certainty judgment for each separate response - you may be quite sure of the capital of France and very unsure about the capital of Estonia, or vice versa. Without introducing that complication I think it is probably best not to use CBM at all for this type of multiple response Q. I'm sure this could be managed easily in the code, though unfortunately I haven't yet got the 2.1 code to run on my Windows PC to take a look.&lt;/p&gt;
+&lt;p&gt;3) I rather go along with Isabelle's concern about giving people .33, .67 or 1 mark instead of 1,2,3 if there are default settings (=1) for the grade on each question. It's important that the mark scheme be easily understood and transparent. In my Moodle implementation  (see &lt;a href=&quot;http://www.ucl.ac.uk/lapt/moodle19/moodle&quot;&gt;http://www.ucl.ac.uk/lapt/moodle19/moodle&lt;/a&gt;) I prefer to simply over-ride any weight settings for individual Qs when CBM is switched on, and mark every response on the 1,2,3 / 0,-2,-6 scale. I label the response buttons C=1,2,3 to help with this, and the appropriate probabilities are exhibited if you hover over the buttons. It is much better (in my view) that a student should see &quot;Mark=-2&quot; and know immediately &quot;yeah, wrong, and I did say I was fairly sure - why didn't I think?&quot; instead of Mark=-1.33 &quot;What's that? Oh, I see, I was wrong, and since it's weighted x2 and I said I was fairly sure, I would have got 2/3 of 2 if I was right - that's 1.33, but I wasn't right so it's -1.33. Got it. Now what was the question again?&quot;. Since CBM is  most valued in formative assessment (self-tests), to help learning, it's v important to minimise any distractions from thinking about the Q&amp;amp;A and the lessons to be learned.&lt;/p&gt;
+&lt;p&gt;I haven't looked at the 2.1 gradebook tables yet in relation to CBM. If people go along with the simplicity arguments I advocate then one can easily handle these tables for maximum value, as I have tried to do in my CBM code for 1.9 and 2.0, for example marking both in relation to the entire quiz and in relation to the subset of Qs that a student may have chosen to test herself/himself on. &lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177867#p783003</guid>
+</item>
+<item>
+<title>New question engine in Moodle 2.1 update</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=176880#p775879</link>
+<pubDate>Mon, 06 Jun 2011 22:12:18 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;A few minutes ago, Eloy pushed the new question engine code (&lt;a title=&quot;Auto-link to Moodle Tracker&quot; href=&quot;http://tracker.moodle.org/browse/MDL-20636&quot;&gt;MDL-20636&lt;/a&gt;) to &lt;a href=&quot;http://git.moodle.org/gw?p=integration.git;a=shortlog;h=refs/heads/master&quot; class=&quot;_blanktarget&quot;&gt;http://git.moodle.org/gw?p=integration.git;a=shortlog;h=refs/heads/master&lt;/a&gt;, which means that it should be part of this week's Moodle 2.1 dev weekly build. &lt;img class=&quot;emoticon&quot; alt=&quot;big grin&quot; title=&quot;big grin&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fbiggrin&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Time to start testing. See &lt;a href=&quot;http://docs.moodle.org/dev/Question_Engine_2:Testing&quot; class=&quot;_blanktarget&quot;&gt;http://docs.moodle.org/dev/Question_Engine_2:Testing&lt;/a&gt; for some hints.&lt;/p&gt;
+&lt;p&gt;&lt;a title=&quot;Auto-link to Moodle Tracker&quot; href=&quot;http://tracker.moodle.org/browse/MDL-27738&quot;&gt;MDL-27738&lt;/a&gt; exists to track the remaining things that need to be done between now and the final Moodle 2.1 release at the end of June.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=176880#p775879</guid>
+</item>
+<item>
+<title>Re: Add a resource - URL - In a new window </title>
+<link>http://moodle.org/mod/forum/discuss.php?d=169279#p750032</link>
+<pubDate>Tue, 15 Mar 2011 13:51:31 GMT</pubDate>
+<description>by Jim Judges &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Thanks Mary, very helpful as ever. Just to clarify this I found the link in:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;span&gt;Site administration &amp;gt; Plugins &amp;gt; Activity modules &amp;gt; URL&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;The default provides the following display options:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;Automatic, Embed, Open, In pop-up&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;With the option to add &quot;In Frame&quot; and &quot;New Window&quot;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=169279#p750032</guid>
+</item>
+<item>
+<title>Ang: Re: Ang: Re: Ang: Re: Ang: Re: Best way to add mp3 to hotpot in moodle</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=176949#p783467</link>
+<pubDate>Thu, 30 Jun 2011 13:28:28 GMT</pubDate>
+<description>by Barfuss Ruge &lt;br /&gt;&lt;br /&gt;&lt;p&gt;It's the 2.0 server:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a title=&quot;Home&quot; href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;accesshide&quot;&gt;&lt;span class=&quot;arrow_text&quot;&gt;/&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;arrow sep&quot;&gt;►&lt;/span&gt; &lt;span&gt;My courses&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;accesshide&quot;&gt;&lt;span class=&quot;arrow_text&quot;&gt;/&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;arrow sep&quot;&gt;►&lt;/span&gt; &lt;a title=&quot;Course Fullname 101&quot; href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/course/view.php?id=2&quot;&gt;CF101&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;accesshide&quot;&gt;&lt;span class=&quot;arrow_text&quot;&gt;/&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;arrow sep&quot;&gt;►&lt;/span&gt; &lt;span&gt;Testing JQuiz&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;accesshide&quot;&gt;&lt;span class=&quot;arrow_text&quot;&gt;/&lt;/span&gt; &lt;/span&gt;&lt;span class=&quot;arrow sep&quot;&gt;►&lt;/span&gt; &lt;a title=&quot;HotPot&quot; href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/mod/hotpot/view.php?id=198&quot;&gt;square_brackets.jqz&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Could it be some setting on my computer?&lt;/p&gt;
+&lt;p&gt;Best regards&lt;/p&gt;
+&lt;p&gt;Barfuss&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=176949#p783467</guid>
+</item>
+<item>
+<title>Moodle 2.0: web services API (function list)</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=118298#p518763</link>
+<pubDate>Mon, 09 Mar 2009 08:29:55 GMT</pubDate>
+<description>by Jerome Mouneyrac &lt;br /&gt;&lt;br /&gt;I started to write a web services API - function list document, based on our current work.&lt;br /&gt;This document will be updated for the following weeks:&lt;br /&gt;We'll add first the function specification on this document, then we'll wrote the unit tests and finally implement them. The &lt;a href=&quot;http://docs.moodle.org/en/Development:Web_services_API_-_Function_List&quot;&gt;document is here&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;If you have got some suggestions about the specs and implementation, I suggest that we open a new topic per module. For example: &lt;span style=&quot;font-style:italic;&quot;&gt;Moodle 2.0: API - Forum&lt;/span&gt;, &lt;span style=&quot;font-style:italic;&quot;&gt;Moodle 2.0: API - User&lt;/span&gt;, &lt;span style=&quot;font-style:italic;&quot;&gt;Moodle 2.0: API Courses&lt;/span&gt;,...&lt;br /&gt;&lt;br /&gt;Thank you.&lt;br /&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=118298#p518763</guid>
+</item>
+<item>
+<title>Re: Taskchain 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178780#p783301</link>
+<pubDate>Thu, 30 Jun 2011 12:24:33 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Yes, that's the plan.&lt;/p&gt;
+&lt;p&gt;You should also be able to convert QuizPort (Moodle 1.9) to TaskChain (Moodle 2.0), when the module is complete.&lt;/p&gt;
+&lt;p&gt;If you think I'm being quiet, you'll know what I'm doing &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178780#p783301</guid>
+</item>
+<item>
+<title>Re: Flowplayer replaces Flash multimedia filter in Moodle 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=156608#p694985</link>
+<pubDate>Thu, 23 Sep 2010 16:21:47 GMT</pubDate>
+<description>by Tomasz Muras &lt;br /&gt;&lt;br /&gt;Hi Joseph,&lt;br /&gt;&lt;br /&gt;I've updated the &lt;a href=&quot;http://demo.enovation.ie/moodle3&quot; title=&quot;Enovation - Moodle demo&quot;&gt;demo&lt;/a&gt; site with the latest Moodle RC1 - so this is how it actually looks like.&lt;br /&gt;Now, in terms of the sizes: there is nothing in the filter that would let a user adjust the settings of a player - but flow player is quite customizable, have a look at &lt;a href=&quot;http://flowplayer.org/setup/index.html&quot;&gt;flowlayer setup page&lt;/a&gt; to see what could possibly be exposed in Moodle.&lt;br /&gt;The question is how should that be made configurable - it could be:&lt;br /&gt;* only by admin in the settings&lt;br /&gt;* while putting a link to .flv by adding extra arguments after '?'&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;cheers,&lt;br /&gt;Tomasz Muras&lt;br /&gt;&lt;a href=&quot;http://www.enovation.ie&quot; title=&quot;Enovation Solutions&quot;&gt;Enovation Solutions&lt;/a&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=156608#p694985</guid>
+</item>
+<item>
+<title>Re: Ang: Problems using portuguese characters</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178577#p783229</link>
+<pubDate>Thu, 30 Jun 2011 09:10:19 GMT</pubDate>
+<description>by César Faria &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Gordon,&lt;/p&gt;
+&lt;p&gt;Good news! &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt; After update my HotPot module it's all working correctly.&lt;/p&gt;
+&lt;p&gt;Thank you so much!&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;Best regards,&lt;br /&gt;César Faria&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178577#p783229</guid>
+</item>
+<item>
+<title>Re: Problem in installing Certificate module</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178720#p783116</link>
+<pubDate>Wed, 29 Jun 2011 21:55:04 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Looks like you are trying to use the Moodle 2.x Certificate module on a Moodle 1.9 site.&lt;/p&gt;
+&lt;p&gt;The Certificate module for Moodle 1.9 is available from here:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://download.moodle.org/download.php/plugins19/mod/certificate.zip&quot; class=&quot;_blanktarget&quot;&gt;http://download.moodle.org/download.php/plugins19/mod/certificate.zip&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Worked fine for me &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;br /&gt;Gordon&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178720#p783116</guid>
+</item>
+<item>
+<title>Re: Ang: Problems using portuguese characters</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178577#p782845</link>
+<pubDate>Wed, 29 Jun 2011 09:06:13 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;&lt;em&gt;&amp;gt; For update my HotPot module&lt;/em&gt;&lt;br /&gt;&lt;em&gt;&amp;gt; I just have to download zip file of the module&lt;/em&gt;&lt;br /&gt;&lt;em&gt;&amp;gt; and overwrite at the server (after unzip, of course)?&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Yes, that's right.&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;gt; When I can test at my server I tell you if it worked.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;OK, thanks. That would be useful feedback.&lt;/p&gt;
+&lt;p&gt;regards&lt;br /&gt;Gordon&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178577#p782845</guid>
+</item>
+<item>
+<title>STACK development during the summer of 2011: move to GIT. </title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174775#p766515</link>
+<pubDate>Fri, 06 May 2011 16:07:26 GMT</pubDate>
+<description>by Christopher Sangwin &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Dear all,&lt;/p&gt;
+&lt;p&gt;I appreciate I don't post on this forum very often, but I waned to let you know about some developmets with the STACK computer aided  assessment questions which are going on this summer. &lt;/p&gt;
+&lt;p&gt;Starting this week I have been collaborating with the Open University to incorporate STACK into the Moodle quiz module for the new forthcoming release of Moodle 2.1. To help get this all working the OU have employed a contractor, Dan Williams, to work with Tim Hunt and myself over the summer.&lt;/p&gt;
+&lt;p&gt;This is a very exciting development. STACK is very much alive and well, and this move will consolidate and improve the code. It will ensure it integrates reliably and neatly into Moodle making it better for us all to use. I'm more confident that STACK is going to become an important tool, and it is already being used by a number of other people:&lt;br /&gt;&lt;a href=&quot;http://web.mat.bham.ac.uk/C.J.Sangwin/Publications/2010-3-1-STACK.pdf&quot;&gt;http://web.mat.bham.ac.uk/C.J.Sangwin/Publications/2010-3-1-STACK.pdf&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;In adition, during this academic cycle colleagues at FSU used STACK in calculus with about 150 students. These students have taken a total of 28010 STACK quizzes which amount to over 200 000 problems evaluated.  Last fall, the use was much higher, perhaps we had over 800 000 problems evaluated. &lt;/p&gt;
+&lt;p&gt;This round of development does not plan to introduce major new features, or to make major changes to the core functionality. An explicit aim is that &quot;old questions will still work&quot;.  We hope it will be easier to install, requireing fewer components and simpler permissions on the server.&lt;/p&gt;
+&lt;p&gt;There are to be some important changes to the way we develop the code and to the internals of STACK. In particular we are going to stop using the CVS for code development and move to GIT. This is a major move. One big advantage is that we will have an opportunity to rearrange the code and tidy things up. Moving directories and files in CVS was/is quite difficult, and some things in the current version of STACK simply need to be weeded out and moved about.&lt;/p&gt;
+&lt;p&gt;I understand that sourceforge will not support CVS for ever, so this move is timely for the project.  It is also in line with many Moodle developments.&lt;/p&gt;
+&lt;p&gt;This does, of course, have implications for future development of the project.&lt;/p&gt;
+&lt;p&gt;If you are running servers then updates will no longer be distributed by a simple &quot;CVS update&quot;. You will probably need to plan a re-install when you upgrade.&lt;/p&gt;
+&lt;p&gt;If you have forked STACK please could you let me know what changes you have made? We would very much like to keep the number of forks to a minimum.&lt;/p&gt;
+&lt;p&gt;Once the project is completed, I'm going to make a major effort to gather and consolidate language files.&lt;/p&gt;
+&lt;p&gt;Once the repository is ready for collaborative developments I shall post an announcement on sourceforge. I would very much welcome your future contributions to STACK. I hope you will be able to come with us when we move to GIT. This can be in a number of ways, of course, so please let me know if you would like to be involved.&lt;/p&gt;
+&lt;p&gt;Chris Sangwin&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174775#p766515</guid>
+</item>
+<item>
+<title>Re: Lesson module, question bank and back button</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178200#p782148</link>
+<pubDate>Mon, 27 Jun 2011 21:53:12 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;When the question bank was separated out from the quiz module (around Moodle 1.5 -&amp;gt; 1.6 time - about 6 years ago) the plan was always to convert the lesson module to use the question bank. We are still waiting for that to happen, but people still talk about it from time to time &lt;img class=&quot;emoticon&quot; alt=&quot;wink&quot; title=&quot;wink&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fwink&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178200#p782148</guid>
+</item>
+<item>
+<title>Re: Possible to enforce password standards?</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=61379#p782881</link>
+<pubDate>Wed, 29 Jun 2011 10:39:37 GMT</pubDate>
+<description>by Howard Miller &lt;br /&gt;&lt;br /&gt;&lt;div class=&quot;text_to_html&quot;&gt;Errr.... why?&lt;br /&gt;&lt;br /&gt;
+Moodle *has* password standards enforcing built in. If you are really still using Moodle 1.7.1 (as implied by your folder name) then you should upgrade - that version is ancient history (and was horribly buggy IIRC). &lt;/div&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=61379#p782881</guid>
+</item>
+<item>
+<title>Re: scorm player height wrong - 1.9.12</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178734#p783151</link>
+<pubDate>Wed, 29 Jun 2011 23:30:07 GMT</pubDate>
+<description>by Amy Groshek &lt;br /&gt;&lt;br /&gt;&lt;code&gt;
+#mod-scorm-player #scormobject {
+     height: auto !important;
+}
+&lt;/code&gt;
+
+&lt;p&gt;Looks normal for me once I disable that height setting from your theme. It's always a bad idea to use !important in your css. &lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178734#p783151</guid>
+</item>
+<item>
+<title>Re: Decaf - Moodle 2 theme - Further Improvements</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175572#p783011</link>
+<pubDate>Wed, 29 Jun 2011 16:18:38 GMT</pubDate>
+<description>by Mary Evans &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Guido.&lt;/p&gt;
+&lt;p&gt;Can I ask how you are declaring your parent theme?&lt;/p&gt;
+&lt;p&gt;If decaf is parent and decaf uses base theme, you need to declare these as ('decaf', 'base') and not the other way round.&lt;/p&gt;
+&lt;p&gt;To make settings work you need to copy the renderers page inful, not just be selective. But you don't need to add the layouts or the styles unless changing colours., then you can add one style sheet if you prefer, but this needs to be declared in config for your theme.&lt;/p&gt;
+&lt;p&gt;Also you can be quite minimalistic in what is written in your theme's config.php. You need your theme name, and your style sheets , the parent theme and the stylesheets excluded from parent themes that includes base as well as decaf.&lt;/p&gt;
+&lt;p&gt;You do not need to specify theme layout as that's in the parent, unless you want to style a page differently, like the frontpage, then your theme layout may just have that one page specified.&lt;/p&gt;
+&lt;p&gt;HTH&lt;/p&gt;
+&lt;p&gt;Mary&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175572#p783011</guid>
+</item>
+<item>
+<title>Re: Decaf - Moodle 2 theme - Further Improvements</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175572#p783049</link>
+<pubDate>Wed, 29 Jun 2011 17:33:42 GMT</pubDate>
+<description>by Richard Oelmann &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Guido,&lt;/p&gt;
+&lt;p&gt;You'll need to add&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color:#0000ff;&quot;&gt;$THEME-&amp;gt;rendererfactory = 'theme_overridden_renderer_factory';&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;to tell the config that you have a renderers file&lt;/p&gt;
+&lt;p&gt;Richard&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175572#p783049</guid>
+</item>
+<item>
+<title>Re: Change &quot;My Courses&quot; to &quot;My Moodle&quot;</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178399#p782465</link>
+<pubDate>Tue, 28 Jun 2011 17:08:57 GMT</pubDate>
+<description>by Richard Oelmann &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Melissa,&lt;/p&gt;
+&lt;p&gt;You should be able to change the 'My Courses' to 'My Moodle' using the language customization, I think.&lt;/p&gt;
+&lt;p&gt;Site Administration-&amp;gt;&lt;span&gt;Language-&amp;gt;&lt;/span&gt;Language customization&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;@@PLUGINFILE@@/lang1.png&quot; alt=&quot;lang customisation&quot; width=&quot;400&quot; height=&quot;230&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;In terms of moving the My Courses menu, you would need to move the section of code that calls that to before the code calling the rest of the custom menu - probably in the renderers.php file. What theme are you using Melissa and I'll try to look at it to give you a bit more detailed instruction &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Richard&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178399#p782465</guid>
+</item>
+<item>
+<title>Re: Change &quot;My Courses&quot; to &quot;My Moodle&quot;</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178399#p782629</link>
+<pubDate>Tue, 28 Jun 2011 19:11:33 GMT</pubDate>
+<description>by Richard Oelmann &lt;br /&gt;&lt;br /&gt;&lt;p&gt;That should make it easy then Melissa :D&lt;/p&gt;
+&lt;p&gt;In the renderer you created from the tutorial, there is a line&lt;/p&gt;
+&lt;p class=&quot;php&quot;&gt;&lt;span style=&quot;color:#000033;&quot;&gt;$branchsort&lt;/span&gt; &lt;span style=&quot;color:#339933;&quot;&gt;=&lt;/span&gt; &lt;span style=&quot;color:#cc66cc;&quot;&gt;10000&lt;/span&gt;&lt;span style=&quot;color:#339933;&quot;&gt;;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p class=&quot;php&quot;&gt;Simply alter the number to alter its position - eg. make it 0 (or -1) to put it on the left. If you want it after any particular item then adjust the number till you get it where in the menu list you want it.&lt;/p&gt;
+&lt;p class=&quot;php&quot;&gt;HTH&lt;/p&gt;
+&lt;p class=&quot;php&quot;&gt;Richard&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178399#p782629</guid>
+</item>
+<item>
+<title>Re: Can JavaScript be used in HTML Editor</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=117089#p768130</link>
+<pubDate>Wed, 11 May 2011 19:41:16 GMT</pubDate>
+<description>by James Snell &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Yeah, I'd like this too.. I'm sure the HTML editor nukes Javascript input as a security measure. However this is also inspiring me to find ugly solutions that I can just see leading to pain later. What would work best for me is a WYSIWYG that will allow javascript editing for certain users and notifies others if they're editing a page without javascript editing permission (and thus will cause the javascript to be disabled upon saving their edits).&lt;/p&gt;
+&lt;p&gt;But for now, I'll do the hacky thing..&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=117089#p768130</guid>
+</item>
+<item>
+<title>Re: Overview of 15 Flash video players (FLV, MP4 video) ALL working!</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178199#p782914</link>
+<pubDate>Wed, 29 Jun 2011 11:54:33 GMT</pubDate>
+<description>by Stan Bogdanov &lt;br /&gt;&lt;br /&gt;&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Hi Gordon,&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Thanks for the very useful info. &lt;/span&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;All players are now working, including FlowPlayer!&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;I found another way, though. The answer has been in front of  my eyes in the source code: I just had to look up the URL generated in the browser that points to the swf or another file on the same page/exercise, and replace the file name, like this:&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;from: &lt;a href=&quot;http://server.com/moodle/20/mysql/pluginfile.php/999/mod_hotpot/sourcefile/&quot; class=&quot;_blanktarget&quot;&gt;http://server.com/moodle/20/mysql/pluginfile.php/999/mod_hotpot/sourcefile/&lt;/a&gt;&lt;span style=&quot;color:#ff0000;&quot;&gt;theplayer.swf&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;to: &lt;a href=&quot;http://server.com/moodle/20/mysql/pluginfile.php/999/mod_hotpot/sourcefile/&quot; class=&quot;_blanktarget&quot;&gt;http://server.com/moodle/20/mysql/pluginfile.php/999/mod_hotpot/sourcefile/&lt;/a&gt;&lt;span style=&quot;color:#ff0000;&quot;&gt;thevideo.flv&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;span style=&quot;color:#ff0000;&quot;&gt;&lt;span style=&quot;color:#000000;&quot;&gt;Done!&lt;/span&gt;&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-size:small;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;My message: any player can be used!&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Cheers&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&lt;span style=&quot;color:#ff0000;&quot;&gt;&lt;span style=&quot;color:#000000;&quot;&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Stan&lt;/span&gt;&lt;br /&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178199#p782914</guid>
+</item>
+<item>
+<title>Re: Ang: Re: Best way to add mp3 to hotpot in moodle</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=176949#p782678</link>
+<pubDate>Tue, 28 Jun 2011 20:27:17 GMT</pubDate>
+<description>by Stan Bogdanov &lt;br /&gt;&lt;br /&gt;&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Hi Barfuss,&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;EMBED is ancient and not standard compliant! Don't use it.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Your &lt;strong&gt;GOOD&lt;/strong&gt; code is this:&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;1: Single line without carriage returns in JQuiz!&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt; &amp;lt;object type=&quot;application/x-shockwave-flash&quot; data=&quot;ekstern_mp3_player_1.swf&quot; width=&quot;30&quot; height=&quot;30&quot;&amp;gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;movie&quot; value=&quot;ekstern_mp3_player_1.swf&quot; /&amp;gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;FlashVars&quot; value=&quot;TheSound=&lt;span style=&quot;color:#ff0000;&quot;&gt;A&lt;/span&gt;tuarpusi.mp3&amp;amp;amp;width=30&amp;amp;amp;height=20&quot; /&amp;gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;loop&quot; value=&quot;false&quot; /&amp;gt; &lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;menu&quot; value=&quot;false&quot; /&amp;gt; &lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;quality&quot; value=&quot;high&quot; /&amp;gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;param name=&quot;bgcolor&quot; value=&quot;&lt;span style=&quot;color:#ff0000;&quot;&gt;#f2ebe3&lt;/span&gt;&quot;&amp;gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&amp;lt;/object&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;2: loop, menu, quality are optional and you can safely remove them.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;3: file names are case sensitive&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;4: changed the background colour to yours to blend with the exercise page.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;5: mind the quotations.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;BTW, what does 'atuarpusi' mean?&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Cheers&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Stan&lt;/span&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=176949#p782678</guid>
+</item>
+<item>
+<title>Re: Ang: Problems using portuguese characters</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178577#p782737</link>
+<pubDate>Wed, 29 Jun 2011 00:56:09 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi César,&lt;/p&gt;
+&lt;p&gt;as far as I know this bug is fixed, so if you update to the latest version of the HotPot module for Moodle 2.x, this problem should disappear.&lt;/p&gt;
+&lt;p&gt;If updating the module does not fix the problem, please could you upload the quiz to my testing server so that I can look at it first hand:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;strong&gt;U&lt;span&gt;R&lt;/span&gt;L:&lt;/strong&gt; &lt;a href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/&quot; class=&quot;_blanktarget&quot;&gt;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Course:&lt;/strong&gt; Course Fullname 101&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Username:&lt;/strong&gt; guestteacher&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Password:&lt;/strong&gt; taskchainv09&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;regards&lt;br /&gt;Gordon&lt;/p&gt;
+&lt;p&gt;P.S. I just ran a quick test, using a simple JCloze with &quot;gestão&quot; in one of the gaps. It worked fine, so I think all you have to do is upgrade you HotPot module.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178577#p782737</guid>
+</item>
+<item>
+<title>Re: How to create different instances </title>
+<link>http://moodle.org/mod/forum/discuss.php?d=169245#p781080</link>
+<pubDate>Thu, 23 Jun 2011 17:45:52 GMT</pubDate>
+<description>by Sue Holtz &lt;br /&gt;&lt;br /&gt;&lt;p&gt;We did this in &lt;strong&gt;2.0&lt;/strong&gt; using different themes for our categories. I know it was done in 1.x because that is where we got the idea. I had to play around with which pages pulled frontpage css, and then we used html to link to each of the three categories. Each category has its own theme based on the picture you see when you select the link to that category. If the student clicks on a link prior to login, then s/he will be taken back to that category after login. Sorry, no guest access, but if you go to the site, you will get the idea.&lt;/p&gt;
+&lt;p&gt;Have a look. &lt;a href=&quot;http://wlsonline2.modevia.com&quot; class=&quot;_blanktarget&quot;&gt;http://wlsonline2.modevia.com&lt;/a&gt; .&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=169245#p781080</guid>
+</item>
+<item>
+<title>Ang: Problems using portuguese characters</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178577#p782617</link>
+<pubDate>Tue, 28 Jun 2011 18:59:01 GMT</pubDate>
+<description>by Barfuss Ruge &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi,&lt;/p&gt;
+&lt;p&gt;I'm from Denmark and I have had the same problems with our special characters. It's a minor bug, but don't worry - Gordon will fix it &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;. He's the moderater of this forum and he develops the hotpot module. When he has done the repair you will get a patch for your server. &lt;/p&gt;
+&lt;p&gt;Best regards&lt;/p&gt;
+&lt;p&gt;Barfuss&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178577#p782617</guid>
+</item>
+<item>
+<title>Re: Moodle in healthcare</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=93663#p633726</link>
+<pubDate>Wed, 03 Mar 2010 16:49:11 GMT</pubDate>
+<description>by Jeff Burge &lt;br /&gt;&lt;br /&gt;I thought people may be interested in reading an update of our experience of Moodle in Healthcare.&lt;br /&gt;&lt;br /&gt;It has been more than two years since we implemented Moodle. In year one we used it to manage our elearning and mandatory training but realising the benefits we committed to Moodle and around 18 months ago began using it as our primary LMS.&lt;br /&gt;&lt;br /&gt;We now have records of almost 200 courses, some of which are one-off events, others, comprehensive programmes providing access to a range of resources. We have more than 3000 active users in the system and it has been a huge success for us.&lt;br /&gt;&lt;br /&gt;We use the Face-to-face module to provide remote booking access to classroom training events and use it to manage all of our Continuing Professional Development as well as statutory and mandatory training.&lt;br /&gt;&lt;br /&gt;As a public body our performance is measured by, amongst other things, our achievement against certain governance standards. One of these, the NHS Litigation Authority standards, we were awarded level 2 status in January of this year, helped in no small part by our utilisation of Moodle. In addition to passing we were highly commended for our systems and processes and received feedback that our current practive would allow us to achieve level 3, the highest standard available.&lt;br /&gt;&lt;br /&gt;In addition Moodle has allowed us to achieve significant gains in our stat/mand training compliance and we have also made very creative use of some of the plug-ins to measure things such as Development Review activity and Clinical Supervision uptake.&lt;br /&gt;&lt;br /&gt;Despite these successes I do not think that we are using Moodle anywhere near its full potential and with some creative thought it continues to offer a really exciting range of tools and interventions to support learning.&lt;br /&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=93663#p633726</guid>
+</item>
+<item>
+<title>Re: Upgrade blocks to moodle  2.0 (from 1.9.xx)</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=165086#p781730</link>
+<pubDate>Sun, 26 Jun 2011 08:40:56 GMT</pubDate>
+<description>by Chaim Schendowich &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I have attached a table with general information about necessary changes to be done when upgrading blocks. I have tried to put together as much as possible though it probably still is very incomplete ... &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;I would be pleased to recieve your feedback.&lt;/p&gt;
+&lt;p&gt;Chaim.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=165086#p781730</guid>
+</item>
+<item>
+<title>Re: Best way to add mp3 to hotpot in moodle</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=176949#p776321</link>
+<pubDate>Wed, 08 Jun 2011 01:52:36 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Barfuss&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;color:#888888;&quot;&gt;&lt;em&gt;&amp;gt;&amp;gt; multimedia (images, audio, video, links) can be inserted&lt;/em&gt;&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;color:#888888;&quot;&gt;&lt;em&gt;&amp;gt;&amp;gt; with square bracket notation, e.g. [mysoundfile.mp3]&lt;/em&gt;&lt;/span&gt;&lt;em&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;&amp;gt; This sounds REALLY nice, but I figure that&lt;/em&gt;&lt;br /&gt;&lt;em&gt;&amp;gt; it is not an option on moodle 2.0 right now.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;I have some good news for you - the square bracket notation is alive an well in the HotPot module for Moodle 2.0. If you are having problems with it, please upload a file to my testing server, so we can all work on it together.&lt;/p&gt;
+&lt;p&gt;cheers&lt;br /&gt;Gordon&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=176949#p776321</guid>
+</item>
+<item>
+<title>Re: Auto Enrol Based on Custom Reg Field</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178101#p781102</link>
+<pubDate>Thu, 23 Jun 2011 18:26:46 GMT</pubDate>
+<description>by Michael Cohn &lt;br /&gt;&lt;br /&gt;&lt;p&gt;#1: Sounds like a good idea to me. Checking every user every night is not optimally efficient, but it's also relatively foolpoof and the CPU time required is probably negligible.&lt;/p&gt;
+&lt;p&gt;1a) Why write the results to a CSV file and thence to a database, instead of putting the results in the database directly?&lt;/p&gt;
+&lt;p&gt;1b) Does this mean that when a new account is created, it won't be enrolled in any classes until the next nightly check? You might also want to have a way to invoke the enrollment script for an individual user. Then you could automatically call it from the page you use to create a new user or change an existing user's jobType.&lt;/p&gt;
+&lt;p&gt;2) Completion tracking sounds good. Moodle seems kind of ideologically unfriendly to linear course paths, but it's something I've needed to implement as well. Be aware that the &quot;user must view lesson&quot; requirement is very weak; it's fulfilled if they just load the first page of the lesson and then go back to the course index page. I don't know a better method offhand; maybe assign some points on pages throughout the course, and use that as a grade requirement for completion.&lt;/p&gt;
+&lt;p&gt;3) How about a script that checks the lesson completion table? I believe it's mdl_course_modules_completion. Then you could have a dynamically generated page that lists all the required lessons for that user and shows which of them have been complete (or that makes any kind of fancy graphic or schematic you want).&lt;/p&gt;
+&lt;p&gt;The completion table references lessons by ID number, which I believe corresponds to the primary key &quot;ID&quot; for the table mdl_lesson. mdl_lesson also tells you which course each lesson belongs to, if you want to organize the output that way.&lt;/p&gt;
+&lt;p&gt;--&lt;/p&gt;
+&lt;p&gt;This has been an interesting set of questions to think about! I would really appreciate it if you'd let me know if these sound helpful, and/or whether what I've been saying is comprehensible. I'm a novice and still learning how to think about moodle and how to talk about it to others, so your feedback would help make it a worthwhile exercise.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178101#p781102</guid>
+</item>
+<item>
+<title>Re: need for dataset</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178274#p781799</link>
+<pubDate>Sun, 26 Jun 2011 17:50:09 GMT</pubDate>
+<description>by Tomasz Muras &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi there,&lt;/p&gt;
+&lt;p&gt;you can also use generator in 1.9 (or &lt;a href=&quot;http://blog.enovation.ie/2011/02/generate-random-test-data-in-moodle-2/&quot;&gt;patched version for 2.0&lt;/a&gt;) to generate random data for your course - very helpful for testing.&lt;/p&gt;
+&lt;p&gt;Tomasz Muras&lt;br /&gt;Enovation Solutions&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178274#p781799</guid>
+</item>
+<item>
+<title>Re: need for dataset</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178274#p781790</link>
+<pubDate>Sun, 26 Jun 2011 16:23:38 GMT</pubDate>
+<description>by Maryel Mendiola    &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Zakieh&lt;/p&gt;
+&lt;p&gt;in &lt;a title=&quot;Moodle Exchange&quot; href=&quot;http://moodle.org/course/view.php?id=15&quot;&gt;Moodle Exchange&lt;/a&gt; you'll find many  issues to download (including courses)&lt;/p&gt;
+&lt;p&gt;visit this glossary 'Course Exchange'&lt;/p&gt;
+&lt;p&gt;&lt;a title=&quot;courses&quot; href=&quot;http://moodle.org/mod/glossary/view.php?id=918&quot;&gt;http://moodle.org/mod/glossary/view.php?id=918&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;Regards,&lt;/p&gt;
+&lt;p&gt;Maryel&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178274#p781790</guid>
+</item>
+<item>
+<title>Re: can&#039;t access quizport due to &quot;attempt&quot; error message </title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178359#p782266</link>
+<pubDate>Tue, 28 Jun 2011 09:36:01 GMT</pubDate>
+<description>by Gordon Bateson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Katie,&lt;/p&gt;
+&lt;p&gt;as well as a limit on the number of attempts at a QuizPort activity, thre is also a setting to limit the number of attempts at any particular quiz within the QuizPort acitivity.&lt;/p&gt;
+&lt;p&gt;In this case, it looks like you need to access the quiz's settings page (accessible from the &quot;Edit quizzes&quot; page of the QuizPort&quot;) and set the number of attempts to unlimited.&lt;/p&gt;
+&lt;p&gt;regards&lt;br /&gt;Gordon&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178359#p782266</guid>
+</item>
+<item>
+<title>Re: Best way to manage CONTRIB code with GIT</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=165236#p782285</link>
+<pubDate>Tue, 28 Jun 2011 10:19:36 GMT</pubDate>
+<description>by Mark Johnson &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Personally, I think that the Plugins system having a field that links to the docs should be enough - then they can live where the maintainer chooses.&lt;/p&gt;
+&lt;p&gt;I prefer to use a system which generates my documentation as HTML pages - this doesn't fit with the Moodle Docs wiki very well. However this does fit very nicely with GitHub (you can have a seperate branch of your repo where you can put web pages which are then accessible through a GitHub.com URL).&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=165236#p782285</guid>
+</item>
+<item>
+<title>Best way to manage CONTRIB code with GIT</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=165236#p724190</link>
+<pubDate>Wed, 29 Dec 2010 14:47:40 GMT</pubDate>
+<description>by Anthony Borrow &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I've read most of the Pro Git book so I now have at least a theoretical understanding of the basics of git. I would like to provide a conceptual framework for myself to help me manage contrib code. This includes testing the code and making it available for others. One thing I would like to see is a solid naming convention for branches, tags, etc. that fits into what is now being done with core. Any and all suggestions, advise, recommendations, questions (including questions I should be asking), etc. would be appreciated. Peace - Anthony&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=165236#p724190</guid>
+</item>
+<item>
+<title>HEADS UP:  MNet support will end in Moodle 2.3</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175158#p768252</link>
+<pubDate>Thu, 12 May 2011 07:26:58 GMT</pubDate>
+<description>by Martin Dougiamas &lt;br /&gt;&lt;br /&gt;&lt;p&gt;ADVANCE NOTICE:&lt;/p&gt;
+&lt;p&gt;We plan to remove our proprietary MNet subsystem from Moodle 2.3 (planned for release in over a year, June &lt;em&gt;&lt;strong&gt;2012&lt;/strong&gt;&lt;/em&gt; ).  It causes us constant problems, is not well-defined, and only implemented by very few other systems.&lt;/p&gt;
+&lt;p&gt;We plan to redesign the functionality completely, replacing it with standard web service functions, standard protocols and probably standard authentication schemes like OAuth 2.0.&lt;/p&gt;
+&lt;p&gt;We want to work with the Mahara developers (and anyone else who may be using Mnet) to ensure a smooth changeover, but it's unlikely that the new system can be directly backward-compatible with MNet.&lt;/p&gt;
+&lt;p&gt;This means that if you use MNet in a significant way, you need to upgrade all your networked systems at the same time and reconfigure the networking.&lt;/p&gt;
+&lt;p&gt;At this stage the design for the new systems is not defined at all.  My own thinking is that we should think holistically about how Moodle can share authentication and the old MNet services with all kinds of other systems, not just Mahara.  If you have any ideas on what we should do and how, then now would be a good time to start brainstorming!&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175158#p768252</guid>
+</item>
+<item>
+<title>Re: Best way to manage CONTRIB code with GIT</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=165236#p724963</link>
+<pubDate>Sun, 02 Jan 2011 11:33:25 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I thought some examples might help with David's explanation, so here are some examples of people getting it right:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;https://github.com/moodlehq/&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodlehq/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/mudrd8mz&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/mudrd8mz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/skodak&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/skodak&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=165236#p724963</guid>
+</item>
+<item>
+<title>Re: Best way to manage CONTRIB code with GIT</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=165236#p730186</link>
+<pubDate>Mon, 17 Jan 2011 14:41:43 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Definitely not. The CONTRIB project at tracker.moodle.org should be used for issue tracking.&lt;/p&gt;
+&lt;p&gt;The suggestion is to move your code from cvs.moodle.org to any public git hosting that you like - with github being one popular choice.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=165236#p730186</guid>
+</item>
+<item>
+<title>Re: SCORM File not specified</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=172928#p782146</link>
+<pubDate>Mon, 27 Jun 2011 22:18:49 GMT</pubDate>
+<description>by Sjoerd de Vries &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I got the same issue.&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt;I ran into this article: &lt;a href=&quot;http://moodle.org/mod/forum/discuss.php?d=163620&quot;&gt;http://moodle.org/mod/forum/discuss.php?d=163620&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;I suppose it has to do with IE9, however, I can import it with chrome. IN IE9 I get the message &quot;file not specified&quot;, but not only with scorm import. IE9 does not import any sip file.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=172928#p782146</guid>
+</item>
+<item>
+<title>User profile picture</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175572#p779594</link>
+<pubDate>Mon, 20 Jun 2011 03:33:31 GMT</pubDate>
+<description>by Lei Zhang &lt;br /&gt;&lt;br /&gt;&lt;p&gt;@Melissa, I have just added another new feature which let you enable/disable user picture in the page heading area.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;@@PLUGINFILE@@/userpicture.png&quot; alt=&quot;user picture&quot; width=&quot;250&quot; height=&quot;150&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;Setting screenshot:&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;@@PLUGINFILE@@/setting.png&quot; alt=&quot;user picture setting&quot; width=&quot;509&quot; height=&quot;95&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175572#p779594</guid>
+</item>
+<item>
+<title>Dock</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175572#p779987</link>
+<pubDate>Tue, 21 Jun 2011 03:42:42 GMT</pubDate>
+<description>by Lei Zhang &lt;br /&gt;&lt;br /&gt;&lt;p&gt;For those who love dock feature in Moodle2,  this is now available in decaf too.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;@@PLUGINFILE@@/Screen%20shot%202011-06-21%20at%203.36.33%20PM.png&quot; alt=&quot;dock&quot; width=&quot;237&quot; height=&quot;330&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175572#p779987</guid>
+</item>
+<item>
+<title>Re: Moodle 2.0 &amp; Google Apps</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=156682#p741518</link>
+<pubDate>Thu, 17 Feb 2011 00:55:19 GMT</pubDate>
+<description>by Jonathan Harker &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi,  If you already have an install, you should be safe grabbing the zip&lt;span class=&quot;content&quot;&gt; snapshot from the top commit of our branch here: &lt;/span&gt;&lt;span class=&quot;content&quot;&gt;&lt;a class=&quot;_blanktarget&quot; href=&quot;http://git.catalyst.net.nz/gw?p=moodle-r2.git;a=shortlog;h=refs/heads/feature-20-googleapps&quot;&gt;http://git.catalyst.net.nz/gw?p=moodle-r2.git;a=shortlog;h=refs/heads/feature-20-googleapps&lt;/a&gt;&lt;/span&gt;&lt;span class=&quot;content&quot;&gt; (which is based on top of MOODLE_201_RELEASE) and copying into your Moodle  installation the following:&lt;br /&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;span class=&quot;content&quot;&gt; auth/gsaml&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; blocks/gaccess&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; blocks/gdata&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; blocks/gmail&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/At.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Ch.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/De.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Fi.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Hu.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Interface.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Li.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/No.php&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&quot;content&quot;&gt; lib/zend/Zend/Validate/Hostname/Se.php&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Hope that helps &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=156682#p741518</guid>
+</item>
+<item>
+<title>Re: Module &quot;report_my_certificates&quot; is not readable - check permissions</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178340#p782136</link>
+<pubDate>Mon, 27 Jun 2011 21:20:26 GMT</pubDate>
+<description>by jean-michel vedrine &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hello,&lt;/p&gt;
+&lt;p&gt;Please read doc again, your files are not in the right place&lt;/p&gt;
+&lt;p&gt;Upload the certificate_report/root/certificates folder to your &lt;strong&gt;root&lt;/strong&gt; (your main moodle) folder.&lt;br /&gt;Upload the certificate_report/blocks/my_certificates folder to your &lt;strong&gt;blocks&lt;/strong&gt; folder.&lt;/p&gt;
+&lt;p&gt;So noting goes in the mod folder !&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178340#p782136</guid>
+</item>
+<item>
+<title>Re: NTLM Authentication not working for Active Directory single sign-on</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=167455#p735269</link>
+<pubDate>Mon, 31 Jan 2011 22:05:41 GMT</pubDate>
+<description>by Iñaki Arenaza &lt;br /&gt;&lt;br /&gt;&lt;p&gt;&amp;gt; [client ***] got response: AF user.name, referer: http://sitename/auth/ldap/ntlmsso_attempt.php
+&amp;gt; [client ***] authenticated user.name, referer: http://sitename/auth/ldap/ntlmsso_attempt.php&lt;/p&gt;
+
+&lt;p&gt;It looks like your winbind configuration returns usernames without domain qualification (i.e. user.name instead of domain\user.name). Moodle expects domain qualified user names (with a backslash as separator).&lt;/p&gt;
+
+&lt;p&gt;If your winbind setup uses another format (and you need that format for other apps), you can edit auth/ldap/auth.php, function ntlmsso_magic(), and change the piece of code that reads:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+    switch ($this-&amp;gt;config-&amp;gt;ntlmsso_type) {
+        case 'ntlm':
+            // Format is DOMAIN\username
+            $username = substr(strrchr($username, '\\'), 1);
+            break;
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;in particular the substr(strrchr(....)) line, so it doesn't try to strip the domain part (which in your particular case makes the authentication fail).&lt;/p&gt;
+
+&lt;p&gt;Saludos.
+Iñaki.&lt;/p&gt;
+</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=167455#p735269</guid>
+</item>
+<item>
+<title>Re: NTLM configured for multiple subnets</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=169978#p745584</link>
+<pubDate>Tue, 01 Mar 2011 07:05:45 GMT</pubDate>
+<description>by Iñaki Arenaza &lt;br /&gt;&lt;br /&gt;&lt;div class=&quot;text_to_html&quot;&gt;Hi Joe,&lt;br /&gt;&lt;br /&gt;
+contrary to other LDAP settings, you need to put a comma (not a semicolon) between subnets. The reason for this inconsistency is that the code that checks the subnet was developed for other features (that use that convention) and we simply use it from LDAP plugin.&lt;br /&gt;&lt;br /&gt;
+Anyway, I thought this was stated in the little help text next to the setting, but it's not. So I'm filing a bug to fix it.&lt;br /&gt;&lt;br /&gt;
+Saludos.&lt;br /&gt;
+Iñaki.&lt;/div&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=169978#p745584</guid>
+</item>
+<item>
+<title>Re: exabis e-Portfolio-Module</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=77046#p684939</link>
+<pubDate>Mon, 23 Aug 2010 02:46:00 GMT</pubDate>
+<description>by Mark Picker &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Also need to change:&lt;/p&gt;
+&lt;p&gt;/blocks/exabis_eportfolio/views_list.php&lt;/p&gt;
+&lt;p&gt;Line 142&lt;/p&gt;
+&lt;p&gt;Change from:&lt;/p&gt;
+&lt;p&gt;&quot; JOIN {$CFG-&amp;gt;prefix}block_exabeporviewshar vshar WHERE u.id=vshar.userid AND vshar.viewid='&quot;.$view-&amp;gt;id.&quot;'&quot;.&lt;/p&gt;
+&lt;p&gt;To:&lt;/p&gt;
+&lt;p&gt;&quot; JOIN {$CFG-&amp;gt;prefix}block_exabeporviewshar vshar ON u.id=vshar.userid WHERE vshar.viewid='&quot;.$view-&amp;gt;id.&quot;'&quot;.&lt;/p&gt;
+&lt;p&gt;Cheers&lt;br /&gt;Mark&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=77046#p684939</guid>
+</item>
+<item>
+<title>Re: exabis e-Portfolio-Module</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=77046#p684932</link>
+<pubDate>Mon, 23 Aug 2010 02:14:06 GMT</pubDate>
+<description>by Mark Picker &lt;br /&gt;&lt;br /&gt;&lt;p&gt;For those using MSSQL, please find below the change that I needed to make to:&lt;/p&gt;
+&lt;p&gt;/exabis_eportfolio/view_items.php&lt;/p&gt;
+&lt;p&gt;SQL statement on line 91&lt;/p&gt;
+&lt;p&gt;Changed the where/group by line from:&lt;/p&gt;
+&lt;p&gt;&quot; where i.userid = $USER-&amp;gt;id $sql_type_where group by i.id, i.name, i.intro, i.timemodified, &lt;strong&gt;cname, cname_parent, coursename&lt;/strong&gt; $sql_sort&quot;;&lt;/p&gt;
+&lt;p&gt;to:&lt;/p&gt;
+&lt;p&gt;  &quot; where i.userid = $USER-&amp;gt;id $sql_type_where&quot;.&lt;br /&gt;  &quot; group by i.id, i.name, i.intro, i.timemodified, &lt;strong&gt;ic.name, ic2.name, c.fullname&lt;/strong&gt;&quot;.&lt;br /&gt; &lt;strong&gt; &quot; ,i.userid, i.type, i.categoryid, i.url, i.attachment, i.courseid,i.shareall, i.externaccess, i.externcomment, i.sortorder&quot;.&lt;br /&gt;&lt;/strong&gt;  &quot; $sql_sort&quot;;&lt;/p&gt;
+&lt;p&gt;I broke the line up purely for readability. Bolded parts are the changed/added bits of code.&lt;/p&gt;
+&lt;p&gt;The query statement now looks like:&lt;/p&gt;
+&lt;p&gt;$query = &quot;select i.*, ic.name AS cname, ic2.name AS cname_parent, c.fullname As coursename, COUNT(com.id) As comments&quot;.&lt;br /&gt;  &quot; from {$CFG-&amp;gt;prefix}block_exabeporitem i&quot;.&lt;br /&gt;  &quot; join {$CFG-&amp;gt;prefix}block_exabeporcate ic on i.categoryid = ic.id&quot;.&lt;br /&gt;  &quot; left join {$CFG-&amp;gt;prefix}block_exabeporcate ic2 on ic.pid = ic2.id&quot;.&lt;br /&gt;  &quot; left join {$CFG-&amp;gt;prefix}course c on i.courseid = c.id&quot;.&lt;br /&gt;  &quot; left join {$CFG-&amp;gt;prefix}block_exabeporitemcomm com on com.itemid = i.id&quot;.&lt;br /&gt;  &quot; where i.userid = $USER-&amp;gt;id $sql_type_where&quot;.&lt;br /&gt;  &quot; group by i.id, i.name, i.intro, i.timemodified, ic.name, ic2.name, c.fullname&quot;.&lt;br /&gt;  &quot; ,i.userid, i.type, i.categoryid, i.url, i.attachment, i.courseid,i.shareall, i.externaccess, i.externcomment, i.sortorder&quot;.&lt;br /&gt;  &quot; $sql_sort&quot;;&lt;/p&gt;
+&lt;p&gt;Cheers&lt;br /&gt;Mark&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=77046#p684932</guid>
+</item>
+<item>
+<title>Re: Cross-Moodle Logins</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177788#p779994</link>
+<pubDate>Tue, 21 Jun 2011 04:12:31 GMT</pubDate>
+<description>by Guillermo M. &lt;br /&gt;&lt;br /&gt;&lt;p&gt;It seems to me that the copied &quot;config.php&quot; file (inside the moodle directory) was not updated to reflect the changed environment.&lt;/p&gt;
+&lt;p&gt;Were the dbname, ..., dirroot and dataroot parameters updated?&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177788#p779994</guid>
+</item>
+<item>
+<title>Re: Cross-Moodle Logins</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177788#p780164</link>
+<pubDate>Tue, 21 Jun 2011 15:01:12 GMT</pubDate>
+<description>by Hubert Chathi &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Yes, you should use a separate dataroot.  Also, if the sandbox and live sites are on the same domain, you probably want to change the sessioncookiepath setting as well (in /admin/settings.php?section=sessionhandling).&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177788#p780164</guid>
+</item>
+<item>
+<title>Re: Problem when create different group in moodle 1.2 beta</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178245#p781963</link>
+<pubDate>Mon, 27 Jun 2011 11:13:00 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;You need to turn on &quot;Enable group members only&quot; in the admin menu if you want this feature.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178245#p781963</guid>
+</item>
+<item>
+<title>Re: The Gap-select new question type for 2.1</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178244#p781964</link>
+<pubDate>Mon, 27 Jun 2011 11:14:06 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;We did not realise that change in &lt;a title=&quot;Auto-link to Moodle Tracker&quot; href=&quot;http://tracker.moodle.org/browse/MDL-27956&quot;&gt;MDL-27956&lt;/a&gt; would have this effect. Will fix soon.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178244#p781964</guid>
+</item>
+<item>
+<title>Re: Placing controls for various click types</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174240#p781950</link>
+<pubDate>Mon, 27 Jun 2011 10:53:10 GMT</pubDate>
+<description>by Colin Fraser &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Wow, this is a long time to wait for an answer... but this is the wrong forum for it..and I doubt this is a timely response, but here is one take on it.&lt;/p&gt;
+&lt;p&gt;Simply put, create this exercise is a SCORM format, using ReLoad Editor or Exe or some such, with everythng you need it to do. Once ready then load it into Moodle as a SCORM package.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174240#p781950</guid>
+</item>
+<item>
+<title>Re: Moodle 2.1 update from 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178273#p781895</link>
+<pubDate>Mon, 27 Jun 2011 07:43:03 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;It should just work - and it will once we have got the bugs ironed out. Thank you for your help with testing &lt;a title=&quot;Auto-link to Moodle Tracker&quot; href=&quot;http://tracker.moodle.org/browse/MDL-27929&quot;&gt;MDL-27929&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Are you using the command-line upgrade? That is probably more reliable that going through your web browser. &lt;a href=&quot;http://docs.moodle.org/20/en/Administration_via_command_line&quot; class=&quot;_blanktarget&quot;&gt;http://docs.moodle.org/20/en/Administration_via_command_line&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Also, I would recommend turning on [[Debugging]] during the upgrade, to get the maximum amount of diagnostics in case of an error.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178273#p781895</guid>
+</item>
+<item>
+<title>Re: Ang: Student can&#039;t see feedback/comments</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174717#p771425</link>
+<pubDate>Mon, 23 May 2011 10:32:15 GMT</pubDate>
+<description>by Yen Ling Lam &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I usually go about the problem in 1.9 by assigning my own scales.  So I have reviewed, and changes needed as scale.  So the grade is &quot;reviewed&quot; and the feedback then can be viewed.  This may help you.&lt;/p&gt;
+&lt;p&gt;In the gradebook, you can further set the weighting of the reviewed assignment as zero.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174717#p771425</guid>
+</item>
+<item>
+<title>Re: Language customization in 2.0.2 SOLVED</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178203#p781680</link>
+<pubDate>Sat, 25 Jun 2011 20:22:23 GMT</pubDate>
+<description>by Prof Larsen &lt;br /&gt;&lt;br /&gt;&lt;p&gt;@Robert, @Mary, @David, @Helen&lt;/p&gt;
+&lt;p&gt;Thank you all for your help. I found the text field! Yay!&lt;/p&gt;
+&lt;p&gt;I had checked the Manage Authentication page several times and skimmed right over it (probably because I didn't expect to find it there). It took you guys all pointing me in the right direction to look again. I'm good to go!&lt;/p&gt;
+&lt;p&gt;Happy Moodling!&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178203#p781680</guid>
+</item>
+<item>
+<title>Re: Grading numerical formats in numerical question type</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174387#p781440</link>
+<pubDate>Fri, 24 Jun 2011 18:29:44 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Right, I have finally got back to thinking about this.&lt;/p&gt;
+&lt;p&gt;While reading this, you might like to note that Moodle outputs numbers (e.g. grades) with the decimal point from the current language pack, and no thousands separators. (See the format_fload function in lib/moodlelib.php. Also qtype_calculated_variable_substituter::format_float in question/type/calculated/question.php.)&lt;/p&gt;
+&lt;h2&gt;How it works in Moodle 2.0&lt;/h2&gt;
+&lt;p&gt;Up to, and including, Moodle 2.0, the way responses to numerical questions were analysed was:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;Remove any spaces.&lt;/li&gt;
+&lt;li&gt;If the respones contains two or more commas, then remove all commas. If it contains only one comma, then replace that with a .&lt;/li&gt;
+&lt;li&gt;Then, looks to see if what is left looks like a PHP number (1, 1.2, -.234e3, etc)&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;So, basically, it tried as hard as possible to interpret the student's answer as a valid number.&lt;/p&gt;
+&lt;p&gt;This correctly interprets any correctly-formatted number the student types, except:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;10,000 (in England) is interpreted as 10, not 10000&lt;/li&gt;
+&lt;li&gt;10.000 (in Spain) is interpreted as 10, not 10000&lt;/li&gt;
+&lt;li&gt;10.000.000 (in Spain) is not accepted, and so automatically graded wrong, when it should be interpreted as ten million.&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;It also interprets some complete garbage as a valid number (e.g. 1 , 2 , 3 , .,,4 gets interpreted as 123.4). I am not very bothered by this. In most cases, the student will be trying to get the question right, so they won't type garbage. And the probility of then accidentally typing some garbage that gets graded correct is minimal.)&lt;/p&gt;
+&lt;h2&gt;What I had done in the new question engine&lt;/h2&gt;
+&lt;p&gt;I.e. how Moodle 2.1 beta currently works.&lt;/p&gt;
+&lt;p&gt;I has assumed that one could always rely on the language (or locale) that Moodle was set to when parsing numbers. Then look in the langauge pack for decsep and thousandssep, and use those to parse the student's response.&lt;/p&gt;
+&lt;p&gt;That solves 1.-3. above. However, it also means that a lot of responses that Moodle would have graded correctly would now be graded wrong. Therefore, this is not at all backwards compatible, as Pierre points out. We can't do this.&lt;/p&gt;
+&lt;p&gt;Also, Pierre's comment here: &lt;a href=&quot;http://moodle.org/mod/forum/discuss.php?d=172211#p755544&quot; class=&quot;_blanktarget&quot;&gt;http://moodle.org/mod/forum/discuss.php?d=172211#p755544&lt;/a&gt; shows that ther are situations where you cannot rely on then selected language.&lt;/p&gt;
+&lt;p&gt;(I was nervous about making Moodle rely on the selected language, right from the start, but at the time I did this I thought it would be worth it.)&lt;/p&gt;
+&lt;h2&gt;What I am now proposing for Moodle 2.1&lt;/h2&gt;
+&lt;p&gt;I am basically proposing to go back to the old system.&lt;/p&gt;
+&lt;p&gt;However, in the new question engine, it is possible to validate the students answer, and warn them if a problem is detected. This is used, for example, in the matching question type, if the student completes some, but not all parts of the question. When the student's response fails to validate, then either they correct it, which is good, or, if they do Submit all and finish despite the warning, then we grade the respones they have given as well as possible.&lt;/p&gt;
+&lt;p&gt;So, the validation I propose to do is, if we detect any thousandssep in the number the student types (based on the currently selected language), or if what the student types is not recognised at all then we will tell them to change their answer to remove them. That will avoid problems 1. - 3. above.&lt;/p&gt;
+&lt;p&gt;I prefer this to things like help icons displayed in the question, because they are unnecessary clutter once the student knows what they are doing. Teachers can still choose to put instructions about formatting in the question text, if they choose.&lt;/p&gt;
+&lt;h2&gt;What we should do in the future&lt;/h2&gt;
+&lt;p&gt;In the future, we should add optinons on the question editing form so that teachers can control what sorts of number formats are allowed. I hope that someone (that is, Pierre &lt;img class=&quot;emoticon&quot; alt=&quot;wink&quot; title=&quot;wink&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fwink&amp;amp;rev=252&quot; /&gt;) will want to work on this.&lt;/p&gt;
+&lt;h2&gt;Thank you&lt;/h2&gt;
+&lt;p&gt;... to Pierre, for thinking about this a lot while I was busy, and making lots of notes. I basically just had to read all his notes, think a little, and then decide.&lt;/p&gt;
+&lt;h2&gt;Link&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;http://en.wikipedia.org/wiki/Decimal_mark&quot; class=&quot;_blanktarget&quot;&gt;http://en.wikipedia.org/wiki/Decimal_mark&lt;/a&gt; is a good summary.&lt;/p&gt;
+&lt;h2&gt;Archaeology&lt;/h2&gt;
+&lt;p&gt;If anyone really cares, you can see the evolution of the numerical quetsion-type through history using this command:&lt;/p&gt;
+&lt;p&gt;gitk -- question/type/numerical/questiontype.php question/questiontypes/numer&lt;br /&gt;ical/questiontype.php mod/quiz/questiontypes/numerical/questiontype.php &amp;amp;&lt;/p&gt;
+&lt;p&gt;Key points in the history of the apply_units function, which is really what we are talking about here, are:&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/ee1fb969c8274130c0e7a7317dd69a8d48e0e54f&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/ee1fb969c8274130c0e7a7317dd69a8d48e0e54f&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/1fe641f7b43b63cb5289b0ffa8b6c4e1f2ee61ff&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/1fe641f7b43b63cb5289b0ffa8b6c4e1f2ee61ff&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/be1bb80efa8223ace8e70b5024286bbdd8501ec4&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/be1bb80efa8223ace8e70b5024286bbdd8501ec4&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/f1ee48c89183873feb48d0d351d73b6a1d31b6be&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/f1ee48c89183873feb48d0d351d73b6a1d31b6be&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/0ff173d3f2e41c359ca7dd576b0e20e4d071bcf7&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/0ff173d3f2e41c359ca7dd576b0e20e4d071bcf7&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/544de1c03589ede5a4ed934fc822db9f9d5c73a5&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/544de1c03589ede5a4ed934fc822db9f9d5c73a5&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/b3c9da2f0a58ba0ff15ef9a95912eb2afafb14be&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/b3c9da2f0a58ba0ff15ef9a95912eb2afafb14be&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/52ad7e0c1b7d1ef99d7cb7db618d4e4fd2a0734f&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/52ad7e0c1b7d1ef99d7cb7db618d4e4fd2a0734f&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-weight:normal;color:#0d3a55;&quot;&gt; &lt;/span&gt;&lt;a href=&quot;https://github.com/moodle/moodle/commit/5073fb743f47ac976f55d1c0c36f6dbd0451e198&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/moodle/moodle/commit/5073fb743f47ac976f55d1c0c36f6dbd0451e198&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174387#p781440</guid>
+</item>
+<item>
+<title>Grading numerical formats in numerical question type</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174387#p764705</link>
+<pubDate>Sun, 01 May 2011 14:19:53 GMT</pubDate>
+<description>by Pierre Pichet &lt;br /&gt;&lt;br /&gt;&lt;h2&gt;&lt;span class=&quot;mw-headline&quot;&gt;Numerical question grading &lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;There are 3 elements that can be graded in a numerical question&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt; the numeric value &lt;/li&gt;
+&lt;li&gt; the unit used in relation to the numeric value &lt;/li&gt;
+&lt;li&gt; the number format used to express the value &lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;1 and 2 are addressed in Moodle 2,0 for questions created from edit_numerical_form.php.&lt;/p&gt;
+&lt;p&gt;3 can give a 0 grade if the student does not use one of the  number formats allowed but there is no specific grading designed as the  unit penalty since Moodle 2,0.&lt;/p&gt;
+&lt;h2&gt;&lt;span class=&quot;mw-headline&quot;&gt;Designing a number format grading&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;We have already 2 ways to grade the student response available in the edit_numerical_form.php. i.e.&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt; the answer-tolerance combination &lt;/li&gt;
+&lt;li&gt; the detailed unit grading &lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;We need flexibility to take in account that number format can vary  even at a same location i.e. in Canada there are two locales as there  are two official languages (french and english).&lt;/p&gt;
+&lt;p&gt;Teacher sometimes ask for specific number formats as fraction that cannot be allowed simultanuously to other grading.&lt;/p&gt;
+&lt;p&gt;The most universal solution is to associate a grade to a specific answer as the tolerance is used.&lt;/p&gt;
+&lt;p&gt;For example in calculated the tolerance can be set as relative or absolute.&lt;/p&gt;
+&lt;p&gt;So my proposal is to add the number format as a new answer parameter.&lt;/p&gt;
+&lt;p&gt;To an official locales list we could add&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt; specific Moodle formats as the one used for 1,9 or 2,0 , &lt;/li&gt;
+&lt;li&gt; a fraction format, &lt;/li&gt;
+&lt;li&gt; time format, &lt;/li&gt;
+&lt;li&gt; degree, second, minutes ( think of GPS )&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;Pierre&lt;/p&gt;
+&lt;p&gt;P.S. see &lt;a href=&quot;http://docs.moodle.org/en/Development:Question_Engine_2:Numerical_formats&quot; class=&quot;_blanktarget&quot;&gt;http://docs.moodle.org/en/Development:Question_Engine_2:Numerical_formats&lt;/a&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174387#p764705</guid>
+</item>
+<item>
+<title>Re: Using English - United States (en_us) in Moodle 2.0.2</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177351#p781847</link>
+<pubDate>Mon, 27 Jun 2011 01:51:35 GMT</pubDate>
+<description>by Mark McCall &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Jason,&lt;/p&gt;
+&lt;p&gt;I have completed a couple of fairly exhaustive updates for enrollment and synchronization for 2.0+ and 2.1 should be clean.  However, I am still find some stragglers in some weird places so please let me know if you find any and we will get them updated.&lt;/p&gt;
+&lt;p&gt;Thanks,&lt;/p&gt;
+&lt;p&gt;Mark&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177351#p781847</guid>
+</item>
+<item>
+<title>Re: Sakai Project: Open Source Higher Ed. Initiative</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=5085#p23277</link>
+<pubDate>Thu, 05 Feb 2004 13:19:59 GMT</pubDate>
+<description>by Bryan Williams &lt;br /&gt;&lt;br /&gt;Quite possibly in 2-5 years these behemoths will create something that a few people might use, if their grant money doesn't run out first.  It's happened before.  Imagine the cooperation among ego's at the university level in trying to get agreement on Sakai features and code management.  Little wonder why the real movement in open-source is with renegades like Martin who know the real meaning of the concept of &quot;connected knower,&quot; and how to work humbly (well, most of the time) with others to produce something the masses can actually use.  Also, where do you suppose Moodle will be in its evolution in 2 years?  I've been at this less than 2 months and am astounded by the progress and the relatively painless process of stumbling through the learning curve!  And hey, I sense the best is yet to come.   It's a big world, there is room for several good Moodle-like solutions.    </description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=5085#p23277</guid>
+</item>
+<item>
+<title>Re: Some Maths Expression not rendering in HTML editor</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178168#p781727</link>
+<pubDate>Sun, 26 Jun 2011 07:51:10 GMT</pubDate>
+<description>by Mauno Korpelainen &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I believe the main problem there are (double) &lt;span style=&quot;text-decoration:underline;&quot;&gt;spaces&lt;/span&gt; in latex expressions.&lt;/p&gt;
+&lt;p&gt;Most latex renderers do ignore extra spaces but in some distributions of latex extra spaces are rendered as unknown characters with [ ? ]&lt;/p&gt;
+&lt;p&gt;Editor mode on the other hand replaces double spaces with single spaces - if you use copy and paste in text mode double spaces are not replaced with single spaces...&lt;/p&gt;
+&lt;p&gt;You could as well write that expession as&lt;/p&gt;
+&lt;p&gt;\frac{{-b\pm\sqrt{{b^2}-4ac}}}{{2a}}&lt;/p&gt;
+&lt;p&gt;without any spaces to get&lt;/p&gt;
+&lt;p&gt;&lt;a title=&quot;TeX&quot; href=&quot;http://moodle.org/filter/tex/displaytex.php?%5Cfrac%7B%7B-b%5Cpm%5Csqrt%7B%7Bb%5E2%7D-4ac%7D%7D%7D%7B%7B2a%7D%7D=&quot; id=&quot;action_link4e0d8153ba976&quot;&gt;&lt;img class=&quot;texrender&quot; title=&quot;\frac{{-b\pm\sqrt{{b^2}-4ac}}}{{2a}}&quot; alt=&quot;\frac{{-b\pm\sqrt{{b^2}-4ac}}}{{2a}}&quot; src=&quot;http://moodle.org/filter/tex/pix.php/be9585929ca1f832220d55f72c088b01.gif&quot; /&gt;&lt;/a&gt;&lt;/p&gt; </description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178168#p781727</guid>
+</item>
+<item>
+<title>Updating a file everywhere it is used in Moodle 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174388#p764706</link>
+<pubDate>Sun, 01 May 2011 14:19:28 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;There is much wingeing about the lack of this feature, so I decided to make a proof-of-concept: &lt;a href=&quot;https://github.com/timhunt/moodle-local_fileupdater&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/timhunt/moodle-local_fileupdater&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;At the moment this just does two things:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;Lists all the places in Moodle where a particular file is used (and you have to manually upload the file in question to a folder in moodledocs first)&lt;/li&gt;
+&lt;li&gt;There is an implementation for a &lt;tt&gt;update_file_contents&lt;/tt&gt; function that can be used to replace a file with updated contents.&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;and it is limited to admins only.&lt;/p&gt;
+&lt;p&gt;Obviously, more work is needed, for example:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;Let the user select the file to search for using the filepicker.&lt;/li&gt;
+&lt;li&gt;Link up 1. and 2. so that you can actually update the contents of the file with a new file (again using the file-picker to upload the new file).&lt;/li&gt;
+&lt;li&gt;Add more sophisticated permissions checking, so we can let teachers use the tool to update just the files they have permission to change.&lt;/li&gt;
+&lt;/ol&gt;&lt;p&gt;3. is actually really hard to do in general, but a reasonably workable approximation should not be too hard.&lt;/p&gt;
+&lt;p&gt;I am not proposing to do any more with this now. I should not even have spent the two hours this prototype took. It was just a bit of displacement activity. So, please, anyone, feel free to clone that git repository and do more work. Thanks.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174388#p764706</guid>
+</item>
+<item>
+<title>Decaf - Moodle 2 theme - Further Improvements</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=175572#p769961</link>
+<pubDate>Wed, 18 May 2011 01:11:08 GMT</pubDate>
+<description>by Lei Zhang &lt;br /&gt;&lt;br /&gt;&lt;p&gt;My &lt;a href=&quot;http://moodle.org/mod/forum/discuss.php?d=153801&quot;&gt;original post&lt;/a&gt; on Decaf theme is getting too long to read, and there're still plenty of room to make it more user-friendly in term of usabilities. In this thread, I'll keep posting all my improvements on Decaf theme, please stay tunned and leave your comments below.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/leizhang/moodle-theme_decaf/zipball/master&quot;&gt;Download latest Decaf&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=175572#p769961</guid>
+</item>
+<item>
+<title>Re: How to customize the main page for each student?</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=167492#p734452</link>
+<pubDate>Sat, 29 Jan 2011 03:50:19 GMT</pubDate>
+<description>by Miriam Laidlaw &lt;br /&gt;&lt;br /&gt;&lt;p&gt;This is not a theme solution as such, but how about making the default page for logged in users the &quot;My Moodle&quot; page (now named My home in Moodle 2.0, but still named My Moodle in the administration drop down option in Site administration --&amp;gt; Appearance --&amp;gt; Navigation).&lt;/p&gt;
+&lt;p&gt;Then make sure that the courses or course categories are not shown on the site homepage (in Site administration --&amp;gt; Front page --&amp;gt; Front page settings).&lt;/p&gt;
+&lt;p&gt;And don't put a course categories block on the main site page.&lt;/p&gt;
+&lt;p&gt;That should somewhat restrict anyone's ability to navigate to courses unless they're already enrolled in them. Their enrolled courses display on their My home (or My Moodle) page and under &quot;My courses&quot; in the Navigation block.&lt;/p&gt;
+&lt;p&gt;There may, of course, be an option to do this with themes - but I will leave that for someone else to answer. &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=167492#p734452</guid>
+</item>
+<item>
+<title>Re: URGENT HELP!!   ADMIN ACCOUNT HACKED</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=174536#p781462</link>
+<pubDate>Fri, 24 Jun 2011 19:52:21 GMT</pubDate>
+<description>by Timothy Kaemmerer &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I know this thread is a month and a half old, but for the future reference of anyone else reading:&lt;/p&gt;
+&lt;p&gt;- you need to check the legal ramifications of possibly exposing users private data. You are probably required to notify your users and at least tell them to change passwords on any accounts with any service that shared the same password with their Moodle account.&lt;/p&gt;
+&lt;p&gt;- If you can ssh into the server, it is beneficial to first make a backup of the hacked/infected filesytem for later analysis so you can see how the person got in remove the vulnerability.&lt;/p&gt;
+&lt;p&gt;- At the first sign of intrusion (or even suspicion of intrusion), I don't think your users would mind too much if you take the site down while you get it sorted out. You're protecting their personal information. Just be sure to let them know so that there is minimal confusion.&lt;/p&gt;
+&lt;p&gt;- You can make a firewall rule to block connections to the server from all ip addresses and then allow only your ip address. Be careful when doing this since your ip address might change from time to time and you can lock yourself out. If that's the case, allow the block that your IP address is in instead.&lt;/p&gt;
+&lt;p&gt;- Everything on the system should be considered untrusted until you know to what extent the hacker was able to intrude (Does he have root server permissions or just access to modify certain files?)&lt;/p&gt;
+&lt;p&gt;- Also, check the modification dates on files (this is mentioned in the wiki as well). You're looking for any application files that were modified around the time of the initial intrusion. These files are suspect.&lt;/p&gt;
+&lt;p&gt;I'm new here, so if isn't good for me to post to a thread this old, just let me know.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=174536#p781462</guid>
+</item>
+<item>
+<title>Re: Custom SQL queries report now compatible with Moodle 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177111#p778320</link>
+<pubDate>Wed, 15 Jun 2011 04:03:05 GMT</pubDate>
+<description>by Chardelle Busch &lt;br /&gt;&lt;br /&gt;&lt;p&gt;I just tried this out and it's really nice Tim.&lt;/p&gt;
+&lt;p&gt;FYI for anyone:&lt;/p&gt;
+&lt;p&gt;If you would rather have the weekly reports run on the first day of the week that you have set in your calendar settings (instead of Saturday), change line 26 of locallib.php to:&lt;/p&gt;
+&lt;p&gt;define('REPORT_CUSTOMSQL_START_OF_WEEK', $CFG-&amp;gt;calendar_startwday);&lt;/p&gt;
+&lt;p&gt;Prefix is not necessary, you can just bracket the table names, e.g.:&lt;/p&gt;
+&lt;p&gt;FROM {groups_members} gm&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177111#p778320</guid>
+</item>
+<item>
+<title>Custom SQL queries report now compatible with Moodle 2.0</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177111#p776889</link>
+<pubDate>Thu, 09 Jun 2011 15:48:02 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;My colleague Derek Woolhead updated the code, and I just dumped in on github. (You can thank Anthony Borrow, and the people at the Oklahoma Moodle Moot who asked him about it for making it happen.)&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;a href=&quot;http://moodle.org/mod/data/view.php?d=13&amp;amp;rid=2884&quot; class=&quot;_blanktarget&quot;&gt;http://moodle.org/mod/data/view.php?d=13&amp;amp;rid=2884&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;[[Custom_SQL_queries_report]]&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/timhunt/moodle-report_customsql&quot; class=&quot;_blanktarget&quot;&gt;https://github.com/timhunt/moodle-report_customsql&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177111#p776889</guid>
+</item>
+<item>
+<title>Re: Supported browsers for 2.0 and 2.1</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178115#p781171</link>
+<pubDate>Thu, 23 Jun 2011 22:21:10 GMT</pubDate>
+<description>by Tim Hunt &lt;br /&gt;&lt;br /&gt;&lt;p&gt;It somewhat depends on which theme you use. But I think it is roughly IE7+, FF3.5+, recent Chrome, Opera, Safari.&lt;/p&gt;
+&lt;p&gt;I don't think that the kind of changes between FF releases are likely to affect Moodle.&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178115#p781171</guid>
+</item>
+<item>
+<title>Re: Supported browsers for 2.0 and 2.1</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178115#p781198</link>
+<pubDate>Thu, 23 Jun 2011 23:31:02 GMT</pubDate>
+<description>by Dan Marsden &lt;br /&gt;&lt;br /&gt;&lt;p&gt;here's the official response:&lt;br /&gt;&lt;a href=&quot;http://docs.moodle.org/dev/Moodle_2.0_release_notes#System_requirements&quot; class=&quot;_blanktarget&quot;&gt;http://docs.moodle.org/dev/Moodle_2.0_release_notes#System_requirements&lt;/a&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178115#p781198</guid>
+</item>
+<item>
+<title>Overview of 15 Flash video players</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178199#p781405</link>
+<pubDate>Fri, 24 Jun 2011 16:42:01 GMT</pubDate>
+<description>by Stan Bogdanov &lt;br /&gt;&lt;br /&gt;&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Hi,&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Just reading posts and found nearly every third post has to do with flash audio and video.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Some people asked the question &quot;How to play video in HotPotatoes?&quot; And they got it working in HotPotatoes, but found it doesn't work in HotPot in Moodle. Then they changed the player and the code and ... Ta-da, it works!, and blame the previous player. This is because they didn't ask the right question &quot;How to get it working in HotPot/QuizPort in Moodle?&quot;&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Well it has &lt;strong&gt;nothing to do with the player, but the code implementation&lt;/strong&gt;. (I &lt;a title=&quot;flv video in hotpot moodle&quot; href=&quot;http://www.ewbooks.info/hotpot/tutorials/hotpotatoes-tutorials/flash-video-hotpot-moodle.html&quot; target=&quot;_blank&quot;&gt;blogged about what creates the misunderstanding&lt;/a&gt;)&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;There're basically two embed methods: dynamically through javascript with different js libraries and the simple static object tag. The Javscript approach doesn't work in Moodle; the object tag does. So if you prefer your player, don't use js, and turn off the media plugins, as Glenys has advised numerous times here.&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&lt;strong&gt;My aim was to show that (nearly) any player can work in HotPot in Moodle.&lt;/strong&gt; (&lt;a title=&quot;flv overview&quot; href=&quot;http://www.ewbooks.info/hotpot/tutorials/hotpotatoes-tutorials/flv-players-hotpot-moodle.html&quot; target=&quot;_blank&quot;&gt;Full overview here&lt;/a&gt;)&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;I put together 15 players on a single page (JCloze) and they play nicely in: &lt;/span&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;(Login as guest should you need to)&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Moodle 1.9 - &lt;a title=&quot;hotpot htm&quot; href=&quot;http://ewbooks.info/moodle/mod/hotpot/view.php?id=223&quot; target=&quot;_blank&quot;&gt;HotPot with .htm&lt;/a&gt; file&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Moodle 1.9 - &lt;a title=&quot;hotpot with jcl&quot; href=&quot;http://ewbooks.info/moodle/mod/hotpot/view.php?id=226&quot; target=&quot;_blank&quot;&gt;HotPot with .jcl&lt;/a&gt; file&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Moodle 1.9 - &lt;a title=&quot;quizport with htm&quot; href=&quot;http://ewbooks.info/moodle/mod/quizport/view.php?id=225&quot; target=&quot;_blank&quot;&gt;QuizPort with .htm&lt;/a&gt; file&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Moodle 1.9 - &lt;a title=&quot;quizport jcl&quot; href=&quot;http://ewbooks.info/moodle/mod/quizport/view.php?id=227&quot; target=&quot;_blank&quot;&gt;QuizPort with .jcl&lt;/a&gt; file&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Login to &lt;strong&gt;Gordon's Moodle 2&lt;/strong&gt; for testing&lt;/span&gt;:&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt; Moodle 2 - &lt;a title=&quot;hotpot2 htm&quot; href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/mod/hotpot/view.php?id=194&quot;&gt;HotPot with .htm&lt;/a&gt; file&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt; Moodle 2 - &lt;a title=&quot;hotpot2 jcl&quot; href=&quot;http://bateson.kanazawa-gu.ac.jp/moodle/20/mysql/mod/hotpot/view.php?id=195&quot; target=&quot;_blank&quot;&gt;HotPot with .jcl&lt;/a&gt; file&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;The players are:&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;9 JW Players ranging from version 1 to 5&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;3 FlowPlayers: two old ones and the latest version 3.2.7&lt;br /&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;1 Dew Tube player&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;1 unknown player&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;1 generic Flash player&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;My test results of the &lt;strong&gt;15 FLV players with HotPot and QuizPort in Moodle 1.9.11 and Moodle 2, both as .htm and .jcl files in different browsers are on Windows&lt;/strong&gt;. (note: Opera still requires the click-to-activate for the ActiveX).&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt; There's no reason why other browser wouldn't play the video, though, so I'm pretty certain it will be OK, but if you can test on other OS and send me the results, I'd be really thankful.&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;The only one not playing is FlowPlayer in HotPot on Moodle 2.&lt;/span&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;The difficulty is to figure out the absolute url from the Files section, but the real problem I think comes from the way it was developed (in JSON) so when HotPot escapes the single quotes, things get messy.&lt;/span&gt; (&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;none of a problem since you have it in the install pack with HotPot&lt;/span&gt;)&lt;br /&gt;&lt;br /&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Here's what happens:&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:&amp;quot;courier new&amp;quot;, courier, monospace;font-size:small;&quot;&gt;param name=&quot;flashvars&quot; value=&quot;config={&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;clip&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;:{&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;url&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;:&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;absolute-url-to-themovie.flv&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;,&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;autoPlay&lt;span style=&quot;color:#800000;&quot;&gt;&amp;amp;quot;&lt;/span&gt;:false}}&amp;amp;amp;width=300&amp;amp;amp;height=250&quot;&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;&lt;strong&gt;Gordon&lt;/strong&gt;, this is what it shows, if you can fix HotPot escaping the single quotes, I believe we'll get flowplayer working in HotPot Moodle 2 (without the bracket notation) too.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Looking forward to your comments&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Cheers&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-family:verdana, arial, helvetica, sans-serif;&quot;&gt;Stan&lt;/span&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178199#p781405</guid>
+</item>
+<item>
+<title>Re: Flash in Moodle</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=178171#p781442</link>
+<pubDate>Fri, 24 Jun 2011 18:37:51 GMT</pubDate>
+<description>by Matt Bury &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi N,&lt;/p&gt;
+&lt;p&gt;I think what you're looking for is the SWF Activity Module: &lt;a href=&quot;http://code.google.com/p/swf-activity-module/&quot; class=&quot;_blanktarget&quot;&gt;http://code.google.com/p/swf-activity-module/&lt;/a&gt; It does everything you've described and then a whole lot more. This wiki page will show you the features: &lt;a href=&quot;http://code.google.com/p/swf-activity-module/wiki/UsingTheSWFActivityModule&quot; class=&quot;_blanktarget&quot;&gt;http://code.google.com/p/swf-activity-module/wiki/UsingTheSWFActivityModule&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;If you're passing the URL to the XML file(s) via FlashVars you can set them in the Name &amp;amp; Value parameters in the SWF Activity Module module form and get them like this:&lt;/p&gt;
+&lt;p&gt;var myXMLfileURL:String = this.root.loaderInfo.parameters.nameOfVariable;&lt;/p&gt;
+&lt;p&gt;It also inlcudes an AMFPHP (Flash Remoting) interface that connects Flash applications to Moodle's API functions which you can call and transfer objects from Flash as if they were native Actionscript. This means you can push grades, send messages, retrieve user data and save images (in the moodledata course directories) all from Flash.&lt;/p&gt;
+&lt;p&gt;I hope this helps! &lt;img class=&quot;emoticon&quot; alt=&quot;smile&quot; title=&quot;smile&quot; src=&quot;http://moodle.org/theme/image.php?theme=moodleofficial&amp;amp;image=s%2Fsmiley&amp;amp;rev=252&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=178171#p781442</guid>
+</item>
+<item>
+<title>Re: moving question pages to question banks</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177723#p779703</link>
+<pubDate>Mon, 20 Jun 2011 11:46:05 GMT</pubDate>
+<description>by Joseph Rézeau &lt;br /&gt;&lt;br /&gt;&lt;p&gt;No,&lt;/p&gt;
+&lt;p&gt;You &lt;em&gt;cannot&lt;/em&gt; export questions from the Lesson activity to the Quiz Questions bank.&lt;/p&gt;
+&lt;p&gt;Joseph&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177723#p779703</guid>
+</item>
+<item>
+<title>Re: login on first page - where to set?</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=74830#p333563</link>
+<pubDate>Wed, 27 Jun 2007 14:41:14 GMT</pubDate>
+<description>by Mauno Korpelainen &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Hi Eugene,&lt;/p&gt;
+&lt;p&gt;try Administration -&amp;gt; Security -&amp;gt; Site policies &lt;br /&gt;and Force users to login&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=74830#p333563</guid>
+</item>
+<item>
+<title>Re: Moodle 2.0 &amp; PayPal Sandbox</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=171745#p757174</link>
+<pubDate>Tue, 05 Apr 2011 15:22:51 GMT</pubDate>
+<description>by Jim Cook &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Although I got the connection TO PayPal (sandbox) working I was getting the dreaded &quot;Thank you for your payment! Unfortunately your payment has not yet been fully processed...&quot; and pressing the Continue button (even after waiting a 10-15 seconds) made no difference.  I was NOT enrolled in the course.&lt;/p&gt;
+&lt;p&gt;It appeared what he had here was &quot;A failure to communicate&quot; (Cool Hand Luke).  In reviewing some other Moodle posts I learned that a PayPal transaction goes back and forth in a verification process.  Being the Moodle noobie that I am, and not a PHP programmer, I began looking at the code to see where else the sandbox/livesite variable was listed (there seems to be something wrong in the code with selecting one or the other).  I found another variable selection line pointing to either the sandbox or the live site in the ipn.php file.  The line begins with $paypaladdr =.   Once I removed the variable and directed the line to just the sandbox all began to work fine.  (I still have not figured out what triggers that variable. So there are TWO places one needs to change this variable.  At least if you are beginning your Moodle/PayPal project in the PayPal Sandbox.  Here (as above) and in the enrol.php (the $paypalurl=).&lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=171745#p757174</guid>
+</item>
+<item>
+<title>Re: One assignment with 2+ gradable parts - is this possible??</title>
+<link>http://moodle.org/mod/forum/discuss.php?d=177968#p781160</link>
+<pubDate>Thu, 23 Jun 2011 21:53:45 GMT</pubDate>
+<description>by Keith Landa &lt;br /&gt;&lt;br /&gt;&lt;p&gt;Katerina - you might want to look into adding the Rubrics module to your Moodle's Assignment activity:&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://moodle.org/mod/data/view.php?d=13&amp;amp;rid=1642&amp;amp;filter=1&quot; target=&quot;_blank&quot;&gt;http://moodle.org/mod/data/view.php?d=13&amp;amp;rid=1642&amp;amp;filter=1&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;We don't have it installed on our system, but I've looked at it a couple of times in the past with the idea of adding it.  It allows you to break up the scoring on an assignment into different components, each of which can have different point values.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://moodle.org/pluginfile.php/108/mod_data/content/17745/screenshot.png&quot; alt=&quot;Assignment Rubrics screenshot&quot; width=&quot;912&quot; height=&quot;840&quot; /&gt;&lt;/p&gt;</description>
+<guid isPermaLink="true">http://moodle.org/mod/forum/discuss.php?d=177968#p781160</guid>
+</item>
+
+  </channel>
+</rss>

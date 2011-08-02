@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>DynAPI Examples - Path Animation</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.util.thread.js');
+DynAPI.include('dynapi.util.pathanim.js');
+
+// not necessary for pathanim, just want to show the generatePath()
+DynAPI.include('dynapi.util.circleanim.js');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad = function() {
+	block = new DynLayer();
+	block.setSize(20,20);
+	block.moveTo(214,174);
+	block.setBgColor("red");
+
+	// path 0 straight line manually created
+	path = new PathAnimation(block);
+	linemanual = [100,100,110,110,120,120,130,130,140,140,150,150,160,160,170,170,180,180,190,190,200,200];
+	path.addAnimation( linemanual );
+	
+	// path 1 straight line generated
+	linegenerated = PathAnimation.line(100,100, 33,3, 20); // x1,y1,x2,y2,inc
+	path.addAnimation( linegenerated );
+
+	// path 2 squiggly line
+	var x = [90,92,94,97,100,103,107,111,116,120,125,130,135,140,146,151,156,161,167,172,177,183,189,196,203,210,218,227,235,244,252,260,267,273,279,284,288,291,293,294,295,294,293,291,288,285,282,278,274,270,266,263,260,257,254,252,251,251,251,253,255,257,261,266,271,277,284,292,300,310,320,332,344,357,371,385,398,412,424,435];
+	var y = [73,73,72,72,73,73,74,75,77,79,82,85,89,94,101,108,116,125,136,147,158,169,180,191,200,208,215,221,226,229,231,231,230,228,225,220,215,209,202,194,187,179,171,163,155,147,139,132,126,119,114,109,104,100,96,92,88,84,81,77,74,71,68,66,64,63,63,64,65,68,73,79,86,96,107,119,131,143,155,165];
+	linesquiggle = PathAnimation.interlace(x,y)
+	path.addAnimation( linesquiggle );
+	
+	// path 3 generated circle path starting at 180degrees about point (250,250)
+	// note: circleanim is not required in order to use pathanim
+	circle = new CircleAnimation();
+	circle.setRadius(50);
+	circle.setAngle(180);
+	circle.setAngleIncrement(10);
+	circlepath = circle.generatePath(250,250);
+	path.addAnimation(circlepath);
+	
+	// default interval
+	path.sleep(50);
+	
+	var listener = new EventListener();
+	listener.onpathstart = function(e) {
+		status = "start";
+	}
+	listener.onpathrun = function(e) {
+		var o = e.getSource();
+		status = "play "+o.x+" "+o.y;
+	}
+	listener.onpathstop = function(e) {
+		var o = e.getSource();
+		status = "stop "+o.x+" "+o.y;;
+	}
+	block.addEventListener(listener);
+	
+	DynAPI.document.addChild(block);
+}
+
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+
+<p><b>Controls</b>:
+<br>sleep : <a href="javascript:path.sleep(20)">20</a> | <a href="javascript:path.sleep(50)">50</a> | <a href="javascript:path.sleep(100)">100</a>
+<br>show coordinates : <a href="javascript:alert(path.paths[0])">path 0</a> | <a href="javascript:alert(path.paths[1])">path 1</a> | <a href="javascript:alert(path.paths[2])">path 2</a> | <a href="javascript:alert(path.paths[3])">path 3</a>
+<br><a href="javascript:path.stopAnimation()">stopAnimation</a>
+
+<p><b>Unstored Animations</b>
+<br><font size=-1>This type is meant for quick playing, the information is deleted when
+<br>the animation is finished playing (this is used in slide animations)</font>
+
+<p><a href="javascript:path.playAnimation(linemanual)">quickplay path 0</a>
+<br><a href="javascript:path.playAnimation(linegenerated)">quickplay path 1</a>
+<br><a href="javascript:path.playAnimation(linesquiggle)">quickplay path 2</a>
+<br><a href="javascript:path.playAnimation(circlepath,true)">quickplay path 3</a> (loops)
+
+<p><b>Stored Animations</b>
+<br><font size=-1>These play paths that have been saved in the PathAnimation object</font>
+
+<table border=1>
+
+<tr><td><td>
+<td>loop</td>
+<td>auto-reset</td>
+<td>play</tr>
+
+<tr><td>Path 0
+<br>straight line<td>
+<td><a href="javascript:path.setLoops(0,true)">on</a> | <a href="javascript:path.setLoops(0,false)">off</a></td>
+<td><a href="javascript:path.setResets(0,true)">on</a> | <a href="javascript:path.setResets(0,false)">off</a></td>
+<td><a href="javascript:path.playAnimation(0)">play</a></td></tr>
+
+<tr><td>Path 1
+<br>generated line<td>
+<td><a href="javascript:path.setLoops(1,true)">on</a> | <a href="javascript:path.setLoops(1,false)">off</a></td>
+<td><a href="javascript:path.setResets(1,true)">on</a> | <a href="javascript:path.setResets(1,false)">off</a></td>
+<td><a href="javascript:path.playAnimation(1)">play</a></td></tr>
+
+<tr><td>Path 2
+<br>squiggly line<td>
+<td><a href="javascript:path.setLoops(2,true)">on</a> | <a href="javascript:path.setLoops(2,false)">off</a></td>
+<td><a href="javascript:path.setResets(2,true)">on</a> | <a href="javascript:path.setResets(2,false)">off</a></td>
+<td><a href="javascript:path.playAnimation(2)">play</a></td></tr>
+
+<tr><td>Path 2
+<br>circle<td>
+<td><a href="javascript:path.setLoops(3,true)">on</a> | <a href="javascript:path.setLoops(3,false)">off</a></td>
+<td><a href="javascript:path.setResets(3,true)">on</a> | <a href="javascript:path.setResets(3,false)">off</a></td>
+<td><a href="javascript:path.playAnimation(3)">play</a></td></tr>
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>DynAPI Examples - Label</title>
+<script language="JavaScript" src="../src/dynapi.js"></script>
+
+<script language="JavaScript">
+<!--
+
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.browser.js');
+DynAPI.include('dynapi.api.dynlayer.js');
+DynAPI.include('dynapi.api.dyndocument.js');
+DynAPI.include('dynapi.api.events.js');
+DynAPI.include('dynapi.gui.label.js');
+
+DynAPI.onLoad = function() {
+	label1 = new Label('')
+	label1.setText('this is a padded wrappable label')
+	label1.setWrap(true)
+	label1.moveTo(350,20)
+	label1.setBgColor('yellow')
+	label1.setPadding(5)
+	label1.setWidth(100)
+	label1.packHeight()
+	DynAPI.document.addChild(label1)
+	
+	label2 = new Label()
+	label2.setText('this is a non-selectable wrappable label')
+	label2.setWrap(true)
+	label2.moveTo(350,110)	
+	label2.setBgColor('yellow')
+	label2.setWidth(100)
+	label2.packHeight()
+	label2.setSelectable(false)
+	DynAPI.document.addChild(label2)
+
+	label3 = new Label('this is a padded non-wrappable label')
+	label3.moveTo(350,220)
+	label3.setBgColor('yellow')
+	label3.setPadding(8)
+	label3.pack()
+	DynAPI.document.addChild(label3)
+	
+	label4 = new Label('this is a non-selectable non-wrappable label')
+	label4.moveTo(350,280)
+	label4.setBgColor('yellow')
+	label4.pack()
+	label4.setSelectable(false)
+	DynAPI.document.addChild(label4)
+}
+
+//-->
+</script>
+</head>
+<body bgcolor="#ffffff">
+
+Resize:
+<br>wrappable label: <a href="javascript:label1.setWidth(100)">100</a>, <a href="javascript:label1.setWidth(170)">170</a>
+<br>wrappable label with cover: <a href="javascript:label2.setWidth(80)">80</a>, <a href="javascript:label2.setWidth(150)">150</a>
+<br>non-wrappable label: <a href="javascript:label3.setWidth(80)">80</a>, <a href="javascript:label3.setWidth(150)">150</a>
+<br>non-wrappable label with cover: <a href="javascript:label4.setWidth(80)">80</a>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?php 
+
+/// Calculate Using Moodle PHMs
+
+include_once('config.php');
+include_once($CFG->dirroot.'/phmlib.php');
+
+$courseid = 5;           // Using Moodle course
+$groupid = 1;            // Using Moodle PHM group id
+$scaleids = array(-88);  // Using Moodle scale ids
+
+$days = 60;
+$minposts = 1;
+$minratings = 14;
+$minraters = 8;
+$minratio = 0.02;   //  Ratings / posts
+
+$savechanges = true;   // Change the group members?
+
+phm_calculate_users($courseid, $groupid, $scaleids, $days, $minposts, $minratings, $minraters, $minratio, $savechanges);
+
+?>

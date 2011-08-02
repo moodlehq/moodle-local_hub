@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>DynAPI Distribution: Delete Example</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+</script>
+<script language="Javascript">
+
+function MakeLayer(){
+	var dlyr = new DynLayer(null,Math.random()*400,Math.random()*400,50,50,'red');
+	dlyr.setHTML("dynlayer");
+	DynAPI.document.addChild(dlyr);
+}
+
+function DeleteLayer(){
+	if (DynAPI.document.children.length>0) {
+		DynAPI.document.children[DynAPI.document.children.length-1].deleteFromParent()
+	}
+	else alert('All layers are removed.')
+}
+
+</script>
+</head>
+
+<body>
+<a href="javascript:MakeLayer()">Make layer</a><br>
+<a href="javascript:DeleteLayer()">Delete layer</a>
+
+</body>
+</html>

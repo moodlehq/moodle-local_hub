@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>DynAPI Examples - Animation Threads</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.util.thread.js');
+DynAPI.include('dynapi.util.pathanim.js');
+DynAPI.include('dynapi.util.hoveranim.js');
+DynAPI.include('dynapi.util.circleanim.js');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad = function() {
+	hoverblock = new DynLayer();
+	hoverblock.setSize(20,20);
+	hoverblock.moveTo(50,150);
+	hoverblock.setBgColor("red");
+
+	circleblock = new DynLayer();
+	circleblock.setSize(20,20);
+	circleblock.moveTo(200,150);
+	circleblock.setBgColor("green");
+	
+	pathblock = new DynLayer();
+	pathblock.setSize(20,20);
+	pathblock.moveTo(400,150);
+	pathblock.setBgColor("blue");
+
+	hover = new HoverAnimation(hoverblock);
+	hover.setAmplitude(50);
+	hover.setAngleIncrement(10);
+	hover.cancel();
+	hover.playAnimation();
+
+	circle = new CircleAnimation(circleblock);
+	circle.setRadius(50);
+	circle.setAngle(180);
+	circle.setAngleIncrement(10);
+	circle.cancel();
+	circle.playAnimation();
+
+	path = new PathAnimation(pathblock);
+	var x = [90,92,94,97,100,103,107,111,116,120,125,130,135,140,146,151,156,161,167,172,177,183,189,196,203,210,218,227,235,244,252,260,267,273,279,284,288,291,293,294,295,294,293,291,288,285,282,278,274,270,266,263,260,257,254,252,251,251,251,253,255,257,261,266,271,277,284,292,300,310,320,332,344,357,371,385,398,412,424,435];
+	var y = [73,73,72,72,73,73,74,75,77,79,82,85,89,94,101,108,116,125,136,147,158,169,180,191,200,208,215,221,226,229,231,231,230,228,225,220,215,209,202,194,187,179,171,163,155,147,139,132,126,119,114,109,104,100,96,92,88,84,81,77,74,71,68,66,64,63,63,64,65,68,73,79,86,96,107,119,131,143,155,165];
+	path.addAnimation(PathAnimation.interlace(x,y));
+	path.setLoops(0,true);
+	path.cancel();
+	path.playAnimation(0);
+	
+	thread = new Thread();
+	thread.sleep(20);
+	thread.run = function() {
+		status = "run";
+		hover.run();
+		circle.run();
+		path.run();
+	}
+	thread.start();
+	
+	DynAPI.document.addChild(hoverblock);
+	DynAPI.document.addChild(circleblock);
+	DynAPI.document.addChild(pathblock);
+}
+
+//-->
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+
+<p>Thread
+<br><a href="javascript:thread.stop()">stop</a> | <a href="javascript:thread.start()">start</a>
+<br>sleep: <a href="javascript:thread.sleep(20)">20</a> | <a href="javascript:thread.sleep(40)">40</a>
+
+</body>
+</html>

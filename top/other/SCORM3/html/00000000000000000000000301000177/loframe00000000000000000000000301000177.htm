@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd"><html lang="en-US" xml:lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>
+			Types of Networks used in E-Learning
+		</title>
+		<meta content="Tue, 04 Dec 1996 21:29:02 GMT" http-equiv="Expires"/>
+		<script type="text/javascript" src="../../js/os_scorm.js" language="Javascript"></script>
+		<script type="text/javascript" src="../../js/os_learningObject.js" language="Javascript"></script>
+		<script type="text/javascript" language="Javascript">
+			
+ var sessionExpired; 
+sessionExpired = false;
+function getBrowser() {
+  var b = navigator.appName;
+  if (b.indexOf("Microsoft") > -1) {
+    return "Microsoft";
+  }
+  else if (b.indexOf("Netscape") > -1) {
+    return "Netscape";
+  }
+  else {
+    return "Other";
+  }
+}
+var browser = getBrowser(); 
+var version = (parseInt(navigator.appVersion));
+function CheckSession()  { 
+    if(sessionExpired) { 
+       parent.opener.location.href = "../portal/nosession.ssc"; 
+       top.close();  } 
+}
+var NN4 = (document.layers) ? true : false; 
+var IE4 = (document.layers) ? false : true;
+
+			window.SCORM = true;
+			window.LEARNING_OBJECT = new LearningObject('00000000000000000000000301000177');
+
+		</script>
+	</head>
+	<frameset onunload="doLMSFinish()" border="0" framespacing="0" id="outerframe" rows="105,*" onload="doLMSInitialize()" frameborder="0">
+		<frameset marginwidth="0" border="0" id="topframe" framespacing="0" cols="160,*" marginheight="0" frameborder="0">
+			<frame marginwidth="0" src="lologo00000000000000000000000301000177.htm?browser=Microsoft&themeID=ciscotheme2" noresize="noresize" name="logo" scrolling="no" marginheight="0" frameborder="0"></frame>
+			<frame target="contents" marginwidth="0" src="lomenu00000000000000000000000301000177.htm?loName=Types+of+Networks+used+in+E-Learning&topicName=Overview&topicCount=5&action=LOLink&refresh=false&browser=Microsoft&docMode=WEB&themeID=ciscotheme2&curID=00000000000000000000000501000016&courseID=00000000000000000000000401000092&loID=00000000000000000000000301000177&studentID=corlee&studentRole=s&loStatus=1&exportInProgress=true" noresize="noresize" name="menu" scrolling="no" marginheight="0" frameborder="0"></frame>
+		</frameset>
+		<frameset cols="160,*" id="botframe">
+			<frame name="topiclist" scrolling="auto" noresize="noresize" src="lonav00000000000000000000000301000177.htm?loID=00000000000000000000000301000177&topicID=0002A513639706B6E1960302000031FC&action=LOLink&studentID=corlee&exportInProgress=true&themeID=ciscotheme2&browser=Microsoft" marginheight="12"></frame>
+			<frame marginwidth="9" src="../../themes/loading.html" noresize="noresize" name="content" scrolling="auto" marginheight="0" frameborder="0"></frame>
+		</frameset>
+	</frameset>
+	<noframes>
+		<body>
+			This page uses frames, but your browser does not support them.
+		</body>
+	</noframes>
+</html>

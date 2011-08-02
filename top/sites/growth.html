@@ -1,0 +1,28 @@
+<html>
+<head>
+<SCRIPT LANGUAGE="JavaScript" type="text/javascript">
+
+if(document.images) {
+pics = new Array();
+pics[1] = new Image();
+pics[1].src = "world.png";
+pics[2] = new Image();
+pics[2].src = "moodle-registered-sites-20091103-small.jpg";
+}
+
+function changer(from,to) {
+if(document.images) {
+document.images[from].src = pics[to].src;
+}
+}
+//-->
+</SCRIPT>
+</head>
+<body>
+<a onMouseOver="changer('img1',2)" onMouseOut="changer('img1',1)" href="javascript:void">
+<img name="img1" border="0" vspace="0" hspace="0" src="world.png"</a><br><br><br>
+mouse over the image to change.<br>
+red = 2006<br>
+yellow = 2009<br>
+</body>
+</html>

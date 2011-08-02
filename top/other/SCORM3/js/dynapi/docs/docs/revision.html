@@ -1,0 +1,47 @@
+<!doctype html public "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title> DynAPI - Appendix A: Revision History </title>
+<link rel="stylesheet" type="text/css" href="../include/dynapi.css">
+</head>
+
+<body bgcolor="#FFFFFF">
+<div align="right"><a href="../index.html">Index</a></div>
+<hr size="1">
+
+<h1>Appendix A: Revision History</h1>
+<pre>
+Version 2001.01.25
+------------------
+This release features many changes to the DynAPI.  Most noticable is 
+a new layer creation system, as well as requiring the script tags after
+the DynAPI.include() statements must be closed before using any DynAPI
+related functions.  Also, the widgets are finally back.  There is a new
+loadPanel widget for loading external files as well as list, path animation
+(slide), button, scrollpanel, and label widgets.  Also included in this package
+is compressed forms of the DynAPI.  These should still be considered beta
+as little testing has been made as of yet.  See the "INSTALL" file for
+more information.  This release also features the first API documentation for
+the distribution.  Please post and bugs to the mailing list.  There are 
+too many changes to list, but here are a few:
+
+[-] Many fixes to events
+[*] createElement, deleteElement, assignElement, and assignChildren are
+    now static methods of the DynLayer object.
+[-] DynAPI.include() should now work correctly
+[+] Libraries are now added dynamically (not hard-coded into DynAPI)
+[-] Re-fix for setBgImage in Netscape
+[-] Returned setPageX/Y to previous versions
+[*] getClip fix
+[*] Check for child is created in deleteChildElements
+[*] Modified moveTo
+[-] InvokeEvent how works properly for double click in NS
+[*] Removed .unassigned and .all arrays.  Renamed .unassignedID and .allID to .unassigned and .all
+[-] Fixed DynAPI.removeFromArray with removal of id's
+[-] Fixed bug in removal from unassigned array in findLayers
+[-] Fixed bug in adding to the all array in findLayers
+[+] Added dynapi.ext.loadPanel for loading external files
+
+</pre>
+</body>
+</html>

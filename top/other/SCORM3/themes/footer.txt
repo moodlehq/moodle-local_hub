@@ -1,0 +1,48 @@
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+<!--Script
+    sRoot=site.GetRootDocument().location;
+-->
+<tr><td height="25" width="35" background="
+<!--Script
+    document.write (sRoot);
+-->
+/themes/akamai/bottom_tabletop_bg.gif">
+
+<img src="
+
+<!--Script
+    document.write (sRoot);
+-->
+/themes/akamai/bottom_tabletop_left.gif"></td>
+
+<!--Script
+    document.write('<td height="25" align="center" width="100%" background="'+ sRoot +'/themes/akamai/bottom_tabletop_bg.gif" align="center">');
+-->
+
+<font color="#FFFFFF" face="arial" size="2">    
+<a href="#"><font color="#FFFFFF">Command Center</font></a>
+<a href="#"><font color="#FFFFFF">Customer Care</font></a> 
+<a href="#"><font color="#FFFFFF">Products & Services</font></a> 
+<a href="#"><font color="#FFFFFF">News & Events</font></a>
+</font></td><td width="35" height="25">
+<img src="
+
+<!--Script
+    document.write (sRoot);
+-->
+
+/themes/akamai/bottom_tabletop_right.gif"></td></tr></table>
+
+
+<!--Script
+    document.write ('<table width="100%" CELLPADDING="0" CELLSPACING="0" background ="'+sRoot+'/themes/akamai/bottom_tablebottom.gif">');
+-->
+
+
+<tr><td height="48" align="center">
+<font size="1" face="Arial, Helvetica, sans-serif">&copy;
+2000 Akamai Technologies, Inc. All rights reserved. &nbsp;&nbsp; 
+<a href="https://i.am.akamai.com/services/index.cgi?page=legal" target="_blank">Legal 
+Notices</a> &nbsp;&nbsp; <a href="https://i.am.akamai.com/akamai/privacyPolicy/privacy.html" target="_blank">
+Privacy Policy</a></font>
+</td></tr></table>

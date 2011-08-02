@@ -1,0 +1,27 @@
+<html>
+<head>
+<style type="text/css">
+BODY {  background-color:#cccccc;font-family:arial;font-size:10px; }
+TD {    font-family:arial;font-size:10px; }
+</style>
+<script language="javascript">
+function cancelUpload() 
+{
+  window.opener.document.ftpcontrol.GetFileSize();
+  window.close();
+}
+</script>
+</head>
+<body>
+<form>
+<table border="0" align="center" cellpadding="5">
+  <tr>
+    <td align="center"><img src="upload_in_progress.gif"></td>
+  </tr>
+  <tr>
+    <td align="center"><input type="button" value="cancel" onclick="cancelUpload()"></td>
+  </tr>
+</table>
+</form>
+</body>
+</html>

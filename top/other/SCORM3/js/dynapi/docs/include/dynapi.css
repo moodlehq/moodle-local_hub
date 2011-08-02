@@ -1,0 +1,93 @@
+H4 {
+  text-align: left;
+  font-family: sans-serif;
+  font-weight: normal;
+  color: #0050B2; 
+}
+.idl-code { 
+  font-family: monospace;
+  border: 1px solid black;
+  white-space: pre; 
+  color: black;
+  background-color: #dfdfdf; 
+}
+
+
+.attribute-name {  
+  color: black;
+  background-color: #FFFFD2;
+}
+
+.method-name {  
+  color: black;
+  background-color: #D9E6F8;
+}
+
+.parameter-name {
+  color: black;
+  background-color: #FEE6F8; 
+}
+
+UL.toc, OL.toc {list-style: none}
+DIV.toc UL UL, DIV.toc OL OL {margin-left: 0}
+DIV.toc UL UL UL, DIV.toc OL OL OL {margin-left: 1em}
+DIV.toc UL UL UL UL, DIV.toc OL OL OL OL {margin-left: 0}
+LI.tocline1 {font-weight: bold}
+LI.tocline2 {font-weight: normal}
+LI.tocline4 {font-style: italic}
+
+code { font-family: monospace }
+
+div.paramtable { margin-left: 1em }
+div.returntable { margin-left: 1em }
+div.exceptiontable { margin-left: 1em }
+
+
+body {
+  margin: 2em 1em 2em 70px;
+  font-family: sans-serif;
+  color: black;
+  background: white;
+  background-position: top left;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+th, td {
+  font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 { text-align: left }
+h1, h2, h3 { color: #005A9C }
+h1 { font: 170% sans-serif }
+h2 { font: 140% sans-serif }
+h3 { font: 120% sans-serif }
+h4 { font: bold 100% sans-serif }
+h5 { font: italic 100% sans-serif }
+h6 { font: small-caps 100% sans-serif }
+
+.hide { display: none }
+
+div.head { margin-bottom: 1em }
+div.head h1 { margin-top: 2em; clear: both }
+div.head table { margin-left: 2em; margin-top: 2em }
+div.head img { color: white; border: none }
+
+p.copyright { font-size: small }
+p.copyright small { font-size: small }
+
+@media screen {
+a:hover { background: #ffa } 
+}
+
+pre { margin-left: 2em }
+dt, dd { margin-top: 0; margin-bottom: 0 }
+dt { font-weight: bold }
+
+pre, code { font-family: monospace }
+
+ul.toc {
+  list-style: disc;
+  list-style: none;
+}
+

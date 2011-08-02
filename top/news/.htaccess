@@ -1,0 +1,5 @@
+<Files news.php>
+    Order Deny,Allow
+    Deny from all
+    Allow from 69.93.78.186
+</Files>

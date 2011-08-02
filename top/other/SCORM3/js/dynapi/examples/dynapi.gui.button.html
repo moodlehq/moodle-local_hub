@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>DynAPI Examples - Button</title>
+<script language="JavaScript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.gui.label.js');
+DynAPI.include('dynapi.gui.button.js');
+DynAPI.include('dynapi.gui.dynimage.js');
+</script>
+<script language="Javascript">
+
+uimg = DynImage.getImage('../src/lib/dynapi/images/common/arrowup.gif');
+dimg = DynImage.getImage('../src/lib/dynapi/images/common/arrowdown.gif');
+limg = DynImage.getImage('../src/lib/dynapi/images/common/arrowleft.gif');
+rimg = DynImage.getImage('../src/lib/dynapi/images/common/arrowright.gif');
+
+DynAPI.onLoad = function() {
+	var d = new DynLayer(null,10,10,500,500,'#e0e0e0');
+	
+	var p = d;
+	// var p = DynAPI.document;
+	
+	var upbutton = new Button(uimg);
+	upbutton.moveTo(50,50);
+	p.addChild(upbutton);
+
+	var ltbutton = new Button(limg);
+	ltbutton.moveTo(100,50);
+	p.addChild(ltbutton);
+
+	var dnbutton = new Button(dimg);
+	dnbutton.moveTo(150,50);
+	dnbutton.setSize(20,20);
+	p.addChild(dnbutton);
+	
+	var rtbutton = new Button(rimg);
+	rtbutton.moveTo(200,50);
+	rtbutton.setSize(30,30);
+	p.addChild(rtbutton);
+
+	var text1button = new Button("button");
+	text1button.moveTo(50,150);
+	p.addChild(text1button);
+	
+	var text2button = new Button("this is another button");
+	text2button.moveTo(120,150);
+	text2button.setPadding(5);
+	p.addChild(text2button);
+
+	var text3button = new Button("this button grows when clicked");
+	text3button.moveTo(260,150);
+	text3button.setSize(160,70);
+	p.addChild(text3button);
+	
+	var l = new EventListener(text3button);
+	l.onclick = function(e) {
+		var o = e.getTarget();
+		o.setSize(o.w+10,o.h+10);
+	}
+	text3button.addEventListener(l);
+	
+	DynAPI.document.addChild(d);
+}
+
+</script>
+</head>
+<body bgcolor="#ffffff">
+
+</body>
+</html>

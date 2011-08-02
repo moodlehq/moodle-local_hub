@@ -1,0 +1,68 @@
+
+PHPADSNEW GEOTRACKING TRY-OUT
+=============================
+
+This package contains a free try-out version of the GeoIP database 
+created by Maxmind, which allows you to try the Geotargeting features 
+found in phpAdsNew. This database was last updated in Januari 2003. 
+The free version of the database is derived from APNIC, ARIN, LACNIC
+and RIPE WHOIS databases.
+
+Also available from MaxMind is the GeoIP Country Premium Edition, which 
+offers a significant improvement in accuracy over the free database and 
+other commerical databases based only on WHOIS records. MaxMind uses a 
+number of Internet mapping tools to identify and correct IP addresses 
+where the end-user location does not match the ISP location on the WHOIS 
+record. The GeoIP Country Premium Edition is updated every month.
+
+To buy an up-to-date version of this database, please take a look at our
+website:  http://www.phpadsnew.com/one/features-geo.html
+
+
+How to install this database?
+-----------------------------
+To install the database you need to copy the GeoIP.dat file to a 
+directory on the server which is running phpAdsNew. It is best 
+practice to copy it to a directory outside of the webserver's
+document root, otherwise visitors of your website might be able
+to download the database.
+
+The next step is to let phpAdsNew know the location of the database.
+First you need to log in as the administrator and go to the 'Settings'
+page. Next choose 'Main settings' and 'Host information and Geotargeting'.
+The second group of settings called 'Geotargeting' contains
+the settings you will need to modify.
+
+As the type of geotracking database you will need to select 'MaxMind GeoIP'.
+You also need to specify the location of the database. For example
+if you copied the database to the directory /opt/www.website.com/,
+you will need to specify /opt/www.website.com/GeoIP.dat.
+Please make also sure you have enabled the evaluation of delivery 
+limitations on the 'Invocation and delivery settings' page, otherwise 
+geotracking won't work at all.
+
+If you are using verbose statistics it is also possible to keep track
+of where your visitors are coming from. To enable the logging of geotracking
+data go to the 'Statistics Settings' page and enable 'Log the country of 
+the visitor in the statistics'.
+
+In order to use this try-out version you will need to have phpAdsNew 
+2.0 RC 2 or higher. Older versions may be compatible with this database,
+but are not tested. Versions older than dev 16092002 are not compatible.
+
+
+How target banners to countries?
+--------------------------------
+After you have installed this try-out version of the GeoIP database,
+there will be two additional delivery limitations available to you,
+called 'Country' and 'Continent'. You can use these to target your
+banners. For more information about how to use delivery limitations
+and the 'Country' and 'Continent' limitations, please read the 
+chapters 'Delivery limitations' and 'Geotargeting' in user guide,
+which should be distributed along with phpAdsNew. You can also read
+them online at: http://www.phpadsnew.com/one/about-manual.html
+
+
+
+This product includes GeoIP data created by MaxMind, available from
+http://maxmind.com/

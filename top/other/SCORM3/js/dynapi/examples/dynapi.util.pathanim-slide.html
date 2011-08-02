@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>DynAPI Examples - Slide Animation (Path Animation)</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.util.thread.js');
+DynAPI.include('dynapi.util.pathanim.js');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad = function() {
+	block = new DynLayer();
+	block.setSize(20,20);
+	block.moveTo(100,100);
+	block.setBgColor("red");
+	
+	
+	var listener = new EventListener();
+	listener.onpathstart = function(e) {
+		status = "start";
+	}
+	listener.onpathrun = function(e) {
+		var o = e.getSource();
+		status = "play "+o.x+" "+o.y;
+	}
+	listener.onpathstop = function(e) {
+		var o = e.getSource();
+		status = "stop "+o.x+" "+o.y;;
+	}
+	block.addEventListener(listener);
+
+	
+	DynAPI.document.addChild(block);
+}
+
+//-->
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+
+<p>SlideTo:
+<br>(<a href="javascript:block.slideTo(100,100)">100,100</a>)
+<br>(<a href="javascript:block.slideTo(200,100)">200,100</a>)
+<br>(<a href="javascript:block.slideTo(200,200)">200,200</a>)
+<br>(<a href="javascript:block.slideTo(100,200)">100,200</a>)
+<br>(<a href="javascript:block.slideTo(400,50)">400,50</a>)
+<br>(<a href="javascript:block.slideTo(50,400)">50,400</a>)
+
+</body>
+</html>

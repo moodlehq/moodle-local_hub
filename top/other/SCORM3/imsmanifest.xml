@@ -1,0 +1,647 @@
+<?xml version="1.0"?><manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" identifier="evo_00000000000000000000000501000016" xsi:schemaLocation="http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd" xmlns:imsmd="http://www.imsproject.org/xsd/imsmd_rootv1p2p1" xmlns:adlcp="http://www.adlnet.org/xsd/adlcp_rootv1p2" xmlns="http://www.imsproject.org/xsd/imscp_rootv1p1p2">
+	<metadata>
+		<schema>ADL SCORM</schema>
+		<schemaversion>1.2</schemaversion>
+		<adlcp:location>meta00000000000000000000000501000016.xml</adlcp:location>
+	</metadata>
+	<organizations default="org_00000000000000000000000501000016">
+		<organization identifier="org_00000000000000000000000501000016">
+			<title>History of Networks &#38; E-Learning (HNAE)</title>
+			<item identifier="evo_00000000000000000000000401000092">
+				<title>Networks &#38; E-Learning</title>
+				<item identifierref="sco_00000000000000000000000301000177" identifier="evo_00000000000000000000000301000177">
+					<title>Types of Networks used in E-Learning</title>
+					<metadata>
+						<schema>ADL SCORM</schema>
+						<schemaversion>1.2</schemaversion>
+						<adlcp:location>meta00000000000000000000000301000177.xml</adlcp:location>
+					</metadata>
+				</item>
+				<item identifierref="sco_00000000000000000000000301000176" identifier="evo_00000000000000000000000301000176">
+					<title>Evolution of Networks in E-Learning</title>
+					<metadata>
+						<schema>ADL SCORM</schema>
+						<schemaversion>1.2</schemaversion>
+						<adlcp:location>meta00000000000000000000000301000176.xml</adlcp:location>
+					</metadata>
+				</item>
+				<metadata>
+					<schema>ADL SCORM</schema>
+					<schemaversion>1.2</schemaversion>
+					<adlcp:location>meta00000000000000000000000401000092.xml</adlcp:location>
+				</metadata>
+			</item>
+		</organization>
+	</organizations>
+	<resources>
+		<resource href="html/00000000000000000000000301000177/loframe00000000000000000000000301000177.htm" adlcp:scormtype="sco" identifier="sco_00000000000000000000000301000177" type="webcontent">
+	<file href="html/00000000000000000000000301000177/loframe00000000000000000000000301000177.htm"></file>
+	<file href="html/00000000000000000000000301000177/lologo00000000000000000000000301000177.htm"></file>
+	<file href="html/00000000000000000000000301000177/lonav00000000000000000000000301000177.htm"></file>
+	<file href="html/00000000000000000000000301000177/lomenu00000000000000000000000301000177.htm"></file>
+	<file href="html/00000000000000000000000301000177/0002A513639706B6E1960302000031FC.htm"></file>
+	<file href="html/images/00000000000000000000000801002F1Dv1.gif">
+		<metadata>
+			<schema>ADL SCORM</schema>
+			<schemaversion>1.2</schemaversion>
+			<adlcp:location>meta00000000000000000000000801002F1D.xml</adlcp:location>
+		</metadata>
+	</file>
+	<file href="html/00000000000000000000000301000177/00000000000000000000000201000B00.htm"></file>
+	<file href="html/images/00000000000000000000000801002F1Cv1.gif">
+		<metadata>
+			<schema>ADL SCORM</schema>
+			<schemaversion>1.2</schemaversion>
+			<adlcp:location>meta00000000000000000000000801002F1C.xml</adlcp:location>
+		</metadata>
+	</file>
+	<file href="html/00000000000000000000000301000177/00000000000000000000000201000AFF.htm"></file>
+	<file href="html/00000000000000000000000301000177/00000000000000000000000201000B01.htm"></file>
+	<file href="html/00000000000000000000000301000177/00000000000000000000000201000B03.htm"></file>
+	<dependency identifierref="sco_javascript"></dependency>
+	<dependency identifierref="sco_themeimages"></dependency>
+</resource>
+		<resource href="html/00000000000000000000000301000176/loframe00000000000000000000000301000176.htm" adlcp:scormtype="sco" identifier="sco_00000000000000000000000301000176" type="webcontent">
+	<file href="html/00000000000000000000000301000176/loframe00000000000000000000000301000176.htm"></file>
+	<file href="html/00000000000000000000000301000176/lologo00000000000000000000000301000176.htm"></file>
+	<file href="html/00000000000000000000000301000176/lonav00000000000000000000000301000176.htm"></file>
+	<file href="html/00000000000000000000000301000176/lomenu00000000000000000000000301000176.htm"></file>
+	<file href="html/00000000000000000000000301000176/00000000000000000000000201000AF6.htm"></file>
+	<file href="html/images/00000000000000000000000801002F1Ev1.gif">
+		<metadata>
+			<schema>ADL SCORM</schema>
+			<schemaversion>1.2</schemaversion>
+			<adlcp:location>meta00000000000000000000000801002F1E.xml</adlcp:location>
+		</metadata>
+	</file>
+	<file href="html/00000000000000000000000301000176/00000000000000000000000201000AF8.htm"></file>
+	<file href="html/images/00000000000000000000000801002F1Dv1.gif">
+		<metadata>
+			<schema>ADL SCORM</schema>
+			<schemaversion>1.2</schemaversion>
+			<adlcp:location>meta00000000000000000000000801002F1D.xml</adlcp:location>
+		</metadata>
+	</file>
+	<file href="html/00000000000000000000000301000176/00000000000000000000000201000AFD.htm"></file>
+	<file href="html/images/00000000000000000000000801002F1Cv1.gif">
+		<metadata>
+			<schema>ADL SCORM</schema>
+			<schemaversion>1.2</schemaversion>
+			<adlcp:location>meta00000000000000000000000801002F1C.xml</adlcp:location>
+		</metadata>
+	</file>
+	<file href="html/00000000000000000000000301000176/00000000000000000000000201000AFE.htm"></file>
+	<file href="html/00000000000000000000000301000176/00000000000000000000000201000AFC.htm"></file>
+	<dependency identifierref="sco_javascript"></dependency>
+	<dependency identifierref="sco_themeimages"></dependency>
+</resource>
+		<resource href="" adlcp:scormtype="asset" identifier="sco_javascript" type="webcontent">
+	<file href="js/assessment.js"></file>
+	<file href="js/buttonHandler.js"></file>
+	<file href="js/ClientAccessPoster.js"></file>
+	<file href="js/command.js"></file>
+	<file href="js/DisplayThumbnail.js"></file>
+	<file href="js/dynapi/CVS/Entries"></file>
+	<file href="js/dynapi/CVS/Repository"></file>
+	<file href="js/dynapi/CVS/Root"></file>
+	<file href="js/dynapi/CVS/Tag"></file>
+	<file href="js/dynapi/docs/api/annotated.html"></file>
+	<file href="js/dynapi/docs/api/browser_js.html"></file>
+	<file href="js/dynapi/docs/api/class_browser-members.html"></file>
+	<file href="js/dynapi/docs/api/class_browser.html"></file>
+	<file href="js/dynapi/docs/api/class_dragevent-members.html"></file>
+	<file href="js/dynapi/docs/api/class_dragevent.html"></file>
+	<file href="js/dynapi/docs/api/class_dynapi-members.html"></file>
+	<file href="js/dynapi/docs/api/class_dynapi.html"></file>
+	<file href="js/dynapi/docs/api/class_dyndocument-members.html"></file>
+	<file href="js/dynapi/docs/api/class_dyndocument.html"></file>
+	<file href="js/dynapi/docs/api/class_dynevent-members.html"></file>
+	<file href="js/dynapi/docs/api/class_dynevent.html"></file>
+	<file href="js/dynapi/docs/api/class_dynlayer-members.html"></file>
+	<file href="js/dynapi/docs/api/class_dynlayer.html"></file>
+	<file href="js/dynapi/docs/api/class_eventlistener-members.html"></file>
+	<file href="js/dynapi/docs/api/class_eventlistener.html"></file>
+	<file href="js/dynapi/docs/api/class_mouseevent-members.html"></file>
+	<file href="js/dynapi/docs/api/class_mouseevent.html"></file>
+	<file href="js/dynapi/docs/api/CVS/Entries"></file>
+	<file href="js/dynapi/docs/api/CVS/Repository"></file>
+	<file href="js/dynapi/docs/api/CVS/Root"></file>
+	<file href="js/dynapi/docs/api/CVS/Tag"></file>
+	<file href="js/dynapi/docs/api/doxygen.css"></file>
+	<file href="js/dynapi/docs/api/doxygen.gif"></file>
+	<file href="js/dynapi/docs/api/dragevent_js.html"></file>
+	<file href="js/dynapi/docs/api/dynapi_js.html"></file>
+	<file href="js/dynapi/docs/api/dyndocument_js.html"></file>
+	<file href="js/dynapi/docs/api/dynlayer_js.html"></file>
+	<file href="js/dynapi/docs/api/events_js.html"></file>
+	<file href="js/dynapi/docs/api/files.html"></file>
+	<file href="js/dynapi/docs/api/functions.html"></file>
+	<file href="js/dynapi/docs/api/index.html"></file>
+	<file href="js/dynapi/docs/CVS/Entries"></file>
+	<file href="js/dynapi/docs/CVS/Entries.Log"></file>
+	<file href="js/dynapi/docs/CVS/Repository"></file>
+	<file href="js/dynapi/docs/CVS/Root"></file>
+	<file href="js/dynapi/docs/CVS/Tag"></file>
+	<file href="js/dynapi/docs/docs/contributors.html"></file>
+	<file href="js/dynapi/docs/docs/CVS/Entries"></file>
+	<file href="js/dynapi/docs/docs/CVS/Repository"></file>
+	<file href="js/dynapi/docs/docs/CVS/Root"></file>
+	<file href="js/dynapi/docs/docs/CVS/Tag"></file>
+	<file href="js/dynapi/docs/docs/faq.html"></file>
+	<file href="js/dynapi/docs/docs/license.html"></file>
+	<file href="js/dynapi/docs/docs/revision.html"></file>
+	<file href="js/dynapi/docs/include/CVS/Entries"></file>
+	<file href="js/dynapi/docs/include/CVS/Repository"></file>
+	<file href="js/dynapi/docs/include/CVS/Root"></file>
+	<file href="js/dynapi/docs/include/CVS/Tag"></file>
+	<file href="js/dynapi/docs/include/dynapi.css"></file>
+	<file href="js/dynapi/docs/index.html"></file>
+	<file href="js/dynapi/examples/CVS/Entries"></file>
+	<file href="js/dynapi/examples/CVS/Repository"></file>
+	<file href="js/dynapi/examples/CVS/Root"></file>
+	<file href="js/dynapi/examples/CVS/Tag"></file>
+	<file href="js/dynapi/examples/dynapi.api.bubbling.html"></file>
+	<file href="js/dynapi/examples/dynapi.api.create.htm"></file>
+	<file href="js/dynapi/examples/dynapi.api.delete.htm"></file>
+	<file href="js/dynapi/examples/dynapi.api.mouseevents.htm"></file>
+	<file href="js/dynapi/examples/dynapi.api.sethtml.htm"></file>
+	<file href="js/dynapi/examples/dynapi.ext.inline.htm"></file>
+	<file href="js/dynapi/examples/dynapi.ext.keyevents.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.button.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.dynimage.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.label.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.list.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.loadpanel-file1.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.loadpanel-file2.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.loadpanel.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.pushpanel.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.scrollbar.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.scrollpane.html"></file>
+	<file href="js/dynapi/examples/dynapi.gui.viewport.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.circleanim.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.hover.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.imganim.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.pathanim-slide.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.pathanim.html"></file>
+	<file href="js/dynapi/examples/dynapi.util.thread.html"></file>
+	<file href="js/dynapi/license"></file>
+	<file href="js/dynapi/readme"></file>
+	<file href="js/dynapi/revision"></file>
+	<file href="js/dynapi/src/CVS/Entries"></file>
+	<file href="js/dynapi/src/CVS/Repository"></file>
+	<file href="js/dynapi/src/CVS/Root"></file>
+	<file href="js/dynapi/src/CVS/Tag"></file>
+	<file href="js/dynapi/src/dynapi.js"></file>
+	<file href="js/dynapi/src/lib/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/browser.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/dragevent.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/dyndocument.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/dynlayer.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/api/events.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/CVS/Entries.Log"></file>
+	<file href="js/dynapi/src/lib/dynapi/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/dragdrop.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/functions.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/inline.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/keyevents.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ext/layer.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/button.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/buttonimage.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/dynimage.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/label.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/list.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/loadpanel.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/pushpanel.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/scrollbar.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/scrollpane.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/sprite.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/gui/viewport.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/arrowdown.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/arrowleft.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/arrowright.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/arrowup.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/button.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/button_mo.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/common/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/CVS/Entries.Log"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowdn0.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowdn1.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowlt0.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowlt1.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowrt0.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowrt1.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowup0.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/arrowup1.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/corner.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/scrollbar-hbg.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/scrollbar-hknob.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/scrollbar-vbg.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/images/scrollpane/scrollbar-vknob.gif"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/fasttreenode.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/grow.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/growin.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/pathanim.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/pathanimbendaddon.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/skinbutton.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/skinwindow.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/status.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/treenode.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/ri/wipe.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/circleanim.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/console.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/cookies.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/CVS/Entries"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/CVS/Repository"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/CVS/Root"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/CVS/Tag"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/debug.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/hoveranim.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/imganim.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/pathanim.js"></file>
+	<file href="js/dynapi/src/lib/dynapi/util/thread.js"></file>
+	<file href="js/fillinblank.js"></file>
+	<file href="js/forumbutton.js"></file>
+	<file href="js/ForumTree.js"></file>
+	<file href="js/genpdabutton.js"></file>
+	<file href="js/glossarybutton.js"></file>
+	<file href="js/helpbutton.js"></file>
+	<file href="js/homebutton.js"></file>
+	<file href="js/matching.js"></file>
+	<file href="js/mchoice.js"></file>
+	<file href="js/mouseover.js"></file>
+	<file href="js/nextlo.js"></file>
+	<file href="js/nexttopic.js"></file>
+	<file href="js/ordering.js"></file>
+	<file href="js/os_dragdrop.js"></file>
+	<file href="js/os_learningObject.js"></file>
+	<file href="js/os_LMS.js"></file>
+	<file href="js/os_scorm.js"></file>
+	<file href="js/os_waldo.js"></file>
+	<file href="js/presnavfloat.js"></file>
+	<file href="js/prevlo.js"></file>
+	<file href="js/prevtopic.js"></file>
+	<file href="js/questions.js"></file>
+	<file href="js/rlomenu.js"></file>
+	<file href="js/simulation.js"></file>
+	<file href="js/slideshow.js"></file>
+	<file href="js/standalone.js"></file>
+	<file href="js/timer.js"></file>
+	<file href="js/utility.js"></file>
+</resource>
+		<resource href="" adlcp:scormtype="asset" identifier="sco_themeimages" type="webcontent">
+	<file href="themes/all_off.gif"></file>
+	<file href="themes/all_on.gif"></file>
+	<file href="themes/arrowdown.gif"></file>
+	<file href="themes/arrowup.gif"></file>
+	<file href="themes/assess_logo_trans.gif"></file>
+	<file href="themes/begquote.jpg"></file>
+	<file href="themes/blue.gif"></file>
+	<file href="themes/button_slice_tall.gif"></file>
+	<file href="themes/ciscotheme2/.gif"></file>
+	<file href="themes/ciscotheme2/back_off.gif"></file>
+	<file href="themes/ciscotheme2/back_on.gif"></file>
+	<file href="themes/ciscotheme2/back_on_assessment.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_back.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_discussion.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_glossary.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_help.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_home.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_loheaderbg34.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_lologo41.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_lonavbg.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_next.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_next_lo.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_portalbg.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_portalheader.gif"></file>
+	<file href="themes/ciscotheme2/cisco2_prev_lo.gif"></file>
+	<file href="themes/ciscotheme2/ciscotheme2.xml"></file>
+	<file href="themes/ciscotheme2/Cisco_assess_gray_logo.gif"></file>
+	<file href="themes/ciscotheme2/Cisco_assess_logo.gif"></file>
+	<file href="themes/ciscotheme2/default_student.gif"></file>
+	<file href="themes/ciscotheme2/end_off.gif"></file>
+	<file href="themes/ciscotheme2/end_on.gif"></file>
+	<file href="themes/ciscotheme2/evolution_thumb.gif"></file>
+	<file href="themes/ciscotheme2/evolution_thumb_over.gif"></file>
+	<file href="themes/ciscotheme2/fwd_off.gif"></file>
+	<file href="themes/ciscotheme2/fwd_on_assessment.gif"></file>
+	<file href="themes/ciscotheme2/help_icon.gif"></file>
+	<file href="themes/ciscotheme2/Message.html"></file>
+	<file href="themes/ciscotheme2/outstart_lefttab_off.gif"></file>
+	<file href="themes/ciscotheme2/outstart_lefttab_on.gif"></file>
+	<file href="themes/ciscotheme2/outstart_righttab_off.gif"></file>
+	<file href="themes/ciscotheme2/outstart_righttab_on.gif"></file>
+	<file href="themes/ciscotheme2/question-color_icon.gif"></file>
+	<file href="themes/ciscotheme2/start_off.gif"></file>
+	<file href="themes/ciscotheme2/start_on.gif"></file>
+	<file href="themes/ciscotheme2/theme.dtd"></file>
+	<file href="themes/ciscotheme2/TOC_mini_survey_icon.gif"></file>
+	<file href="themes/ciscotheme2/wd21.gif"></file>
+	<file href="themes/ciscotheme2/wd24.gif"></file>
+	<file href="themes/ciscotheme2/wd7.gif"></file>
+	<file href="themes/ciscotheme2/Welcome.html"></file>
+	<file href="themes/command_prompt.gif"></file>
+	<file href="themes/corner.gif"></file>
+	<file href="themes/endquote.jpg"></file>
+	<file href="themes/evo_launch_button_bev_off.gif"></file>
+	<file href="themes/evo_launch_button_bev_on.gif"></file>
+	<file href="themes/filter.gif"></file>
+	<file href="themes/folder.gif"></file>
+	<file href="themes/folderclosed.gif"></file>
+	<file href="themes/folderopen.gif"></file>
+	<file href="themes/footer.txt"></file>
+	<file href="themes/greenbar2.jpg"></file>
+	<file href="themes/grouping.gif"></file>
+	<file href="themes/gui-vertical.gif"></file>
+	<file href="themes/helplink.gif"></file>
+	<file href="themes/hyperterminal_top.gif"></file>
+	<file href="themes/image.gif"></file>
+	<file href="themes/img-blank.gif"></file>
+	<file href="themes/img-branch-cont-0.gif"></file>
+	<file href="themes/img-branch-cont-1.gif"></file>
+	<file href="themes/img-branch-end-0.gif"></file>
+	<file href="themes/img-branch-end-1.gif"></file>
+	<file href="themes/img-email.gif"></file>
+	<file href="themes/img-folder-closed-0.gif"></file>
+	<file href="themes/img-folder-closed-1.gif"></file>
+	<file href="themes/img-folder-closed-fav.gif"></file>
+	<file href="themes/img-folder-open-0.gif"></file>
+	<file href="themes/img-folder-open-1.gif"></file>
+	<file href="themes/img-folder-open-fav.gif"></file>
+	<file href="themes/img-globe-0.gif"></file>
+	<file href="themes/img-globe-1.gif"></file>
+	<file href="themes/img-minus-cont-0.gif"></file>
+	<file href="themes/img-minus-cont-1.gif"></file>
+	<file href="themes/img-minus-end-0.gif"></file>
+	<file href="themes/img-minus-end-1.gif"></file>
+	<file href="themes/img-newsgroup.gif"></file>
+	<file href="themes/img-page-globe-link.gif"></file>
+	<file href="themes/img-page-globe.gif"></file>
+	<file href="themes/img-page-link.gif"></file>
+	<file href="themes/img-page.gif"></file>
+	<file href="themes/img-plus-cont-0.gif"></file>
+	<file href="themes/img-plus-cont-1.gif"></file>
+	<file href="themes/img-plus-end-0.gif"></file>
+	<file href="themes/img-plus-end-1.gif"></file>
+	<file href="themes/img-vert-line-0.gif"></file>
+	<file href="themes/img-vert-line-1.gif"></file>
+	<file href="themes/info.jpg"></file>
+	<file href="themes/linked.gif"></file>
+	<file href="themes/lo.gif"></file>
+	<file href="themes/loading.html"></file>
+	<file href="themes/middle.gif"></file>
+	<file href="themes/newsgroup.gif"></file>
+	<file href="themes/nopartner.gif"></file>
+	<file href="themes/nothing.jpg"></file>
+	<file href="themes/output_pda.gif"></file>
+	<file href="themes/output_presentation.gif"></file>
+	<file href="themes/output_preview.gif"></file>
+	<file href="themes/output_web.gif"></file>
+	<file href="themes/outstart/access.gif"></file>
+	<file href="themes/outstart/admin.gif"></file>
+	<file href="themes/outstart/admin_lrg.gif"></file>
+	<file href="themes/outstart/aicc_logo_icon.gif"></file>
+	<file href="themes/outstart/arrowdown.gif"></file>
+	<file href="themes/outstart/arrowup.gif"></file>
+	<file href="themes/outstart/assess0.jpg"></file>
+	<file href="themes/outstart/assess100.jpg"></file>
+	<file href="themes/outstart/assess25.jpg"></file>
+	<file href="themes/outstart/assess50.jpg"></file>
+	<file href="themes/outstart/assess75.jpg"></file>
+	<file href="themes/outstart/assessment_logo.gif"></file>
+	<file href="themes/outstart/assessnodata.jpg"></file>
+	<file href="themes/outstart/assess_logo_trans.gif"></file>
+	<file href="themes/outstart/back.gif"></file>
+	<file href="themes/outstart/back_off.gif"></file>
+	<file href="themes/outstart/back_on.gif"></file>
+	<file href="themes/outstart/back_over.gif"></file>
+	<file href="themes/outstart/begquote.jpg"></file>
+	<file href="themes/outstart/bullet_neg.gif"></file>
+	<file href="themes/outstart/bullet_plus.gif"></file>
+	<file href="themes/outstart/button_slice.gif"></file>
+	<file href="themes/outstart/check.gif"></file>
+	<file href="themes/outstart/checkout.gif"></file>
+	<file href="themes/outstart/check_in_active.gif"></file>
+	<file href="themes/outstart/check_in_inactive.gif"></file>
+	<file href="themes/outstart/check_in_live.gif"></file>
+	<file href="themes/outstart/check_out_active.gif"></file>
+	<file href="themes/outstart/check_out_inactive.gif"></file>
+	<file href="themes/outstart/check_out_live.gif"></file>
+	<file href="themes/outstart/check_x.gif"></file>
+	<file href="themes/outstart/complete.jpg"></file>
+	<file href="themes/outstart/container_lrg.gif"></file>
+	<file href="themes/outstart/contenttype10.gif"></file>
+	<file href="themes/outstart/contenttype100.gif"></file>
+	<file href="themes/outstart/contenttype101.gif"></file>
+	<file href="themes/outstart/contenttype102.gif"></file>
+	<file href="themes/outstart/contenttype103.gif"></file>
+	<file href="themes/outstart/contenttype104.gif"></file>
+	<file href="themes/outstart/contenttype105.gif"></file>
+	<file href="themes/outstart/contenttype106.gif"></file>
+	<file href="themes/outstart/contenttype11.gif"></file>
+	<file href="themes/outstart/contenttype12.gif"></file>
+	<file href="themes/outstart/contenttype13.gif"></file>
+	<file href="themes/outstart/contenttype17.gif"></file>
+	<file href="themes/outstart/contenttype18.gif"></file>
+	<file href="themes/outstart/contenttype19.gif"></file>
+	<file href="themes/outstart/contenttype2.gif"></file>
+	<file href="themes/outstart/contenttype20.gif"></file>
+	<file href="themes/outstart/contenttype21.gif"></file>
+	<file href="themes/outstart/contenttype22.gif"></file>
+	<file href="themes/outstart/contenttype23.gif"></file>
+	<file href="themes/outstart/contenttype24.gif"></file>
+	<file href="themes/outstart/contenttype25.gif"></file>
+	<file href="themes/outstart/contenttype26.gif"></file>
+	<file href="themes/outstart/contenttype27.gif"></file>
+	<file href="themes/outstart/contenttype28.gif"></file>
+	<file href="themes/outstart/contenttype29.gif"></file>
+	<file href="themes/outstart/contenttype3.gif"></file>
+	<file href="themes/outstart/contenttype30.gif"></file>
+	<file href="themes/outstart/contenttype31.gif"></file>
+	<file href="themes/outstart/contenttype32.gif"></file>
+	<file href="themes/outstart/contenttype33.gif"></file>
+	<file href="themes/outstart/contenttype34.gif"></file>
+	<file href="themes/outstart/contenttype36.gif"></file>
+	<file href="themes/outstart/contenttype37.gif"></file>
+	<file href="themes/outstart/contenttype38.gif"></file>
+	<file href="themes/outstart/contenttype4.gif"></file>
+	<file href="themes/outstart/contenttype7.gif"></file>
+	<file href="themes/outstart/copy_of_inprogress.jpg"></file>
+	<file href="themes/outstart/course_lrg.gif"></file>
+	<file href="themes/outstart/discussion.gif"></file>
+	<file href="themes/outstart/discussion_icon.gif"></file>
+	<file href="themes/outstart/discussion_over.gif"></file>
+	<file href="themes/outstart/distribution.gif"></file>
+	<file href="themes/outstart/down.gif"></file>
+	<file href="themes/outstart/encryption_icon.gif"></file>
+	<file href="themes/outstart/end.gif"></file>
+	<file href="themes/outstart/endquote.jpg"></file>
+	<file href="themes/outstart/end_on.gif"></file>
+	<file href="themes/outstart/evinstall.gif"></file>
+	<file href="themes/outstart/evolution_thumb.gif"></file>
+	<file href="themes/outstart/evolution_thumb_over.gif"></file>
+	<file href="themes/outstart/evo_launch_button_bev_off.gif"></file>
+	<file href="themes/outstart/evo_launch_button_bev_on.gif"></file>
+	<file href="themes/outstart/evsplash.gif"></file>
+	<file href="themes/outstart/evupgrade.gif"></file>
+	<file href="themes/outstart/export.gif"></file>
+	<file href="themes/outstart/external.gif"></file>
+	<file href="themes/outstart/face2_small.gif"></file>
+	<file href="themes/outstart/filter.gif"></file>
+	<file href="themes/outstart/folder.gif"></file>
+	<file href="themes/outstart/fwd_off.gif"></file>
+	<file href="themes/outstart/fwd_on.gif"></file>
+	<file href="themes/outstart/glossary.gif"></file>
+	<file href="themes/outstart/glossary_over.gif"></file>
+	<file href="themes/outstart/green.gif"></file>
+	<file href="themes/outstart/help.gif"></file>
+	<file href="themes/outstart/helpicon.gif"></file>
+	<file href="themes/outstart/helplink.gif"></file>
+	<file href="themes/outstart/help_over.gif"></file>
+	<file href="themes/outstart/history.gif"></file>
+	<file href="themes/outstart/home.gif"></file>
+	<file href="themes/outstart/home_over.gif"></file>
+	<file href="themes/outstart/image.gif"></file>
+	<file href="themes/outstart/img-blank.gif"></file>
+	<file href="themes/outstart/import.gif"></file>
+	<file href="themes/outstart/inprogress.jpg"></file>
+	<file href="themes/outstart/instock.gif"></file>
+	<file href="themes/outstart/lock.gif"></file>
+	<file href="themes/outstart/media_lrg.gif"></file>
+	<file href="themes/outstart/metadata_group_lrg.gif"></file>
+	<file href="themes/outstart/next.gif"></file>
+	<file href="themes/outstart/nextday.gif"></file>
+	<file href="themes/outstart/next_over.gif"></file>
+	<file href="themes/outstart/nopartner.gif"></file>
+	<file href="themes/outstart/objecttype1.gif"></file>
+	<file href="themes/outstart/objecttype10.gif"></file>
+	<file href="themes/outstart/objecttype11.gif"></file>
+	<file href="themes/outstart/objecttype12.gif"></file>
+	<file href="themes/outstart/objecttype13.gif"></file>
+	<file href="themes/outstart/objecttype14.gif"></file>
+	<file href="themes/outstart/objecttype17.gif"></file>
+	<file href="themes/outstart/objecttype2.gif"></file>
+	<file href="themes/outstart/objecttype20.gif"></file>
+	<file href="themes/outstart/objecttype27.gif"></file>
+	<file href="themes/outstart/objecttype3.gif"></file>
+	<file href="themes/outstart/objecttype4.gif"></file>
+	<file href="themes/outstart/objecttype5.gif"></file>
+	<file href="themes/outstart/objecttype6.gif"></file>
+	<file href="themes/outstart/objecttype7.gif"></file>
+	<file href="themes/outstart/objecttype8.gif"></file>
+	<file href="themes/outstart/output_cd.gif"></file>
+	<file href="themes/outstart/output_pda.gif"></file>
+	<file href="themes/outstart/output_presentation.gif"></file>
+	<file href="themes/outstart/output_print.gif"></file>
+	<file href="themes/outstart/outstart.xml"></file>
+	<file href="themes/outstart/outstart_arrow.gif"></file>
+	<file href="themes/outstart/outstart_bgtab_off.jpg"></file>
+	<file href="themes/outstart/outstart_bgtab_on.jpg"></file>
+	<file href="themes/outstart/outstart_lefttab_off.gif"></file>
+	<file href="themes/outstart/outstart_lefttab_on.gif"></file>
+	<file href="themes/outstart/outstart_locontentbg.gif"></file>
+	<file href="themes/outstart/outstart_loheader.gif"></file>
+	<file href="themes/outstart/outstart_portalheader.gif"></file>
+	<file href="themes/outstart/outstart_righttab_off.gif"></file>
+	<file href="themes/outstart/outstart_righttab_on.gif"></file>
+	<file href="themes/outstart/package.gif"></file>
+	<file href="themes/outstart/pagedown.gif"></file>
+	<file href="themes/outstart/pageup.gif"></file>
+	<file href="themes/outstart/printer.gif"></file>
+	<file href="themes/outstart/qcolon.gif"></file>
+	<file href="themes/outstart/question.GIF"></file>
+	<file href="themes/outstart/red.gif"></file>
+	<file href="themes/outstart/review_off.gif"></file>
+	<file href="themes/outstart/review_on.gif"></file>
+	<file href="themes/outstart/sap_install_icon_off.gif"></file>
+	<file href="themes/outstart/sap_install_icon_on.gif"></file>
+	<file href="themes/outstart/sa_local_server.jpg"></file>
+	<file href="themes/outstart/sa_remote_server.jpg"></file>
+	<file href="themes/outstart/scorm.gif"></file>
+	<file href="themes/outstart/silverstar.gif"></file>
+	<file href="themes/outstart/site.gif"></file>
+	<file href="themes/outstart/start.gif"></file>
+	<file href="themes/outstart/start_on.gif"></file>
+	<file href="themes/outstart/survey.gif"></file>
+	<file href="themes/outstart/survey_logo.gif"></file>
+	<file href="themes/outstart/survey_logo_trans.gif"></file>
+	<file href="themes/outstart/survey_results.gif"></file>
+	<file href="themes/outstart/task_active.gif"></file>
+	<file href="themes/outstart/task_inactive.gif"></file>
+	<file href="themes/outstart/task_live.gif"></file>
+	<file href="themes/outstart/template_icon.gif"></file>
+	<file href="themes/outstart/template_lrg.gif"></file>
+	<file href="themes/outstart/toc_survey_icon.gif"></file>
+	<file href="themes/outstart/topiccheck.gif"></file>
+	<file href="themes/outstart/unassigned.gif"></file>
+	<file href="themes/outstart/unc_arrow.gif"></file>
+	<file href="themes/outstart/up.gif"></file>
+	<file href="themes/outstart/upload_in_progress.gif"></file>
+	<file href="themes/outstart/upload_in_progress.html"></file>
+	<file href="themes/outstart/wd21.gif"></file>
+	<file href="themes/outstart/wd24.gif"></file>
+	<file href="themes/outstart/wd7.gif"></file>
+	<file href="themes/outstart/welcome.htm"></file>
+	<file href="themes/outstart/welcome.txt"></file>
+	<file href="themes/posticon.gif"></file>
+	<file href="themes/pria_single_next.gif"></file>
+	<file href="themes/pria_single_prev.gif"></file>
+	<file href="themes/question.GIF"></file>
+	<file href="themes/review_off.gif"></file>
+	<file href="themes/review_on.gif"></file>
+	<file href="themes/s.gif"></file>
+	<file href="themes/script.gif"></file>
+	<file href="themes/search_off.gif"></file>
+	<file href="themes/search_on.gif"></file>
+	<file href="themes/smallvertical.gif"></file>
+	<file href="themes/survey_logo_trans.gif"></file>
+	<file href="themes/teal.gif"></file>
+	<file href="themes/telnet_top.gif"></file>
+	<file href="themes/theme.dtd"></file>
+	<file href="themes/thumb_clear.gif"></file>
+	<file href="themes/topic.gif"></file>
+	<file href="themes/topiccheck.gif"></file>
+	<file href="themes/treebotline.gif"></file>
+	<file href="themes/treenode-collapse.gif"></file>
+	<file href="themes/treenode-expand.gif"></file>
+	<file href="themes/treevline.gif"></file>
+	<file href="themes/unc_arrow.gif"></file>
+	<file href="themes/vertical.gif"></file>
+	<file href="themes/vertical_rule_slice.gif"></file>
+	<file href="themes/x.gif"></file>
+	<file href="themes/yellow.gif"></file>
+</resource>
+	</resources>
+</manifest>

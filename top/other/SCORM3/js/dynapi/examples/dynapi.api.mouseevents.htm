@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>DynAPI Distribution: MouseEvents Example</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad=function() {
+
+	myLayer = new DynLayer()
+	
+	myLayer.setSize(100,100)
+	myLayer.setBgColor('#c0c0c0')
+	myLayer.moveTo(100,100)
+	
+
+	myListener = new EventListener(DynAPI.document)
+		myListener.onmouseover=function(e) {
+			myLayer.setBgColor('#ffc000')
+			window.status = 'Last Event: onmouseover'
+		}
+		myListener.onmousemove=function(e) {
+			myLayer.setBgColor('#ffc000')
+			window.status = 'Last Event: onmousemove'
+		}
+		myListener.onmouseout=function(e) {
+			myLayer.setBgColor('#c0c0c0')
+			window.status = 'Last Event: onmouseout'
+		}
+		myListener.onmousedown=function(e) {
+			myLayer.setBgColor('#0000c0')
+			window.status = 'Last Event: onmousedown'
+		}
+		myListener.onmouseup=function(e) {
+			myLayer.setBgColor('#ffc000')
+			window.status = 'Last Event: onmouseup'
+		}
+		myListener.onrtmouseup=function(e) {
+			myLayer.setBgColor('#ffcc00')
+			window.status = 'Last Event: onrtmouseup'
+		}
+		myListener.onrtmousedown=function(e) {
+			myLayer.setBgColor('#00cc00')
+			window.status = 'Last Event: onrtmousedown'
+		}
+		myListener.onmdmousedown=function(e) {
+			myLayer.setBgColor('#11cc00')
+			window.status = 'Last Event: onmdmousedown'
+		}
+		myListener.onmdmouseup=function(e) {
+			myLayer.setBgColor('#ffcc00')
+			window.status = 'Last Event: onmdmouseup'
+		}
+		myListener.ondblclick=function(e) {
+			window.status = 'Last Event: ondblclick'
+			alert('double-click')
+		}
+
+	DynAPI.document.addChild(myLayer)
+	myLayer.addEventListener(myListener)
+	
+}
+
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+</body>
+</html>

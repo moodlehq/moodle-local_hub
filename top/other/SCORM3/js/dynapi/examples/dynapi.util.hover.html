@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>DynAPI Examples - Hover Animation</title>
+<script language="Javascript" src="../src/dynapi.js"></script>
+<script language="Javascript">
+DynAPI.setLibraryPath('../src/lib/');
+DynAPI.include('dynapi.api.*');
+DynAPI.include('dynapi.util.thread.js');
+DynAPI.include('dynapi.util.pathanim.js');  // hover requires a function in pathanim
+DynAPI.include('dynapi.util.hoveranim.js');
+</script>
+<script language="Javascript">
+
+DynAPI.onLoad = function() {
+	block = new DynLayer();
+	block.setSize(20,20);
+	block.moveTo(200,200);
+	block.setBgColor("red");
+	
+	hover = new HoverAnimation(block);
+	hover.setAmplitude(50);
+	hover.setAngleIncrement(10);
+	hover.sleep(20);
+	
+	hover.playAnimation();
+	
+	var listener = new EventListener();
+	listener.onpathstart = function(e) {
+		status = "start";
+	}
+	listener.onpathrun = function(e) {
+		var o = e.getSource();
+		status = "play "+o.x+" "+o.y;
+	}
+	listener.onpathstop = function(e) {
+		var o = e.getSource();
+		status = "stop "+o.x+" "+o.y;;
+	}
+	block.addEventListener(listener);
+
+	
+	DynAPI.document.addChild(block);
+}
+
+//-->
+</script>
+</head>
+
+<body bgcolor="#ffffff">
+
+<p>Hover
+<br>amplitude: <a href="javascript:hover.setAmplitude(50)">50</a> | <a href="javascript:hover.setAmplitude(100)">100</a>
+<br>angle increment: <a href="javascript:hover.setAngleIncrement(10)">10</a> | <a href="javascript:hover.setAngleIncrement(5)">5</a>
+<br>sleep: <a href="javascript:hover.sleep(20)">20</a> | <a href="javascript:hover.sleep(40)">40</a>
+
+</body>
+</html>

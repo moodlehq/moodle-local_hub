@@ -1,0 +1,5 @@
+USE moodle;
+
+TRUNCATE TABLE countries;
+
+LOAD DATA LOCAL INFILE 'ip-to-country.csv' INTO TABLE countries FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY "\n";

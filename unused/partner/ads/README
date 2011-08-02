@@ -1,0 +1,140 @@
+
+    phpAdsNew 2
+    ------------------------------------------------------------------------
+    An ad server and banner management system written in PHP
+
+
+    Version 2 RC 4.2
+    ------------------------------------------------------------------------
+    THIS IS A RELEASE CANDIDATE AND MAY NOT BE 
+    STABLE ENOUGH FOR USE IN A PRODUCTION ENVIRONMENT.
+    THE USE OF THIS SOFTWARE IS COMPLETELY AT YOUR OWN RISK!
+
+
+    
+    Copyright (C) 2000-2003
+	Niels Leenheer 	   <niels@creatype.nl>
+	Matteo Beccati     <matteo@beccati.com>
+
+	Wim Godden 	   <wim@godden.net>
+	Phil Hord 	   <phil@phord.com>
+	Noor Dawod         <noor@COMRAX.COM>
+	Cedric Fontaine    <cfontaine@spidmail.net>
+	Michael Harvey 	   <mike@ve-studio.com>
+	Stefan Morgenroth  <dandra@users.sourceforge.net>
+
+
+    Documentation written and maintained by:
+	Niels Leenheer 	   <niels@creatype.nl>
+
+
+    Based on phpAds created by Tobias Ratschiller <tobias@dnet.it>
+    Copyright (C) 1999-2000 
+
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+    In addition, as a special exception, TOMO <groove@spencernetwork.org> 
+    gives permission to link the code of this program with the FTP library 
+    (or with modified versions of LIB-FTP that use the same license as LIB-FTP), 
+    and distribute linked combinations including the two.  You must obey 
+    the GNU General Public License in all respects for all of the code used 
+    other than LIB-FTP.  If you modify this file, you may extend this exception 
+    to your version of the file, but you are not obligated to do so.  If 
+    you do not wish to do so, delete this exception statement from your version.
+
+    In addition, as a special exception, Edd Dumbill <edd@usefulinc.com>
+    gives permission to link the code of this program with the XML-RPC library 
+    (or with modified versions of XML-RPC that use the same license as XML-RPC), 
+    and distribute linked combinations including the two.  You must obey 
+    the GNU General Public License in all respects for all of the code used 
+    other than XML-RPC.  If you modify this file, you may extend this exception 
+    to your version of the file, but you are not obligated to do so.  If 
+    you do not wish to do so, delete this exception statement from your version.
+
+
+
+    Requirements: 
+    ------------------------------------------------------------------------
+    PHP 4.0.1 or higher (4.3.0 recommended)
+    MySQL 3.23.3 or higher (InnoDB recommended)
+
+    If you want to run phpAdsNew on a PostgreSQL server you should
+    take a look at phpPgAds, which is a port of phpAdsNew to PostgreSQL,
+    made by Matteo Beccati. The phpPgAds project can be found at: 
+    http://sourceforge.net/projects/phppgads/
+       
+         
+    Summary:
+    ------------------------------------------------------------------------
+    phpAdsNew is a banner management and tracking system written in PHP.
+    Currently it can
+    - manage multiple campaigns per advertiser
+    - manage multiple banners (any size) per campaign
+    - manage multiple zones per publisher
+    - Link banners or campaigns to different zones
+    - view daily, weekly, monthly, overall and summary statistics
+    - send statistics to advertisers via email
+    - use HTML (Rich media), GIF, JPEG, PNG and Flash banners
+    - use banners stored on an external server (linked) or
+      store banner through the admin interface in the 
+      MySQL server or on a ftp server.
+    - integrate banner networks with your own banners
+    - show random, pre-defined or HTML/image banners
+    - supports multiple keywords for groups of banners
+    - supports conditional keywords
+    - activate and deactivate single banners
+    - show banners based on filters: user-agent, accept-language, day-of-week, IP masks, domain, source page, time
+    - Set a target number of impressions for a campaign
+    - Perform campaign/banner weighing
+    - Target banner clicks to frames
+    - Multi-lingual and support for right-to-left languages, like Arabic
+ 
+
+    Download:
+    ------------------------------------------------------------------------
+    You can get the latest version at http://www.phpadsnew.com
+
+
+    Credits:
+    ------------------------------------------------------------------------
+    Kyle Cordes <Kyle@kylecordes.com>, Weston Bustraan <weston@infinityteldata.net>,
+    Jörg Legarth, Brian <brian@cooltext.com>, Robert Allen <zircote@excite.com>,
+    Ben Schumacher <bs@cyalchemy.com>, Leonid Igolnik - LiM <lim@israel.net>,
+    Philip Gabbert <pgabbert@exactis.com>, Ralf Eggert <ralf@in-greece.de>,
+    Niels Schoot <nschoot@users.sourceforge.net>, Martin Braun <martin@braun.cc>,
+    Vivian Girel, René Friedrich <rene.friedrich@web.de> and many more.
+
+    XML-RPC library:
+    Edd Dumbill <edd@usefulinc.com>
+
+    FTP library:
+    TOMO <groove@spencernetwork.org> 
+
+    Occasional bugfixes and support: 
+    Manuel Lemos, Boaz Yahav, Roy Nasser, Mark Maggalet, Ben Schumacher.
+    And all the rest who helped.
+
+
+    Support:
+    ------------------------------------------------------------------------
+    Questions about phpAdsNew should be directed to the forums. More
+    information about it can be found on phpAdsNew's homepage. Bug reports
+    and questions related to the develpment of phpAdsNew are also welcome
+    on the site. Please read the manual before you ask questions!
+
+    http://www.phpadsnew.com
+    
+
