@@ -4,12 +4,12 @@ require('../../../../config.php');
 
 $records_to_show = 150;
 
-$COUNTRIES = get_list_of_countries();
+$COUNTRIES = get_string_manager()->get_list_of_countries(false);
 
 // We cache the recent users page to avoid DOS attacks here
 $timenow = time();
 if (empty($SESSION->userpics) || ($SESSION->userpicstime + 300 < $timenow)) {
-    if (!$users = get_records("user", "picture", "1", "lastaccess DESC", "id,firstname,lastname,lastaccess,country", 0, $records_to_show)) {
+    if (!$users = $DB->get_records("user", array("picture"=>"1"), "lastaccess DESC", "id,firstname,lastname,lastaccess,country", 0, $records_to_show)) {
         error("no users!");
     }
     $SESSION->userpics = $users;
