@@ -4,7 +4,7 @@
 
 require('../../../../config.php');
 
-$type = optional_param('type', 'sites');
+$type = optional_param('type', 'sites', PARAM_ALPHA);
 
 header("Content-Type: text/plain\n");
 

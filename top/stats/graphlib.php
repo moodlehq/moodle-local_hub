@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 /** Used to put a timestamp on cached charts */
 define('STATS_CACHE_FILE_NAME_ID', date('Ymt'));
 /** Used when calling {@link logical_top_point} Rounds [up] to the the first digit */
@@ -268,10 +270,10 @@ function all_sites_graph() {
                 r.month,
                 r.year,
                 r.created,
-                IFNULL(`registry_lost`.unreachable,0) as unreachable
+                IFNULL(registry_lost.unreachable,0) as unreachable
             FROM (
                 SELECT
-                    COUNT(`timecreated`) AS created,
+                    COUNT(timecreated) AS created,
                     FROM_UNIXTIME(timecreated, '%Y%m') AS orderfield,
                     FROM_UNIXTIME(timecreated, '%b') AS month,
                     FROM_UNIXTIME(timecreated, '%Y') AS year
@@ -281,9 +283,9 @@ function all_sites_graph() {
             ) r
             LEFT JOIN (
                 SELECT
-                    COUNT(`timeunreachable`) AS unreachable,
+                    COUNT(timeunreachable) AS unreachable,
                     FROM_UNIXTIME(timeunreachable, '%Y%m') AS orderfield
-                FROM `".$CFG->prefix."registry`
+                FROM {registry}
                 WHERE timecreated!=0 AND (timeunreachable!=0 OR override NOT BETWEEN 1 AND 3) AND users >0 AND confirmed=1 AND unreachable > 1
                 GROUP BY orderfield
             ) as registry_lost ON registry_lost.orderfield=r.orderfield
@@ -338,7 +340,7 @@ function moodle_implementation_map_graph() {
 
     $sql = 'SELECT 
                 country, 
-                COUNT(DISTINCT `id`) AS countrycount
+                COUNT(DISTINCT id) AS countrycount
             FROM {registry}
             WHERE confirmed=1 AND users>0 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
             GROUP BY country 
@@ -386,7 +388,7 @@ function moodle_implementation_map_graph() {
  * @return google_charts_line_graph
  */
 function number_of_users_to_site_size($title, $start=0, $end=1000000, $rounder=4) {
-    global $CFG;
+    global $CFG, $DB;
     
     $graph = new google_charts_bar_graph();
     $graph->set_chart_title($title);
@@ -1392,5 +1394,3 @@ class graph_value {
         }
     }
 }
-
-?>

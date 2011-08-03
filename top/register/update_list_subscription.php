@@ -1,5 +1,7 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die;
+
 /**
  * Updates the subscription to the security alerts mailing-list. In the case
  * of a new user, the 'old' variables must be empty.  In the case of a user
@@ -42,7 +44,7 @@ function update_list_subscription($oldemail, $oldstatus, $newemail, $newstatus) 
 }
 
 function update_list_subscription_soap($op, $email, $debug = false) {
-    
+
     $return = true;
     
     // necessary for debug, use '1' on production server
@@ -68,9 +70,9 @@ function update_list_subscription_soap($op, $email, $debug = false) {
         $answer = $sympa->AuthenticateAndRun($sympa_admin_email, $md5, $op, array('securityalerts@lists.moodle.org', $email, null, 1));
 
         if ($op == 'add') {
-            notify('Your new email address '.$email.' was added to <a href="http://lists.moodle.org/info/securityalerts">securityalerts@lists.moodle.org</a>');
+            echo ('Your new email address '.$email.' was added to <a href="http://lists.moodle.org/info/securityalerts">securityalerts@lists.moodle.org</a>');
         } else if ($op == 'del') {
-            notify('Your old email address '.$email.' was deleted from <a href="http://lists.moodle.org/info/securityalerts">securityalerts@lists.moodle.org</a>');
+            echo ('Your old email address '.$email.' was deleted from <a href="http://lists.moodle.org/info/securityalerts">securityalerts@lists.moodle.org</a>');
         }
     }
     catch (SoapFault $ex) {
@@ -88,7 +90,7 @@ function update_list_subscription_soap($op, $email, $debug = false) {
             print "</pre>";
 
             echo '<pre>';
-            print_r($answer);
+            print_r($answer); // TODO: this is not defined!
             echo '</pre>';
         }
     }

@@ -1,10 +1,10 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/sites/siteslib.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/lib.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/graphlib.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/googlecharts.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/graphlib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/googlecharts.php');
 
 define('STATS_DIR', 'sites');
 

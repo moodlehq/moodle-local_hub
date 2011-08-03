@@ -1,5 +1,7 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die;
+
 /**
  *
  * @global moodle_database $DB

@@ -359,6 +359,7 @@ function linkcheck($url) {
 }
 
 function vote_for_site($siteid, $votemodifier) {
+    die('NOT CONVERTED YET!');
     global $USER;
     $message = false;
     if ($site = get_record('registry', 'id', $siteid)) {  // site exists
@@ -388,5 +389,3 @@ function vote_for_site($siteid, $votemodifier) {
     }
     return $message;
 }
-
-?>

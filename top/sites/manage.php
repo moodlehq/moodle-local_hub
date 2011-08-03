@@ -1,8 +1,8 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/sites/siteslib.php');
-require_once($CFG->dirroot.'/local/moodleorg/register/update_list_subscription.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/register/update_list_subscription.php');
 
 $siteid = optional_param('id', 0, PARAM_INT);
 $frame  = optional_param('frame', '', PARAM_ALPHA);

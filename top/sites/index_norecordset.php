@@ -1,7 +1,7 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
 
 $country = optional_param('country', '', PARAM_ALPHA);
 $cool = optional_param('cool', 0, PARAM_INT);

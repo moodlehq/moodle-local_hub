@@ -28,15 +28,15 @@
 /** Include the nessecary config file :) */
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/lib.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/graphlib.php');
-require_once($CFG->dirroot.'/local/moodleorg/stats/googlecharts.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/graphlib.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/googlecharts.php');
 //require_once($CFG->libdir.'/phpxml/xml.php');
 
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
-define('STATS_DIR', 'stats');
+define('STATS_DIR', 'local/moodleorg/top/stats');
 
 // Update the number of users to ensure it is accurate
 $moodle = $DB->get_record('registry', array('host'=>'moodle.org'), 'id,users', MUST_EXIST);
