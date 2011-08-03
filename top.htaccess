@@ -1,7 +1,7 @@
     RewriteEngine On
 
 # protect this script
-    Redirect /local/modoleorg/top.htaccess http://localhost
+    Redirect /local/moodleorg/top.htaccess http://localhost
 
 
 #   Uncomment these three lines below to redirect for maintenance.  The IP is OURS
