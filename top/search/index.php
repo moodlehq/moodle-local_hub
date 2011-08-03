@@ -40,4 +40,3 @@
 
 <?php
     echo $OUTPUT->footer();
-    //print_footer();

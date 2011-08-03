@@ -1,7 +1,7 @@
 <?php 
 
-    require('../../config.php');
-    require_once($CFG->dirroot.'/toplib.php');
+    require('../../../../../config.php');
+    require_once($CFG->dirroot.'/local/moodleorg/top/toplib.php');
     require_once($CFG->dirroot.'/course/lib.php');
 
     require_login();

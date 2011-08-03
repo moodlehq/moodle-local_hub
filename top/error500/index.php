@@ -94,7 +94,7 @@ if ($sendsms) {
         </div>
         <!-- moodle menu start -->
         <div id="moodle-menu"> 
-            <form action="http://moodle.org/public/search" method="get" id="moodle-global-search"> 
+            <form action="http://moodle.org/search" method="get" id="moodle-global-search">
                 <div> 
                     <input type="hidden" value="017878793330196534763:-0qxztjngoy" name="cx" /> 
                     <input type="hidden" value="FORID:9" name="cof" /> 

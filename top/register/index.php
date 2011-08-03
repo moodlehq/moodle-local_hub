@@ -3,7 +3,7 @@
 // Allows the admin to create, delete and rename course categories
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/register/update_list_subscription.php');
+require_once($CFG->dirroot.'/local/moodleorg/top/register/update_list_subscription.php');
 
 if (!$site = get_site()) {
     error("Site isn't defined!");

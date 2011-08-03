@@ -2,8 +2,6 @@
 
 require('../../../../config.php');
 
-moodle_setlocale();
-
 $PAGE->set_url(new moodle_url('/logo/index.php'));
 $PAGE->set_context(get_system_context());
 

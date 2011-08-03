@@ -1,10 +1,11 @@
 <div class="mainblockcent">
 <h1>Link Checker</h1>
 <?
+$text = array();
 $text['N/A'] = "Ikke HTTP";
 $text[OK]    = "Valid hostname";
 $text[FEJL]  = "Invalid hostname";
-$text[Død]   = "No response";
+$text[Dd]   = "No response"; //TODO: here was some weird char
 $text[100]   = "Continue";
 $text[101]   = "Switching Protocols";
 $text[200]   = "OK";
@@ -71,7 +72,7 @@ function firstArd($url) {
    if ($urlArray[query]) $urlArray[path] .= "?$urlArray[query]";
    $sock = fsockopen($urlArray[host], $urlArray[port]);
    if ($sock) {
-      $dump .= "GET $urlArray[path] HTTP/1.1\r\n";
+      $dump = "GET $urlArray[path] HTTP/1.1\r\n";
       $dump .= "User-Agent: Z-Add Link Checker (http://w3.z-add.co.uk/linkcheck/)\r\n";
       $dump .= "Host: $urlArray[host]\r\nConnection: close\r\n";
       $dump .= "Connection: close\r\n\r\n";
@@ -104,9 +105,9 @@ function check($url) {
          if (!$urlArray[port]) $urlArray[port] = "80";
          if (!$urlArray[path]) $urlArray[path] = "/";
          $sock = @fsockopen($urlArray[host], $urlArray[port], &$errnum, &$errstr, 10);
-         if (!$sock) $return[code] = "Død";
+         if (!$sock) $return[code] = "Dï¿½d";
          else {
-            $dump .= "HEAD $urlArray[path] HTTP/1.1\r\n";
+            $dump = "HEAD $urlArray[path] HTTP/1.1\r\n";
             $dump .= "User-Agent: Z-Add Link Checker (http://w3.z-add.co.uk/linkcheck/)\r\n";
             $dump .= "Host: $urlArray[host]\r\nConnection: close\r\n";
             $dump .= "Connection: close\r\n\r\n";
