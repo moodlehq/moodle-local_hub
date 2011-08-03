@@ -44,6 +44,11 @@ cd ..
 cd ..
 
 #contrib plugns
-cd local/skypeicons
+cd local/contrib
+git pull
+cd ../..
+
+# theme
+cd theme/moodleofficial
 git pull
 cd ../..
