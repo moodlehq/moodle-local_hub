@@ -118,8 +118,8 @@
 
     RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt)$  local/moodleorg/top/$1 [L]
 
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forum|images|logo|network|news|other|register|search|security|sites|stats|support|useful|userpics)$       /$1/                      [R=301,L]
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forum|images|logo|network|news|other|register|search|security|sites|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
+    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|register|search|security|sites|stats|support|useful|userpics)$       /$1/                      [R=301,L]
+    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|register|search|security|sites|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
 
     RewriteRule ^public/search/($|(.*))  /search/$2  [R=301,L]
 
