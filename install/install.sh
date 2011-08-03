@@ -69,3 +69,10 @@ cd ..
 # back to moodle root
 cd ..
 
+# contrib plugins
+cd local
+git clone git@github.com:moodlehq/moodle-local_contrib.git contrib
+cd skypeicons
+#git checkout -b MOODLE_21_STABLE origin/MOODLE_21_STABLE
+echo /local/contrib/ >> ../../.git/info/exclude
+cd ../..

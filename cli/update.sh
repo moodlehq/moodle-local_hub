@@ -42,3 +42,8 @@ cd ..
 
 # back to moodle root
 cd ..
+
+#contrib plugns
+cd local/skypeicons
+git pull
+cd ../..
