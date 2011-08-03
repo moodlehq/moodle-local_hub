@@ -76,3 +76,12 @@ cd contrib
 #git checkout -b MOODLE_21_STABLE origin/MOODLE_21_STABLE
 echo /local/contrib/ >> ../../.git/info/exclude
 cd ../..
+
+
+# theme
+cd theme
+git clone git@github.com:moodlehq/moodle-theme_moodleofficial.git moodleofficial
+cd moodleofficial
+#git checkout -b MOODLE_21_STABLE origin/MOODLE_21_STABLE
+echo /theme/moodleofficial/ >> ../../.git/info/exclude
+cd ../..
