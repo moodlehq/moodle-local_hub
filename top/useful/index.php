@@ -1,6 +1,6 @@
 <?php  //  Martin Dougiamas   MDLSITE-550
 
-    require('../config.php');
+    require('../../../../config.php');
 
     $meta = '<link rel="alternate" type="application/rss+xml" ';
     $meta .= 'title ="Recently rated Moodle posts" href="http://moodle.org/useful/rss.xml" />';
@@ -22,9 +22,8 @@
     echo '</a>';
     echo '</div>';
 
-    print_heading('Posts recently rated as "Useful" in <a href="http://moodle.org/course/view.php?id=5">Using Moodle</a>');
+    $OUTPUT->heading('Posts recently rated as "Useful" in <a href="http://moodle.org/course/view.php?id=5">Using Moodle</a>');
 
     include('content.html');
 
     echo $OUTPUT->footer();
-?>

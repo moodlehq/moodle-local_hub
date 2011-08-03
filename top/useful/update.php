@@ -2,14 +2,16 @@
 
 // Martin Dougiamas  MDLSITE-550
 
-ob_start();   // capture all output
-
 define('CLI_SCRIPT', true);
-require('../config.php');
+
+require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
+
 require($CFG->dirroot.'/mod/forum/lib.php');
 
 $USER = guest_user();
 load_all_capabilities();
+
+ob_start();   // capture all output
 
 $courseid = 5;
 $scaleid = -88;
