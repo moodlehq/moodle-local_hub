@@ -138,7 +138,7 @@ if (empty($form->url)) {
 
     $message = "Management form: http://moodle.org/sites/manage.php\n\n".
                "     URL: $entry->url\n".
-               "    Site: ".stripslashes($entry->sitename)."\n".
+               "    Site: ".$entry->sitename."\n".
                " Version: $entry->release ($entry->version)\n".
                "    Host: $entry->host\n".
                "  Secret: $entry->secret\n".

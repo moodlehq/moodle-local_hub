@@ -40,7 +40,7 @@
             $userto = $DB->get_record('user', array('id' => 24152), '*', MUST_EXIST);    // helen
 
             $message = clean_param($frm->contacttext, PARAM_TEXT);
-            $messagesubject = stripslashes($frm->contactsubject);
+            $messagesubject = $frm->contactsubject;
             $messagetext = format_text_email($message, FORMAT_PLAIN) ."\n\n--\nThis message was sent to you via the contact form at http://moodle.org/contact.\n";
 
             $userfrom = clone($USER);
@@ -49,7 +49,7 @@
             if (email_to_user($userto, $userfrom, $messagesubject, $messagetext)) {
                 print_moodle_content($contactsent);
             } else {
-                notify('There was an error while sending out the message. Please try again later.');
+                $OUTPUT->notify('There was an error while sending out the message. Please try again later.');
             }
 
         } else { /* print out the form */

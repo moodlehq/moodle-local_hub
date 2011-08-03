@@ -111,7 +111,7 @@ if (!$post = data_submitted()) {
     error("No data found!");
 }
 
-$post->subject = stripslashes(strip_tags($post->subject));  // Strip all tags
+$post->subject = strip_tags($post->subject);  // Strip all tags
 $options = new object;
 $options->filter=false;
 $post->message = format_text($post->message, $post->format, $options);   // Clean up any bad tags

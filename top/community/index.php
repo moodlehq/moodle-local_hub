@@ -4,6 +4,7 @@
     require_once('../toplib.php');
 
 
+    $data = new stdClass();
     $data->usercount = $DB->count_records('user', array('deleted' => 0));
     $data->langcount = 78;
     $data->countrycount = $DB->count_records_sql('SELECT count(DISTINCT country) FROM {registry} WHERE unreachable = 0');
