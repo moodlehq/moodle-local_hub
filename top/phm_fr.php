@@ -2,8 +2,8 @@
 
 /// Calculate Moodle en Español PHMs
 
-include_once('config.php');
-include_once('phmlib.php');
+require('../../../config.php');
+require_once('phmlib.php');
 
 $courseid = 20;               // Moodle en Francais course
 $groupid = 195;               // Moodle en Francais PHM group id
@@ -18,5 +18,3 @@ $minratio = 0.02;   //  Ratings / posts
 $savechanges = true;   // Change the group members?
 
 phm_calculate_users($courseid, $groupid, $scaleids, $days, $minposts, $minratings, $minraters, $minratio, $savechanges);
-
-?>

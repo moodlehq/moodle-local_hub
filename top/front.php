@@ -1,4 +1,5 @@
 <?php defined('MOODLE_INTERNAL') || die(); ?>
+
 <div class="showroom clearfix">
  <div>
    <h3><?php print_string('frontpagewelcometitle', 'moodle.org'); ?></h3>

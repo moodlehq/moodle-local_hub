@@ -12,14 +12,12 @@ function print_moodle_page($page, $content="", $topcourseid=0, $navlinks=array()
 /* Prints the header and main content */
 function print_moodle_page_top($page, $content="", $navlinks=array()) {
 
-    global $CFG, $SESSION, $USER, $SITE, $ME, $PAGE, $OUTPUT, $DB;
+    global $CFG, $USER, $SITE, $PAGE, $OUTPUT, $DB;
 
     $PAGE->set_context(get_system_context());
     $PAGE->set_url('/'.$page);
     $PAGE->set_docs_path($page);
     $PAGE->set_pagelayout('standard');
-
-    $CFG->pagetheme = 'moodleofficial';
 
     $topicons = array('about', 'support', 'community', 'development', 'downloads');
 
@@ -54,7 +52,7 @@ function print_moodle_page_top($page, $content="", $navlinks=array()) {
 /// Print the actual main content first
 
     if (in_array($page, $topicons)) {
-        echo '<img class="frontpagesectionimage" src="'.$CFG->wwwroot.'/theme/moodleofficial/pix/'.$page.'.gif" alt="" />';
+        echo '<img class="frontpagesectionimage" src="'.$CFG->wwwroot.'/theme/moodleofficial/pix/'.$page.'.gif" alt="" />'; // TODO: this should be really in subdirectory and we should use pix_url() method...
     }
 
     /// Main page
@@ -104,14 +102,13 @@ function print_moodle_page_top($page, $content="", $navlinks=array()) {
 /* Prints the blocks and footer */
 function print_moodle_page_bottom($page, $topcourseid=0) {
 
-    global $CFG, $SESSION, $USER, $SITE, $ME, $DB, $OUTPUT, $PAGE;
+    global $OUTPUT;
 
 /// Set up the page
     if (!$topcourseid) {
         $topcourseid = 1003;  // default blocks
     }
 
-    $CFG->pagepath = '';
     echo $OUTPUT->footer();
 }
 
