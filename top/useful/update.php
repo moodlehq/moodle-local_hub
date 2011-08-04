@@ -4,7 +4,7 @@
 
 define('CLI_SCRIPT', true);
 
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
+require(dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/config.php');
 
 require($CFG->dirroot.'/mod/forum/lib.php');
 
