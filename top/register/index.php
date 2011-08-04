@@ -44,12 +44,12 @@ echo $OUTPUT->heading($strregistration);
 
 /// Check the registration
 
-if (!$form = data_submitted("nomatch")) {
+if (!$form = data_submitted()) {
     notice("Sorry, but you need to call this page from a Moodle registration page.");
 }
 
 if (empty($form->url)) {
-    notify(get_string("missingurl"));
+    notice(get_string("missingurl"));
 
 } else if (substr_count(strtolower($form->url), "localhost") or 
            substr_count(strtolower($form->url), "127.0.0.1") or
@@ -67,22 +67,22 @@ if (empty($form->url)) {
     notice("Sorry, but your URL \"$form->url\" is either malformed, or failed the DNS check.");
 
 } else if (empty($form->secret)) {
-    notify("Missing secret key");
+    notice("Missing secret key");
 
 } else if (empty($form->sitename)) {
-    notify(get_string("missingsitename"));
+    notice(get_string("missingsitename"));
 
 } else if (empty($form->country)) {
-    notify(get_string("missingcountry"));
+    notice(get_string("missingcountry"));
 
 } else if (!isset($form->public)) {
     $form->public = 0;
 
 } else if (empty($form->adminname)) {
-    notify(get_string("missingfullname"));
+    notice(get_string("missingfullname"));
 
 } else if (empty($form->adminemail)) {
-    notify(get_string("missingemail"));
+    notice(get_string("missingemail"));
 
 } else if (preg_match("/\@localhost$/i", $form->adminemail) or !verifymxr($form->adminemail)) {
     notice("Sorry, but your email \"$form->adminemail\" is not valid.");

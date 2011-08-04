@@ -183,6 +183,8 @@ function edit_button($isadmin, $country="") {
 function ismoodlesiteadmin() {
     global $CFG, $USER;
 
+    //TODO: hehe, this should definitely use new capability from local_moodleorg plugin! (skodak)
+
     if (isset($USER->id)) {
         return (is_siteadmin()              // Normal admins
                or $USER->id == 1074    // Sean Keogh - s.keogh@pteppic.net

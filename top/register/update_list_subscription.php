@@ -98,5 +98,3 @@ function update_list_subscription_soap($op, $email, $debug = false) {
     return $return;
 }
 
-
-?>
