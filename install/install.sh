@@ -85,3 +85,9 @@ cd moodleofficial
 #git checkout -b MOODLE_21_STABLE origin/MOODLE_21_STABLE
 echo /theme/moodleofficial/ >> ../../.git/info/exclude
 cd ../..
+
+
+# fix some permissions
+
+chmod ago+w local/moodleorg/top/stats/cache
+chmod ago+w local/moodleorg/top/sites/cache

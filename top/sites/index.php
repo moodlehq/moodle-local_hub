@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
 require_once($CFG->dirroot.'/local/moodleorg/top/stats/graphlib.php');
 require_once($CFG->dirroot.'/local/moodleorg/top/stats/googlecharts.php');
 
-define('STATS_DIR', 'sites');
+define('STATS_DIR', 'local/moodleorg/top/sites');
 
 $countries = get_string_manager()->get_list_of_countries();
 $countryarray = get_combined_country_info();
