@@ -23,7 +23,8 @@ php fake_install.php
 
 ==TODO==
 * verify site registration from older Moodle versions works
-* test donations script!!
+* test donations script!
+* test google search via http://moodle.org/public/search and the bloody autofocused tracker search box
 * what does error500 do?
 * you may need some new apm or eaccelerator script, add it to local/moodleorg/cli (you can copy the basics rom fake_install.php)
 

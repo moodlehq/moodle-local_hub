@@ -3,7 +3,7 @@
     require('../../../../config.php');
     require_once('../toplib.php');
 
-    $PAGE->set_url('/search/');
+    $PAGE->set_url('/public/search/');
     $PAGE->set_context(get_system_context());
     $PAGE->set_title('Search moodle.org');
     $PAGE->set_heading($PAGE->title);
