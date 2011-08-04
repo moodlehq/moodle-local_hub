@@ -5,6 +5,8 @@ Disallow: /mod/forum/search.php
 Disallow: /course/recent.php
 Disallow: /sites/
 Disallow: /sites/*.*
+Disallow: /local/moodleorg/top/sites/
+Disallow: /local/moodleorg/top/sites/*.*
 
 User-agent: Adsbot-Google
 Disallow: /*.*
