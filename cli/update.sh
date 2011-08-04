@@ -43,7 +43,7 @@ cd ..
 # back to moodle root
 cd ..
 
-#contrib plugns
+#contrib plugins
 cd local/contrib
 git pull
 cd ../..
