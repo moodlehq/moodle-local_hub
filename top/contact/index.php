@@ -48,6 +48,7 @@
 
             if (email_to_user($userto, $userfrom, $messagesubject, $messagetext)) {
                 print_moodle_content($contactsent);
+                echo $OUTPUT->continue_button(new moodle_url('/'));
             } else {
                 $OUTPUT->notify('There was an error while sending out the message. Please try again later.');
             }
