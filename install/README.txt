@@ -18,6 +18,7 @@ php fake_install.php
 
 ==Missing bits==
 * mod/cvsadmin
+* update cron path to useful/update.sh
 
 
 
