@@ -13,4 +13,4 @@ if (empty($installedversion)) {
     set_config('version', '2011070100', 'local_moodleorg');
 }
 
-echo 'ok';
+echo "ok\n\n";
