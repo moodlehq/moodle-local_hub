@@ -3,7 +3,7 @@
 /// Calculate Using Moodle PHMs
 
 require('../../../config.php');
-require_once($CFG->dirroot.'/phmlib.php');
+require_once(dirname(__FILE__).'/phmlib.php');
 
 $courseid = 5;           // Using Moodle course
 $groupid = 1;            // Using Moodle PHM group id

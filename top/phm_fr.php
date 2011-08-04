@@ -3,7 +3,7 @@
 /// Calculate Moodle en Español PHMs
 
 require('../../../config.php');
-require_once('phmlib.php');
+require_once(dirname(__FILE__).'/phmlib.php');
 
 $courseid = 20;               // Moodle en Francais course
 $groupid = 195;               // Moodle en Francais PHM group id
