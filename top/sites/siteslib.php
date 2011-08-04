@@ -15,25 +15,24 @@ function get_combined_country_info() {
             LEFT JOIN (
                 SELECT
                     country,
-                    IFNULL(COUNT(DISTINCT `id`),0) public
+                    IFNULL(COUNT(DISTINCT id),0) public
                 FROM {registry}
-                WHERE `public` >0 
+                WHERE public >0
                 AND confirmed=1 AND (unreachable<2 OR override BETWEEN 1 AND 3) AND users>0
-                GROUP BY `country`
+                GROUP BY country
             ) registry_public ON registry_public.country=registry.country
             LEFT JOIN (
                 SELECT
-                    `country`,
-                    IFNULL(COUNT(DISTINCT `id`),0) private
+                    country,
+                    IFNULL(COUNT(DISTINCT id),0) private
                 FROM {registry}
-                WHERE `public` = 0
+                WHERE public = 0
                 AND confirmed=1 AND (unreachable<2 OR override BETWEEN 1 AND 3) AND users>0
-                GROUP BY `country`
+                GROUP BY country
             ) registry_private ON registry_private.country=registry.country
             GROUP BY registry.country
             HAVING (public>0 OR private>0)
             ORDER BY total DESC";
-    $sql = sprintf($sql, $CFG->prefix, $CFG->prefix, $CFG->prefix);
     $resultingcountries = $DB->get_records_sql($sql);
     $countryarray = Array();
     $countryarray['00'] = new stdClass;
