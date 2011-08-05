@@ -1,7 +1,7 @@
 <?php
 
-    require('../../../../config.php');
-    require_once('../toplib.php');
+    require('../../../../../config.php');
+    require_once('../../toplib.php');
 
     $PAGE->set_url('/public/search/');
     $PAGE->set_context(get_system_context());
@@ -15,7 +15,7 @@
 
 <div class="generalbox boxaligncenter" style="text-align:center" >
 
-<form action="http://moodle.org/search" id="cse-search-box">
+<form action="http://moodle.org/public/search/" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="017878793330196534763:-0qxztjngoy" />
     <input type="hidden" name="cof" value="FORID:9" />

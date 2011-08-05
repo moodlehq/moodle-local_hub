@@ -119,11 +119,9 @@
     RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt)$  local/moodleorg/top/$1 [L]
 
     Redirect    /search               http://moodle.org/public/search/
-    RewriteRule ^public/search$       /public/search/                 [R=301,L]
-    RewriteRule ^public/search/(.*)$  local/moodleorg/top/search/$1   [L]
 
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|register|security|sites|stats|support|useful|userpics|forums/my|support/commercial)$   /$1/ [R=301,L]
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|register|security|sites|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
+    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|public|register|security|sites|stats|support|useful|userpics|forums/my|public/search|support/commercial)$   /$1/ [R=301,L]
+    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|public|register|security|sites|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
 
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress/(.*)$   local/moodleorg/top/cafepress/$1 [L]
