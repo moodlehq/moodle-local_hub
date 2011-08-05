@@ -123,6 +123,11 @@
     RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|public|register|security|sites|stats|support|useful|userpics|forums/my|public/search|support/commercial)$   /$1/ [R=301,L]
     RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|error500|events|forums|images|logo|network|news|other|public|register|security|sites|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
 
+# plugins database
+    RewriteRule ^plugins$       /plugins/        [R=301,L]
+    RewriteRule ^plugins/(.*)$  local/plugins/$1 [L]
+
+
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress/(.*)$   local/moodleorg/top/cafepress/$1 [L]
 

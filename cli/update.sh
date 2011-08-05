@@ -44,7 +44,7 @@ cd ..
 cd ..
 
 #contrib plugins
-cd local/contrib
+cd local/plugins
 git pull
 cd ../..
 
