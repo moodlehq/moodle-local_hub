@@ -116,7 +116,7 @@
 
 # top pages and dirs added to http://moodle.org/ - it is much easier to maintain all these in local plugin
 
-    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt)$  local/moodleorg/top/$1 [L]
+    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
 
     Redirect    /search               http://moodle.org/public/search/
 
