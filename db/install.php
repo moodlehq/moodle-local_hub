@@ -30,4 +30,19 @@ function xmldb_local_hub_install() {
     $messageprovider->name = 'coursehubmessage';
     $messageprovider->component = 'local/hub';
     $DB->insert_record('message_providers', $messageprovider);
+
+    //create a new scale called featured, at this moment moment we have no alternative than adding it to the DB
+    //core TODO: better way to create a scale or adding a scale MDL-21631, MDL-16474
+    $scale = new stdClass();
+    $scale->courseid = 0;
+    $admin = get_admin();
+    $scale->userid = empty($admin)?2:$admin->id; //if the script is run before an admin has ever been created, assign userid = 2 (usual admin default)
+    $scale->name = 'coursefeatured';
+    $scale->scale = get_string('featured', 'local_hub');
+    $scale->description = get_string('featureddesc', 'local_hub');
+    $scale->descriptionformat = 1;
+    $scale->timemodified = time();
+    $scale->id = $DB->insert_record('scale', $scale);
+    //save the scale id into the config table
+    set_config('courseratingscaleid', $scale->id, 'local_hub');
 }

@@ -1763,9 +1763,11 @@ class local_hub {
             $ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
             $ratingoptions->userid = $USER->id;
             $ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/index.php";
+            $ratingoptions->component = 'local_hub';
+            $ratingoptions->ratingarea = 'featured';
 
             $rm = new rating_manager();
-            $courses = $rm->get_ratings($ratingoptions);
+            $courses = $rm->get_ratings($ratingoptions); //this function return $ratingoptions->items with information about the ratings
 
             foreach ($courses as $course) {
                 $course->rating->settings->permissions->viewany = 1;
@@ -1910,6 +1912,62 @@ function hub_comment_permissions($params) {
 
     return array('view' => true,
         'post' => $post);
+}
+
+/**
+ * Return rating related permissions
+ *
+ * @param string $options the context id
+ * @return array an associative array of the user's rating permissions
+ */
+function hub_rating_permissions($contextid, $component, $ratingarea) {
+    if ($component != 'local_hub' || $ratingarea != 'featured') {
+        // We don't know about this component/ratingarea so just return null to get the
+        // default restrictive permissions.
+        return null;
+    }
+    if (is_siteadmin()) {
+        $permissions = array('view' => true, 'viewany' => true, 'viewall' => true, 'rate' => true);
+    } else {
+        $permissions = array('view' => false, 'viewany' => false, 'viewall' => false, 'rate' => false);
+    }
+    return $permissions;
+}
+
+/**
+ * Validates a submitted rating
+ * @param array $params submitted data
+ *            context => object the context in which the rated items exists [required]
+ *            component => The component for this plugin - should always be local_hub [required]
+ *            ratingarea => object the context in which the rated items exists [required]
+ *            itemid => int the ID of the object being rated [required]
+ *            scaleid => int the scale from which the user can select a rating. Used for bounds checking. [required]
+ *            rating => int the submitted rating [required]
+ *            rateduserid => int the id of the user whose items have been rated. NOT the user who submitted the ratings. 0 to update all. [required]
+ *            aggregation => int the aggregation method to apply when calculating grades ie RATING_AGGREGATE_AVERAGE [required]
+ * @return boolean true if the rating is valid. Will throw rating_exception if not
+ */
+function hub_rating_validate($params) {
+    global $DB;
+
+    // Check the component is local_hub
+    if ($params['component'] != 'local_hub') {
+        throw new rating_exception('invalidcomponent');
+    }
+    // validate rating area
+    if ($params['ratingarea'] != 'featured') {
+        throw new rating_exception('invalidratingarea');
+    }
+    //validate item id
+    if (!$record = $DB->get_record('hub_course_directory', array('id'=>$params['itemid']))) {
+        throw new rating_exception('invalidratingitemid');
+    }
+    //validate context id
+    if (get_context_instance(CONTEXT_COURSE, SITEID)->id != $params['context']->id) {
+        throw new rating_exception('invalidcontext');
+    }
+
+    return true;
 }
 
 /**

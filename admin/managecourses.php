@@ -236,6 +236,19 @@ foreach ($courses as &$course) {
     $courseimagenumbers[] = $course->screenshots;
 }
 
+//add rating information to the course
+require_once($CFG->dirroot . '/rating/lib.php');
+$ratingoptions = new stdclass();
+$ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+$ratingoptions->items = $courses;
+$ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
+$ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
+$ratingoptions->userid = $USER->id;
+$ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/admin/managecourses.php";
+$ratingoptions->component = 'local_hub';
+$ratingoptions->ratingarea = 'featured';
+$rm = new rating_manager();
+$courses = $rm->get_ratings($ratingoptions); //this function return $ratingoptions->items with information about the ratings
 
 
 /// OUTPUT
