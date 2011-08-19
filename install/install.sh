@@ -73,7 +73,7 @@ cd ..
 cd local
 git clone git@github.com:moodlehq/moodle-local_phpmyadmin.git phpmyadmin
 cd phpmyadmin
-git checkout -b MOODLE_20_STABLE_3_3_10 origin/MOODLE_20_STABLE_3_3_10
+#git checkout -b MOODLE_20_STABLE_3_3_10 origin/MOODLE_20_STABLE_3_3_10
 echo /local/phpmyadmin/ >> ../../.git/info/exclude
 cd ../../
 
