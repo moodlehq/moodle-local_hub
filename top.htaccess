@@ -1,15 +1,13 @@
     RewriteEngine On
 
 # protect this script
-    Redirect /local/moodleorg/top.htaccess http://localhost
+    Redirect /local/moodleorg/top.htaccess http://moodle.org
 
 
 #   Uncomment these three lines below to redirect for maintenance.  The IP is OURS
 #    RewriteBase /
 #    RewriteCond %{REMOTE_HOST} !^124\.169\.227\.78
 #    RewriteRule .* http://www.moodle.com/sorry [R=302,L]
-
-#php_value session.save_path  "2;/var/www/data/moodle/sessions"
 
     # return error 500 for rss feeds temporarily - added by jordan
     #RewriteRule ^rss/file.php/(.*) /error500/index.php?e=500 [L,NC]
@@ -108,26 +106,24 @@
     Redirect /mod/newmodule_template.zip http://download.moodle.org/modules/NEWMODULE.zip
 
     #spammers
-    Redirect /phpwcms http://localhost
-    Redirect /bookmark4u http://localhost
-    Redirect /_vti_bin http://localhost
-    Redirect /MSOffice http://localhost
-    Redirect /mod/forum/ws http://localhost
+    Redirect /phpwcms http://www.google.com
+    Redirect /bookmark4u http://google.com
+    Redirect /_vti_bin http://www.google.com
+    Redirect /MSOffice http://www.google.com
+    Redirect /mod/forum/ws http://www.google.com
+
 
 # top pages and dirs added to http://moodle.org/ - it is much easier to maintain all these in local plugin
 
-    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
-
     Redirect    /search               http://moodle.org/public/search/
-
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|events|forums|images|logo|network|news|other|public|register|security|sites|spam|stats|support|useful|userpics|forums/my|public/search|support/commercial)$   /$1/ [R=301,L]
-    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|events|forums|images|logo|network|news|other|public|register|security|sites|spam|stats|support|useful|userpics)/(.*)$  local/moodleorg/top/$1/$2 [L]
+    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
+    RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|events|forums/my|forums|images|logo|network|news|other|public/search|public|register|security|sites|spam|stats|support/commercial|support|useful|userpics)($|(/(.*))) local/moodleorg/top/$1/$4 [L]
 
 # plugins database
-    RewriteRule ^plugins$       /plugins/        [R=301,L]
-    RewriteRule ^plugins/(.*)$  local/plugins/$1 [L]
-
+    RewriteRule ^plugins($|(/(.*))) local/plugins/$3 [L]
 
 # cafepress - can be removed if updated to use /cafepress/
-    RewriteRule ^local/cafepress/(.*)$   local/moodleorg/top/cafepress/$1 [L]
+    RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
 
+# Apache ErrorDocument handler
+    RewriteRule ^error($|(/(.*))) local/moodleorg/top/error/$3 [L]
