@@ -1,0 +1,34 @@
+/* @group moodlemenu */
+#moodlemenu {
+  clear: both;
+  border-top: 1px solid #ffe39d;
+  border-bottom: 0.16em solid #e4af5f;
+  z-index: 10;
+  background: #ffe39d url(pix/menu_grad.jpg) repeat-x left top;
+}
+#site-index #moodlemenu,
+#my-index #moodlemenu {
+  border-bottom-color: #ffe39d;
+}
+#Menu1 {
+  float: left;
+  width: auto !important;
+}
+#Menu1 li a {
+  padding: 0.5em 4px;
+}
+#Menu1 .first {
+  padding-left: 15px;
+}
+#global-search {
+  float: right;
+  margin: 2px 2px 0 0;
+}
+#global-search .input-text {
+  padding: 1px;
+  margin: 2px 0;
+  background-color: #fdfae9;
+  border: 1px solid #ffb63c;
+  font-size: 100%;
+}
+/* @end */

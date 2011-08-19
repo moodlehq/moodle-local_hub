@@ -1,0 +1,9 @@
+
+  SmartMenus 6 License
+=======================
+
+    The SmartMenus script is free for non-commercial use but is not free software.
+
+    For details on licensing, please visit:
+
+    http://www.smartmenus.org/license/

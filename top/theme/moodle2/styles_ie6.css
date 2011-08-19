@@ -1,0 +1,152 @@
+/*
+ * These styles are ONLY included for IE 6 (via meta.php)
+ */
+
+/* Reset fonts for IE */
+body {font-size:small;font:x-small;}
+pre,code,kbd,samp,tt {font-size:108%;}
+
+body {
+  padding-bottom: 10px;
+}
+.arrow.sep {
+  font-family: arial, sans-serif;
+  padding-left: 0.5em;
+}
+.arrow_button input {
+  font-family: arial, sans-serif;
+}
+#header-home {
+  float: none;
+}
+#header-home-i3 {
+  /*width: 100%;*/
+}
+#header-home .headermain,
+#header .headermain {
+  margin-left: 15px;
+}
+.navbar {
+  height: 2.1em !important;
+  margin-bottom: -1px;
+  z-index: -1;
+}
+.navbar .breadcrumb {
+  margin-left: 9px;
+}
+#navbtnarea form {
+  float: none;
+}
+#site-index .navbar,
+#my-index .navbar {
+  filter: Alpha(opacity=75);
+}
+.headermenu {
+  margin-right: 6px;
+}
+#header-home .headermenu,
+#my-index #header .headermenu {
+  margin-right: 5px;
+}
+#moodlemenu .MM li {
+  padding-bottom: 2px;
+}
+#content-i3 {
+  height: 250px;
+}
+#login-index .loginbox {
+  height: auto;
+}
+.calendar-controls .previous,
+.calendar-controls .next {
+  font-family: arial, sans-serif;
+}
+#mod-forum-search .submit input {
+  margin-left: 50%;
+}
+#bottomleft,
+#bottomright {
+  font-size: 1px;
+  line-height: 1;
+}
+#footerimg,
+#bottomright {
+  right: -1px;
+}
+.footernotice {
+  padding-bottom: 10px;
+}
+p.footernotice {
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+input {
+  padding: expression((this.type=="submit")?'0 4px':this.currentStyle.paddingTop+" "+this.currentStyle.paddingRight+" "+this.currentStyle.paddingBottom+" "+this.currentStyle.paddingLeft);
+}
+#global-search .input-submit {
+  padding: 0;
+}
+#Menu1 li a {
+  padding: 0.5em 4px;
+}
+.sideblock .content input {
+  text-align: expression((this.type=="submit")?'center':this.currentStyle.textAlign);
+}
+.sideblock .content div.btn input {
+  width: expression((this.type=="submit")?'auto':this.currentStyle.width);
+}
+.sideblock {
+  overflow: hidden;
+}
+.sideblock ul.list li {
+  padding-bottom: 1px;
+}
+.sideblock div.column.c0 {
+  margin: 2px 0 0 -8px;
+}
+ul.section li {
+  margin: 0.3em 0;
+}
+.block_online_users .listentry img.userpicture {
+  left: -22px;
+}
+.tabtree {
+  height: 100%;
+}
+.tabrow0 {
+  padding-top: 10px;
+}
+.tabrow0 li {
+  margin-left: 0;
+}
+.tabrow0 li.first {
+  margin-left: -4px;
+  margin-right: -4px;
+}
+.tabrow0 li.last a {
+  margin-right: 0;
+}
+.tabrow0 li.onerow {
+  margin-right: 0;
+}
+.tabrow0 a {
+  padding: 0 0 0 13px;
+}
+.tabrow0 a span {
+  padding: 12px 1em 4px 0;
+}
+.tabrow0 div,
+.tabrow0 ul {
+  top: 3.2em;
+  padding: 0.2em 0;
+}
+form.mform input {
+  margin-left: expression((this.type=="text"||this.type=="file"||this.type=="password")?'-10px':'0');
+}
+form.mform textarea {
+ margin-left: -10px;
+}
+.showroom {
+  clear: none;
+}

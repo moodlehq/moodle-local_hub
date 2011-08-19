@@ -1,0 +1,23 @@
+
+  SmartMenus 6 - How to update from older versions
+====================================================
+
+    To update from older SmartMenus 6 versions, you just need to replace your
+    script core file "c_smartmenus.js" with the updated one. Your configuration
+    file "c_config.js" (without any changes) should be completely compatible
+    with every future v6.x release.
+
+    If there are any changes to the configuration file "c_config.js" in the new
+    version you are updating to (like the addition of new variables that control
+    new features), they will be explicitly mentioned in the changelog file
+    "changelog.txt" for the versions that have been released between your
+    current version and the one your are updating to. But note that you will not
+    need to change your config file in any way to make your menus function as
+    before with the updated script core. You may just need to make the changes
+    to take advantage of any new features.
+
+    If you use core CSS (you should know what this is if you are updating and
+    you are using it - if you don't know, however, please take a look at the
+    manual "manual.html"), you will also need to regenerate it with your config
+    file and the new script core as any future version may include some small
+    changes to the CSS code used by the script.

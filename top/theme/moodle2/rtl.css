@@ -1,0 +1,289 @@
+/* @override 
+	http://ubuntu.userver.lan/moodle_19_2col/theme/moodle2/rtl.css
+	http://moodle.org/theme/moodle2/rtl.css?forceconfig=moodle2
+*/
+ul {
+  padding-right: 2.4em;
+}
+ol {
+  padding-right: 2.6em;
+}
+/* @group header */
+#header-home .headermain,
+#header .headermain {
+  margin: 1.3em 30px 2.25em 0px;
+}
+#header-home .headermenu,
+#header .headermenu,
+#my-index #header .headermenu {
+  margin-left: 20px;
+}
+#Menu1 {
+  float: right !important;
+}
+#global-search {
+  float: left;
+  margin-left: 15px;
+}
+/* @end */
+/* @group navbtn area */
+#navbtnarea {
+  text-align: left;
+}
+#navbtnarea .navbutton {
+  float: left;
+  background: #ffe39d url(pix/bb_right_8_white.gif) no-repeat right bottom;
+  padding: 2px 1em 4px 1em;
+}
+#navbtnarea #switchrole {
+  float: right;
+  margin-left: 5px;
+}
+#navbtnarea form {
+  float: left;
+}
+/* @end */
+/* @group footer */
+#footer .logo {
+  float: right;
+  margin: 6px 10px 0 0;
+}
+#footer .logininfo {
+  float: left;
+  margin: 8px 12px;
+}
+#footer .helplink {
+  float: right;
+  margin: 8px 2em 8px 10px;
+}
+/* @end */
+td#left-column {
+  padding-right: 0;
+  padding-left: 5px;
+}
+td#right-column {
+  padding-right: 5px;
+  padding-left: 0;
+}
+.sideblock .header .hide-show-image {
+  float: left;
+}
+.sideblock .content div.info {
+  text-align: right;
+}
+.calendar-controls .current {
+  text-align: center;
+}
+div.coursebox {
+  float: right;
+}
+.sideblock .list li {
+  margin-right: 16px;
+}
+.sideblock div.column.c0 {
+  margin-right: -19px;
+  float: right;
+}
+div.sideblock div.content * {
+  text-align: right;
+}
+div.calendar-controls a.next {
+  text-align: left;
+}
+div.bt {
+  text-align: right;
+}
+div.bb {
+  text-align: right;
+}
+div.sideblock div.header div.bt div {
+  background-position: 100% 0;
+  right: -13px;
+}
+div.sideblock div.header div.bt {
+  background-position: 0 0;
+  left: -13px;
+  margin: 0 13px 0 0;
+  text-align: right;
+}
+div.sideblock div.header div.i1 {
+  background-position: 100% 0;
+  padding: 0;
+}
+div.sideblock div.header div.i2 {
+  background-position: 0 0;
+  padding: 0 12px;
+}
+div.sideblock div.header div.i3 {
+  /*background: transparent;*/
+}
+div.sideblock div.bt div {
+  background-position: 100% 0;
+  right: -13px;
+}
+div.sideblock div.bt {
+  background-position: 0 0;
+  left: 0;
+  margin: 0 13px 0 0;
+  text-align: right;
+}
+div.sideblock div.bb div {
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  left: 0;
+  right: -13px;
+}
+div.sideblock div.bb {
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  margin: 0 13px 0 0;
+}
+div.sideblock div.i1 {
+  background-position: 100% 0;
+  padding: 0;
+}
+div.sideblock div.i2 {
+  background-position: 0 0;
+  padding: 0 12px;
+}
+div.sideblock div.i3 {
+  /*background: transparent;*/
+}
+/* @group block online users */
+.block_online_users .info {
+  padding-bottom: 0.5em;
+}
+.block_online_users .list li {
+  margin-right: 0;
+  padding-left: 0;
+}
+.sideblock .list li {
+}
+.block_online_users .listentry div.user {
+  float: none;
+  padding: 0 22px 0 16px;
+}
+.block_online_users .listentry div.user img {
+  position: absolute;
+  right: 0;
+  left: auto;
+  margin: 0;
+}
+.block_online_users .listentry div.message {
+  float: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.block_online_users .listentry div.message img {
+  position: absolute;
+  left: 0;
+}
+/* @end */
+/* @group block messages */
+.block_messages .info {
+  padding-bottom: 0.5em;
+}
+.block_messages .list li {
+  margin-right: 0;
+  padding-left: 0;
+  position: relative;
+}
+.block_messages .listentry div.user {
+  float: none;
+  padding: 0 22px 0 16px;
+}
+.block_messages .listentry img {
+  margin: 0;
+}
+.block_messages .listentry .user img {
+  position: absolute;
+  right: 0;
+  left: auto;
+}
+.block_messages .listentry div.message {
+  float: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.block_messages .listentry div.message img {
+  position: absolute;
+  left: 0;
+}
+/* @end */
+#course-view .section td.right {
+  border-style: none;
+}
+.section .activity a {
+  float: right;
+  padding: 2px 0;
+}
+.section .activity {
+  text-align: right;
+}
+.activity .unread {
+  float: left;
+}
+
+.forumpost .left {
+border-style:none solid solid none;
+padding:6px 0 4px 4px;
+}
+
+.forumpost .header .picture {
+text-align:right;
+}
+
+caption, th, td {
+text-align:right;
+}
+
+.forumpost .content {
+border-left:1px solid #EEEEEE;
+border-right:0 none;
+}
+
+.forumpost .content .posting {
+border-left:0 none;
+border-right:1px solid #EEEEEE;
+}
+
+.forumpost .attachments {
+text-align:left;
+}
+
+img.icon {
+margin-left:4px;
+margin-right:0;
+}
+
+.forumpost .topic .subject {
+margin-left:1em;
+margin-right:0;
+}
+
+.forumheaderlist th.header, .forumheaderlist td {
+text-align:right;
+}
+
+.forumheaderlist .lastpost {
+text-align:right;
+}
+
+.forumheaderlist th.lastpost {
+background:#FFF1D0 url(pix/bt_left_8_white.gif) no-repeat scroll left top;
+padding-right:10px;
+padding-left:0;
+}
+
+.forumheaderlist th.topic {
+background:#FFF1D0 url(pix/bt_right_8_white.gif) no-repeat scroll right top;
+padding-right:10px;
+padding-left:0;
+}
+
+.section .forum a {
+margin-left:0.5em;
+margin-right:0;
+} 

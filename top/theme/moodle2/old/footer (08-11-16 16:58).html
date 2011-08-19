@@ -1,0 +1,42 @@
+
+<?php    
+    print_container_end(); // content container
+
+    print_container_start(true, '', 'footer');
+
+    echo '<a class="logo" href="http://moodle.org/">';
+    echo '<img height="20" alt="Moodle" src="'.$CFG->httpsthemewww .'/'. current_theme().'/pix/moodle-logo-1.gif"/>';
+    echo '</a>';
+
+    echo '<p class="helplink">';
+    echo page_doc_link(get_string('moodledocslink'));
+    echo '</p>';
+
+    echo $loggedinas;
+    // echo $homelink;
+
+    $useridarray = array(2, 3 // MD
+                          );
+    
+    if (!empty($performanceinfo) && isloggedin() && in_array($USER->id, $useridarray)) {
+        echo $performanceinfo;
+    }
+    
+    echo '<div id="bottomleft">&nbsp;</div>';
+    echo '<div id="bottomright">&nbsp;</div>';
+?>
+
+    <p class="footernotice">
+        All content on this web site is made available under the 
+        <a href="http://docs.moodle.org/en/License">GNU General Public License</a>, unless otherwise stated. <br />
+        Please see our <a href="http://docs.moodle.org/en/Category:FAQ">FAQ index</a> and read our <a href="http://docs.moodle.org/en/Policy_on_Advertising">Policy on advertising</a>.<br />
+        <a href="http://moodle.org/contact/">Contact the community manager</a>
+    </p>
+    
+    <?php print_container_end(); ?>
+</div>
+<?php
+    include($CFG->themedir.'/moodle2/js/js.php');
+?>
+</body>
+</html>

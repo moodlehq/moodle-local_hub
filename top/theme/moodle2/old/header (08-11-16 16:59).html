@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html<?php echo $direction ?>>
+<head>
+    <?php echo $meta ?>
+    <meta name="keywords" content="moodle, <?php echo $title ?> " />
+    <title><?php echo $title ?></title>
+    <link rel="shortcut icon" href="<?php echo $CFG->httpsthemewww .'/'. current_theme() ?>/favicon.ico" />
+    <?php include("$CFG->javascript"); ?>
+    <script type="text/javascript" src="<?php echo $CFG->httpsthemewww .'/'. current_theme() ?>/sm/c_config.js"></script>
+    <script type="text/javascript" src="<?php echo $CFG->httpsthemewww .'/'. current_theme() ?>/sm/c_smartmenus.js"></script>
+</head>
+
+<body<?php echo " $bodytags"; ?>>
+
+<div id="page">
+
+<?php if ($home) {  // This is what gets printed on the home page only  
+?>
+    <div id="header-wrapper">
+        <?php print_container_start(true, '', 'header-home'); ?>
+            <h1 class="headermain"><a href="<?php echo $CFG->httpswww .'/' ?>"><img id="moodlelogo" src="<?php echo $CFG->httpsthemewww .'/'. current_theme() ?>/pix/moodle-logo.gif" alt="Moodle" /></a></h1>
+            <div class="headermenu"><?php echo $menu ?></div>
+            <div id="moodlemenu" class="clearfix">
+                <?php include('menu.php'); ?>
+                <form id="global-search" method="get" action="http://moodle.org/public/search">
+                    <div>
+                        <input type="hidden" name="cx" value="017878793330196534763:-0qxztjngoy" />
+                        <input type="hidden" name="cof" value="FORID:9" />
+                        <input type="hidden" name="ie" value="UTF-8" />
+                        <input class="input-text" type="text" name="q" size="15" maxlength="255"/>
+                        <input class="input-submit" type="submit" name="sa" value="Search moodle.org"/>
+                    </div>
+                </form>
+            </div>
+        <?php print_container_end(); ?>
+    	<div class="navbar clearfix">
+    		&nbsp;      
+        </div>
+    </div>
+<?php } else if ($heading) {  // This is what gets printed on any other page with a heading 
+?>
+    <div id="header-wrapper">
+        <?php print_container_start(true, '', 'header'); ?>
+            <h1 class="headermain"><a href="<?php echo $CFG->httpswww .'/' ?>"><img id="moodlelogo" src="<?php echo $CFG->httpsthemewww .'/'. current_theme() ?>/pix/moodle-logo.gif" alt="Moodle" /></a></h1>
+            <div class="headermenu"><?php echo $menu ?></div>
+            <div id="moodlemenu" class="clearfix">
+                <?php include('menu.php'); ?>
+                <form id="global-search" method="get" action="http://moodle.org/public/search">
+                    <div>
+                        <input type="hidden" name="cx" value="017878793330196534763:-0qxztjngoy" />
+                        <input type="hidden" name="cof" value="FORID:9" />
+                        <input type="hidden" name="ie" value="UTF-8" />
+                        <input class="input-text" type="text" name="q" size="15" maxlength="255"/>
+                        <input class="input-submit" type="submit" name="sa" value="Search moodle.org"/>
+                    </div>
+                </form>
+            </div>
+        <?php print_container_end(); ?>
+    </div>
+    <div class="navbar clearfix">
+    <?php if ($navigation) { // This is the navigation table with breadcrumbs
+        ?>
+        <div class="breadcrumb"><?php print_navigation($navigation); ?></div>
+        <?php if (!empty($button) && ($button != '&nbsp;')) { ?>
+        </div>
+        <div id="navbtnarea" class="clearfix">
+            <div class="navbutton"><?php echo $button; ?></div>
+        <?php }
+    } ?>
+    </div>
+<?php } else { ?>
+    <div id="no-header-wrapper">
+        <!--<div id="topright">&nbsp;</div>-->
+    </div>
+<?php } ?>
+    <!-- END OF HEADER -->
+    <?php print_container_start(false, '', 'content'); ?>
