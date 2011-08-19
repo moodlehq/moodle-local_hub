@@ -1,54 +1,24 @@
 #!/bin/bash
 
-# let's start in the moodle root
-cd ../../..
+basedir="/var/www/vhosts/moodle.org/html"
+gitconfig="git config core.filemode false"
 
 # blocks =============================
-cd blocks
-
-cd cool_sites
-git pull
-cd ..
-
-cd partners
-git pull
-cd ..
-
-cd unanswered_discussions
-git pull
-cd ..
-
-# back to moodle root
-cd ..
+cd $basedir/blocks/cool_sites && $gitconfig && git pull
+cd $basedir/blocks/partners && $gitconfig  && git pull
+cd $basedir/blocks/unanswered_discussions && $gitconfig  && git pull
 
 # filters =============================
-cd filter
+cd $basedir/filter/geshi && $gitconfig  && git pull
+cd $basedir/filter/moodledocs && $gitconfig && git pull
+cd $basedir/filter/moodlelinks && $gitconfig && git pull
+cd $basedir/filter/skypeicons && $gitconfig && git pull
 
-cd geshi
-git pull
-cd ..
+# contrib plugins =====================
+cd $basedir/local/plugins && $gitconfig && git pull
 
-cd moodledocs
-git pull
-cd ..
+# theme ===============================
+cd $basedir/theme/moodleofficial && $gitconfig && git pull
 
-cd moodlelinks
-git pull
-cd ..
-
-cd skypeicons
-git pull
-cd ..
-
-# back to moodle root
-cd ..
-
-#contrib plugins
-cd local/plugins
-git pull
-cd ../..
-
-# theme
-cd theme/moodleofficial
-git pull
-cd ../..
+# moodle ==============================
+cd $basedir && $gitconfig && git pull
