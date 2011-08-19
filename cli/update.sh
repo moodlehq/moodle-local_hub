@@ -18,7 +18,7 @@ cd $basedir/filter/skypeicons && $gitconfig && git pull
 cd $basedir/local/plugins && $gitconfig && git pull
 
 # theme ===============================
-cd $basedir/theme/moodleofficial&& $gitconfig && git pull
+cd $basedir/theme/moodleofficial && $gitconfig && git pull
 
 # moodle ==============================
 cd $basedir && $gitconfig && git pull
