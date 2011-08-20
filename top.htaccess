@@ -21,9 +21,9 @@
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
     #RewriteCond %{HTTP_REFERER} !^http://(\w+\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
     # all theme requests
-    RewriteRule ^theme/.*$ - [F,L]
+    #RewriteRule ^theme/.*$ - [F,L]
     # or just certain files
-    #RewriteRule ^theme/.*\.(js|css|jpg|gif|png|txt|html|php)$ - [F,L]
+    RewriteRule ^theme/.*\.(js|css|txt|html|php)$ - [F,L]
 
     RewriteCond %{QUERY_STRING} ^(.*)f(.*)=release.html(.*)$
     RewriteRule ^doc/$ http://docs.moodle.org/en/Release_Notes? [R=301,L]
