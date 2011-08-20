@@ -16,11 +16,18 @@
     RewriteCond %{QUERY_STRING} d=http://
     RewriteRule (.*) - [F,L]
 
-    # Block non moodle.[org|com|net] sites from hotlinking our theme files.
+    # Block sites from hotlinking our theme files.
+    #
+    # Temp allow styles_ie(6|7).css until we figure out where its coming from - jordan
+    RewriteCond %{REQUEST_URI} !^/theme/moodle2/styles_ie(6|7).css
+    # Allow empty referer
     RewriteCond %{HTTP_REFERER} !^$
+    # Allow moodle.[org|com|net]
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
-    #RewriteCond %{HTTP_REFERER} !^http://(\w+\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
-    # all theme requests
+    # Allow google for site cache, translate, image search etc..
+    RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?google\.com($|(/(.*))) [NC]
+    RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?googleusercontent.com($|(/(.*))) [NC]
+    # Block all theme requests
     #RewriteRule ^theme/.*$ - [F,L]
     # or just certain files
     RewriteRule ^theme/.*\.(js|css|txt|html|php)$ - [F,L]
