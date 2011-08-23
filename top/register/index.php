@@ -182,12 +182,7 @@ if (empty($form->url)) {
         }
 
     } else if ($pending) {   // simply updated the pending entry, don't subscribe to list
-        if ($entry->courses > 1 || $entry->users > 10 ||
-            $entry->posts > 10   || $entry->questions > 3 || $entry->resources > 10) {
-            $entry->confirmed = 1;
-        } else {
-            $entry->confirmed = 0;
-        }
+        $entry->confirmed = 1;    // Always now!  We don't check numbers of things any more. Rely no sitechecker later  MD 22/8/11
         $entry->id = $pending->id;
         if ($DB->update_record("registry", $entry)) {
             if (!empty($entry->mailme)) {
@@ -206,12 +201,7 @@ if (empty($form->url)) {
         }
 
     } else {   // No entry exists yet, so make a new one.
-        if ($entry->courses > 1 || $entry->users > 10 ||
-            $entry->posts > 10   || $entry->questions > 3 || $entry->resources > 10) {
-            $entry->confirmed = 1;
-        } else {
-            $entry->confirmed = 0;
-        }
+        $entry->confirmed = 1;    // Always now!  We don't check numbers of things any more. Rely on sitechecker later  MD 22/8/11
         $entry->timecreated = $timenow;
 
         if ($DB->insert_record("registry", $entry)) {
