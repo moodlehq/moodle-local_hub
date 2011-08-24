@@ -111,6 +111,7 @@ $string['description'] = 'Description';
 $string['description_help'] = 'The hub description will always appear on the hub directory.';
 $string['donotdeleteormodify'] = 'DO NOT DELETE OR MODIFY THIS USER !';
 $string['downloadable'] = 'courses I can download';
+$string['downloadablecourses'] = 'Downloadable courses';
 $string['editcourse'] = 'Edit';
 $string['educationallevel'] = 'Educational level';
 $string['educationallevel_help'] = 'What educational level are you searching for?  In the case of communities of educators, this level describes the level they are teaching.';
@@ -158,6 +159,7 @@ $string['enabled_help'] = 'You can enabled/disabled the hub server.';
 $string['enablerssfeeds'] = 'RSS feeds';
 $string['enablerssfeeds_help'] = 'If enabled, a RSS feed icon will be displayed at the bottom of the search page. If disabled, RSS cannot be read.';
 $string['enrollable'] = 'courses I can enrol in';
+$string['enrollablecourses'] = 'Enrollable courses';
 $string['enroldownload'] = 'Find';
 $string['enroldownload_help'] = 'Some courses listed in this directory are being advertised so that people can come and participate in them on the original site.
 

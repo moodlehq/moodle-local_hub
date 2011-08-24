@@ -66,6 +66,8 @@ class local_hub_external extends external_api {
         $resultinfo['language'] = $hubinfo['language'];
         $resultinfo['sites'] = $hubinfo['sites'];
         $resultinfo['courses'] = $hubinfo['courses'];
+        $resultinfo['enrollablecourses'] = $hubinfo['enrollablecourses'];
+        $resultinfo['downloadablecourses'] = $hubinfo['downloadablecourses'];
         if (has_capability('local/hub:viewinfo', $context)) {
              $resultinfo['contactname'] = $hubinfo['contactname'];
              $resultinfo['contactemail'] = $hubinfo['contactemail'];           
@@ -92,6 +94,8 @@ class local_hub_external extends external_api {
                     'url' => new external_value(PARAM_URL, 'hub url'),
                     'sites' => new external_value(PARAM_NUMBER, 'number of registered sites on this hub', VALUE_OPTIONAL),
                     'courses' => new external_value(PARAM_NUMBER, 'number total of courses from all registered sites on this hub', VALUE_OPTIONAL),
+                    'enrollablecourses' => new external_value(PARAM_INT, 'number total of visible enrollable courses on this hub', VALUE_OPTIONAL),
+                    'downloadablecourses' => new external_value(PARAM_INT, 'number total of visible downloadable courses on this hub', VALUE_OPTIONAL),
                 )
                 , 'hub information');
     }

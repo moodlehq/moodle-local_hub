@@ -707,7 +707,7 @@ class local_hub {
      */
     public function get_registered_sites_total() {
         global $DB;
-        return $DB->count_records('hub_site_directory', array('visible' => 1, 'deleted' => 0));
+        return $DB->count_records('hub_site_directory', array('deleted' => 0));
     }
 
     /**
@@ -880,6 +880,20 @@ class local_hub {
         $hubinfo['url'] = $CFG->wwwroot;
         $hubinfo['sites'] = $this->get_registered_sites_total();
         $hubinfo['courses'] = $this->get_registered_courses_total();
+
+        //enrollable course total
+        $options = array();
+        $options['onlyvisible'] = true;
+        $options['downloadable'] = false;
+        $options['enrollable'] = true;
+        $enrollablecourses = $this->get_courses($options, 0, 0, true);
+        $hubinfo['enrollablecourses'] = $enrollablecourses;
+
+        //downloadable course total
+        $options['downloadable'] = true;
+        $options['enrollable'] = false;
+        $downloadablecourses = $this->get_courses($options, 0, 0, true);
+        $hubinfo['downloadablecourses'] = $downloadablecourses;
         return $hubinfo;
     }
 

@@ -131,15 +131,20 @@ class hub_registration_form extends moodleform {
         $mform->addElement('static', 'urlstring',
                 get_string('url', 'local_hub'), $CFG->wwwroot);
 
-        $registeredsites = $hub->get_registered_sites_total();
-        $registeredcourses = $hub->get_registered_courses_total();
-
+        $hubinfo = $hub->get_info();
         $mform->addElement('static', 'sitesstring',
-                get_string('registeredsites', 'local_hub'), $registeredsites);
-        $mform->addElement('hidden', 'sites', $registeredsites);
+                get_string('registeredsites', 'local_hub'), $hubinfo['sites']);
+        $mform->addElement('hidden', 'sites', $hubinfo['sites']);
         $mform->addElement('static', 'coursesstring',
-                get_string('registeredcourses', 'local_hub'), $registeredcourses);
-        $mform->addElement('hidden', 'courses', $registeredcourses);
+                get_string('registeredcourses', 'local_hub'), $hubinfo['courses']);
+        $mform->addElement('hidden', 'courses', $hubinfo['courses']);
+        $mform->addElement('static', 'enrollablecoursesstring',
+                get_string('enrollablecourses', 'local_hub'), $hubinfo['enrollablecourses']);
+        $mform->addElement('hidden', 'enrollablecourses', $hubinfo['enrollablecourses']);
+        $mform->addElement('static', 'downloadablecoursesstring',
+                get_string('downloadablecourses', 'local_hub'), $hubinfo['downloadablecourses']);
+        $mform->addElement('hidden', 'downloadablecourses', $hubinfo['downloadablecourses']);
+
 
         //if the hub is private do not display the register button
         if ($privacy != HUBPRIVATE and empty($this->_customdata['alreadyregistered'])) {
