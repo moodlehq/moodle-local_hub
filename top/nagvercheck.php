@@ -9,7 +9,7 @@ define('MATURITY_BETA',     100);   // feature complete, ready for preview and t
 define('MATURITY_RC',       150);   // tested, will be released unless there are fatal bugs
 define('MATURITY_STABLE',   200);   // ready for production deployment
 
-require_once("version.php");
+require_once("../../../version.php");
 
 $nagiosip = "174.120.103.202";
 
