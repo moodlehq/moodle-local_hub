@@ -30,22 +30,22 @@ echo html_writer::end_tag('div');
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 // print_heading('Moodle logo');
 echo $OUTPUT->heading('Moodle logo');
-echo '<p class="centerpara smalltext"><img src="logo-240x60.gif" alt="Moodle logo" /><br />
-<a href="logo-240x60.gif" title="logo-240x60.gif 6.3KB">[240 x 60]</a>&nbsp; &nbsp; &nbsp;
-<a href="logo-1024x254.jpg" title="logo-1024x254.jpg 59.4KB">[1024 x 254]</a>&nbsp; &nbsp; &nbsp;
-<a href="logo-4045x1000.jpg" title="logo-4045x1000.jpg 285.3KB">[4045 x 1000]</a>
+echo '<p class="centerpara smalltext"><img src="/logo/logo-240x60.gif" alt="Moodle logo" /><br />
+<a href="/logo/logo-240x60.gif" title="logo-240x60.gif 6.3KB">[240 x 60]</a>&nbsp; &nbsp; &nbsp;
+<a href="/logo/logo-1024x254.jpg" title="logo-1024x254.jpg 59.4KB">[1024 x 254]</a>&nbsp; &nbsp; &nbsp;
+<a href="/logo/logo-4045x1000.jpg" title="logo-4045x1000.jpg 285.3KB">[4045 x 1000]</a>
 </p>';
 // print_heading('Moodle `M` logo');
 echo $OUTPUT->heading('Moodle `M` logo');
-echo '<p class="centerpara smalltext"><img src="mlogo-126x100.gif" alt="Moodle M logo" /><br />
-<a href="mlogo-126x100.gif" title="mlogo-126x100.gif 5.0KB">[126 x 100]</a>
+echo '<p class="centerpara smalltext"><img src="/logo/mlogo-126x100.gif" alt="Moodle M logo" /><br />
+<a href="/logo/mlogo-126x100.gif" title="mlogo-126x100.gif 5.0KB">[126 x 100]</a>
 </p>';
 // print_heading('Desktop wallpaper');
 echo $OUTPUT->heading('Desktop wallpaper');
-echo '<p class="centerpara smalltext"><img src="wallpaper-thumbnail.jpg" alt="Moodle desktop wallpaper" /><br />
-<a href="wallpaper-1024x768.jpg" title="wallpaper-1024x768.jpg 42.6KB">[1024 x 768]</a>&nbsp; &nbsp; &nbsp;
-<a href="wallpaper-1280x960.jpg" title="wallpaper-1280x960.jpg 60.8KB">[1280 x 960]</a>&nbsp; &nbsp; &nbsp;
-<a href="wallpaper-1600x1200.jpg" title="wallpaper-1600x1200.jpg 69.7KB">[1600 x 1200]</a>
+echo '<p class="centerpara smalltext"><img src="/logo/wallpaper-thumbnail.jpg" alt="Moodle desktop wallpaper" /><br />
+<a href="/logo/wallpaper-1024x768.jpg" title="wallpaper-1024x768.jpg 42.6KB">[1024 x 768]</a>&nbsp; &nbsp; &nbsp;
+<a href="/logo/wallpaper-1280x960.jpg" title="wallpaper-1280x960.jpg 60.8KB">[1280 x 960]</a>&nbsp; &nbsp; &nbsp;
+<a href="/logo/wallpaper-1600x1200.jpg" title="wallpaper-1600x1200.jpg 69.7KB">[1600 x 1200]</a>
 </p>';
 // print_simple_box_end();
 echo html_writer::end_tag('div');
