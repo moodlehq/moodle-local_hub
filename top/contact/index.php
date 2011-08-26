@@ -15,7 +15,9 @@
                               'contactbugstitle',
                               'contactbugs',
                               'contactsecurity',
-                              'http://tracker.moodle.org/|moodletrackertitle',
+                              'http://tracker.moodle.org/|moodletrackertitle'); /*
+                              
+                              // Contact form removed by Jordan at Martins request on 2011/08/08
                               'contactmoodleorgtitle',
                               'contactmoodleorgemail',
                               '<div class="moodletop link"><span class="arrow sep">►</span> <a href="mailto:s%75%70po%72%74%40%6d%6f%6f%64l%65%2e%6f%72%67">support@moodle.org</a></div>'
@@ -26,13 +28,13 @@
         $contactcommunity[] = 'contactlogin';
         $contactcommunity[ ]= 'http://moodle.org/login/|contactmoodleorglogin';
     }
-    $contactsent = array('contactsent');
+    $contactsent = array('contactsent'); */
 
     /* This script sends out email : requiring login helps block spam.
      * TODO : find a way to let anonymous user send out email without opening
      * the door to spam.
      */
-
+    /*
     if (isloggedin()) {
 
         if (($frm = data_submitted()) && confirm_sesskey()) {
@@ -53,7 +55,7 @@
                 $OUTPUT->notify('There was an error while sending out the message. Please try again later.');
             }
 
-        } else { /* print out the form */
+        } else { */ /* print out the form */
             print_moodle_content($contactintro);
             print_moodle_content($contactcommunity);
             echo "<br /><br />";
@@ -61,10 +63,10 @@
             include('contact.html');
         }
 
-    } else  {
+ // } else  {
         print_moodle_content($contactintro);
         print_moodle_content($contactcommunity);
-    }
+ // }
 
 
     print_moodle_page_bottom('contact');
