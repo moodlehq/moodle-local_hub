@@ -55,7 +55,7 @@
                 $OUTPUT->notify('There was an error while sending out the message. Please try again later.');
             }
 
-        } else { */ /* print out the form */
+        } else {
             print_moodle_content($contactintro);
             print_moodle_content($contactcommunity);
             echo "<br /><br />";
@@ -63,7 +63,7 @@
             include('contact.html');
         }
 
- // } else  {
+    } else  { */
         print_moodle_content($contactintro);
         print_moodle_content($contactcommunity);
  // }
