@@ -357,7 +357,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     //bulk operation checkbox html
                     $checkboxhtml = html_writer::tag('div',
                                     html_writer::checkbox('bulk-' . $courseiteration,
-                                            $course->id, false, '', array()),
+                                            $course->id, false, '', array('class' => 'hubmanagecoursecheckbox')),
                                     array('class' => 'hubcoursedelete'));
 
                     //visible icon html
@@ -677,7 +677,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 $bulkformparam['method'] = 'post';
                 $bulkformparam['action'] = new moodle_url('', $optionalurlparams);
                 $bulkbutton = html_writer::empty_tag('input',
-                                array('name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
+                                array('class' => 'bulksubmitbutton', 'name' => 'bulksubmitbutton', 'id' => 'bulksubmit',
                                     'type' => 'submit',
                                     'value' => get_string('bulkoperationperform', 'local_hub')));
                 $renderedhtml .= html_writer::tag('div', $bulkbutton,

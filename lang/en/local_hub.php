@@ -276,6 +276,7 @@ $string['no'] = 'No';
 $string['nocomments'] = 'No comments';
 $string['nocourse'] = 'No courses match your search.';
 $string['nocoursereturn'] = 'The hub has been set to return no course on web service called.';
+$string['nocourseselected'] = 'No courses selected';
 $string['none'] = 'None';
 $string['noratings'] = 'No ratings';
 $string['or'] = 'or';

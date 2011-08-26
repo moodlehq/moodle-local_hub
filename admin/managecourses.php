@@ -306,5 +306,9 @@ if (!empty($pagingbarhtml)) {
     echo $pagingbarhtml;
 }
 
+$PAGE->requires->string_for_js('nocourseselected', 'local_hub');
+$PAGE->requires->yui_module('moodle-local_hub-courses', 'M.local_hub.init_hubcourses',
+        array(array('scriptname' => 'local/hub/admin/managecourses.php')));
+
 //display footer
 echo $OUTPUT->footer();
