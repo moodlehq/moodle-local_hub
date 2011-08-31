@@ -89,7 +89,7 @@ $boxheading = "Access Denied - Spammer Detected";
 $displaycaptcha = false;
 
 if (isset($_SERVER['ANTISPAM_THREAT'])) {
-  if ($_SERVER['ANTISPAM_THREAT'] < '25') {
+  if ($_SERVER['ANTISPAM_THREAT'] < '20') {
     if ($memcache_obj->get("antispam_".$_SERVER['REMOTE_ADDR'])) {
       // user is on blacklist and threat level below threshold and passed captcha
       $boxheading = "Access Granted";
