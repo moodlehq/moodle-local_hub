@@ -23,7 +23,7 @@
  */
 
 //defined('MOODLE_INTERNAL') || die();
-require('../config.php');
+require('../../../../config.php');
 require_once($CFG->libdir.'/formslib.php');
 require_once('HTML/QuickForm/input.php');
 
