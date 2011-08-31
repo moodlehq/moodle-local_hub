@@ -80,7 +80,7 @@ if ($mform_captcha->is_cancelled()) {
     redirect("/spam/");
 }
 
-$PAGE->requires->css('/spam.css');
+$PAGE->requires->css('/spam/spam.css');
 $PAGE->set_cacheable(false);
 $PAGE->set_title("Captcha Verification");
 $PAGE->set_heading($SITE->fullname);
