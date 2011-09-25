@@ -6,7 +6,7 @@ require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
 require_login();
 
 if (!ismoodlesiteadmin()) {
-    print_error('erroradminonly', 'moodle.org');
+    print_error('erroradminonly', 'local_moodleorg');
 }
 
 $cool = optional_param('cool', '', PARAM_INT);

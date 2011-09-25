@@ -2,9 +2,9 @@
 
 <div class="showroom clearfix">
  <div>
-   <h3><?php print_string('frontpagewelcometitle', 'moodle.org'); ?></h3>
-   <p><?php print_string('frontpagewelcome1', 'moodle.org'); ?></p>
-   <p><?php print_string('frontpagewelcome2', 'moodle.org'); ?></p>
+   <h3><?php print_string('frontpagewelcometitle', 'local_moodleorg'); ?></h3>
+   <p><?php print_string('frontpagewelcome1', 'local_moodleorg'); ?></p>
+   <p><?php print_string('frontpagewelcome2', 'local_moodleorg'); ?></p>
 </div>
 </div>
 
@@ -12,17 +12,17 @@
 <tr>
  <td class="frontpageimage c0"><div>
    <a class="frontpagelink" href="about/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/about.gif" alt="" />
-   <br /><?php print_string('nameaboutmoodle', 'moodle.org'); ?></a>
+   <br /><?php print_string('nameaboutmoodle', 'local_moodleorg'); ?></a>
  </div></td>
 
  <td class="frontpageimage c1"><div>
    <a class="frontpagelink" href="news/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/news.gif" alt="" />
-   <br /><?php print_string('namenews', 'moodle.org'); ?></a>
+   <br /><?php print_string('namenews', 'local_moodleorg'); ?></a>
  </div></td>
 
  <td class="frontpageimage c2"><div>
    <a class="frontpagelink" href="support/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/support.gif" alt="" />
-   <br /><?php print_string('namesupport', 'moodle.org'); ?></a>
+   <br /><?php print_string('namesupport', 'local_moodleorg'); ?></a>
  </div></td>
 
 </tr>
@@ -30,17 +30,17 @@
 <tr>
  <td class="frontpageimage c0"><div>
    <a class="frontpagelink" href="community/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/community.gif" alt="" />
-   <br /><?php print_string('namecommunity', 'moodle.org'); ?></a>
+   <br /><?php print_string('namecommunity', 'local_moodleorg'); ?></a>
  </div></td>
 
  <td class="frontpageimage c1"><div>
    <a class="frontpagelink" href="development/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/development.gif" alt="" />
-   <br /><?php print_string('namedevelopment', 'moodle.org'); ?></a>
+   <br /><?php print_string('namedevelopment', 'local_moodleorg'); ?></a>
  </div></td>
 
  <td class="frontpageimage c2"><div>
    <a class="frontpagelink" href="downloads/"><img src="<?php echo $CFG->wwwroot ?>/theme/moodleofficial/pix/downloads.gif" alt="" />
-   <br /><?php print_string('namedownloads', 'moodle.org'); ?></a>
+   <br /><?php print_string('namedownloads', 'local_moodleorg'); ?></a>
  </div></td>
 
 </tr>

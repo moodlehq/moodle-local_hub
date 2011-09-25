@@ -15,7 +15,7 @@
                      'supportforumsenglish',
                      'http://moodle.org/course/view.php?id=5|supportforumsenglishname',
                      'supportforumslang',
-                     get_string('supportforumslangurl', 'moodle.org').'|supportforumslangname',
+                     get_string('supportforumslangurl', 'local_moodleorg').'|supportforumslangname',
                      'supportforumslist',
                      'http://moodle.org/course/|supportforumslistname',
                      'supportbookstitle',

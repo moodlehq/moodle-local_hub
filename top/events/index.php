@@ -3,7 +3,7 @@
     require('../../../../config.php');
     require_once('../toplib.php');
 
-    $html = get_string('events', 'moodle.org');
+    $html = get_string('events', 'local_moodleorg');
 
     $strings = array('events',
                      'http://moodle.org/calendar/view.php|newscalendar',
