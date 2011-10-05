@@ -47,7 +47,7 @@ function gather_version_information($years=1, $months=0, $days=0) {
     $start = microtime(true);
     $fromtime = mktime(0,0,0,date('m')-$months, date('d')-$days, date('Y')-$years);
     
-    $sql = 'SELECT moodlerelease, COUNT(DISTINCT id) releasecount FROM {registry} WHERE confirmed=1 AND timecreated>? AND users>0 GROUP BY moodlerelease';
+    $sql = 'SELECT moodlerelease, COUNT(DISTINCT id) releasecount FROM {registry} WHERE confirmed=1 AND timecreated>? GROUP BY moodlerelease';
     $resultingversions = $DB->get_records_sql($sql, array($fromtime));
     if (!is_array($resultingversions)) {
         return false;
@@ -215,7 +215,7 @@ function new_registrations_graph() {
                     FROM_UNIXTIME(timecreated, '%b') AS month,
                     FROM_UNIXTIME(timecreated, '%Y') AS year
                 FROM {registry}
-                WHERE timecreated!=0 AND confirmed=1 AND users>0 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
+                WHERE timecreated!=0 AND confirmed=1 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
             ) r
             GROUP BY r.monthdate
             ORDER BY r.dateorder ASC";
@@ -278,7 +278,7 @@ function all_sites_graph() {
                     FROM_UNIXTIME(timecreated, '%b') AS month,
                     FROM_UNIXTIME(timecreated, '%Y') AS year
                 FROM {registry}
-                WHERE timecreated!=0 AND confirmed=1 AND users > 0
+                WHERE timecreated!=0 AND confirmed=1
                 GROUP BY orderfield
             ) r
             LEFT JOIN (
@@ -286,7 +286,7 @@ function all_sites_graph() {
                     COUNT(timeunreachable) AS unreachable,
                     FROM_UNIXTIME(timeunreachable, '%Y%m') AS orderfield
                 FROM {registry}
-                WHERE timecreated!=0 AND (timeunreachable!=0 OR override NOT BETWEEN 1 AND 3) AND users >0 AND confirmed=1 AND unreachable > 1
+                WHERE timecreated!=0 AND (timeunreachable!=0 OR override NOT BETWEEN 1 AND 3) AND confirmed=1 AND unreachable > 1
                 GROUP BY orderfield
             ) as registry_lost ON registry_lost.orderfield=r.orderfield
             ORDER BY r.orderfield";
@@ -342,7 +342,7 @@ function moodle_implementation_map_graph() {
                 country, 
                 COUNT(DISTINCT id) AS countrycount
             FROM {registry}
-            WHERE confirmed=1 AND users>0 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
+            WHERE confirmed=1 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
             GROUP BY country 
             ORDER BY CountryCount DESC';
     $countryresults = $DB->get_records_sql($sql);

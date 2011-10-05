@@ -57,5 +57,5 @@ function stats_top_10_countries() {
 }
 
 function stats_get_criteria_sql($prefix='r') {
-    return $prefix.'.users > 0 AND ('.$prefix.'.unreachable < 2 OR '.$prefix.'.override IN (1, 2, 3)) AND '.$prefix.'.confirmed=1';
+    return '('.$prefix.'.unreachable < 2 OR '.$prefix.'.override IN (1, 2, 3)) AND '.$prefix.'.confirmed=1';
 }
