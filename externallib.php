@@ -154,7 +154,7 @@ class local_hub_external extends external_api {
 
         $params = self::validate_parameters(self::update_site_info_parameters(),
                         array('siteinfo' => $siteinfo));
-        
+
         //check that the hub can access the site
         $hubmanager = new local_hub();
         if (!$hubmanager->is_remote_site_valid($params['siteinfo']['url'])) {
@@ -167,9 +167,8 @@ class local_hub_external extends external_api {
 
         //retieve site url
         $token = optional_param('wstoken', '', PARAM_ALPHANUM);
-        $localhub = new local_hub();
 
-        $siteurl = $localhub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
+        $siteurl = $hubmanager->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
 
         //this following error should never happen
         //(communication record doesn't exist and webservice token exists)
@@ -177,7 +176,7 @@ class local_hub_external extends external_api {
             throw new moodle_exception('noexistingcommunication', 'local_hub');
         }
 
-        $result = $localhub->register_site($params['siteinfo'], $siteurl);
+        $result = $hubmanager->register_site($params['siteinfo'], $siteurl);
 
         return 1;
     }

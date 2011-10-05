@@ -1582,14 +1582,36 @@ class local_hub {
     
     /**
      * Check if the remote site is valid (not localhost and available by the hub)
+     * Note: it doesn't matter if the site returns a 404 error.
+     * The point here is to check if the site exists. It doesn not matter if the hub can not call the site,
+     * as by security design, a hub should never call a site.
+     * However an admin user registering his site should be able to access the site,
+     * as people searching on the hub.
+     * So we want:
+     * a) to check that the url is not a local address
+     * b) to check that the site return some not empty headers
+     *    (it exists, at least the domain name is registered)
      * @param string $url the site url
-     * @return boolean true if the site is valid 
+     * @return boolean true if the site is valid
      */
     public function is_remote_site_valid($url) {
-        $siteheaders = get_headers($url);
+
+        //Retrieve some of the site header info by curl
+        //Curl is twice faster and more than the get_headers() php function
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,            $url);
+        curl_setopt($ch, CURLOPT_HEADER,         true);
+        curl_setopt($ch, CURLOPT_NOBODY,         true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT,        15);
+        $r = curl_exec($ch);
+        $curlinfo = curl_getinfo($ch);
+        //Note: if not reach, then $siteheaders contains an array with one empty element
+
+        //Check if site is valid
         if ( strpos($url, 'http://localhost') !== false
-                or strpos($url, 'http://127.0.0.1') !== false 
-                or $siteheaders === false) {           
+                or strpos($url, 'http://127.0.0.1') !== false
+                or empty($curlinfo['header_size'])) {
             return false;
         }
         return true;
