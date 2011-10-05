@@ -70,7 +70,7 @@ $questions                  = optional_param('questions', '', PARAM_FLOAT);
 $resources                  = optional_param('resources', '', PARAM_FLOAT);
 $participantnumberaverage   = optional_param('participantnumberaverage', '', PARAM_FLOAT);
 $modulenumberaverage        = optional_param('modulenumberaverage', '', PARAM_FLOAT);
-$moodleversion              = optional_param('moodleversion', '', PARAM_INT);
+$moodleversion              = optional_param('moodleversion', '', PARAM_FLOAT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
 

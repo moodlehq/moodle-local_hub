@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20110225" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20111005" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -27,7 +27,7 @@
         <FIELD NAME="regioncode" TYPE="char" LENGTH="6" NOTNULL="false" SEQUENCE="false" COMMENT="the region code following the ISO 3166-2 standard" PREVIOUS="countrycode" NEXT="street"/>
         <FIELD NAME="street" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="street address" PREVIOUS="regioncode" NEXT="geolocation"/>
         <FIELD NAME="geolocation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="the geolocation number" PREVIOUS="street" NEXT="moodleversion"/>
-        <FIELD NAME="moodleversion" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the current moodle version of the site" PREVIOUS="geolocation" NEXT="moodlerelease"/>
+        <FIELD NAME="moodleversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle version of the site" PREVIOUS="geolocation" NEXT="moodlerelease"/>
         <FIELD NAME="moodlerelease" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle release" PREVIOUS="moodleversion" NEXT="ip"/>
         <FIELD NAME="ip" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the last IP (updated after a valid validation)" PREVIOUS="moodlerelease" NEXT="courses"/>
         <FIELD NAME="courses" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of courses, -1 if unknown" PREVIOUS="ip" NEXT="users"/>

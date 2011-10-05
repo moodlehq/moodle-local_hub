@@ -132,7 +132,7 @@ class local_hub_external extends external_api {
                                 'resources' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of resources'),
                                 'participantnumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise average number of participants'),
                                 'modulenumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise verage number of course modules'),
-                                'moodleversion' => new external_value(PARAM_INT, 'moodle version'),
+                                'moodleversion' => new external_value(PARAM_FLOAT, 'moodle version'),
                                 'moodlerelease' => new external_value(PARAM_TEXT, 'moodle release'),
                             ), 'site info')
                 )

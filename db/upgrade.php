@@ -351,6 +351,26 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2011081200, 'local', 'hub');
     }
 
+    if ($oldversion < 2011100500) {
+
+        // Changing type of field moodleversion on table hub_site_directory to char
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('moodleversion', XMLDB_TYPE_CHAR, '10', null, null, null, null, 'geolocation');
+
+        // Launch change of type for field moodleversion
+        $dbman->change_field_type($table, $field);
+
+        // Changing precision of field moodleversion on table hub_site_directory to (20)
+        $field = new xmldb_field('moodleversion', XMLDB_TYPE_CHAR, '20', null, null, null, null, 'geolocation');
+
+        // Launch change of precision for field moodleversion
+        $dbman->change_field_precision($table, $field);
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2011100500, 'local', 'hub');
+    }
+
+
 
     return $result;
 }
