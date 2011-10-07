@@ -25,7 +25,7 @@
     # Allow moodle.[org|com|net]
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
     # Allow test site - otherwise it breaks when testing...
-    RewriteCond %{HTTP_REFERER} !^http://moodleorg.moodle.local($|(/(.*))) [NC]
+    RewriteCond %{HTTP_REFERER} !^http://moodleorg.moodle.local($|((/|:)(.*))) [NC]
     # Allow google for site cache, translate, image search etc..
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?google\.com($|(/(.*))) [NC]
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?googleusercontent.com($|(/(.*))) [NC]
