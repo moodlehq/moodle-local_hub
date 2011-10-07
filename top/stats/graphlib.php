@@ -202,23 +202,19 @@ function new_registrations_graph() {
         return $graph;
     }
 
-    $sql = "SELECT 
-                r.monthdate,
-                r.month,
-                r.year,
-                COUNT(r.id) AS count
-            FROM (
-                SELECT
-                    id,
-                    FROM_UNIXTIME(timecreated, '%b %Y') AS monthdate,
-                    FROM_UNIXTIME(timecreated, '%Y%m') AS dateorder,
-                    FROM_UNIXTIME(timecreated, '%b') AS month,
-                    FROM_UNIXTIME(timecreated, '%Y') AS year
-                FROM {registry}
-                WHERE timecreated!=0 AND confirmed=1 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
-            ) r
-            GROUP BY r.monthdate
-            ORDER BY r.dateorder ASC";
+    $sql = "SELECT r.monthdate, r.month, r.year, COUNT(r.id) AS count
+              FROM (
+                SELECT id,
+                       FROM_UNIXTIME(timecreated, '%b %Y') AS monthdate,
+                       FROM_UNIXTIME(timecreated, '%Y%m') AS dateorder,
+                       FROM_UNIXTIME(timecreated, '%b') AS month,
+                       FROM_UNIXTIME(timecreated, '%Y') AS year
+                  FROM {registry}
+                 WHERE timecreated != 0 AND
+                       confirmed = 1
+                   ) r
+          GROUP BY r.monthdate
+          ORDER BY r.dateorder ASC";
     $monthresults = $DB->get_records_sql($sql);
     foreach ($monthresults as $row) {
         if ($row->month==date('M') && $row->year==date('Y')) continue;
