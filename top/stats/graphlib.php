@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
+require_once('lib.php');
+
 /** Used to put a timestamp on cached charts */
 define('STATS_CACHE_FILE_NAME_ID', date('Ymt'));
 /** Used when calling {@link logical_top_point} Rounds [up] to the the first digit */
@@ -42,12 +44,16 @@ define('STATS_LOGICALTOP_FIRSTTHREEDIGIT', 1000);
  * @param int $days The number of days to look back
  * @return array
  */
-function gather_version_information($years=1, $months=0, $days=0) {
+function gather_version_information($years = 1, $months = 0, $days = 0) {
     global $CFG, $DB;
     $start = microtime(true);
     $fromtime = mktime(0,0,0,date('m')-$months, date('d')-$days, date('Y')-$years);
     
-    $sql = 'SELECT moodlerelease, COUNT(DISTINCT id) releasecount FROM {registry} WHERE confirmed=1 AND timecreated>? GROUP BY moodlerelease';
+    $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
+              FROM {registry}
+             WHERE confirmed = 1 AND
+                   timecreated > ?
+          GROUP BY moodlerelease';
     $resultingversions = $DB->get_records_sql($sql, array($fromtime));
     if (!is_array($resultingversions)) {
         return false;
@@ -202,24 +208,28 @@ function new_registrations_graph() {
         return $graph;
     }
 
-    $sql = "SELECT r.monthdate, r.month, r.year, COUNT(r.id) AS count
+    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
+    $sql = "SELECT r.dateorder, COUNT(r.id) AS count
               FROM (
                 SELECT id,
-                       FROM_UNIXTIME(timecreated, '%b %Y') AS monthdate,
-                       FROM_UNIXTIME(timecreated, '%Y%m') AS dateorder,
-                       FROM_UNIXTIME(timecreated, '%b') AS month,
-                       FROM_UNIXTIME(timecreated, '%Y') AS year
+                       FROM_UNIXTIME(timecreated, '%Y%m') AS dateorder
                   FROM {registry}
-                 WHERE timecreated != 0 AND
+                 WHERE timecreated > 0 AND
+                       timecreated < :thismonth AND
                        confirmed = 1
                    ) r
-          GROUP BY r.monthdate
+          GROUP BY r.dateorder
           ORDER BY r.dateorder ASC";
-    $monthresults = $DB->get_records_sql($sql);
+    $monthresults = $DB->get_recordset_sql($sql, array('thismonth' => $thismonth));
+    $thismonthstr = date('Ym');
     foreach ($monthresults as $row) {
-        if ($row->month==date('M') && $row->year==date('Y')) continue;
-        $graph->add_value(array($row->count, $row->month, $row->year));
+        if ($row->dateorder == $thismonthstr) {
+            continue;
+        }
+        $timestamp = mktime(0, 0, 0, substr($row->dateorder, 4), 1, substr($row->dateorder, 0, 4));
+        $graph->add_value(array($row->count, date('M', $timestamp), date('Y', $timestamp)));
     }
+    $monthresults->close();
     return $graph;
 }
 
@@ -261,41 +271,49 @@ function all_sites_graph() {
         return $graph;
     }
 
-    $sql = "SELECT
-                r.orderfield,
-                r.month,
-                r.year,
-                r.created,
-                IFNULL(registry_lost.unreachable,0) as unreachable
+    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
+    $sql = "SELECT r1.dateorder, r1.created, IFNULL(r2.unreachable, 0) as unreachable
             FROM (
-                SELECT
-                    COUNT(timecreated) AS created,
-                    FROM_UNIXTIME(timecreated, '%Y%m') AS orderfield,
-                    FROM_UNIXTIME(timecreated, '%b') AS month,
-                    FROM_UNIXTIME(timecreated, '%Y') AS year
-                FROM {registry}
-                WHERE timecreated!=0 AND confirmed=1
-                GROUP BY orderfield
-            ) r
+                SELECT FROM_UNIXTIME(r.timecreated, '%Y%m') AS dateorder,
+                       COUNT(r.id) AS created
+                  FROM {registry} r
+                 WHERE r.timecreated > 0 AND
+                       r.timecreated < :thismonth1 AND
+                       r.confirmed = 1
+              GROUP BY dateorder
+            ) r1
             LEFT JOIN (
-                SELECT
-                    COUNT(timeunreachable) AS unreachable,
-                    FROM_UNIXTIME(timeunreachable, '%Y%m') AS orderfield
-                FROM {registry}
-                WHERE timecreated!=0 AND (timeunreachable!=0 OR override NOT BETWEEN 1 AND 3) AND confirmed=1 AND unreachable > 1
-                GROUP BY orderfield
-            ) as registry_lost ON registry_lost.orderfield=r.orderfield
-            ORDER BY r.orderfield";
-    $monthresults = $DB->get_records_sql($sql);
-    $thismonth = date('F Y');
-    $totalcreatedsofar = 0;
-    $totalremovedsofar = 0;
+                SELECT FROM_UNIXTIME(r.timeunreachable, '%Y%m') AS dateorder,
+                       COUNT(r.id) AS unreachable
+                  FROM {registry} r
+                 WHERE r.timeunreachable > 0 AND
+                       r.timeunreachable < :thismonth2 AND
+                       r.confirmed = 1 AND
+                       r.override NOT IN (1, 2, 3) AND
+                       r.unreachable > :maxunreachable2
+              GROUP BY dateorder
+            ) as r2 ON r2.dateorder = r1.dateorder
+            ORDER BY r1.dateorder";
+    $params = array(
+        'maxunreachable1' => STATS_MAX_UNREACHABLE,
+        'maxunreachable2' => STATS_MAX_UNREACHABLE,
+        'thismonth1' => $thismonth,
+        'thismonth2' => $thismonth,
+    );
+    $monthresults = $DB->get_records_sql($sql, $params);
+    $runningtotal = 0;
+    $thismonthstr = date('Ym');
     foreach ($monthresults as $row) {
-        if ($row->month==date('M') && $row->year==date('Y')) continue;
-	$totalcreatedsofar += (int)$row->created;
-        $totalremovedsofar += (int)$row->unreachable;
-        $totaltoshow = ($totalcreatedsofar-$totalremovedsofar) - $row->created;
-        $graph->add_value(array($totaltoshow, $row->created, substr($row->month,0,1), $row->year));
+        if ($row->dateorder == $thismonthstr) {
+            continue;
+        }
+        $timestamp = mktime(0, 0, 0, substr($row->dateorder, 4), 1, substr($row->dateorder, 0, 4));
+        $month = substr(date('M', $timestamp), 0, 1);
+        $year = date('Y', $timestamp);
+
+        $totaltoshow = $runningtotal - $row->created;
+        $runningtotal += $row->created - $row->unreachable;
+        $graph->add_value(array($totaltoshow, $row->created, $month, $year));
     }
     return $graph;
 }
@@ -334,17 +352,16 @@ function moodle_implementation_map_graph() {
         return $graph;
     }
 
-    $sql = 'SELECT 
-                country, 
-                COUNT(DISTINCT id) AS countrycount
-            FROM {registry}
-            WHERE confirmed=1 AND (timeunreachable=0 OR override BETWEEN 1 AND 3)
-            GROUP BY country 
-            ORDER BY CountryCount DESC';
-    $countryresults = $DB->get_records_sql($sql);
+    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    $sql = "SELECT r.country, COUNT(r.id) AS countrycount
+              FROM {registry} r
+             WHERE $where
+          GROUP BY r.country
+          ORDER BY countrycount DESC";
+    $countryresults = $DB->get_records_sql($sql, $params);
     $count = 0;
-    while($count<20) {
-        $country=array_shift($countryresults);
+    while ($count < 40) {
+        $country = array_shift($countryresults);
         $graph->add_value($country->country, 100-($count*5));
         $count++;
     }
@@ -390,7 +407,9 @@ function number_of_users_to_site_size($title, $start=0, $end=1000000, $rounder=4
     $graph->set_chart_title($title);
     $graph->set_style(GOOGLE_CHARTS_BAR_VERTICAL_GROUPED);
     $graph->set_bar_limit(24);
-    if ($start>=10000) $graph->set_x_label_interval(4);
+    if ($start >= 10000) {
+        $graph->set_x_label_interval(4);
+    }
     $graph->set_dimensions(400,375);
     $graph->use_second_xlabel();
     $filename = 'user_size_'.(string)$start.'_'.(string)$end.'.'.STATS_CACHE_FILE_NAME_ID.'.png';
@@ -402,19 +421,28 @@ function number_of_users_to_site_size($title, $start=0, $end=1000000, $rounder=4
         return $graph;
     }
 
-    $sql = 'SELECT 
-                users,
-                COUNT(DISTINCT id) as sitecount
-            FROM (
-                SELECT id, ROUND(users, -?) users FROM {registry} WHERE users>? AND users<=? AND confirmed=1 AND (timeunreachable=0 OR override IN (1 AND 3))
-            ) AS registry GROUP BY users ORDER BY users';
-    $sitesizeresults = $DB->get_records_sql($sql, array($rounder, $start, $end));
+    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+
+    $sql = "SELECT r.users, COUNT(r.id) as sitecount
+              FROM (
+                SELECT r.id, ROUND(r.users, -:rounder) users
+                  FROM {registry} r
+                 WHERE r.users > :start AND
+                       r.users <= :end AND
+                       $where
+                   ) AS r
+          GROUP BY r.users
+          ORDER BY r.users";
+    $params['rounder'] = $rounder;
+    $params['start'] = $start;
+    $params['end'] = $end;
+    $sitesizeresults = $DB->get_records_sql($sql, $params);
     $xlabel = true;
-    $secondxlabelpos = ceil(count($sitesizeresults)/2);
+    $secondxlabelpos = ceil(count($sitesizeresults) / 2);
     $count = 0;
     foreach ($sitesizeresults as $row) {
         $count++;
-        if ($secondxlabelpos==$count) {
+        if ($secondxlabelpos == $count) {
             $graph->add_value(array($row->sitecount, number_format($row->users), 'Users'));
         } else {
             $graph->add_value(array($row->sitecount, number_format($row->users)));
@@ -527,8 +555,12 @@ function moodle_users_per_site() {
     $range[] = array('start'=>1000000, 'end'=>1999999);
 
     $graph->set_bar_limit(count($range)+1);
-
-    $sql = 'SELECT COUNT(id) sitecount FROM {registry} r WHERE r.users>? AND r.users<=? AND (r.unreachable < 2 OR r.override IN (1, 2, 3)) AND r.confirmed=1';
+    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    $sql = "SELECT COUNT(id) sitecount
+              FROM {registry} r
+             WHERE r.users > :start AND
+                   r.users <= :end AND
+                   $where";
 
     $secondxlabelpos = ceil(count($range)/2);
     $count = 0;
@@ -536,8 +568,11 @@ function moodle_users_per_site() {
     $xlabelcount = count($range);
     $graph->overridelabelposition[] = 0;
     $graph->overridelabelposition[] = 0;
+    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
     foreach ($range as $key=>$group) {
-        $sitesizeresults = $DB->get_record_sql($sql, array($group['start'], $group['end']));
+        $params['start'] = $group['start'];
+        $params['end'] = $group['end'];
+        $sitesizeresults = $DB->get_record_sql($sql, $params);
         $count++;
         $label = number_format($group['start']);
         $graph->overridelabelposition[] = round((100/$xlabelcount)*($key+1), 1);
@@ -783,7 +818,7 @@ abstract class graph {
         if (!file_exists($this->filepath) || !is_dir($this->filepath)) {
             $outcome = mkdir($this->filepath, $CFG->directorypermissions);
             if (!$outcome) {
-                return $this->seterror("Failed to create the stats directory");
+                return $this->set_error("Failed to create the stats directory");
             }
         }
         $this->filename = $filename;

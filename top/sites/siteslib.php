@@ -1,39 +1,44 @@
 <?php
 
+defined('MOODLE_INTERNAL') || die;
+
 define('MAXVOTES', 3);
+
+require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
 
 function get_combined_country_info() {
     global $CFG, $DB;
 
+    list($publicwhere, $publicparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pub');
+    list($privatewhere, $privateparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pri');
+
+
     $countries = get_string_manager()->get_list_of_countries();
     $sql = "SELECT
-                registry.country,
-                IFNULL(registry_public.public,0)+IFNULL(registry_private.private,0) total,
-                IFNULL(registry_public.public,0) public,
-                IFNULL(registry_private.private,0) private
-            FROM {registry} registry
+                r.country,
+                IFNULL(rp.public, 0) + IFNULL(rr.private,0) total,
+                IFNULL(rp.public, 0) public,
+                IFNULL(rr.private, 0) private
+            FROM {registry} r
+
             LEFT JOIN (
-                SELECT
-                    country,
-                    IFNULL(COUNT(DISTINCT id),0) public
-                FROM {registry}
-                WHERE public >0
-                AND confirmed=1 AND (unreachable<2 OR override BETWEEN 1 AND 3) AND users>0
-                GROUP BY country
-            ) registry_public ON registry_public.country=registry.country
+                SELECT r.country, IFNULL(COUNT(r.id), 0) AS public
+                  FROM {registry} r
+                 WHERE r.public > 0 AND $publicwhere
+              GROUP BY r.country
+            ) rp ON rp.country = r.country
+
             LEFT JOIN (
-                SELECT
-                    country,
-                    IFNULL(COUNT(DISTINCT id),0) private
-                FROM {registry}
-                WHERE public = 0
-                AND confirmed=1 AND (unreachable<2 OR override BETWEEN 1 AND 3) AND users>0
-                GROUP BY country
-            ) registry_private ON registry_private.country=registry.country
-            GROUP BY registry.country
-            HAVING (public>0 OR private>0)
+                SELECT r.country, IFNULL(COUNT(r.id), 0) AS private
+                  FROM {registry} r
+                 WHERE r.public = 0 AND $privatewhere
+              GROUP BY r.country
+            ) rr ON rr.country = r.country
+
+            GROUP BY r.country
+            HAVING ( total > 0 )
             ORDER BY total DESC";
-    $resultingcountries = $DB->get_records_sql($sql);
+    $resultingcountries = $DB->get_records_sql($sql, array_merge($publicparams, $privateparams));
     $countryarray = Array();
     $countryarray['00'] = new stdClass;
     $countryarray['00']->countrycode = '00';
@@ -82,11 +87,14 @@ function get_combined_country_info() {
  */
 function get_sites_for_country($countrycode) {
     global $DB;
+    list($where, $params) = local_moodleorg_stats_get_confirmed_sql(null);
+    $params['countrycode'] = $countrycode;
+
     $country = new stdClass;
-    $country->totalsites =   $DB->count_records_select('registry', "confirmed=1 AND country LIKE ? AND (timeunreachable=0 OR override=1) AND users>0", array($countrycode));
-    $country->privatesites = $DB->count_records_select('registry', "confirmed=1 AND country LIKE ? AND (timeunreachable=0 OR override=1) AND users>0 AND public=0", array($countrycode));
-    $country->publicsites =  $country->totalsites-$country->privatesites;
-    $country->sites =        $DB->get_records_select('registry', "confirmed=1 AND country=? AND public != 0 AND (timeunreachable=0 OR override=1) AND users>0", array($countrycode), 'sitename, url', 'id,sitename,url,country,public,timecreated,cool,mailme');
+    $country->totalsites =   $DB->count_records_select('registry', "country LIKE :countrycode AND $where", $params);
+    $country->privatesites = $DB->count_records_select('registry', "country LIKE :countrycode AND public = 0 AND $where", $params);
+    $country->publicsites =  $country->totalsites - $country->privatesites;
+    $country->sites =        $DB->get_records_select('registry', "country LIKE :countrycode AND public != 0 AND $where", $params, 'sitename, url', 'id,sitename,url,country,public,timecreated,cool,mailme');
     return $country;
 }
 

@@ -27,24 +27,20 @@
 
 /** Include the nessecary config file :) */
 
+define('STATS_DIR', 'local/moodleorg/top/stats');
+
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/graphlib.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/googlecharts.php');
-//require_once($CFG->libdir.'/phpxml/xml.php');
+require_once($CFG->dirroot.'/'.STATS_DIR.'/lib.php');
+require_once($CFG->dirroot.'/'.STATS_DIR.'/graphlib.php');
+require_once($CFG->dirroot.'/'.STATS_DIR.'/googlecharts.php');
 
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
-define('STATS_DIR', 'local/moodleorg/top/stats');
-
 // Update the number of users to ensure it is accurate
-$moodle = $DB->get_record('registry', array('host'=>'moodle.org'), 'id,users', MUST_EXIST);
-$moodle->users = $DB->count_records('user', array('deleted'=>0));
-$DB->update_record('registry',$moodle);
+$moodle = local_moodleorg_stats_update_moodle_users();
 
-$site = get_site();
-$stats = stats_get_registry_stats();
+$stats = local_moodleorg_stats_get_registry_stats();
 
 
 $PAGE->set_context(get_system_context());
@@ -122,7 +118,7 @@ $table->head    = array(get_string('site'), get_string('statsusers', 'moodle.org
 $table->align   = array('left','right','right');
 $table->data    = array();
 
-$top10usersitesresults = stats_top_10_sites_by_users();
+$top10usersitesresults = local_moodleorg_stats_top_10_sites_by_users();
 foreach ($top10usersitesresults as $row) {
     $data = array();
     if ($row->public=='2') {
@@ -145,7 +141,7 @@ $table->head    = array(get_string('site'), get_string('statsusers', 'moodle.org
 $table->align   = array('left','right','right');
 $table->data    = array();
 
-$top10coursesitesresults = stats_top_10_sites_by_courses();
+$top10coursesitesresults = local_moodleorg_stats_top_10_sites_by_courses();
 foreach ($top10coursesitesresults as $row) {
     $data = array();
     if ($row->public=='2') {
@@ -194,7 +190,7 @@ $table->width = '400px';
 $table->head = array('Country', 'Registrations');
 $table->data = array();
 $table->align = array('left','right');
-$top10countries = stats_top_10_countries();
+$top10countries = local_moodleorg_stats_top_10_countries();
 $countrynames = get_string_manager()->get_list_of_countries();
 foreach ($top10countries as $row) {
     $data = Array($countrynames[$row->country], number_format($row->countrycount));
