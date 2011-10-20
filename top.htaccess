@@ -29,6 +29,8 @@
     # Allow google for site cache, translate, image search etc..
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?google\.com($|(/(.*))) [NC]
     RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?googleusercontent.com($|(/(.*))) [NC]
+    # Allow cafepress moodle store
+    RewriteCond %{HTTP_REFERER} !^http://(www|).cafepress.com(|.au)/moodle [NC]
     # Block all theme requests
     #RewriteRule ^theme/.*$ - [F,L]
     # or just certain files
