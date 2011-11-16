@@ -1931,7 +1931,7 @@ class local_hub {
  * used by Comment API
  * @return array
  */
-function hub_comment_permissions($params) {
+function local_hub_comment_permissions($params) {
     global $DB, $USER;
 
     $post = false;
@@ -1956,7 +1956,7 @@ function hub_comment_permissions($params) {
  * @param string $options the context id
  * @return array an associative array of the user's rating permissions
  */
-function hub_rating_permissions($contextid, $component, $ratingarea) {
+function local_hub_rating_permissions($contextid, $component, $ratingarea) {
     if ($component != 'local_hub' || $ratingarea != 'featured') {
         // We don't know about this component/ratingarea so just return null to get the
         // default restrictive permissions.
@@ -1983,7 +1983,7 @@ function hub_rating_permissions($contextid, $component, $ratingarea) {
  *            aggregation => int the aggregation method to apply when calculating grades ie RATING_AGGREGATE_AVERAGE [required]
  * @return boolean true if the rating is valid. Will throw rating_exception if not
  */
-function hub_rating_validate($params) {
+function local_hub_rating_validate($params) {
     global $DB;
 
     // Check the component is local_hub
@@ -2018,7 +2018,7 @@ function hub_rating_validate($params) {
  * }
  * @return boolean true if validate, otherwise throw an exception
  */
-function hub_comment_validate($comment_param) {
+function local_hub_comment_validate($comment_param) {
     global $DB;
 
     // validate comment area
