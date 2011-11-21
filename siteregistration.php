@@ -74,6 +74,11 @@ $moodleversion              = optional_param('moodleversion', '', PARAM_FLOAT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
 
+//hack to support Xlanguage MDL-30281 - Moodle regression explains in MDL-30297
+if (empty($language)) {
+    $language = optional_param('Xlanguage', '', PARAM_ALPHANUMEXT);
+}
+
 $sitevalues = array('name' => $name,
         'url' => $url,
         'token' => $token,
