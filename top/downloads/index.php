@@ -17,10 +17,7 @@
                      'http://download.moodle.org/windows/|downloadwintitle',
                      'downloadmodulestitle',
                      'downloadmodules',
-                     'http://moodle.org/mod/data/view.php?id=6009|downloadmodulestitle',
-                     'downloadthemestitle',
-                     'downloadthemes',
-                     'http://moodle.org/mod/data/view.php?id=6552|downloadthemestitle',
+                     'http://moodle.org/plugins|downloadmodulestitle',
                      'downloadlangtitle',
                      'downloadlang',
                      'http://download.moodle.org/lang16/|downloadlangtitle');
