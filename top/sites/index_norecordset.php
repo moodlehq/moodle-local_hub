@@ -47,7 +47,7 @@ if ($cool or $uncool) {
         if ($site = $DB->get_record('registry', array('id'=>$cool+$uncool))) {  // site exists
             $country = $site->country;
             if ($DB->record_exists('registry_votes', array('userid'=>$USER->id, 'siteid'=>$site->id))) {
-                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'moodle.org', s($site->sitename)));
+                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'local_moodleorg', s($site->sitename)));
             } else {
                 if ($cool) {
                     $site->cool = $site->cool + 1;
@@ -59,7 +59,7 @@ if ($cool or $uncool) {
                 $coolsite->cool = $site->cool;
                 $coolsite->cooldate = time();
                 $DB->update_record('registry', $coolsite);
-                
+
                 $vote = new stdClass;
                 $vote->userid = $USER->id;
                 $vote->siteid = $site->id;

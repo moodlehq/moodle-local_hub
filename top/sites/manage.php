@@ -14,7 +14,7 @@ $isadmin = ismoodlesiteadmin();
 require_login();
 
 if (!ismoodlesiteadmin()) {
-    print_error('erroradminonly', 'moodle.org');
+    print_error('erroradminonly', 'local_moodleorg');
 }
 
 $adminaccount = get_admin();
@@ -64,7 +64,7 @@ if (isset($delete) and confirm_sesskey()) {
     echo $OUTPUT->notification("Site '$site->sitename' has been removed from the registry", 'notifysuccess');
 
     echo '<center><a href="manage.php?frame=index" target="index">Continue</a></center>';
-    
+
     echo html_writer::end_tag('div');
     echo $OUTPUT->footer();
     exit;

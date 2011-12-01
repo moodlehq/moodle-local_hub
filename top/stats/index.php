@@ -44,8 +44,8 @@ $stats = local_moodleorg_stats_get_registry_stats();
 
 
 $PAGE->set_context(get_system_context());
-$PAGE->set_title(get_string('aboutstatisticstitle', 'moodle.org'));
-$PAGE->set_heading(get_string('aboutstatisticsheading', 'moodle.org'));
+$PAGE->set_title(get_string('aboutstatisticstitle', 'local_moodleorg'));
+$PAGE->set_heading(get_string('aboutstatisticsheading', 'local_moodleorg'));
 $PAGE->set_url(new moodle_url('/stats/'));
 $PAGE->navbar->add($PAGE->heading, $PAGE->url);
 
@@ -57,24 +57,24 @@ echo $OUTPUT->heading($PAGE->heading);
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>all_sites_graph(), 'alt'=>get_string('registrationgraphalt', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>all_sites_graph(), 'alt'=>get_string('registrationgraphalt', 'local_moodleorg')));
 echo html_writer::end_tag('p');
-echo html_writer::tag('p', get_string('registrationgraphdesc', 'moodle.org'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;'));
+echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;'));
 
 $table = new html_table();
 $table->attributes = array('class'=>'generaltable boxaligncenter');
 $table->width = '400px';
 $table->align = array('left','right');
 $table->data = array(
-    array(get_string('registeredsitestitle','moodle.org'), '<a href="http://moodle.org/sites/">'.number_format($stats->registrycount).'</a>'),
-    array(get_string('statscountries', 'moodle.org'), "<a href=\"http://moodle.org/sites/\">".number_format($stats->countrycount)."</a>"),
-    array(get_string('statscourses', 'moodle.org'), number_format($stats->courses)),
-    array(get_string('statsusers', 'moodle.org'), number_format($stats->users)),
-    array(get_string('statsteachers', 'moodle.org'), number_format($stats->teachers)),
-    array(get_string('statsenrolments', 'moodle.org'), number_format($stats->enrolments)),
-    array(get_string('statsposts', 'moodle.org'), number_format($stats->posts)),
-    array(get_string('statsresources', 'moodle.org'), number_format($stats->resources)),
-    array(get_string('statsquestions', 'moodle.org'), number_format($stats->questions))
+    array(get_string('registeredsitestitle','local_moodleorg'), '<a href="http://moodle.org/sites/">'.number_format($stats->registrycount).'</a>'),
+    array(get_string('statscountries', 'local_moodleorg'), "<a href=\"http://moodle.org/sites/\">".number_format($stats->countrycount)."</a>"),
+    array(get_string('statscourses', 'local_moodleorg'), number_format($stats->courses)),
+    array(get_string('statsusers', 'local_moodleorg'), number_format($stats->users)),
+    array(get_string('statsteachers', 'local_moodleorg'), number_format($stats->teachers)),
+    array(get_string('statsenrolments', 'local_moodleorg'), number_format($stats->enrolments)),
+    array(get_string('statsposts', 'local_moodleorg'), number_format($stats->posts)),
+    array(get_string('statsresources', 'local_moodleorg'), number_format($stats->resources)),
+    array(get_string('statsquestions', 'local_moodleorg'), number_format($stats->questions))
 );
 echo html_writer::table($table);
 echo html_writer::end_tag('div');
@@ -84,7 +84,7 @@ echo html_writer::end_tag('div');
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>new_registrations_graph(), 'alt'=>get_string('newregistrations', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>new_registrations_graph(), 'alt'=>get_string('newregistrations', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('div');
 
@@ -94,7 +94,7 @@ echo html_writer::end_tag('div');
 /*
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>download_summary_graph(), 'alt'=>get_string('namedownloads', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>download_summary_graph(), 'alt'=>get_string('namedownloads', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('div');
 */
@@ -104,17 +104,17 @@ echo html_writer::end_tag('div');
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
-echo html_writer::empty_tag('img', array('src'=>'sites.bar.png', 'alt'=>get_string('registeredsitestitle', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>'sites.bar.png', 'alt'=>get_string('registeredsitestitle', 'local_moodleorg')));
 echo '&nbsp;';
-echo html_writer::empty_tag('img', array('src'=>moodle_users_per_site(), 'alt'=>get_string('graphusersites', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>moodle_users_per_site(), 'alt'=>get_string('graphusersites', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 
-echo $OUTPUT->heading(get_string('top10sitesbyusers', 'moodle.org'));
+echo $OUTPUT->heading(get_string('top10sitesbyusers', 'local_moodleorg'));
 $table = new html_table();
 $table->attributes = array('class'=>'generaltable boxaligncenter');
 $table->width = '800px';
 $table->size    = array('360px','80px','80px','280px');
-$table->head    = array(get_string('site'), get_string('statsusers', 'moodle.org'), get_string('statscourses', 'moodle.org'));
+$table->head    = array(get_string('site'), get_string('statsusers', 'local_moodleorg'), get_string('statscourses', 'local_moodleorg'));
 $table->align   = array('left','right','right');
 $table->data    = array();
 
@@ -132,12 +132,12 @@ foreach ($top10usersitesresults as $row) {
 }
 echo html_writer::table($table);
 
-echo $OUTPUT->heading(get_string('top10sitesbycourses', 'moodle.org'));
+echo $OUTPUT->heading(get_string('top10sitesbycourses', 'local_moodleorg'));
 $table = new html_table();
 $table->attributes = array('class'=>'generaltable boxaligncenter');
 $table->width = '800px';
 $table->size    = array('360px','80px','80px','280px');
-$table->head    = array(get_string('site'), get_string('statsusers', 'moodle.org'), get_string('statscourses', 'moodle.org'));
+$table->head    = array(get_string('site'), get_string('statsusers', 'local_moodleorg'), get_string('statscourses', 'local_moodleorg'));
 $table->align   = array('left','right','right');
 $table->data    = array();
 
@@ -161,7 +161,7 @@ echo html_writer::end_tag('div');
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>moodle_population(), 'alt'=>get_string('graphpopulation', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>moodle_population(), 'alt'=>get_string('graphpopulation', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 $lastday = time() - (24 * 3600);
 $lastmonth = time() - (30 * 24 * 3600);
@@ -170,10 +170,10 @@ $table->attributes = array('class'=>'generaltable boxaligncenter');
 $table->width ='400px';
 $table->align = array('left','right');
 $table->data = array();
-$table->data[] = array(get_string('registereduserstotal', 'moodle.org'), number_format($moodle->users));
-$table->data[] = array(get_string('registereduserslastday', 'moodle.org'), number_format($DB->count_records_select('user', 'firstaccess > ?', array($lastday))));
-$table->data[] = array(get_string('activeusers24hours', 'moodle.org'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastday))));
-$table->data[] = array(get_string('activeuserspastmonth', 'moodle.org'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastmonth))));
+$table->data[] = array(get_string('registereduserstotal', 'local_moodleorg'), number_format($moodle->users));
+$table->data[] = array(get_string('registereduserslastday', 'local_moodleorg'), number_format($DB->count_records_select('user', 'firstaccess > ?', array($lastday))));
+$table->data[] = array(get_string('activeusers24hours', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastday))));
+$table->data[] = array(get_string('activeuserspastmonth', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastmonth))));
 echo html_writer::table($table);
 echo html_writer::end_tag('div');
 
@@ -182,7 +182,7 @@ echo html_writer::end_tag('div');
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 $table = new html_table();
 $table->attributes = array('class'=>'generaltable boxaligncenter');
@@ -198,7 +198,7 @@ foreach ($top10countries as $row) {
 }
 echo html_writer::table($table);
 if ($stats->countrycount) {
-    echo html_writer::tag('p', get_string('graphregistrationmapdesc','moodle.org',$stats->countrycount), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
+    echo html_writer::tag('p', get_string('graphregistrationmapdesc','local_moodleorg',$stats->countrycount), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
 }
 echo html_writer::end_tag('div');
 
@@ -229,8 +229,8 @@ $fullminorversiongraph = minor_version_pie_graph($fullversioninfo, 'All Moodle r
 
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>$minorversiongraph, 'alt'=>get_string('registrationslast6months', 'moodle.org')));
-echo html_writer::empty_tag('img', array('src'=>$fullminorversiongraph, 'alt'=>get_string('registrationstotal', 'moodle.org')));
+echo html_writer::empty_tag('img', array('src'=>$minorversiongraph, 'alt'=>get_string('registrationslast6months', 'local_moodleorg')));
+echo html_writer::empty_tag('img', array('src'=>$fullminorversiongraph, 'alt'=>get_string('registrationstotal', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('div');
 

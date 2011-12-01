@@ -4,7 +4,7 @@
     require_once('../../toplib.php');
 
     $navlinks = array();
-    $navlinks[] = array('name' => get_string('namesupport', 'moodle.org'), 'link' => $CFG->wwwroot.'/support/', 'type' => 'misc');
+    $navlinks[] = array('name' => get_string('namesupport', 'local_moodleorg'), 'link' => $CFG->wwwroot.'/support/', 'type' => 'misc');
 
     $strings = array(
                      'supportcommercial',

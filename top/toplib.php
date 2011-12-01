@@ -36,7 +36,7 @@ function print_moodle_page_top($page, $content="", $navlinks=array()) {
     }
 
     if ($page) {
-        $titlename = $pagename = get_string("name$page", 'moodle.org');
+        $titlename = $pagename = get_string("name$page", 'local_moodleorg');
         $PAGE->navbar->add($pagename);
     } else {
         $navigation = 'home';
@@ -69,7 +69,7 @@ function print_moodle_page_top($page, $content="", $navlinks=array()) {
 
         if ($page == 'news') {
             if (! $mainforum = forum_get_course_forum($SITE->id, 'news')) {
-                print_error(get_string('errornomainnews', 'moodle.org'));
+                print_error(get_string('errornomainnews', 'local_moodleorg'));
             }
             //$numarticles = $SITE->newsitems;
             $rss = 'http://moodle.org/rss/file.php/51/1b51bf7f3cab9689af042af1ff4a07f0/mod_forum/1/rss.xml';
@@ -122,15 +122,15 @@ function print_moodle_content($content) {
         foreach ($content as $string) {
             if (substr($string, 0, 5) == 'http:') {
                 $link = explode('|', $string);
-                echo '<div class="moodletop link"><span class="arrow sep">&#x25BA;</span> <a href="'.$link[0].'">'.get_string($link[1], 'moodle.org').'</a></div>';
+                echo '<div class="moodletop link"><span class="arrow sep">&#x25BA;</span> <a href="'.$link[0].'">'.get_string($link[1], 'local_moodleorg').'</a></div>';
             } else if (substr($string, -5, 5) == 'intro') {
-                echo "<div class=\"moodletop intro $string\">".get_string($string, 'moodle.org')."</div>\n";
+                echo "<div class=\"moodletop intro $string\">".get_string($string, 'local_moodleorg')."</div>\n";
             } else if (substr($string, -5, 5) == 'title') {
-                echo "<h3 class=\"moodletop $string\">".get_string($string, 'moodle.org')."</h3>\n";
+                echo "<h3 class=\"moodletop $string\">".get_string($string, 'local_moodleorg')."</h3>\n";
             } else if (substr($string, 0, 1) == '<') {
                 echo $string."\n";
             } else {
-                echo "<div class=\"moodletop $string\">".get_string($string, 'moodle.org')."</div>\n";
+                echo "<div class=\"moodletop $string\">".get_string($string, 'local_moodleorg')."</div>\n";
             }
         }
     } else {

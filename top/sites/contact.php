@@ -4,7 +4,7 @@ require('../../../../config.php');
 
 $siteid = required_param('siteid', PARAM_INT);
 
-/* This script sends out email : requiring login helps block spam. 
+/* This script sends out email : requiring login helps block spam.
  * TODO : find a way to let anonymous user send out email without opening
  * the door to spam.
  */
@@ -36,17 +36,17 @@ if (in_array($currentaddress, $exceptions)) {
 
 
 if (isset($SESSION->registrycontactmessagesent) && $SESSION->registrycontactmessagesent >= 3) {
-    print_error('errormaxmessages', 'moodle.org');
+    print_error('errormaxmessages', 'local_moodleorg');
 }
 
-// You'll need to build a little fake $userto object to pass to email_to_user() 
+// You'll need to build a little fake $userto object to pass to email_to_user()
 // using adminname and adminuser
 
-if (!$site) { 
+if (!$site) {
 
     echo $OUTPUT->box('The site you requested cannot be found or displayed.  Please contact the administrator if you believe this is an error.');
 
-} else if ($site->mailme != 1) { 
+} else if ($site->mailme != 1) {
 
     /* there shouldn't be a link to this script if $site->mailme isn't on.. but just
      * in case people fool around with the siteid variable...
@@ -83,7 +83,7 @@ if (!$site) {
         }
 
     } else {
-        print_error('errorsendingmail', 'moodle.org');
+        print_error('errorsendingmail', 'local_moodleorg');
     }
 
     /* will have to choose the right way to end... */

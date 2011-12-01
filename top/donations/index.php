@@ -5,19 +5,19 @@ require('../../../../config.php');
 $PAGE->set_context(get_system_context());
 $PAGE->set_url(new moodle_url('/donations/'));
 $PAGE->set_title('Moodle.org: donations');
-$PAGE->set_heading(get_string('donationstitle', 'moodle.org'));
+$PAGE->set_heading(get_string('donationstitle', 'local_moodleorg'));
 $PAGE->navbar->add($PAGE->heading, $PAGE->url);
 
 echo $OUTPUT->header();
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter boxwidthwide', 'style'=>'padding:20px;'));
 
 echo html_writer::tag('h2', 'Donating to Moodle', array('class'=>'mdl-align'));
-echo html_writer::tag('p', get_string('donations', 'moodle.org'));
-echo html_writer::tag('p', get_string('donationstrust', 'moodle.org'));
+echo html_writer::tag('p', get_string('donations', 'local_moodleorg'));
+echo html_writer::tag('p', get_string('donationstrust', 'local_moodleorg'));
 
 echo html_writer::start_tag('ol');
-echo html_writer::tag('li', get_string('donationsservices', 'moodle.org'));
-echo html_writer::tag('li', get_string('donationsmoney', 'moodle.org'));
+echo html_writer::tag('li', get_string('donationsservices', 'local_moodleorg'));
+echo html_writer::tag('li', get_string('donationsmoney', 'local_moodleorg'));
 echo html_writer::end_tag('ol');
 
 echo '<table style="margin-left:auto; margin-right:auto; text-align: center;"><tr>';

@@ -39,7 +39,7 @@ $params = array($CFG->mnet_localhost_id);
 
 $hosts = $DB->get_records_sql($sql, $params);
 
-$content = '<div class="moodletop intro">'.get_string('networkintro', 'moodle.org').'</div>';
+$content = '<div class="moodletop intro">'.get_string('networkintro', 'local_moodleorg').'</div>';
 
 $content .= '<ul class="moodletop networkhosts">';
 if ($hosts) {

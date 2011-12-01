@@ -9,7 +9,7 @@
     $data->langcount = 78;
     $data->countrycount = $DB->count_records_sql('SELECT count(DISTINCT country) FROM {registry} WHERE unreachable = 0');
 
-    $strings = array('<div class="moodletop intro communityintro">'.get_string('communityintro', 'moodle.org', $data).'</div>',
+    $strings = array('<div class="moodletop intro communityintro">'.get_string('communityintro', 'local_moodleorg', $data).'</div>',
                      'supportforumstitle',
                      'supportforums',
                      'http://moodle.org/support/forums/|supportforumslistname',
