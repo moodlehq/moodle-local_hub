@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Moodle.org library functions
  *
  * @package    local
  * @subpackage moodleorg
