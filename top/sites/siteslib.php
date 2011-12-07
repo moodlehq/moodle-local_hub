@@ -147,7 +147,7 @@ function prepare_country_tag_cloud(&$countries, $canedit=false, $taglimit=50, $m
         } else {
             $editlink = '';
         }
-        $countryhtml[] = "<a href='index.php?country=".$country->countrycode.$editlink."' style='font-size:{$fontsize}em'>".$country->country."</a>";
+        $countryhtml[] = "<a href='/sites/index.php?country=".$country->countrycode.$editlink."' style='font-size:{$fontsize}em'>".$country->country."</a>";
     }
     $html .= join('&nbsp; &nbsp;', $countryhtml)."</p>";
     return $html;

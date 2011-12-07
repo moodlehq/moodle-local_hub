@@ -137,8 +137,8 @@ if ($country!==null && array_key_exists($country, $countries)) {
         if (!empty($USER->sitevoting) && $site->public) {
             $properties .= '&nbsp;&nbsp;&nbsp;';
             if (!isset($oldvotes[$site->id])) {
-                $properties .= '<a title="I like this site!" href="index.php?cool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" /></a>';
-                $properties .= '&nbsp;<a title="I don\'t like this site!" href="index.php?uncool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/no.gif" height="15" width="12" alt="" border="0" /></a>';
+                $properties .= '<a title="I like this site!" href="/sites/index.php?cool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" /></a>';
+                $properties .= '&nbsp;<a title="I don\'t like this site!" href="/sites/index.php?uncool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/no.gif" height="15" width="12" alt="" border="0" /></a>';
             } else if ($oldvotes[$site->id] >= 0) {
                 $properties .= '<img title="Total score: '.$site->cool.'" src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" />';
             } else {
