@@ -90,12 +90,16 @@ $displaycaptcha = false;
 
 if (isset($_SERVER['REDIRECT_ANTISPAM_THREAT'])) {
   $ANTISPAM_THREAT = $_SERVER['REDIRECT_ANTISPAM_THREAT'];
+  $ANTISPAM_AGE = $_SERVER['REDIRECT_ANTISPAM_AGE'];
 }elseif (isset($_SERVER['ANTISPAM_THREAT'])) {
   $ANTISPAM_THREAT = $_SERVER['ANTISPAM_THREAT'];
+  $ANTISPAM_AGE = $_SERVER['ANTISPAM_AGE'];
 }
 
+
+
 if (isset($ANTISPAM_THREAT)) {
-  if ($ANTISPAM_THREAT < '21') {
+  if ($ANTISPAM_THREAT < '21' || $ANTISPAM_AGE < '30') {
     if ($memcache_obj->get("antispam_".$_SERVER['REMOTE_ADDR'])) {
       // user is on blacklist and threat level below threshold and passed captcha
       $boxheading = "Access Granted";
