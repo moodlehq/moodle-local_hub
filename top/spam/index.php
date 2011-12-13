@@ -88,8 +88,14 @@ $PAGE->navbar->add('Error');
 $boxheading = "Access Denied - Spammer Detected";
 $displaycaptcha = false;
 
-if (isset($_SERVER['ANTISPAM_THREAT'])) {
-  if ($_SERVER['ANTISPAM_THREAT'] < '20') {
+if (isset($_SERVER['REDIRECT_ANTISPAM_THREAT'])) {
+  $ANTISPAM_THREAT = $_SERVER['REDIRECT_ANTISPAM_THREAT'];
+}elseif (isset($_SERVER['ANTISPAM_THREAT'])) {
+  $ANTISPAM_THREAT = $_SERVER['ANTISPAM_THREAT'];
+}
+
+if (isset($ANTISPAM_THREAT)) {
+  if ($ANTISPAM_THREAT < '20') {
     if ($memcache_obj->get("antispam_".$_SERVER['REMOTE_ADDR'])) {
       // user is on blacklist and threat level below threshold and passed captcha
       $boxheading = "Access Granted";
