@@ -114,7 +114,7 @@
     Redirect /donation   http://moodle.org/donations/
     Redirect /help   http://moodle.org/course/view.php?id=5
     Redirect /buzz   http://moodle.org/mod/data/view.php?id=6140
-    Redirect /themes   http://moodle.org/mod/data/view.php?id=6552
+    Redirect /themes   http://moodle.org/plugins/browse.php?list=category&id=3
     Redirect /philosophy http://docs.moodle.org/en/Philosophy
     Redirect /faq   http://docs.moodle.org/en/Category:FAQ
     Redirect /modules   http://moodle.org/mod/data/view.php?id=6009
