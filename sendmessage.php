@@ -31,15 +31,14 @@ require_once($CFG->dirroot . "/local/hub/forms.php");
 require_login();
 
 $hub = new local_hub();
-$id = required_param('id', 0, PARAM_INTEGER);
-$admin = optional_param('admin', 0, PARAM_INTEGER); //access from admin page
+$id = required_param('id', PARAM_INT);
+$admin = optional_param('admin', 0, PARAM_INT); //access from admin page
 $hubcourse = $hub->get_course($id);
 
-$PAGE->set_url('/local/hub/sendmessage.php', array('id' => $id));
-$PAGE->set_pagetype('site-index');
-$PAGE->set_docs_path('');
-$PAGE->set_pagelayout('frontpage');
 $PAGE->set_context(get_system_context());
+$PAGE->set_url('/local/hub/sendmessage.php', array('id' => $id));
+$PAGE->set_heading($SITE->fullname);
+$PAGE->set_pagelayout('frontpage');
 
 //Spam detection (only 10 messages to publishers per day per user)
 if (!is_siteadmin ()) {
