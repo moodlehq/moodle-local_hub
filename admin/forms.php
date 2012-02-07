@@ -602,7 +602,6 @@ class hub_course_settings_form extends moodleform {
             $mform->addHelpButton('demourl',
                     'demourl', 'local_hub');
             $mform->setDefault('demourl', $course->demourl);
-            $mform->addRule('demourl', $strrequired, 'required', null, 'client');
         }
 
         $mform->addElement('textarea', 'description',
@@ -709,7 +708,6 @@ class hub_course_settings_form extends moodleform {
         //setdefault is currently not supported making this required field not usable MDL-20988
         $editoroptions = array('maxfiles' => 0, 'maxbytes' => 0, 'trusttext' => false, 'forcehttps' => false);
         $mform->addElement('editor', 'creatornotes', get_string('creatornotes', 'hub'), '', $editoroptions);
-        $mform->addRule('creatornotes', $strrequired, 'required', null, 'client');
         $mform->setType('creatornotes', PARAM_CLEANHTML);
         $mform->addHelpButton('creatornotes', 'creatornotes', 'hub');
         

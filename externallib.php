@@ -579,11 +579,14 @@ class local_hub_external extends external_api {
             $courseinfo['enrollable'] = $course->enrollable;
             $courseinfo['screenshots'] = $course->screenshots;
             $courseinfo['timemodified'] = $course->timemodified;
-            if (!empty($course->demourl)) {
-                $courseinfo['demourl'] = $course->demourl;
-            }
             if (!empty($course->courseurl)) {
                 $courseinfo['courseurl'] = $course->courseurl;
+            } else if (!empty($course->demourl)) { //courseurl is mandatory, demo url can be blank
+                $courseinfo['demourl'] = $course->demourl;
+            } else {
+                 $courseurl = new moodle_url($CFG->wwwroot, array('sesskey' => sesskey(),
+                                    'redirectcourseid' => $course->id));
+                 $courseinfo['demourl'] = $courseurl->out(false);
             }
 
             //outcomes

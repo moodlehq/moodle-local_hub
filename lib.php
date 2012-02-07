@@ -579,10 +579,20 @@ class local_hub {
     }
 
     /**
-     * Return sites found against some parameters, by default it returns all visible sites
-     * @param string $search String that will be compared to site name and site description
-     * @param string $language language code to compare (has to be exact)
-     * @param boolean $onlyvisible - set to false to return full list
+     * Return sites found against some options.
+     * By default it returns all visible and not deleted sites
+     *
+     * @param array $options array of options
+     *              onlyvisible - boolean - return only visible sites, otherwise all sites
+     *              search - string - search terms (on name and description)
+     *              language - string - return sites of this language
+     *              urls - array of strings - return sites for these urls
+     *              visible - boolean -  return visible or not visible sites
+     *              trusted - boolean - return trusted or not trusted sites
+     *              prioritise - boolean - return prioritised or not prioritised sites
+     *              countrycode - string - return sites for this country code
+     *              onlydeleted - boolean - return only deleted sites
+     *              deleted - boolean - return deleted and not deleted sites
      * @return array of sites
      */
     public function get_sites($options = array()) {
@@ -671,7 +681,9 @@ class local_hub {
             $wheresql .= " AND";
         }
         if (!key_exists('onlydeleted', $options) or !$options['onlydeleted']) {
-            $wheresql .= " deleted = 0";
+            if (empty($options['deleted'])) { //do no return any deleted sites
+                $wheresql .= " deleted = 0";
+            }
         } else {
             $wheresql .= " deleted = 1";
         }
@@ -1657,9 +1669,16 @@ class local_hub {
             $course = $this->get_course($redirectcourseid);
             if (!empty($course->courseurl)) {
                 $courseurl = new moodle_url($course->courseurl);
-            } else {
+            } else if (!empty($course->demourl)) {
                 $courseurl = new moodle_url($course->demourl);
+            } else {
+                //we try to display a demo site but none has been set
+                echo $OUTPUT->header();
+                echo get_string('nodemo', 'local_hub');
+                echo $OUTPUT->footer();
+                die();
             }
+
             $rss = optional_param('rss', false, PARAM_BOOL);
             $rss = empty($rss) ? '' : 'rss';
             add_to_log(SITEID, 'local_hub', 'course redirection ' . $rss, '', $redirectcourseid);

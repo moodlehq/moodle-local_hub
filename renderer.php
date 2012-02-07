@@ -404,19 +404,23 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //create visit link html
+                $visitlinkhtml = '';
                 if (!empty($course->courseurl)) {
                     $courseurl = new moodle_url($course->courseurl);
                     $linktext = get_string('visitsite', 'local_hub');
-                } else {
-                    $courseurl = new moodle_url($course->demourl);
-                    $linktext = get_string('visitdemo', 'local_hub');
+                } else if (!empty($course->demourl)) {
+                        $courseurl = new moodle_url($course->demourl);
+                        $linktext = get_string('visitdemo', 'local_hub');
                 }
-                if (!$withwriteaccess) {
+
+                if (!empty($courseurl)) {
+                    if (!$withwriteaccess) {
                     $courseurl = new moodle_url('', array('sesskey' => sesskey(),
-                                'redirectcourseid' => $course->id));
-                }
-                $visitlinkhtml = html_writer::tag('a', $linktext,
+                                    'redirectcourseid' => $course->id));
+                    }
+                    $visitlinkhtml = html_writer::tag('a', $linktext,
                                 array('href' => $courseurl, 'class' => 'hubcoursedownload'));
+                }
                 
                  //Create rating html
                 $featuredhtml = "";
@@ -621,18 +625,21 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //creator notes
-                if (count($courses) == 1) {
-                    //creator notes
-                    $creatornotes = html_writer::tag('div', get_string('creatornotes', 'local_hub') . ':',
-                                    array('class' => 'creatornotestitle'));
-                    $creatornotes .= html_writer::tag('div',
-                                    format_text($course->creatornotes, $course->creatornotesformat),
-                                    array('class' => 'creatornotes'));
-                } else {
-                    //more details button
-                    $creatornotesurl = new moodle_url('', array('courseid' => $course->id));
-                    $creatornotes = html_writer::tag('a', get_string('seecreatornotes', 'local_hub'),
-                                    array('class' => 'seecreatornotes', 'href' => $creatornotesurl));
+                $creatornotes = '';
+                if (!empty($course->creatornotes)) {
+                    if (count($courses) == 1) {
+                        //creator notes
+                        $creatornotes = html_writer::tag('div', get_string('creatornotes', 'local_hub') . ':',
+                                        array('class' => 'creatornotestitle'));
+                        $creatornotes .= html_writer::tag('div',
+                                        format_text($course->creatornotes, $course->creatornotesformat),
+                                        array('class' => 'creatornotes'));
+                    } else {
+                        //more details button
+                        $creatornotesurl = new moodle_url('', array('courseid' => $course->id));
+                        $creatornotes = html_writer::tag('a', get_string('seecreatornotes', 'local_hub'),
+                                        array('class' => 'seecreatornotes', 'href' => $creatornotesurl));
+                    }
                 }
 
                 //the main DIV tags

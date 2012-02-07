@@ -216,7 +216,7 @@ if (!empty($courseid)) {
 
 
 //complete course data with site name and course content
-$sites = $hub->get_sites();
+$sites = $hub->get_sites(array('deleted' => 1));
 $courseids = array(); //all result courses
 $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
 foreach ($courses as &$course) {
