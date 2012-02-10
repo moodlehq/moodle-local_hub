@@ -375,7 +375,6 @@ class send_message_form extends moodleform {
         $strrequired = get_string('required');
         $mform = & $this->_form;
 
-        $publishername = $this->_customdata['publishername'];
         $coursename = $this->_customdata['coursename'];
 
         $mform->addElement('header', '', get_string('msgtopublisher', 'local_hub', $coursename));
@@ -383,8 +382,10 @@ class send_message_form extends moodleform {
         $mform->addElement('hidden', 'id', $this->_customdata['id']);
         $mform->addElement('hidden', 'admin', $this->_customdata['admin']);
 
-        $sentoptions = array('publisher' => get_string('senttopublisher', 'local_hub', $publishername),
-            'hub' =>  get_string('senttohub', 'local_hub', get_config('local_hub', 'name')));
+        $sentoptions = array('hub' =>  get_string('senttohub', 'local_hub', get_config('local_hub', 'name')));
+        if (!empty($this->_customdata['publishername'])) {
+            $sentoptions['publisher'] = get_string('senttopublisher', 'local_hub', $this->_customdata['publishername']);
+        }
         $mform->addElement('select', 'sentto', get_string('sendto', 'local_hub'), $sentoptions);
 
         $options = array('question' => get_string('msgtypequestion', 'local_hub'),

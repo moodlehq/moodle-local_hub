@@ -30,10 +30,8 @@ require_once($CFG->dirroot . "/local/hub/forms.php");
 
 require_login();
 
-$hub = new local_hub();
-$id = required_param('id', PARAM_INT);
+$id = optional_param('id', 0, PARAM_INT);
 $admin = optional_param('admin', 0, PARAM_INT); //access from admin page
-$hubcourse = $hub->get_course($id);
 
 $PAGE->set_context(get_system_context());
 $PAGE->set_url('/local/hub/sendmessage.php', array('id' => $id));
@@ -53,8 +51,17 @@ if (!is_siteadmin ()) {
     }
 }
 
+$hub = new local_hub();
+if (!empty($id)) {
+    $hubcourse = $hub->get_course($id);
+    $publishername = $hubcourse->publishername;
+} else {
+    $publishername = '';
+    $hubcourse->fullname = $SITE->fullname;
+}
+$coursename = $hubcourse->fullname;
 $sendmessageform = new send_message_form('', array('id' => $id, 'admin' => $admin,
-        'publishername' => $hubcourse->publishername, 'coursename' => $hubcourse->fullname));
+        'publishername' => $publishername, 'coursename' => $coursename));
 
 //Cancel operation => redirect to the index/admin course page
 $cancel = optional_param('cancel', null, PARAM_ALPHA);
