@@ -75,7 +75,7 @@ $string['donationstrust'] = 'Moodle has a development fund run by the Moodle Tru
 $string['donationsservices'] = 'If you have a need for Moodle services such as hosting, support, installation, custom coding, course development or consulting, please contact your local authorised  <a href="http://moodle.com/">Moodle Partner from moodle.com</a> (you\'ll see their banner advertisements around this site). Partners contribute a fixed percentage of all their earnings towards the Moodle Trust development fund, so everyone wins.';
 $string['donationsmoney'] = 'You can also contribute money directly to the fund via a cash donation. All this money is used to turn the wishes on our roadmap into real features we can all use. To make a donation using a credit card in most major currencies, please click the Paypal button below.<br /><br />Donators over $10 can add their name to this page for a year.  Please remember to hit the "continue" button after paying to see the form where you can edit how your entry appears.';
 $string['downloadcore'] = 'Our main method of distribution is via these standard core packages.  They contain a number of modules that are maintained by core developers, and are convenient for installing on nearly any platform where you have PHP and a database already installed.';
-$string['downloadcoretitle'] = 'Standard Moodle packages';
+$string['downloadcoretitle'] = 'Moodle standard packages';
 $string['downloadcvs'] = 'Another way to get the core source code is by using CVS to connect directly to one of our mirrors of the code repository used by Moodle developers.  This makes upgrading very easy, even if you have made local changes to the source code.';
 $string['downloadcvstitle'] = 'Moodle via CVS';
 $string['downloadintro'] = 'Moodle is open source under the <a href="http://docs.moodle.org/dev/License">GPL licence</a>.  Everything we produce is available for you to download and use for free.';
@@ -85,7 +85,7 @@ $string['downloadlogotitle'] = 'Moodle logos';
 $string['downloadmac'] = 'If you don\'t have a web server set up already, these all-in-one packages make it very easy to install Moodle on any Apple computer running Mac OS X.';
 $string['downloadmactitle'] = 'Moodle for Mac OS X';
 $string['downloadmodules'] = 'Browse through our comprehensive database of extra modules and plugins that can be added to your Moodle site to give it extra functionality beyond the core packages.';
-$string['downloadmodulestitle'] = 'Modules and plugins';
+$string['downloadmodulestitle'] = 'Plugins';
 $string['downloadthemes'] = 'The appearance of a Moodle site can be changed dramatically by using a different theme.  We keep a database of themes that Moodle users have created and shared.';
 $string['downloadthemestitle'] = 'Themes';
 $string['downloadwin'] = 'If you don\'t have a web server set up already, these all-in-one packages make it very easy to install Moodle on any computer running Microsoft Windows.';
