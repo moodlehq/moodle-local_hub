@@ -95,10 +95,10 @@ foreach ($rs as $post) {
         }
     }
     $post->subject = $fullsubject;
-    //$fulllink = html_writer::link($postlink, get_string("postincontext", "forum"));
+    $fulllink = html_writer::link($postlink, get_string("postincontext", "forum"));
 
     echo "<br /><br />";
-    forum_print_post($post, $discussion, $forum, $cm, $course, false, false, false);
+    forum_print_post($post, $discussion, $forum, $cm, $course, false, false, false, $fulllink);
 
 }
 $rs->close();
