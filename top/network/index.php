@@ -5,12 +5,6 @@ require_once('../toplib.php');
 
 require_login();
 
-// only for logged in users!
-///if (!isloggedin() || isguest()) {
-if (isguestuser()) {
-    return false;
-}
-
 if (!is_enabled_auth('mnet')) {
     // no need to query anything remote related
     debugging( 'mnet authentication plugin is not enabled', DEBUG_ALL );
