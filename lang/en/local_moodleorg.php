@@ -200,3 +200,5 @@ $string['supportforumstitle'] = 'Forums';
 $string['supportintro'] = 'You are not alone!  There are a variety of ways to get help with Moodle if you need it.';
 $string['top10sitesbyusers'] = 'Top 10 sites by users';
 $string['top10sitesbycourses'] = 'Top 10 sites by courses';
+$string['top10countriesbyregistration'] = 'Top 10 countries by registrations';
+$string['versionsused'] = 'Versions used';

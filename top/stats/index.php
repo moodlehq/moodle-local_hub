@@ -159,6 +159,7 @@ echo html_writer::end_tag('div');
 /**
  * Display the implementation map chart
  */
+echo $OUTPUT->heading(get_string('top10countriesbyregistration', 'local_moodleorg'));
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
 echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'local_moodleorg')));
@@ -184,6 +185,7 @@ echo html_writer::end_tag('div');
 /**
  * Display the major and minor registrations for the past 6 months
  */
+echo $OUTPUT->heading(get_string('versionsused', 'local_moodleorg'));
 $partialminorchartexists = check_for_existing_cached_chart($CFG->dirroot.'/'.STATS_DIR.'/cache/partial.minor.versions.'.date('Ymd').'.png');
 $fullminorchartexists = check_for_existing_cached_chart($CFG->dirroot.'/'.STATS_DIR.'/cache/full.minor.versions.'.date('Ymd').'.png');
 if (!$partialminorchartexists || !$fullminorchartexists) {
