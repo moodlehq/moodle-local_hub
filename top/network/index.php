@@ -17,11 +17,6 @@ if (!is_enabled_auth('mnet')) {
     return '';
 }
 
-// check for outgoing roaming permission first
-if (!has_capability('moodle/site:mnetlogintoremote', get_context_instance(CONTEXT_SYSTEM), NULL, false)) {
-    return '';
-}
-
 $sql = 'SELECT
             DISTINCT h.id,
             h.name,

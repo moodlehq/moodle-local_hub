@@ -168,7 +168,7 @@ $string['registrationgraphdesc'] = 'We perform <a href="http://docs.moodle.org/e
 $string['registrationslast6months'] = 'Registrations in the past 6 months';
 $string['registrationstotal'] = 'All current registrations';
 $string['roadmap'] = 'Moodle Roadmap';
-$string['shop'] = 'Looking for some way to show you are part of our community?  See out shop for shirts, mugs and all kinds of other things.';
+$string['shop'] = 'Looking for some way to show you are part of our community?  See our shop for shirts, mugs and all kinds of other things.';
 $string['shoptitle'] = 'Moodle Shop';
 $string['sourcecodetitle'] = 'Open source code';
 $string['statscourses'] = 'Courses';
@@ -200,3 +200,5 @@ $string['supportforumstitle'] = 'Forums';
 $string['supportintro'] = 'You are not alone!  There are a variety of ways to get help with Moodle if you need it.';
 $string['top10sitesbyusers'] = 'Top 10 sites by users';
 $string['top10sitesbycourses'] = 'Top 10 sites by courses';
+$string['top10countriesbyregistration'] = 'Top 10 countries by registrations';
+$string['versionsused'] = 'Versions used';

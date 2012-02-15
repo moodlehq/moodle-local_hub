@@ -157,29 +157,9 @@ echo html_writer::table($table);
 echo html_writer::end_tag('div');
 
 /**
- * Display the moodle populationg graph
- */
-echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
-echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>moodle_population(), 'alt'=>get_string('graphpopulation', 'local_moodleorg')));
-echo html_writer::end_tag('p');
-$lastday = time() - (24 * 3600);
-$lastmonth = time() - (30 * 24 * 3600);
-$table = new html_table();
-$table->attributes = array('class'=>'generaltable boxaligncenter');
-$table->width ='400px';
-$table->align = array('left','right');
-$table->data = array();
-$table->data[] = array(get_string('registereduserstotal', 'local_moodleorg'), number_format($moodle->users));
-$table->data[] = array(get_string('registereduserslastday', 'local_moodleorg'), number_format($DB->count_records_select('user', 'firstaccess > ?', array($lastday))));
-$table->data[] = array(get_string('activeusers24hours', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastday))));
-$table->data[] = array(get_string('activeuserspastmonth', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastmonth))));
-echo html_writer::table($table);
-echo html_writer::end_tag('div');
-
-/**
  * Display the implementation map chart
  */
+echo $OUTPUT->heading(get_string('top10countriesbyregistration', 'local_moodleorg'));
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
 echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'local_moodleorg')));
@@ -205,6 +185,7 @@ echo html_writer::end_tag('div');
 /**
  * Display the major and minor registrations for the past 6 months
  */
+echo $OUTPUT->heading(get_string('versionsused', 'local_moodleorg'));
 $partialminorchartexists = check_for_existing_cached_chart($CFG->dirroot.'/'.STATS_DIR.'/cache/partial.minor.versions.'.date('Ymd').'.png');
 $fullminorchartexists = check_for_existing_cached_chart($CFG->dirroot.'/'.STATS_DIR.'/cache/full.minor.versions.'.date('Ymd').'.png');
 if (!$partialminorchartexists || !$fullminorchartexists) {
@@ -232,6 +213,27 @@ echo html_writer::start_tag('p', array('class'=>'mdl-align'));
 echo html_writer::empty_tag('img', array('src'=>$minorversiongraph, 'alt'=>get_string('registrationslast6months', 'local_moodleorg')));
 echo html_writer::empty_tag('img', array('src'=>$fullminorversiongraph, 'alt'=>get_string('registrationstotal', 'local_moodleorg')));
 echo html_writer::end_tag('p');
+echo html_writer::end_tag('div');
+
+/**
+ * Display the moodle populationg graph
+ */
+echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
+echo html_writer::start_tag('p', array('class'=>'mdl-align'));
+echo html_writer::empty_tag('img', array('src'=>moodle_population(), 'alt'=>get_string('graphpopulation', 'local_moodleorg')));
+echo html_writer::end_tag('p');
+$lastday = time() - (24 * 3600);
+$lastmonth = time() - (30 * 24 * 3600);
+$table = new html_table();
+$table->attributes = array('class'=>'generaltable boxaligncenter');
+$table->width ='400px';
+$table->align = array('left','right');
+$table->data = array();
+$table->data[] = array(get_string('registereduserstotal', 'local_moodleorg'), number_format($moodle->users));
+$table->data[] = array(get_string('registereduserslastday', 'local_moodleorg'), number_format($DB->count_records_select('user', 'firstaccess > ?', array($lastday))));
+$table->data[] = array(get_string('activeusers24hours', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastday))));
+$table->data[] = array(get_string('activeuserspastmonth', 'local_moodleorg'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastmonth))));
+echo html_writer::table($table);
 echo html_writer::end_tag('div');
 
 echo $OUTPUT->footer();
