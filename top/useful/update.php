@@ -7,9 +7,17 @@ define('CLI_SCRIPT', true);
 require(dirname(dirname(dirname(dirname(dirname(__FILE__))))).'/config.php');
 
 require($CFG->dirroot.'/mod/forum/lib.php');
+require($CFG->dirroot.'/rating/lib.php');
 
 $USER = guest_user();
 load_all_capabilities();
+
+////set up the ratings information that will be the same for all posts
+$ratingoptions = new stdClass();
+$ratingoptions->component = 'mod_forum';
+$ratingoptions->ratingarea = 'post';
+$ratingoptions->userid = $USER->id;
+$rm = new rating_manager();
 
 ob_start();   // capture all output
 
@@ -98,6 +106,22 @@ foreach ($rs as $post) {
     $fulllink = html_writer::link($postlink, get_string("postincontext", "forum"));
 
     echo "<br /><br />";
+    //add the ratings information to the post
+    //Unfortunately seem to have do this individually as posts may be from different forums
+    if ($forum->assessed != RATING_AGGREGATE_NONE) {
+        $modcontext = get_context_instance(CONTEXT_MODULE, $cm->id);
+        $ratingoptions->context = $modcontext;
+        $ratingoptions->items = array($post);
+        $ratingoptions->aggregate = $forum->assessed;//the aggregation method
+        $ratingoptions->scaleid = $forum->scale;
+        $ratingoptions->assesstimestart = $forum->assesstimestart;
+        $ratingoptions->assesstimefinish = $forum->assesstimefinish;
+        $postswithratings = $rm->get_ratings($ratingoptions);
+
+        if ($postswithratings && count($postswithratings)==1) {
+            $post = $postswithratings[0];
+        }
+    }
     forum_print_post($post, $discussion, $forum, $cm, $course, false, false, false, $fulllink);
 
 }
