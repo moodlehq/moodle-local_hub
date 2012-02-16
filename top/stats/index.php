@@ -205,7 +205,7 @@ if (!$partialminorchartexists || !$fullminorchartexists) {
     $fullversioninfo = array($tempversion);
 }
 
-$minorversiongraph = minor_version_pie_graph($versioninfo, 'Moodle registrations for the last two months');
+$minorversiongraph = minor_version_pie_graph($versioninfo, 'New Moodle registrations in the last two months');
 $fullminorversiongraph = minor_version_pie_graph($fullversioninfo, 'All Moodle registrations by version', 'full');
 
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
