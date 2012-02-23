@@ -370,6 +370,14 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2011100500, 'local', 'hub');
     }
 
+    if ($oldversion < 2012022100) {
+
+        // Set the new recaptcha option to true
+        set_config('hubrecaptcha', 1, 'local_hub');
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2012022100, 'local', 'hub');
+    }
 
 
     return $result;

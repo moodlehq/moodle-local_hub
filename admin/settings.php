@@ -58,6 +58,8 @@ if (!empty($fromform) and confirm_sesskey()) {
     set_config('name', $fromform->name, 'local_hub');
     set_config('hubenabled', 
             empty($fromform->enabled)?0:$fromform->enabled, 'local_hub');
+    set_config('hubrecaptcha',
+            empty($fromform->recaptchaenabled)?0:$fromform->recaptchaenabled, 'local_hub');
     set_config('description', $fromform->desc, 'local_hub');
     set_config('contactname', $fromform->contactname, 'local_hub');
     set_config('contactemail', $fromform->contactemail, 'local_hub');
@@ -146,15 +148,17 @@ if (!empty($fromform) and confirm_sesskey()) {
     echo $OUTPUT->notification(get_string('settingsupdated', 'local_hub'), 'notifysuccess');
 }
 
-//check if Recaptcha is enabled
-if (!$CFG->recaptchapublickey or !$CFG->recaptchaprivatekey) {
+//display a warning if Recaptcha is enabled and not set
+if (get_config('local_hub', 'hubrecaptcha')
+        && (!$CFG->recaptchapublickey or !$CFG->recaptchaprivatekey)) {
     $recaptchaurl = new moodle_url('/' . $CFG->admin . '/search.php', array('query' => 'recaptcha'));
     $recaptchalink = html_writer::tag('a',
                     get_string('recaptcha', 'local_hub'),
                     array('href' => $recaptchaurl));
     echo $OUTPUT->notification(get_string('recaptchadisable', 'local_hub', $recaptchalink));
-} else {
-    $hubsettingsform->display();
 }
+
+$hubsettingsform->display();
+
 echo $OUTPUT->footer();
 

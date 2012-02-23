@@ -241,6 +241,8 @@ class hub_settings_form extends moodleform {
 
         $enabled = get_config('local_hub', 'hubenabled');
 
+        $recaptcha = get_config('local_hub', 'hubrecaptcha');
+
         $languages = get_string_manager()->get_list_of_languages();
 
         $strrequired = get_string('required');
@@ -270,6 +272,11 @@ class hub_settings_form extends moodleform {
                 get_string('enabled', 'local_hub'), '');
         $mform->setDefault('enabled', $enabled);
         $mform->addHelpButton('enabled', 'enabled', 'local_hub');
+
+        $mform->addElement('checkbox', 'recaptchaenabled',
+                get_string('recaptchaenabled', 'local_hub'), '');
+        $mform->setDefault('recaptchaenabled', $recaptcha);
+        $mform->addHelpButton('recaptchaenabled', 'recaptchaenabled', 'local_hub');
 
         $mform->addElement('select', 'privacy',
                 get_string('privacy', 'local_hub'), $privacyoptions);

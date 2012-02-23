@@ -284,79 +284,72 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
 
 }
 
+if (get_config('local_hub', 'hubrecaptcha')) {
 
+    //fill the "recaptcha" Moodle form with hub values
+    $siteconfirmationform = new site_registration_confirmation_form('', $sitevalues);
 
-//fill the "recaptcha" Moodle form with hub values
-$siteconfirmationform = new site_registration_confirmation_form('', $sitevalues);
+    $fromform = $siteconfirmationform->get_data();
 
-$fromform = $siteconfirmationform->get_data();
-
-if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL if the recaptcha is wrong)
-
-    //check that the form has the required data
-    //(to force people that don't call this page from a Moodle registration page to POST correct data.
-    //Note that there is no good reason for people to do it)
-    if (empty($fromform->token) or empty($fromform->url) or
-            empty($fromform->name) or empty($fromform->contactname)
-            or empty($fromform->contactemail) or empty($fromform->description)
-            or empty($fromform->language)) {
-        throw new moodle_exception('errorwrongdata', 'local_hub', new moodle_url('/index.php'));
+    if (!empty($fromform)) { //the recaptcha has been valided (get_data return NULL if the recaptcha is wrong)
+        process_registration ((object) $fromform, $secretexists, $urlexists, $sitewithsamesecret, $sitewithsameurl);
     }
 
-    $siteinfo = new stdClass();
-    $siteinfo->secret = $fromform->token;
-    $siteinfo->url = $fromform->url;
-    $siteinfo->description = $fromform->description;
-    $siteinfo->name = $fromform->name;
-    $siteinfo->contactname = $fromform->contactname;
-    $siteinfo->contactemail = $fromform->contactemail;
-    $siteinfo->contactphone = $fromform->contactphone;
-    $siteinfo->imageurl = $fromform->imageurl;
-    $siteinfo->privacy = $fromform->privacy;
-    $siteinfo->language = $fromform->language;
-    $siteinfo->users = $fromform->users;
-    $siteinfo->courses = $fromform->courses;
-    $siteinfo->street = $fromform->street;
-    $siteinfo->regioncode = $fromform->regioncode;
-    $siteinfo->countrycode = $fromform->countrycode;
-    $siteinfo->geolocation = $fromform->geolocation;
-    $siteinfo->contactable = $fromform->contactable;
-    $siteinfo->emailalert = $fromform->emailalert;
-    $siteinfo->enrolments = $fromform->enrolments;
-    $siteinfo->posts = $fromform->posts;
-    $siteinfo->questions = $fromform->questions;
-    $siteinfo->resources = $fromform->resources;
-    $siteinfo->participantnumberaverage = $fromform->participantnumberaverage;
-    $siteinfo->modulenumberaverage = $fromform->modulenumberaverage;
-    $siteinfo->moodleversion = $fromform->moodleversion;
-    $siteinfo->moodlerelease = $fromform->moodlerelease;
+    echo $OUTPUT->header();
+    $siteconfirmationform->display();
+    echo $OUTPUT->footer();
+    die();
+} else {
+    process_registration ((object) $sitevalues, $secretexists, $urlexists, $sitewithsamesecret, $sitewithsameurl);
+}
 
-    if (!$secretexists and !$urlexists) {
-        $newtoken = $hub->register_site($siteinfo);
-        //log the new site
-        add_to_log(SITEID, 'local_hub', 'new site registration', '', $siteinfo->url);
-    } else if ($secretexists and $urlexists and
-            ($sitewithsamesecret->url == $sitewithsameurl->url)) {
-        //the site is already registered
-        //It happens when new fresh site has been installed and the email link
-        //wasn't followed till the end of the registration replacement process.
-        $newtoken = $hub->register_site($siteinfo, $siteinfo->url);
+/**
+ * Process the registration - redirect the user to its admin confirmation registration page
+ *
+ * @param object $sitevalues the site values
+ * @param boolean $secretexists true if a site is already registered with the same secret
+ * @param type $urlexists true if a site is already registered with this url
+ * @param type $sitewithsamesecret the DB site already existing for this secret
+ * @param type $sitewithsameurl the DB site already existing for this url address
+ */
+function process_registration ($sitevalues, $secretexists, $urlexists, $sitewithsamesecret, $sitewithsameurl) {
+    global $CFG;
 
-        //log the overwritting site registration
-        add_to_log(SITEID, 'local_hub', 'site registered a new time', '', $siteinfo->url);
-    } else {
-        //log the code logic error (it should never happen)
-        add_to_log(SITEID, 'local_hub', 'registration code logic error', '', $siteinfo->url);
-        throw new moodle_exception('codelogicerror', 'local_hub');
-    }
+//check that the form has the required data
+        //(to force people that don't call this page from a Moodle registration page to POST correct data.
+        //Note that there is no good reason for people to do it)
+        if (empty($sitevalues->token) or empty($sitevalues->url) or
+                empty($sitevalues->name) or empty($sitevalues->contactname)
+                or empty($sitevalues->contactemail) or empty($sitevalues->description)
+                or empty($sitevalues->language)) {
+            throw new moodle_exception('errorwrongdata', 'local_hub', new moodle_url('/index.php'));
+        }
 
-    //Redirect to the site with the created token
-    redirect(new moodle_url($url."/admin/registration/confirmregistration.php",
-            array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $fromform->token,
-                'hubname' => get_config('local_hub', 'name'))));
+        //token is saved as secret in the DB
+        $sitevalues->secret = $sitevalues->token;
 
-} 
+        $hub = new local_hub();
+        if (!$secretexists and !$urlexists) {
+            $newtoken = $hub->register_site($sitevalues);
+            //log the new site
+            add_to_log(SITEID, 'local_hub', 'new site registration', '', $sitevalues->url);
+        } else if ($secretexists and $urlexists and
+                ($sitewithsamesecret->url == $sitewithsameurl->url)) {
+            //the site is already registered
+            //It happens when new fresh site has been installed and the email link
+            //wasn't followed till the end of the registration replacement process.
+            $newtoken = $hub->register_site($sitevalues, $sitevalues->url);
 
-echo $OUTPUT->header();
-$siteconfirmationform->display();
-echo $OUTPUT->footer();
+            //log the overwritting site registration
+            add_to_log(SITEID, 'local_hub', 'site registered a new time', '', $sitevalues->url);
+        } else {
+            //log the code logic error (it should never happen)
+            add_to_log(SITEID, 'local_hub', 'registration code logic error', '', $sitevalues->url);
+            throw new moodle_exception('codelogicerror', 'local_hub');
+        }
+
+        //Redirect to the site with the created token
+        redirect(new moodle_url($sitevalues->url . "/admin/registration/confirmregistration.php",
+                        array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $sitevalues->token,
+                            'hubname' => get_config('local_hub', 'name'))));
+}
