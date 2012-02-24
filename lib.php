@@ -868,7 +868,7 @@ class local_hub {
     public function get_course_outcomes($courseid) {
         global $DB;
         return $DB->get_records('hub_course_outcomes',
-                array('courseid' => $courseid), 'outcome ASC');
+                array('courseid' => $courseid));
     }
 
 ///////////////////////////
