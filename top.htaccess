@@ -144,6 +144,9 @@
 # plugins database
     RewriteRule ^plugins($|(/(.*))) local/plugins/$3 [L]
 
+# local/dev
+    RewriteRule ^dev($|(/(.*))) local/dev/$3 [L]
+
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
 
