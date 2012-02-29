@@ -20,6 +20,9 @@ cd $basedir/local/plugins && $gitconfig && git pull
 # phpmyadmin ==========================
 cd $basedir/local/phpmyadmin && $gitconfig && git pull
 
+# dev plugin ==========================
+cd $basedir/local/dev && $gitconfig && git pull
+
 # theme ===============================
 cd $basedir/theme/moodleofficial && $gitconfig && git pull
 
