@@ -147,6 +147,15 @@
 # local/dev
     RewriteRule ^dev($|(/(.*))) local/dev/$3 [L]
 
+# local/chatlogs migrated from cvsadmin
+    RewriteCond %{REQUEST_URI} ^/mod/cvsadmin/view.php
+    RewriteCond %{QUERY_STRING} ^conversationid=(.*)$
+    RewriteRule ^mod/cvsadmin/view.php /local/chatlogs/index.php?conversationid=%1 [QSA,L,R=301]
+
+    RewriteCond %{REQUEST_URI} ^/mod/cvsadmin/view.php
+    RewriteCond %{QUERY_STRING} ^tab=chat$
+    RewriteRule ^mod/cvsadmin/view.php /local/chatlogs/index.php [L,R=301]
+
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
 
