@@ -118,7 +118,7 @@
     Redirect /philosophy http://docs.moodle.org/en/Philosophy
     Redirect /faq   http://docs.moodle.org/en/Category:FAQ
     Redirect /modules   http://moodle.org/mod/data/view.php?id=6009
-    Redirect /cvs   http://moodle.org/mod/cvsadmin/view.php?cid=1
+    Redirect /cvs   http://moodle.org/dev/
     Redirect /jobs   http://moodle.org/mod/data/view.php?d=54
     Redirect /books   http://moodle.org/mod/data/view.php?id=7246
     Redirect /useful.php   http://moodle.org/useful/
@@ -149,12 +149,17 @@
 
 # local/chatlogs migrated from cvsadmin
     RewriteCond %{REQUEST_URI} ^/mod/cvsadmin/view.php
-    RewriteCond %{QUERY_STRING} ^conversationid=(.*)$
-    RewriteRule ^mod/cvsadmin/view.php /local/chatlogs/index.php?conversationid=%1 [QSA,L,R=301]
+    RewriteCond %{QUERY_STRING}     ^conversationid=(.*)$
+    RewriteRule ^mod/cvsadmin/view.php(.*)$       /local/chatlogs/index.php?conversationid=%1 [L,R=301]
 
     RewriteCond %{REQUEST_URI} ^/mod/cvsadmin/view.php
-    RewriteCond %{QUERY_STRING} ^tab=chat$
-    RewriteRule ^mod/cvsadmin/view.php /local/chatlogs/index.php [L,R=301]
+    RewriteCond %{QUERY_STRING}     ^tab=chat$
+    RewriteRule ^mod/cvsadmin/view.php(.*)$       /local/chatlogs/index.php? [L,R=301]
+
+# mod/cvsadmin -> /dev/
+    RewriteCond %{REQUEST_URI} ^/mod/cvsadmin/view.php
+    RewriteCond %{QUERY_STRING}     ^cid=1$
+    RewriteRule ^mod/cvsadmin/view.php(.*)$      /dev/? [R=301]
 
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
