@@ -137,7 +137,7 @@
 
     Redirect    /search               http://moodle.org/public/search/
     RewriteRule ^spam$ /spam/ [R=301,L]
-    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|phm\.php|phm_es\.php|phm_fr\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
+    RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
     RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|events|forums/my|forums|images|logo|network|news|other|public/search|public|register|security|sites|spam|stats|support/commercial|support|useful|userpics)($|(/(.*))) local/moodleorg/top/$1/$4 [L]
     RewriteRule ^theme/moodle2($|(/(.*))) local/moodleorg/top/theme/moodle2/$3 [L]
 

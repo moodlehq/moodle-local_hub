@@ -8,8 +8,8 @@ include_once($CFG->dirroot.'/group/lib.php');
 /**
  *
  * @global moodle_database $DB
- * @global moodle_page $PAGE
  * @global core_renderer $OUTPUT
+ * @param array $emailusers
  * @param <type> $courseid
  * @param <type> $groupid
  * @param array $scaleids
@@ -20,32 +20,17 @@ include_once($CFG->dirroot.'/group/lib.php');
  * @param <type> $minratio
  * @param <type> $savechanges
  */
-function phm_calculate_users($courseid, $groupid, array $scaleids, $days = 60, $minposts = 1, $minratings = 14, $minraters = 8, $minratio = 0.02, $savechanges = true) {
-    global $DB, $PAGE, $OUTPUT;
+function phm_calculate_users($emailusers, $courseid, $groupid, array $scaleids, $days = 60, $minposts = 1, $minratings = 14, $minraters = 8, $minratio = 0.02, $savechanges = true) {
+    global $DB, $OUTPUT;
 
-    ///global $CFG,$db;
-    ///$db->debug = 1;
-    ///$CFG->debugdisplay=1;
-    ///$CFG->debug=38911;
-
-    require_login();
+    $s = '';
 
     $coursecontext = get_context_instance(CONTEXT_COURSE, $courseid, MUST_EXIST);
     $coursecontextid = $coursecontext->id;
 
-    require_capability('moodle/course:managegroups', $coursecontext);
 
     $course = $DB->get_record('course', array('id'=>$courseid), '*', MUST_EXIST);
     $course_name = $course->fullname;
-
-    $PAGE->set_url('/');
-    $PAGE->set_course($course);
-    $PAGE->set_title("Particularly Helpful Moodlers (in $course_name)");
-    $PAGE->set_heading($PAGE->title);
-    $PAGE->navbar->add($PAGE->title);
-
-    echo $OUTPUT->header();
-    echo $OUTPUT->heading("Using Moodle participants with: >= $minposts posts in the last $days days, >=  $minratings ratings total by more than $minraters raters, ratings/posts ratio >= $minratio");
 
     $timenow = time();
     $timeago = $timenow - ($days * 24 * 3600);
@@ -142,7 +127,6 @@ function phm_calculate_users($courseid, $groupid, array $scaleids, $days = 60, $
 
     $existingmembers = groups_get_members($groupid);
 
-    echo $OUTPUT->heading("$totalcount users");
 
     arsort($usersort);
 
@@ -174,11 +158,13 @@ function phm_calculate_users($courseid, $groupid, array $scaleids, $days = 60, $
 
         $table->data[] = $row;
     }
-    echo html_writer::table($table);
 
-    echo $OUTPUT->heading("PHM Members being removed");
+    $s.= html_writer::tag('h1', "Using Moodle participants with: >= $minposts posts in the last $days days, >=  $minratings ratings total by more than $minraters raters, ratings/posts ratio >= $minratio");
+    $s.= html_writer::tag('h2', "$totalcount users");
+    $s.= html_writer::table($table);
 
-    echo $OUTPUT->heading(count($existingmembers)." users", 3);
+    $s.= html_writer::tag('h1', "PHM Members being removed");
+    $s.= html_writer::tag('h2', count($existingmembers)." users");
 
     $table = new html_table();
     $table->attributes = array('class'=>'generaltable');
@@ -221,9 +207,17 @@ function phm_calculate_users($courseid, $groupid, array $scaleids, $days = 60, $
         $table->data[] = $row;
 
     }
-    echo html_writer::table($table);
+    $s.= html_writer::table($table);
 
-    echo $OUTPUT->footer();
+
+    // begin email sending..
+    $subject =  "Particularly Helpful Moodlers (in $course_name)";
+    foreach($emailusers as $emailuser) {
+        // hacky - force sending html to users who don't want it.
+        // ps. I hate html email - danp
+        $emailuser->mailformat = 1;
+        email_to_user($emailuser, 'moodle.org', $subject, 'HTML email only, sorry', $s);
+    }
 }
 
 function phm_get_users_rater_count($userid, array $forumcontextids, $distinct=false) {
