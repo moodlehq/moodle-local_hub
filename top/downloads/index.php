@@ -7,9 +7,9 @@
                      'downloadcoretitle',
                      'downloadcore',
                      'http://download.moodle.org/|downloadcoretitle',
-                     'downloadviagit',
+                     'downloadviagitcvs',
                      'downloadlangtitle',
                      'downloadlang',
-                     'http://download.moodle.org/lang16/|downloadlangtitle');
+                     'http://download.moodle.org/langpack/|downloadlangtitle');
 
     print_moodle_page('downloads', $strings);
