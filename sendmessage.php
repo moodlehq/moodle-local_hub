@@ -84,6 +84,12 @@ if (!empty($data) and confirm_sesskey()) {
     $feedback->type = $data->type;
     $feedback->text = $data->message;
 
+    //force the user email adress to be displayed:
+    //the publisher doesn't have to be a hub user so the email address is his only way to contact back the sender
+    //and hub administrator can see all email addresses.
+    $fromuser = $USER;
+    $fromuser->maildisplay = true;
+
     switch ($data->sentto) {
         case 'publisher':
             //send email to publisher (message API does not support email as recipient)
@@ -100,12 +106,12 @@ if (!empty($data) and confirm_sesskey()) {
             $hubcourse->huburl = $hubcourse->huburl->out();
             $hubcourse->hubcourseurl = new moodle_url('/', array('courseid' => $hubcourse->id));
             $hubcourse->hubcourseurl = $hubcourse->hubcourseurl->out();
-            $hubcourse->userurl = new moodle_url('/message/index.php', array('id' => $USER->id));
+            $hubcourse->userurl = new moodle_url('/message/index.php', array('id' => $fromuser->id));
             $hubcourse->userurl = $hubcourse->userurl->out();
-            $hubcourse->userfullname = $USER->firstname . ' ' . $USER->lastname;
+            $hubcourse->userfullname = $fromuser->firstname . ' ' . $fromuser->lastname;
             $hubcourse->message = $data->message;
             $feedback->senttoemail = $sentouser->email;
-            email_to_user($sentouser, $USER, get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname),
+            email_to_user($sentouser, $fromuser, get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname),
                     get_string('msgforcourse', 'local_hub', $hubcourse));
             break;
         case 'hub':
@@ -115,7 +121,7 @@ if (!empty($data) and confirm_sesskey()) {
             $eventdata = new stdClass();
             $eventdata->component = 'local/hub';
             $eventdata->name = 'coursehubmessage';
-            $eventdata->userfrom = $USER;
+            $eventdata->userfrom = $fromuser;
             $eventdata->userto = get_admin();
             $eventdata->subject = get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname);
             $eventdata->fullmessage = $data->message . ' ' . $courseurl;
