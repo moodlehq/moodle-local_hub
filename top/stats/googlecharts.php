@@ -1009,9 +1009,15 @@ class google_charts_bar_graph extends bar_graph {
  * @return bool True for success false otherwise
  */
 function cache_google_charts_image($url, $filepath) {
+
+    //extract the params from the url to call the function by POST
+    list($url, $params) = explode('?', $url, 2);
+
     $error = false;
     $handle = curl_init();
     curl_setopt($handle, CURLOPT_URL, trim($url));
+    curl_setopt($handle, CURLOPT_POST, 1);
+    curl_setopt($handle, CURLOPT_POSTFIELDS, $params);
     curl_setopt($handle, CURLOPT_HEADER, false);
     curl_setopt($handle, CURLOPT_RETURNTRANSFER, true);
     $data = curl_exec($handle);
