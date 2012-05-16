@@ -158,6 +158,10 @@ if (get_config('local_hub', 'hubrecaptcha')
     echo $OUTPUT->notification(get_string('recaptchadisable', 'local_hub', $recaptchalink));
 }
 
+if (!get_config('moodle', 'extendedusernamechars')) {
+    echo $OUTPUT->notification(get_string('noextendedusernamechars', 'local_hub'));
+}
+
 $hubsettingsform->display();
 
 echo $OUTPUT->footer();

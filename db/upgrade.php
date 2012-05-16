@@ -379,6 +379,14 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2012022100, 'local', 'hub');
     }
 
+    if ($oldversion < 2012051600) {
+
+        // Set the extendedusernamechars option to true
+        set_config('extendedusernamechars', 1);
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2012051600, 'local', 'hub');
+    }
 
     return $result;
 }

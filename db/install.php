@@ -45,4 +45,7 @@ function xmldb_local_hub_install() {
     $scale->id = $DB->insert_record('scale', $scale);
     //save the scale id into the config table
     set_config('courseratingscaleid', $scale->id, 'local_hub');
+
+    // Set the extendedusernamechars option to true
+    set_config('extendedusernamechars', 1);
 }

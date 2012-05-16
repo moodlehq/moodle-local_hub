@@ -278,6 +278,7 @@ $string['nocourse'] = 'No courses match your search.';
 $string['nocoursereturn'] = 'The hub has been set to return no course on web service called.';
 $string['nocourseselected'] = 'No courses selected';
 $string['nodemo'] = "No demo available for this course yet.";
+$string['noextendedusernamechars'] = 'You MUST allow extended characters in usernames. Search for \'extendedusernamechars\' with the administration search.';
 $string['none'] = 'None';
 $string['noratings'] = 'No ratings';
 $string['or'] = 'or';
