@@ -23,16 +23,10 @@
                      'http://moodle.org/mod/data/view.php?id=7246|supportbookstitle',
                      'supportcommercialtitle',
                      'supportcommercial',
-                     'http://moodle.com/hosting/|moodlehosting',
-                     'http://moodle.com/support/|moodlesupport',
-                     'http://moodle.com/consulting/|moodleconsulting',
-                     'http://moodle.com/installation/|moodleinstallation',
-                     'http://moodle.com/integration/|moodleintegrations',
-                     'http://moodle.com/custom/|moodlecustomisation',
-                     'http://moodle.com/courseware/|moodlecourseware',
-                     'http://moodle.com/training/|moodletraining',
-                     'http://moodle.com/themes/|moodlethemes',
-                     'http://moodle.com/certification/|moodlecertification'
+                     'http://moodle.com/partners/?mode=search&sector=university|moodlepartner_university',
+                     'http://moodle.com/partners/?mode=search&sector=school|moodlepartner_school',
+                     'http://moodle.com/partners/?mode=search&sector=corporate|moodlepartner_corporate',
+                     'http://moodle.com/partners/?mode=search&sector=other|moodlepartner_other',
                      );
 
     print_moodle_page('support', $strings, 1013);
