@@ -1,8 +1,8 @@
-<?php 
+<?php
 
 define('CLI_SCRIPT', true);
 
-require('../../../config.php');
+require(dirname(__FILE__).'/../../../config.php');
 require_once(dirname(__FILE__).'/phmlib.php');
 
 if (isset($_SERVER['REMOTE_ADDR'])) {
