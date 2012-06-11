@@ -1353,6 +1353,7 @@ class local_hub {
         $user = $DB->get_record('user', array('username' => $username,
                     'idnumber' => $username));
         if (empty($user)) {
+            $user = new stdClass();
             $user->username = $username;
             $user->firstname = $username;
             $user->lastname = get_string('donotdeleteormodify', 'local_hub');
@@ -1362,7 +1363,14 @@ class local_hub {
             $user->idnumber = $username;
             $user->mnethostid = 1;
             $user->description = get_string('hubwsuserdescription', 'local_hub');
-            $user->id = user_create_user($user);
+            $user->timecreated = time();
+            $user->timemodified = $user->timecreated;
+
+            // Insert the "site" user into the database.
+            $user->id = $DB->insert_record('user', $user);
+            events_trigger('user_created', $user);
+            add_to_log(SITEID, 'user', get_string('create'), '/view.php?id='.$user->id,
+                fullname($user));
         }
 
         //check and assign the role to user
