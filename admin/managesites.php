@@ -30,6 +30,8 @@ require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . "/local/hub/forms.php");
 
+define('MAXSITES', 100);
+
 admin_externalpage_setup('managesites');
 
 //check that the PHP xmlrpc extension is enabled
@@ -75,9 +77,12 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $sitesearchform = new site_search_form('', array('search' => $search, 'adminform' => 1));
     $fromform = $sitesearchform->get_data();
 
+    $moresiteshtml = '';
+    $limitfrom = optional_param('limitfrom', 0, PARAM_INTEGER);
+
     //if the page result from any action from the renderer, set data to the previous search in order to
     //display the same result
-    if ((!empty($search) or $trust != -1 or $delete != -1 /*or $visible != -1 or $prioritise != -1*/)
+    if (((!empty($limitfrom) or !empty($search) or $trust != -1 or $delete != -1) /*or $visible != -1 or $prioritise != -1*/)
             and confirm_sesskey()) {
         $fromformdata['trusted'] = optional_param('trusted', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['countrycode'] = optional_param('countrycode', 'all', PARAM_ALPHANUMEXT);
@@ -105,7 +110,19 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
 
         //get courses
         $options['search'] = $search;
-        $sites = $hub->get_sites($options);
+
+        $limitnum = MAXSITES;
+        $sites = $hub->get_sites($options, $limitfrom, $limitnum);
+        $limitfrom = $limitfrom + MAXSITES;
+        $sitestotal = $hub->get_sites($options, 0, 0, true);
+        if ($sitestotal > $limitfrom) {
+            $urlparams = (array)$fromform;
+            $urlparams['limitfrom'] = $limitfrom;
+            $urlparams['submitbutton'] = 1;
+            $urlparams['sesskey'] = sesskey();
+            $managesitesurl = new moodle_url('/local/hub/admin/managesites.php', $urlparams);
+            $moresiteshtml = html_writer::link($managesitesurl, 'More sites');
+        }
     }
 
     //(search, none language, no onlyvisible)
@@ -127,4 +144,5 @@ if (!($delete != -1 and !$confirm)) {
     echo $OUTPUT->heading(get_string('deletesite', 'local_hub', $site->name), 3, 'main');
 }
 echo $contenthtml;
+echo $moresiteshtml;
 echo $OUTPUT->footer();
