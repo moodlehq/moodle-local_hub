@@ -595,7 +595,7 @@ class local_hub {
      *              deleted - boolean - return deleted and not deleted sites
      * @return array of sites
      */
-    public function get_sites($options = array()) {
+    public function get_sites($options = array(), $limitfrom=0, $limitnum=0, $countresult = false) {
         global $DB;
 
         $sqlparams = array();
@@ -688,7 +688,12 @@ class local_hub {
             $wheresql .= " deleted = 1";
         }
 
-        $sites = $DB->get_records_select('hub_site_directory', $wheresql, $sqlparams, $ordersql);
+        if ($countresult) {
+            $sites = $DB->count_records_select('hub_site_directory', $wheresql, $sqlparams);
+        } else {
+            $sites = $DB->get_records_select('hub_site_directory', $wheresql, $sqlparams, $ordersql,
+                    '*', $limitfrom, $limitnum);
+        }
         return $sites;
     }
 

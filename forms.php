@@ -286,18 +286,20 @@ class course_search_form extends moodleform {
         $mform->setType('orderby', PARAM_ALPHA);
 
 
-        if (key_exists('adminform', $this->_customdata)) {         
-            $sites = $hub->get_sites();
-            $siteids = array();
-            foreach ($sites as $site) {
+        if (key_exists('adminform', $this->_customdata)) {
+            if ($hub->get_sites(array(), 0, 0, true) < 100) { // field not humanly usable over 100 sites.
+                $sites = $hub->get_sites();
+                $siteids = array();
+                foreach ($sites as $site) {
 
-                $siteids[$site->id] = $site->name;
+                    $siteids[$site->id] = $site->name;
+                }
+                asort($siteids, SORT_LOCALE_STRING);
+                $siteids = array('all' => get_string('any')) + $siteids;
+                $mform->addElement('select', 'siteid', get_string('site', 'local_hub'), $siteids);
+                $mform->setDefault('siteid', $siteid);
+                $mform->addHelpButton('siteid', 'site', 'local_hub');
             }
-            asort($siteids, SORT_LOCALE_STRING);
-            $siteids = array('all' => get_string('any')) + $siteids;
-            $mform->addElement('select', 'siteid', get_string('site', 'local_hub'), $siteids);
-            $mform->setDefault('siteid', $siteid);
-            $mform->addHelpButton('siteid', 'site', 'local_hub');
         }
 
         $mform->addElement('text', 'search', get_string('keywords', 'local_hub'));
