@@ -247,7 +247,8 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
     //check if a site already attempt a registration
     $registrationattempt = get_config('local_hub_unregistration', $sitewithsameurl->id);
     if (!empty($registrationattempt)) {
-        throw new moodle_exception('freshmoodleregistrationerror2');
+        throw new moodle_exception('freshmoodleregistrationerror2', 'local_hub',
+                new moodle_url($url));
     }
 
     //create a temporary registration token to identify the previously registered site administrator
