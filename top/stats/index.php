@@ -50,15 +50,41 @@ $PAGE->set_url(new moodle_url('/stats/'));
 $PAGE->navbar->add($PAGE->heading, $PAGE->url);
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading($PAGE->heading);
+//echo $OUTPUT->heading($PAGE->heading);
+
+/**
+ * Display the implementation map chart
+ */
+echo $OUTPUT->heading(get_string('top10countriesbyregistration', 'local_moodleorg'));
+echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
+echo html_writer::start_tag('p', array('class'=>'mdl-align'));
+echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'local_moodleorg')));
+echo html_writer::end_tag('p');
+$table = new html_table();
+$table->attributes = array('class'=>'generaltable boxaligncenter');
+$table->width = '400px';
+$table->head = array('Country', 'Registrations');
+$table->data = array();
+$table->align = array('left','right');
+$top10countries = local_moodleorg_stats_top_10_countries();
+$countrynames = get_string_manager()->get_list_of_countries();
+foreach ($top10countries as $row) {
+    $data = Array($countrynames[$row->country], number_format($row->countrycount));
+    $table->data[] = $data;
+}
+echo html_writer::table($table);
+if ($stats->countrycount) {
+    echo html_writer::tag('p', get_string('graphregistrationmapdesc','local_moodleorg',$stats->countrycount), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
+}
+echo html_writer::end_tag('div');
 
 /**
  * Display the all registered sites graph
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
-echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>all_sites_graph(), 'alt'=>get_string('registrationgraphalt', 'local_moodleorg')));
-echo html_writer::end_tag('p');
+//echo html_writer::start_tag('p', array('class'=>'mdl-align'));
+//echo html_writer::empty_tag('img', array('src'=>all_sites_graph(), 'alt'=>get_string('registrationgraphalt', 'local_moodleorg')));
+//echo html_writer::end_tag('p');
 echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;'));
 
 $table = new html_table();
@@ -82,11 +108,11 @@ echo html_writer::end_tag('div');
 /**
  * Display the new registrations graph
  */
-echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
-echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>new_registrations_graph(), 'alt'=>get_string('newregistrations', 'local_moodleorg')));
-echo html_writer::end_tag('p');
-echo html_writer::end_tag('div');
+//echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
+//echo html_writer::start_tag('p', array('class'=>'mdl-align'));
+//echo html_writer::empty_tag('img', array('src'=>new_registrations_graph(), 'alt'=>get_string('newregistrations', 'local_moodleorg')));
+//echo html_writer::end_tag('p');
+//echo html_writer::end_tag('div');
 
 /**
  * Display the download summary graph
@@ -109,6 +135,7 @@ echo '&nbsp;';
 echo html_writer::empty_tag('img', array('src'=>moodle_users_per_site(), 'alt'=>get_string('graphusersites', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 
+/*
 echo $OUTPUT->heading(get_string('top10sitesbyusers', 'local_moodleorg'));
 $table = new html_table();
 $table->attributes = array('class'=>'generaltable boxaligncenter');
@@ -155,32 +182,8 @@ foreach ($top10coursesitesresults as $row) {
 }
 echo html_writer::table($table);
 echo html_writer::end_tag('div');
+*/
 
-/**
- * Display the implementation map chart
- */
-echo $OUTPUT->heading(get_string('top10countriesbyregistration', 'local_moodleorg'));
-echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
-echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>moodle_implementation_map_graph(), 'alt'=>get_string('graphregistrationmap', 'local_moodleorg')));
-echo html_writer::end_tag('p');
-$table = new html_table();
-$table->attributes = array('class'=>'generaltable boxaligncenter');
-$table->width = '400px';
-$table->head = array('Country', 'Registrations');
-$table->data = array();
-$table->align = array('left','right');
-$top10countries = local_moodleorg_stats_top_10_countries();
-$countrynames = get_string_manager()->get_list_of_countries();
-foreach ($top10countries as $row) {
-    $data = Array($countrynames[$row->country], number_format($row->countrycount));
-    $table->data[] = $data;
-}
-echo html_writer::table($table);
-if ($stats->countrycount) {
-    echo html_writer::tag('p', get_string('graphregistrationmapdesc','local_moodleorg',$stats->countrycount), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
-}
-echo html_writer::end_tag('div');
 
 /**
  * Display the major and minor registrations for the past 6 months
