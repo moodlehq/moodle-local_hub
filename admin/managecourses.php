@@ -216,8 +216,13 @@ if (!empty($courseid)) {
 
 
 //complete course data with site name and course content
-$sites = $hub->get_sites(array('deleted' => 1));
-$courseids = array(); //all result courses
+$courseids = array();
+foreach ($courses as $tmpcourse) {
+    $courseids[] = $tmpcourse->id;
+}
+$courseidslist = implode(',', $courseids);
+$sites = $DB->get_records_sql('SELECT site.* FROM {hub_course_directory} course, {hub_site_directory} site WHERE '
+        . 'course.id IN (' . $courseidslist . ') AND site.id = course.siteid  GROUP BY siteid');
 $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
 foreach ($courses as &$course) {
     //get site name for each courses
@@ -232,7 +237,6 @@ foreach ($courses as &$course) {
     }
 
     //some information for the YUI imagegallery javascript
-    $courseids[] = $course->id;
     $courseimagenumbers[] = $course->screenshots;
 }
 
