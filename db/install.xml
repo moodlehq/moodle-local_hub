@@ -6,12 +6,12 @@
   <TABLES>
     <TABLE NAME="countries" COMMENT="countries table retrofitted from MySQL" NEXT="register_ads">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="ipfrom"/>
-        <FIELD NAME="ipfrom" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="ipto"/>
-        <FIELD NAME="ipto" TYPE="int" LENGTH="20" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="ipfrom" NEXT="code2"/>
-        <FIELD NAME="code2" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="ipto" NEXT="code3"/>
-        <FIELD NAME="code3" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="code2" NEXT="countryname"/>
-        <FIELD NAME="countryname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="code3"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="ipfrom"/>
+        <FIELD NAME="ipfrom" TYPE="int" LENGTH="20" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="ipto"/>
+        <FIELD NAME="ipto" TYPE="int" LENGTH="20" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="ipfrom" NEXT="code2"/>
+        <FIELD NAME="code2" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" PREVIOUS="ipto" NEXT="code3"/>
+        <FIELD NAME="code3" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" PREVIOUS="code2" NEXT="countryname"/>
+        <FIELD NAME="countryname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="code3"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -24,11 +24,11 @@
     </TABLE>
     <TABLE NAME="register_ads" COMMENT="register_ads table retrofitted from MySQL" PREVIOUS="countries" NEXT="register_donations">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="country"/>
-        <FIELD NAME="country" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="partner"/>
-        <FIELD NAME="partner" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="country" NEXT="title"/>
-        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="partner" NEXT="image"/>
-        <FIELD NAME="image" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="title"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="country"/>
+        <FIELD NAME="country" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="partner"/>
+        <FIELD NAME="partner" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="country" NEXT="title"/>
+        <FIELD NAME="title" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="partner" NEXT="image"/>
+        <FIELD NAME="image" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="title"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -39,13 +39,13 @@
     </TABLE>
     <TABLE NAME="register_donations" COMMENT="register_donations table retrofitted from MySQL" PREVIOUS="register_ads" NEXT="register_downloads">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="userid"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="userid" NEXT="org"/>
-        <FIELD NAME="org" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="name" NEXT="url"/>
-        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="org" NEXT="amount"/>
-        <FIELD NAME="amount" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="url" NEXT="timedonated"/>
-        <FIELD NAME="timedonated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="1053918331" SEQUENCE="false" ENUM="false" PREVIOUS="amount"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="name"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="userid" NEXT="org"/>
+        <FIELD NAME="org" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="name" NEXT="url"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="org" NEXT="amount"/>
+        <FIELD NAME="amount" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" PREVIOUS="url" NEXT="timedonated"/>
+        <FIELD NAME="timedonated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="1053918331" SEQUENCE="false" PREVIOUS="amount"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -53,10 +53,10 @@
     </TABLE>
     <TABLE NAME="register_downloads" COMMENT="register_downloads table retrofitted from MySQL" PREVIOUS="register_donations" NEXT="registry">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="url"/>
-        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="ip"/>
-        <FIELD NAME="ip" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" ENUM="false" PREVIOUS="url" NEXT="timeaccess"/>
-        <FIELD NAME="timeaccess" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="ip"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="url"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="ip"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="url" NEXT="timeaccess"/>
+        <FIELD NAME="timeaccess" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="ip"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -67,35 +67,57 @@
     </TABLE>
     <TABLE NAME="registry" COMMENT="registry table retrofitted from MySQL" PREVIOUS="register_downloads" NEXT="registry_votes">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="url"/>
-        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="sitename"/>
-        <FIELD NAME="sitename" TYPE="text" LENGTH="small" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="url" NEXT="moodleversion"/>
-        <FIELD NAME="moodleversion" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="sitename" NEXT="moodlerelease"/>
-        <FIELD NAME="moodlerelease" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="moodleversion" NEXT="host"/>
-        <FIELD NAME="host" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="moodlerelease" NEXT="ipaddress"/>
-        <FIELD NAME="ipaddress" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="host" NEXT="lang"/>
-        <FIELD NAME="lang" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="ipaddress" NEXT="courses"/>
-        <FIELD NAME="courses" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="lang" NEXT="users"/>
-        <FIELD NAME="users" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="courses" NEXT="enrolments"/>
-        <FIELD NAME="enrolments" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="users" NEXT="teachers"/>
-        <FIELD NAME="teachers" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="enrolments" NEXT="posts"/>
-        <FIELD NAME="posts" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="teachers" NEXT="resources"/>
-        <FIELD NAME="resources" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="posts" NEXT="questions"/>
-        <FIELD NAME="questions" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="resources" NEXT="secret"/>
-        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="questions" NEXT="country"/>
-        <FIELD NAME="country" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="secret" NEXT="public"/>
-        <FIELD NAME="public" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="country" NEXT="adminname"/>
-        <FIELD NAME="adminname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="public" NEXT="adminemail"/>
-        <FIELD NAME="adminemail" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" ENUM="false" PREVIOUS="adminname" NEXT="mailme"/>
-        <FIELD NAME="mailme" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="adminemail" NEXT="contact"/>
-        <FIELD NAME="contact" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="mailme" NEXT="confirmed"/>
-        <FIELD NAME="confirmed" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="contact" NEXT="timeupdated"/>
-        <FIELD NAME="timeupdated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="confirmed" NEXT="timecreated"/>
-        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="timeupdated" NEXT="unreachable"/>
-        <FIELD NAME="unreachable" TYPE="int" LENGTH="11" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="timecreated" NEXT="timelinkchecked"/>
-        <FIELD NAME="timelinkchecked" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="unreachable" NEXT="cool"/>
-        <FIELD NAME="cool" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="timelinkchecked" NEXT="cooldate"/>
-        <FIELD NAME="cooldate" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="cool"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="hubid"/>
+        <FIELD NAME="hubid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" NEXT="url" PREVIOUS="id"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="hubid" NEXT="sitename"/>
+        <FIELD NAME="sitename" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="url" NEXT="description"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="sitename" NEXT="moodleversion"/>
+        <FIELD NAME="moodleversion" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="description" NEXT="moodlerelease"/>
+        <FIELD NAME="moodlerelease" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="moodleversion" NEXT="serverstring"/>
+        <FIELD NAME="serverstring" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="moodlerelease" NEXT="host"/>
+        <FIELD NAME="host" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="serverstring" NEXT="ipaddress"/>
+        <FIELD NAME="ipaddress" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" PREVIOUS="host" NEXT="lang"/>
+        <FIELD NAME="lang" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="ipaddress" NEXT="courses"/>
+        <FIELD NAME="courses" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="lang" NEXT="users"/>
+        <FIELD NAME="users" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="courses" NEXT="enrolments"/>
+        <FIELD NAME="enrolments" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="users" NEXT="teachers"/>
+        <FIELD NAME="teachers" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="enrolments" NEXT="posts"/>
+        <FIELD NAME="posts" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="teachers" NEXT="participantnumberaverage"/>
+        <FIELD NAME="participantnumberaverage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="posts" NEXT="resources"/>
+        <FIELD NAME="resources" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="-1" SEQUENCE="false" PREVIOUS="participantnumberaverage" NEXT="questions"/>
+        <FIELD NAME="questions" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="resources" NEXT="modulenumberaverage"/>
+        <FIELD NAME="modulenumberaverage" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" PREVIOUS="questions" NEXT="secret"/>
+        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="modulenumberaverage" NEXT="trusted"/>
+        <FIELD NAME="trusted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="secret" NEXT="country"/>
+        <FIELD NAME="country" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="trusted" NEXT="public"/>
+        <FIELD NAME="public" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="country" NEXT="deleted"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" PREVIOUS="public" NEXT="publicationmax"/>
+        <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="deleted" NEXT="prioritise"/>
+        <FIELD NAME="prioritise" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="publicationmax" NEXT="regioncode"/>
+        <FIELD NAME="regioncode" TYPE="char" LENGTH="6" NOTNULL="false" SEQUENCE="false" PREVIOUS="prioritise" NEXT="street"/>
+        <FIELD NAME="street" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="regioncode" NEXT="geolocation"/>
+        <FIELD NAME="geolocation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" PREVIOUS="street" NEXT="adminname"/>
+        <FIELD NAME="adminname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="geolocation" NEXT="adminemail"/>
+        <FIELD NAME="adminemail" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="adminname" NEXT="adminphone"/>
+        <FIELD NAME="adminphone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" PREVIOUS="adminemail" NEXT="imageurl"/>
+        <FIELD NAME="imageurl" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" PREVIOUS="adminphone" NEXT="mailme"/>
+        <FIELD NAME="mailme" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="imageurl" NEXT="privacy"/>
+        <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" PREVIOUS="mailme" NEXT="contact"/>
+        <FIELD NAME="contact" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="privacy" NEXT="confirmed"/>
+        <FIELD NAME="confirmed" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="contact" NEXT="timeupdated"/>
+        <FIELD NAME="timeupdated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="confirmed" NEXT="timecreated"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timeupdated" NEXT="timeunreachable"/>
+        <FIELD NAME="timeunreachable" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timecreated" NEXT="unreachable"/>
+        <FIELD NAME="unreachable" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timeunreachable" NEXT="score"/>
+        <FIELD NAME="score" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="unreachable" NEXT="errormsg"/>
+        <FIELD NAME="errormsg" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="score" NEXT="timelinkchecked"/>
+        <FIELD NAME="timelinkchecked" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="errormsg" NEXT="cool"/>
+        <FIELD NAME="cool" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="timelinkchecked" NEXT="cooldate"/>
+        <FIELD NAME="cooldate" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="cool" NEXT="override"/>
+        <FIELD NAME="override" TYPE="int" LENGTH="3" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="cooldate" NEXT="redirectto"/>
+        <FIELD NAME="redirectto" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="override" NEXT="latitude"/>
+        <FIELD NAME="latitude" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" PREVIOUS="redirectto" NEXT="longitude"/>
+        <FIELD NAME="longitude" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" PREVIOUS="latitude"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
@@ -107,11 +129,11 @@
     </TABLE>
     <TABLE NAME="registry_votes" COMMENT="registry_votes table retrofitted from MySQL" PREVIOUS="registry">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" ENUM="false" NEXT="siteid"/>
-        <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="id" NEXT="userid"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="siteid" NEXT="vote"/>
-        <FIELD NAME="vote" TYPE="int" LENGTH="4" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="userid" NEXT="timevoted"/>
-        <FIELD NAME="timevoted" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" ENUM="false" PREVIOUS="vote"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="siteid"/>
+        <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="userid"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="siteid" NEXT="vote"/>
+        <FIELD NAME="vote" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="userid" NEXT="timevoted"/>
+        <FIELD NAME="timevoted" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="vote"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
