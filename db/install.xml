@@ -77,7 +77,7 @@
         <FIELD NAME="serverstring" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="moodlerelease" NEXT="host"/>
         <FIELD NAME="host" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="serverstring" NEXT="ipaddress"/>
         <FIELD NAME="ipaddress" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" PREVIOUS="host" NEXT="lang"/>
-        <FIELD NAME="lang" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="ipaddress" NEXT="courses"/>
+        <FIELD NAME="lang" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" PREVIOUS="ipaddress" NEXT="courses"/>
         <FIELD NAME="courses" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="lang" NEXT="users"/>
         <FIELD NAME="users" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="courses" NEXT="enrolments"/>
         <FIELD NAME="enrolments" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="users" NEXT="teachers"/>
