@@ -103,7 +103,7 @@ class google_charts_map_graph extends graph {
      * @deprecated
      */
     public function add_values(array $xvalues /*, $countrykey, $countkey*/) {
-        return $this->add_country_values($xvalues, func_get_arg(1), func_get_arg(2))
+        return $this->add_country_values($xvalues, func_get_arg(1), func_get_arg(2));
     }
 
     /**
