@@ -16,20 +16,20 @@ function get_combined_country_info() {
     $countries = get_string_manager()->get_list_of_countries();
     $sql = "SELECT
                 r.country,
-                IFNULL(rp.public, 0) + IFNULL(rr.private,0) total,
-                IFNULL(rp.public, 0) public,
-                IFNULL(rr.private, 0) private
+                COALESCE(rp.public, 0) + COALESCE(rr.private,0) total,
+                COALESCE(rp.public, 0) public,
+                COALESCE(rr.private, 0) private
             FROM {registry} r
 
             LEFT JOIN (
-                SELECT r.country, IFNULL(COUNT(r.id), 0) AS public
+                SELECT r.country, COALESCE(COUNT(r.id), 0) AS public
                   FROM {registry} r
                  WHERE r.public > 0 AND $publicwhere
               GROUP BY r.country
             ) rp ON rp.country = r.country
 
             LEFT JOIN (
-                SELECT r.country, IFNULL(COUNT(r.id), 0) AS private
+                SELECT r.country, COALESCE(COUNT(r.id), 0) AS private
                   FROM {registry} r
                  WHERE r.public = 0 AND $privatewhere
               GROUP BY r.country

@@ -272,7 +272,7 @@ function all_sites_graph() {
     }
 
     $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
-    $sql = "SELECT r1.dateorder, r1.created, IFNULL(r2.unreachable, 0) as unreachable
+    $sql = "SELECT r1.dateorder, r1.created, COALESCE(r2.unreachable, 0) as unreachable
             FROM (
                 SELECT FROM_UNIXTIME(r.timecreated, '%Y%m') AS dateorder,
                        COUNT(r.id) AS created
