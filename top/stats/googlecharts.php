@@ -91,13 +91,29 @@ class google_charts_map_graph extends graph {
     }
 
     /**
+     * Expects two parameters!
+     * @deprecated
+     */
+    public function add_value($country /*, $value*/) {
+        return $this->add_country_value($country, func_get_arg(1));
+    }
+
+    /**
+     * Expects two parameters!
+     * @deprecated
+     */
+    public function add_values(array $xvalues /*, $countrykey, $countkey*/) {
+        return $this->add_country_values($xvalues, func_get_arg(1), func_get_arg(2))
+    }
+
+    /**
      * Add a country and value to the map
      *
      * @param string $country A two letter country code ISO3166
      * @param string $value The number to associated with this country
      * @return bool
      */
-    public function add_value($country, $value) {
+    public function add_country_value($country, $value) {
         if (strlen($country)===2) {
             $this->countries[] =strtoupper($country);
             $this->percentages[] = $value;
@@ -114,10 +130,10 @@ class google_charts_map_graph extends graph {
      * @param string|int $countkey The count code key for the data array
      * @return int A count of the successfully added country/value pairs
      */
-    public function add_values(array $xvalues, $countrykey, $countkey) {
+    public function add_country_values(array $xvalues, $countrykey, $countkey) {
         $count = 0;
         foreach ($xvalues as $xvalue) {
-            $outcome = $this->add_value($xvalue[$countrykey], $xvalue[$countkey]);
+            $outcome = $this->add_country_value($xvalue[$countrykey], $xvalue[$countkey]);
             if ($outcome) $count++;
         }
         return $count;
