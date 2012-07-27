@@ -36,8 +36,8 @@ function get_combined_country_info() {
             ) rr ON rr.country = r.country
 
             GROUP BY r.country
-            HAVING ( total > 0 )
-            ORDER BY total DESC";
+            HAVING ((COALESCE(rp.public, 0) + COALESCE(rr.private,0)) > 0 )
+            ORDER BY (COALESCE(rp.public, 0) + COALESCE(rr.private,0)) DESC";
     $resultingcountries = $DB->get_records_sql($sql, array_merge($publicparams, $privateparams));
     $countryarray = Array();
     $countryarray['00'] = new stdClass;
