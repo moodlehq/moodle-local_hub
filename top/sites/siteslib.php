@@ -16,7 +16,7 @@ function get_combined_country_info() {
     $countries = get_string_manager()->get_list_of_countries();
     $sql = "SELECT
                 r.country,
-                COALESCE(rp.public, 0) + COALESCE(rr.private,0) total,
+                COALESCE(rp.public, 0) + COALESCE(rr.private,0) AS total,
                 COALESCE(rp.public, 0) public,
                 COALESCE(rr.private, 0) private
             FROM {registry} r
