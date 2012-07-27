@@ -33,6 +33,7 @@ echo $OUTPUT->heading($PAGE->heading);
 //print_heading(count($users)." users with custom pictures");
 
 $now = time();
+$string = new stdClass();
 $string->day         = get_string("day");
 $string->days        = get_string("days");
 $string->hour        = get_string("hour");
