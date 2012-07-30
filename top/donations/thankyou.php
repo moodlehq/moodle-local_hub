@@ -91,12 +91,12 @@ if (!empty($form)) {
       echo "<center><hr>";
       echo "<p>If you want to you can add your name to the public list of donors.</p><br />";
       echo "<form action=thankyou.php method=post><table align=center>";
-      echo "<tr><td align=right>Name:</td><td><input type=text name=name value=\"$form->name\">(optional)</td></tr>";
+      echo "<tr><td align=right>Name:</td><td><input type=text name=name value=\"".s($form->name)."\">(optional)</td></tr>";
       echo "<tr><td align=right>Organisation name:</td><td><input type=text name=org>(optional)</td></tr>";
       echo "</table>";
       echo "<input type=submit value=\"Please add me to the public list of donors\">";
-      echo "<input type=hidden name=amount value=\"$form->amount\">";
-      echo "<input type=hidden name=code value=\"$form->code\">";
+      echo "<input type=hidden name=amount value=\"".s($form->amount)."\">";
+      echo "<input type=hidden name=code value=\"".s($form->code)."\">";
       echo "</form>";
   }
   echo "</center>";

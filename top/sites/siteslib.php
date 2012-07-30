@@ -9,36 +9,16 @@ require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
 function get_combined_country_info() {
     global $CFG, $DB;
 
-    list($publicwhere, $publicparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pub');
-    list($privatewhere, $privateparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pri');
-
+    list($confirmedwhere, $confirmedparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pub');
 
     $countries = get_string_manager()->get_list_of_countries();
-    $sql = "SELECT
-                r.country,
-                IFNULL(rp.public, 0) + IFNULL(rr.private,0) total,
-                IFNULL(rp.public, 0) public,
-                IFNULL(rr.private, 0) private
-            FROM {registry} r
-
-            LEFT JOIN (
-                SELECT r.country, IFNULL(COUNT(r.id), 0) AS public
-                  FROM {registry} r
-                 WHERE r.public > 0 AND $publicwhere
-              GROUP BY r.country
-            ) rp ON rp.country = r.country
-
-            LEFT JOIN (
-                SELECT r.country, IFNULL(COUNT(r.id), 0) AS private
-                  FROM {registry} r
-                 WHERE r.public = 0 AND $privatewhere
-              GROUP BY r.country
-            ) rr ON rr.country = r.country
-
-            GROUP BY r.country
-            HAVING ( total > 0 )
-            ORDER BY total DESC";
-    $resultingcountries = $DB->get_records_sql($sql, array_merge($publicparams, $privateparams));
+    $sql = "SELECT r.country, COUNT('x') AS totalcount, SUM(SIGN(r.public)) AS publiccount
+              FROM {registry} r
+             WHERE $confirmedwhere
+          GROUP BY r.country
+            HAVING (COUNT('x')) > 0
+          ORDER BY (COUNT('x')) DESC";
+    $resultingcountries = $DB->get_records_sql($sql, $confirmedparams);
     $countryarray = Array();
     $countryarray['00'] = new stdClass;
     $countryarray['00']->countrycode = '00';
@@ -50,24 +30,19 @@ function get_combined_country_info() {
     $totalprivate = 0;
     foreach ($resultingcountries as $country) {
         if (array_key_exists($country->country, $countries)) {
-            if (!array_key_exists($country->country, $countryarray)) {
-                $countryarray[$country->country] = new stdClass;
-                $countryarray[$country->country]->countrycode = $country->country;
-                $countryarray[$country->country]->country = $countries[$country->country];
-                $countryarray[$country->country]->totalcount = 0;
-                $countryarray[$country->country]->publiccount = 0;
-                $countryarray[$country->country]->privatecount = 0;
-            }
-            $countryarray[$country->country]->totalcount = $country->total;
-            $countryarray[$country->country]->publiccount += $country->public;
-            $countryarray[$country->country]->privatecount += $country->private;
+            $countryarray[$country->country] = new stdClass;
+            $countryarray[$country->country]->countrycode = $country->country;
+            $countryarray[$country->country]->country = $countries[$country->country];
+            $countryarray[$country->country]->totalcount = $country->totalcount;
+            $countryarray[$country->country]->publiccount = $country->publiccount;
+            $countryarray[$country->country]->privatecount = $country->totalcount - $country->publiccount;
         } else {
-            $countryarray['00']->totalcount += $country->total;
-            $countryarray['00']->publiccount += $country->public;
-            $countryarray['00']->privatecount += $country->private;
+            $countryarray['00']->totalcount += $country->totalcount;
+            $countryarray['00']->publiccount += $country->publiccount;
+            $countryarray['00']->privatecount += $country->totalcount - $country->publiccount;
         }
-        $totalpublic += $country->public;
-        $totalprivate += $country->private;
+        $totalpublic += $country->publiccount;
+        $totalprivate += $country->totalcount - $country->publiccount;
     }
     //$countryarray[] = array_shift($countryarray);
     array_shift($countryarray);

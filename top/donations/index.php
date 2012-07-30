@@ -47,25 +47,25 @@ $fromdate = time() - 31536000;
 
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter boxwidthwide', 'style'=>'padding:20px;'));
 
-$bigdonations = $DB->get_records_select("register_donations", "timedonated > ? AND amount >= 1000", array($fromdate), "timedonated DESC");
+$bigdonations = $DB->get_records_select("register_donations", "timedonated > ? AND ".$DB->sql_cast_char2real('amount')." >= 1000", array($fromdate), "timedonated DESC");
 
 foreach ($bigdonations as $key => $donation) {
     $donations[] = $donation;
 }
 
-$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND amount >= 500 AND amount < 1000", array($fromdate), "timedonated DESC");
+$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND ".$DB->sql_cast_char2real('amount')." >= 500 AND ".$DB->sql_cast_char2real('amount')." < 1000", array($fromdate), "timedonated DESC");
 
 foreach ($otherdonations as $key => $donation) {
     $donations[] = $donation;
 }
 
-$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND amount >= 200 AND amount < 500", array($fromdate), "timedonated DESC");
+$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND ".$DB->sql_cast_char2real('amount')." >= 200 AND ".$DB->sql_cast_char2real('amount')." < 500", array($fromdate), "timedonated DESC");
 
 foreach ($otherdonations as $key => $donation) {
     $donations[] = $donation;
 }
 
-$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND amount < 200", array($fromdate), "timedonated DESC");
+$otherdonations = $DB->get_records_select("register_donations", "timedonated > ? AND ".$DB->sql_cast_char2real('amount')." < 200", array($fromdate), "timedonated DESC");
 
 foreach ($otherdonations as $key => $donation) {
     $donations[] = $donation;
