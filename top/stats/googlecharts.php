@@ -99,7 +99,7 @@ class google_charts_map_graph extends graph {
     }
 
     /**
-     * Expects two parameters!
+     * Expects three parameters!
      * @deprecated
      */
     public function add_values(array $xvalues /*, $countrykey, $countkey*/) {
