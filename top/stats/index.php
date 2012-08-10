@@ -186,9 +186,8 @@ foreach ($top10coursesitesresults as $row) {
     $table->data[] = $data;
 }
 echo html_writer::table($table);
-echo html_writer::end_tag('div');
 */
-
+echo html_writer::end_tag('div');
 
 /**
  * Display the major and minor registrations for the past 6 months
