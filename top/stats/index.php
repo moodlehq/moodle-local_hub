@@ -77,7 +77,7 @@ $table->data = array(
 );
 echo html_writer::table($table);
 
-echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;'));
+echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;width:300px;'));
 
 echo html_writer::end_tag('div');
 
@@ -135,7 +135,7 @@ echo html_writer::end_tag('div');
  */
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align', 'style'=>'font-size:0.8em;color:#555;'));
-echo html_writer::empty_tag('img', array('src'=>'sites.bar.png', 'alt'=>get_string('registeredsitestitle', 'local_moodleorg')));
+//echo html_writer::empty_tag('img', array('src'=>'sites.bar.png', 'alt'=>get_string('registeredsitestitle', 'local_moodleorg')));
 echo '&nbsp;';
 echo html_writer::empty_tag('img', array('src'=>moodle_users_per_site(), 'alt'=>get_string('graphusersites', 'local_moodleorg')));
 echo html_writer::end_tag('p');
