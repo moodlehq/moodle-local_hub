@@ -77,7 +77,7 @@ $table->data = array(
 );
 echo html_writer::table($table);
 
-echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;width:300px;'));
+echo html_writer::tag('p', get_string('registrationgraphdesc', 'local_moodleorg'), array('class'=>'mdl-align', 'style'=>'font-size:0.8em;'));
 
 echo html_writer::end_tag('div');
 
