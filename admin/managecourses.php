@@ -217,52 +217,53 @@ if (!empty($courseid)) {
 
 //complete course data with site name and course content
 $courseids = array();
-foreach ($courses as $tmpcourse) {
-    $courseids[] = $tmpcourse->id;
-}
-$courseidslist = implode(',', $courseids);
-$sites = $DB->get_records_sql('SELECT site.* FROM {hub_course_directory} course, {hub_site_directory} site WHERE '
-        . 'course.id IN (' . $courseidslist . ') AND site.id = course.siteid  GROUP BY siteid');
 $courseimagenumbers = array(); //number of screenshots of all courses (must be exact same order than $courseids)
-foreach ($courses as &$course) {
-    //get site name for each courses
-    $course->site = $sites[$course->siteid];
 
-    //get course content for each course
-    $contents = $hub->get_course_contents($course->id);
-    if (!empty($contents)) {
-        foreach ($contents as $content) {
-            $course->contents[] = $content;
+if (!empty($courses)) {
+    foreach ($courses as $tmpcourse) {
+        $courseids[] = $tmpcourse->id;
+    }
+    $courseidslist = implode(',', $courseids);
+    $sites = $DB->get_records_sql('SELECT site.* FROM {hub_course_directory} course, {hub_site_directory} site WHERE '
+            . 'course.id IN (' . $courseidslist . ') AND site.id = course.siteid  GROUP BY siteid');
+
+    foreach ($courses as &$course) {
+        //get site name for each courses
+        $course->site = $sites[$course->siteid];
+
+        //get course content for each course
+        $contents = $hub->get_course_contents($course->id);
+        if (!empty($contents)) {
+            foreach ($contents as $content) {
+                $course->contents[] = $content;
+            }
         }
+
+        //some information for the YUI imagegallery javascript
+        $courseimagenumbers[] = $course->screenshots;
     }
 
-    //some information for the YUI imagegallery javascript
-    $courseimagenumbers[] = $course->screenshots;
+    //add rating information to the course
+    require_once($CFG->dirroot . '/rating/lib.php');
+    $ratingoptions = new stdclass();
+    $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+    $ratingoptions->items = $courses;
+    $ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
+    $ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
+    $ratingoptions->userid = $USER->id;
+    $ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/admin/managecourses.php";
+    $ratingoptions->component = 'local_hub';
+    $ratingoptions->ratingarea = 'featured';
+    $rm = new rating_manager();
+    $courses = $rm->get_ratings($ratingoptions); //this function return $ratingoptions->items with information about the ratings
+
+    //load javascript for YUI imagegallery javascript screenshot
+    $PAGE->requires->yui_module('moodle-block_community-imagegallery',
+            'M.blocks_community.init_imagegallery',
+            array(array('imageids' => $courseids,
+                    'imagenumbers' => $courseimagenumbers,
+                    'huburl' => $CFG->wwwroot)));
 }
-
-//add rating information to the course
-require_once($CFG->dirroot . '/rating/lib.php');
-$ratingoptions = new stdclass();
-$ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
-$ratingoptions->items = $courses;
-$ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
-$ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
-$ratingoptions->userid = $USER->id;
-$ratingoptions->returnurl = $CFG->wwwroot . "/local/hub/admin/managecourses.php";
-$ratingoptions->component = 'local_hub';
-$ratingoptions->ratingarea = 'featured';
-$rm = new rating_manager();
-$courses = $rm->get_ratings($ratingoptions); //this function return $ratingoptions->items with information about the ratings
-
-
-/// OUTPUT
-
-//load javascript for YUI imagegallery javascript screenshot
-$PAGE->requires->yui_module('moodle-block_community-imagegallery',
-        'M.blocks_community.init_imagegallery',
-        array(array('imageids' => $courseids,
-                'imagenumbers' => $courseimagenumbers,
-                'huburl' => $CFG->wwwroot)));
 
 //display header
 echo $OUTPUT->header();
