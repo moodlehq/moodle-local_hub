@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/moodleorg/db" VERSION="20090219" COMMENT="XMLDB file for moodle.org tables"
+<XMLDB PATH="local/moodleorg/db" VERSION="20120910" COMMENT="XMLDB file for moodle.org tables"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -68,7 +68,7 @@
     <TABLE NAME="registry" COMMENT="registry table retrofitted from MySQL" PREVIOUS="register_downloads" NEXT="registry_votes">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="hubid"/>
-        <FIELD NAME="hubid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" NEXT="url" PREVIOUS="id"/>
+        <FIELD NAME="hubid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" PREVIOUS="id" NEXT="url"/>
         <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="hubid" NEXT="sitename"/>
         <FIELD NAME="sitename" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="url" NEXT="description"/>
         <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" PREVIOUS="sitename" NEXT="moodleversion"/>
@@ -127,7 +127,7 @@
         <INDEX NAME="country" UNIQUE="false" FIELDS="country" PREVIOUS="confirmed"/>
       </INDEXES>
     </TABLE>
-    <TABLE NAME="registry_votes" COMMENT="registry_votes table retrofitted from MySQL" PREVIOUS="registry">
+    <TABLE NAME="registry_votes" COMMENT="registry_votes table retrofitted from MySQL" PREVIOUS="registry" NEXT="moodleorg_useful_coursemap">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="siteid"/>
         <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="id" NEXT="userid"/>
@@ -142,6 +142,19 @@
         <INDEX NAME="userid" UNIQUE="false" FIELDS="userid" NEXT="siteid"/>
         <INDEX NAME="siteid" UNIQUE="false" FIELDS="siteid" PREVIOUS="userid"/>
       </INDEXES>
+    </TABLE>
+    <TABLE NAME="moodleorg_useful_coursemap" COMMENT="Mapping between courses, languages and scales used for generating moodleorg front page." PREVIOUS="registry_votes">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true" NEXT="courseid"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Course id" PREVIOUS="id" NEXT="lang"/>
+        <FIELD NAME="lang" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="The language this course maps to" PREVIOUS="courseid" NEXT="scaleid"/>
+        <FIELD NAME="scaleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The scale for 'useful posts' which this course uses" PREVIOUS="lang"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="courseid"/>
+        <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id" COMMENT="mapping to course id" PREVIOUS="primary" NEXT="scaleid"/>
+        <KEY NAME="scaleid" TYPE="foreign" FIELDS="scaleid" REFTABLE="scale" REFFIELDS="id" COMMENT="Scale id index" PREVIOUS="courseid"/>
+      </KEYS>
     </TABLE>
   </TABLES>
 </XMLDB>
