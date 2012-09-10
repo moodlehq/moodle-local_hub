@@ -36,5 +36,18 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2012091000, 'local', 'moodleorg');
     }
 
+    if ($oldversion < 2012091001) {
+
+        // Define key lang (unique) to be added to moodleorg_useful_coursemap
+        $table = new xmldb_table('moodleorg_useful_coursemap');
+        $key = new xmldb_key('lang', XMLDB_KEY_UNIQUE, array('lang'));
+
+        // Launch add key lang
+        $dbman->add_key($table, $key);
+
+        // moodleorg savepoint reached
+        upgrade_plugin_savepoint(true, 2012091001, 'local', 'moodleorg');
+    }
+
     return true;
 }

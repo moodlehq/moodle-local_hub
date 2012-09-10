@@ -153,7 +153,8 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="courseid"/>
         <KEY NAME="courseid" TYPE="foreign-unique" FIELDS="courseid" REFTABLE="course" REFFIELDS="id" COMMENT="mapping to course id" PREVIOUS="primary" NEXT="scaleid"/>
-        <KEY NAME="scaleid" TYPE="foreign" FIELDS="scaleid" REFTABLE="scale" REFFIELDS="id" COMMENT="Scale id index" PREVIOUS="courseid"/>
+        <KEY NAME="scaleid" TYPE="foreign" FIELDS="scaleid" REFTABLE="scale" REFFIELDS="id" COMMENT="Scale id index" PREVIOUS="courseid" NEXT="lang"/>
+        <KEY NAME="lang" TYPE="unique" FIELDS="lang" COMMENT="unique lang key" PREVIOUS="scaleid"/>
       </KEYS>
     </TABLE>
   </TABLES>
