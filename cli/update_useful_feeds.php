@@ -38,11 +38,11 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
         mtrace("No forums found for $langcode");
         return;
     }
+
+    //TODO: this is in the existing code, but it seems to do nothing!
     foreach ($forumids as $forum) {
         $forumlist[] = $forum->id;
     }
-
-
     $forumids = implode(',', $forumlist);
 
     list($ctxselect, $ctxjoin) = context_instance_preload_sql('cm.id', CONTEXT_MODULE, 'ctx');
@@ -52,6 +52,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     $params['courseid'] = $courseid;
     $params['since'] = time() - (3600*24*7);   // 7 days
     $params['cmtype'] = 'forum';
+    $params['scaleid'] = $negativescaleid;
     $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
             FROM {forum_posts} fp
             JOIN {user} u ON u.id = fp.userid
@@ -59,7 +60,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
             JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
             JOIN {modules} m ON (cm.module = m.id)
             $ctxjoin
-            JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid)
+            JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid AND r.scaleid = :scaleid)
             WHERE fd.course = :courseid
             AND m.name = :cmtype
             AND r.timecreated > :since
