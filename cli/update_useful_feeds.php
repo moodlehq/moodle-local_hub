@@ -54,16 +54,17 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     $params['cmtype'] = 'forum';
     $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
             FROM {forum_posts} fp
-            LEFT JOIN {user} u ON u.id = fp.userid
-            LEFT JOIN {forum_discussions} fd ON fd.id = fp.discussion
-            LEFT JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
-                 JOIN {modules} m ON (cm.module = m.id)
+            JOIN {user} u ON u.id = fp.userid
+            JOIN {forum_discussions} fd ON fd.id = fp.discussion
+            JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
+            JOIN {modules} m ON (cm.module = m.id)
             $ctxjoin
-            LEFT JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid)
+            JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid)
             WHERE fd.course = :courseid
             AND m.name = :cmtype
             AND r.timecreated > :since
-            ORDER BY r.timecreated DESC";
+            GROUP BY fp.id, fd.forum, ctx.id, u.id
+            ORDER BY MAX(r.timecreated) DESC";
 
     $rs = $DB->get_recordset_sql($sql, $params);
 
