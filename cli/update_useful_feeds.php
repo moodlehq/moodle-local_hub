@@ -79,7 +79,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     }
 
 
-    $rs = $DB->get_recordset_sql($sql, $params);
+    $rs = $DB->get_recordset_sql($sql, $params, 0, 60);
 
     $cachedir = make_cache_directory('moodleorg/useful');
     $rsspath = $cachedir.'/rss-'.$langcode.'.xml';
