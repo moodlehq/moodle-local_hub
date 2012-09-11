@@ -18,12 +18,7 @@ class local_moodleorg_useful_mapping_table extends table_sql {
     }
 
     public function col_edit($row) {
-        if (empty($row->mappingid)) {
-            $str = 'Create';
-        } else {
-            $str = 'Edit';
-        }
-        return html_writer::link(new moodle_url('/local/moodleorg/admin/edit_coursemapping.php', array('courseid'=>$row->id)), $str);
+        return html_writer::link(new moodle_url('/local/moodleorg/admin/edit_coursemapping.php', array('courseid'=>$row->id)), 'Edit');
     }
 
     public function col_scale($row) {
