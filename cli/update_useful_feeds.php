@@ -31,19 +31,6 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     ob_start();   // capture all output
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-    // TODO: is this necessary??
-    $negativescaleid = $scaleid * -1;
-    $forumids = $DB->get_records('forum', array('course'=>$courseid, 'scale'=>$negativescaleid), '', 'id');
-    if (empty($forumids)) {
-        mtrace("No forums found for $langcode");
-        return;
-    }
-
-    //TODO: this is in the existing code, but it seems to do nothing!
-    foreach ($forumids as $forum) {
-        $forumlist[] = $forum->id;
-    }
-    $forumids = implode(',', $forumlist);
 
     list($ctxselect, $ctxjoin) = context_instance_preload_sql('cm.id', CONTEXT_MODULE, 'ctx');
     $userselect = user_picture::fields('u', null, 'uid');
@@ -52,20 +39,45 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     $params['courseid'] = $courseid;
     $params['since'] = time() - (3600*24*7);   // 7 days
     $params['cmtype'] = 'forum';
-    $params['scaleid'] = $negativescaleid;
-    $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
-            FROM {forum_posts} fp
-            JOIN {user} u ON u.id = fp.userid
-            JOIN {forum_discussions} fd ON fd.id = fp.discussion
-            JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
-            JOIN {modules} m ON (cm.module = m.id)
-            $ctxjoin
-            JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid AND r.scaleid = :scaleid)
-            WHERE fd.course = :courseid
-            AND m.name = :cmtype
-            AND r.timecreated > :since
-            GROUP BY fp.id, fd.forum, ctx.id, u.id
-            ORDER BY MAX(r.timecreated) DESC";
+
+    if (!empty($scaleid)) {
+
+        // Check some forums with the scale exist..
+        $negativescaleid = $scaleid * -1;
+        $forumids = $DB->get_records('forum', array('course'=>$courseid, 'scale'=>$negativescaleid), '', 'id');
+        if (empty($forumids)) {
+            mtrace("No forums found for $langcode with scale $scaleid");
+            return;
+        }
+
+        $params['scaleid'] = $negativescaleid;
+        $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
+                FROM {forum_posts} fp
+                JOIN {user} u ON u.id = fp.userid
+                JOIN {forum_discussions} fd ON fd.id = fp.discussion
+                JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
+                JOIN {modules} m ON (cm.module = m.id)
+                $ctxjoin
+                JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid AND r.scaleid = :scaleid)
+                WHERE fd.course = :courseid
+                AND m.name = :cmtype
+                AND r.timecreated > :since
+                GROUP BY fp.id, fd.forum, ctx.id, u.id
+                ORDER BY MAX(r.timecreated) DESC";
+    } else {
+        $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
+                FROM {forum_posts} fp
+                JOIN {user} u ON u.id = fp.userid
+                JOIN {forum_discussions} fd ON fd.id = fp.discussion
+                JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
+                JOIN {modules} m ON (cm.module = m.id)
+                $ctxjoin
+                WHERE fd.course = :courseid
+                AND m.name = :cmtype
+                AND fp.created > :since
+                ORDER BY fp.created DESC";
+    }
+
 
     $rs = $DB->get_recordset_sql($sql, $params);
 
