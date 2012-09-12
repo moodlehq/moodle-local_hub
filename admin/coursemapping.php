@@ -6,13 +6,17 @@ require_once($CFG->libdir . '/tablelib.php');
 class local_moodleorg_useful_mapping_table extends table_sql {
     public function __construct($uniqueid) {
         parent::__construct($uniqueid);
-        $fields = 'c.id, c.shortname, c.fullname AS coursename, m.id AS mappingid, m.lang, s.name AS scalename, s.scale, m.phmgroupid, g.name AS groupname';
-        $from = '{course} c LEFT JOIN {moodleorg_useful_coursemap} m ON c.id = m.courseid LEFT JOIN {scale} s ON m.scaleid = s.id
-                 LEFT JOIN {groups} g ON m.phmgroupid = g.id';
+        $fields = 'c.id, c.shortname, c.fullname AS coursename, m.id AS mappingid,
+                   m.lang, s.name AS scalename, s.scale, m.phmgroupid, g.name AS groupname,
+                   m.coursemanagerslist';
+        $from   = '{course} c
+                   LEFT JOIN {moodleorg_useful_coursemap} m ON c.id = m.courseid
+                   LEFT JOIN {scale} s ON m.scaleid = s.id
+                   LEFT JOIN {groups} g ON m.phmgroupid = g.id';
         $where = 'c.visible = 1 AND c.id != :siteid';
         $params = array('siteid' => SITEID);
-        $this->define_headers(array('ID', 'Shortname', 'Course Name', 'Language', 'Scale', 'PHM Group', 'Edit'));
-        $this->define_columns(array('id', 'shortname', 'coursename', 'lang', 'scale', 'groupname', 'edit'));
+        $this->define_headers(array('ID', 'Shortname', 'Course Name', 'Language', 'Scale', 'PHM Group', 'Course Managers', 'Edit'));
+        $this->define_columns(array('id', 'shortname', 'coursename', 'lang', 'scale', 'groupname', 'coursemanagers', 'edit'));
         $this->no_sorting('edit');
         $this->set_sql($fields, $from, $where, $params);
         $this->collapsible(false);
@@ -41,6 +45,23 @@ class local_moodleorg_useful_mapping_table extends table_sql {
     public function col_groupname($row) {
         if (!empty($row->phmgroupid)) {
             return "{$row->groupname} [{$row->phmgroupid}]";
+        } else {
+            return '-';
+        }
+    }
+
+    public function col_coursemanagers($row) {
+        global $DB;
+
+        if (!empty($row->coursemanagerslist)) {
+            list($insql, $params) = $DB->get_in_or_equal(explode(',', $row->coursemanagerslist));
+            $sql = "SELECT u.id, u.firstname, u.lastname FROM {user} u WHERE u.deleted = 0 AND u.id $insql";
+            $managers = $DB->get_records_sql($sql, $params);
+            $o = '';
+            foreach ($managers as $manager){
+                $o.= fullname($manager).'<br />';
+            }
+            return $o;
         } else {
             return '-';
         }

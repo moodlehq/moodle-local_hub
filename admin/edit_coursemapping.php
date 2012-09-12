@@ -6,7 +6,7 @@ require_once($CFG->libdir . '/grouplib.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 class local_moodleorg_useful_coursemap_form extends moodleform {
-    function definition () {
+    public function definition () {
         global $DB, $CFG;
         $mform = $this->_form;
 
@@ -34,7 +34,8 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
         }
         unset($groups);
         $mform->addElement('select', 'phmgroupid', 'PHM Group:', $groupchoices);
-
+        $mform->addElement('text', 'coursemanagerslist', 'Course manager ids (seperated by commas)');
+        $mform->addRule('coursemanagerslist', 'The course managers must be userids seperated by commas only.', 'regex', '/^(\d+,?)*$/');
         $this->add_action_buttons();
     }
 }
@@ -57,18 +58,12 @@ if ($mform->is_cancelled()) {
 } else if ($formdata = $mform->get_data()) {
     $data = new stdClass;
     $data->courseid = $courseid;
-    if (empty($formdata->scaleid)) {
-        $data->scaleid = null;
-    }else {
-        $data->scaleid = $formdata->scaleid;
-    }
 
-    if (empty($formdata->phmgroupid)) {
-        $data->phmgroupid = null;
-    }else {
-        $data->phmgroupid = $formdata->phmgroupid;
-    }
+    $data->scaleid = !empty($formdata->scaleid) ? $formdata->scaleid : null;
+    $data->phmgroupid = !empty($formdata->phmgroupid) ? $formdata->phmgroupid : null;
+    $data->coursemanagerslist= !empty($formdata->coursemanagerslist) ? $formdata->coursemanagerslist : null;
     $data->lang = $formdata->lang;
+
     if (empty($coursemapping->id)) {
         $DB->insert_record('moodleorg_useful_coursemap', $data);
     } else {
