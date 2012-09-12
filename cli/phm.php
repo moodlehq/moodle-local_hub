@@ -2,37 +2,39 @@
 
 define('CLI_SCRIPT', true);
 
-require(dirname(__FILE__).'/../../../config.php');
-require_once(dirname(__FILE__).'/phmlib.php');
+require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
+require_once(dirname(__FILE__).'/lib/phmlib.php');
 
 if (isset($_SERVER['REMOTE_ADDR'])) {
     exit(1);
 }
 
-// hacky, hardcoded list of users to mail!
-$helen = $DB->get_record('user', array('email' => 'helen@moodle.org'), '*', MUST_EXIST);
+mtrace("Generating Particularly Helpful Moodlers for all langs..");
+$mappings = $DB->get_records('moodleorg_useful_coursemap');
+foreach ($mappings as $map) {
+    if (empty($map->scaleid)) {
+        mtrace("{$map->lang}...SKIPPING - no scale set.");
+        continue;
+    }
 
-/// Calculate Moodle en PHMs
-$courseid = 5;           // Using Moodle course
-$groupid = 1;            // Using Moodle PHM group id
-$scaleids = array(-88);  // Using Moodle scale ids
+    if (empty($map->phmgroupid)) {
+        mtrace("{$map->lang}... SKIPPING - lang as no group set.");
+        continue;
+    }
 
-phm_calculate_users(array($helen), $courseid, $groupid, $scaleids);
+    mtrace("{$map->lang}... generating PHM [Course: {$map->courseid} Scale: {$map->scaleid} Group: {$map->phmgroupid}]");
 
-/// Calculate Moodle en FR PHMs
-$courseid = 20;               // Moodle en Francais course
-$groupid = 195;               // Moodle en Francais PHM group id
-$scaleids = array(-84, -96);  // Moodle en Francais scales
-$severin = $DB->get_record('user', array('email' => 'severin.terrier@univ-tlse1.fr'), '*', MUST_EXIST);
-$nicolas = $DB->get_record('user', array('email' => 'nicolas@martignoni.net'), '*', MUST_EXIST);
-
-phm_calculate_users(array($helen, $severin, $nicolas), $courseid, $groupid, $scaleids);
-
-/// Calculate Moodle en Español PHMs
-
-$courseid = 11;               // Moodle en Español course
-$groupid = 186;               // Moodle en Español PHM group id
-$scaleids = array(-82, -92);  // Moodle en Español scales
-$eloy = $DB->get_record('user', array('email' => 'stronk7@moodle.org'), '*', MUST_EXIST);
-
-phm_calculate_users(array($helen, $eloy), $courseid, $groupid, $scaleids);
+    $managers = array();
+    if (!empty($map->coursemanagerslist)) {
+        list($insql, $params) = $DB->get_in_or_equal(explode(',', $map->coursemanagerslist));
+        $sql = "SELECT u.* FROM {user} u WHERE u.deleted = 0 AND u.id $insql";
+        $managers = $DB->get_records_sql($sql, $params);
+    }
+    $result = phm_calculate_users($managers, $map->courseid, $map->phmgroupid, $map->scaleid);
+    if ($result) {
+        mtrace("{$map->lang}... DONE.");
+    } else {
+        mtrace("{$map->lang}... FAILED.");
+    }
+}
+mtrace("Done generating PHMs");

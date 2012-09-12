@@ -12,7 +12,7 @@ include_once($CFG->dirroot.'/group/lib.php');
  * @param array $emailusers
  * @param <type> $courseid
  * @param <type> $groupid
- * @param array $scaleids
+ * @param int $scaleid
  * @param <type> $days
  * @param <type> $minposts
  * @param <type> $minratings
@@ -20,7 +20,7 @@ include_once($CFG->dirroot.'/group/lib.php');
  * @param <type> $minratio
  * @param <type> $savechanges
  */
-function phm_calculate_users($emailusers, $courseid, $groupid, array $scaleids, $days = 60, $minposts = 1, $minratings = 14, $minraters = 8, $minratio = 0.02, $savechanges = true) {
+function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days = 60, $minposts = 1, $minratings = 14, $minraters = 8, $minratio = 0.02, $savechanges = true) {
     global $DB, $OUTPUT;
 
     $s = '';
@@ -38,17 +38,21 @@ function phm_calculate_users($emailusers, $courseid, $groupid, array $scaleids, 
     $totalcount = 0;
 
     list($ctxselect, $ctxjoin) = context_instance_preload_sql('cm.id', CONTEXT_MODULE, 'ctx');
-    list($scalein, $params) = $DB->get_in_or_equal($scaleids, SQL_PARAMS_NAMED);
 
-    $params['courseid'] = $courseid;
+    $negativescaleid = $scaleid * -1;
+    $params = array('courseid' => $courseid, 'scaleid' => $negativescaleid);
 
     $sql = "SELECT f.* $ctxselect
             FROM {forum} f
             LEFT JOIN {course_modules} cm ON cm.instance = f.id
             LEFT JOIN {modules} m ON m.id = cm.module
             $ctxjoin
-            WHERE cm.course = :courseid AND scale $scalein AND m.name = 'forum'";
+            WHERE cm.course = :courseid AND scale = :scaleid AND m.name = 'forum'";
     $forums = $DB->get_records_sql($sql, $params);
+    if (empty($forums)) {
+        mtrace("\t No forums found in courseid $courseid with scaleid $scaleid");
+        return false;
+    }
     $forumcontexts = array();
     foreach ($forums as &$forum) {
         $forumcontexts[] = $forum->ctxid;
@@ -218,6 +222,8 @@ function phm_calculate_users($emailusers, $courseid, $groupid, array $scaleids, 
         $emailuser->mailformat = 1;
         email_to_user($emailuser, 'moodle.org', $subject, 'HTML email only, sorry', $s);
     }
+
+    return true;
 }
 
 function phm_get_users_rater_count($userid, array $forumcontextids, $distinct=false) {
