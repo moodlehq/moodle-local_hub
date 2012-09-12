@@ -6,7 +6,7 @@ require_once($CFG->libdir . '/tablelib.php');
 class local_moodleorg_useful_mapping_table extends table_sql {
     public function __construct($uniqueid) {
         parent::__construct($uniqueid);
-        $fields = 'c.id, c.shortname, c.fullname AS coursename, m.id AS mappingid, m.lang, s.name AS scalename, s.scale, g.name AS groupname';
+        $fields = 'c.id, c.shortname, c.fullname AS coursename, m.id AS mappingid, m.lang, s.name AS scalename, s.scale, m.phmgroupid, g.name AS groupname';
         $from = '{course} c LEFT JOIN {moodleorg_useful_coursemap} m ON c.id = m.courseid LEFT JOIN {scale} s ON m.scaleid = s.id
                  LEFT JOIN {groups} g ON m.phmgroupid = g.id';
         $where = 'c.visible = 1 AND c.id != :siteid';
@@ -39,8 +39,8 @@ class local_moodleorg_useful_mapping_table extends table_sql {
     }
 
     public function col_groupname($row) {
-        if (!empty($row->groupname)) {
-            return $row->groupname;
+        if (!empty($row->phmgroupid)) {
+            return "{$row->groupname} [{$row->phmgroupid}]";
         } else {
             return '-';
         }

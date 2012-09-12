@@ -30,7 +30,7 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
         $groupchoices = array();
         $groupchoices[0] = 'Do not create a PHM group.';
         foreach ($groups as $group) {
-            $groupchoices[$group->id] = $group->name;
+            $groupchoices[$group->id] = "{$group->name} [{$group->id}]";
         }
         unset($groups);
         $mform->addElement('select', 'phmgroupid', 'PHM Group:', $groupchoices);
