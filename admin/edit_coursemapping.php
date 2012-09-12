@@ -2,6 +2,7 @@
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->libdir . '/formslib.php');
+require_once($CFG->libdir . '/grouplib.php');
 $courseid = required_param('courseid', PARAM_INT);
 
 class local_moodleorg_useful_coursemap_form extends moodleform {
@@ -24,6 +25,15 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
         } else {
             $mform->setDefault('lang', $CFG->lang);
         }
+
+        $groups = groups_get_all_groups($course->id);
+        $groupchoices = array();
+        $groupchoices[0] = 'Do not create a PHM group.';
+        foreach ($groups as $group) {
+            $groupchoices[$group->id] = $group->name;
+        }
+        unset($groups);
+        $mform->addElement('select', 'phmgroupid', 'PHM Group:', $groupchoices);
 
         $this->add_action_buttons();
     }
@@ -51,6 +61,12 @@ if ($mform->is_cancelled()) {
         $data->scaleid = null;
     }else {
         $data->scaleid = $formdata->scaleid;
+    }
+
+    if (empty($formdata->phmgroupid)) {
+        $data->phmgroupid = null;
+    }else {
+        $data->phmgroupid = $formdata->scaleid;
     }
     $data->lang = $formdata->lang;
     if (empty($coursemapping->id)) {
