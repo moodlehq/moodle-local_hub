@@ -55,11 +55,12 @@ class local_moodleorg_useful_mapping_table extends table_sql {
 
         if (!empty($row->coursemanagerslist)) {
             list($insql, $params) = $DB->get_in_or_equal(explode(',', $row->coursemanagerslist));
-            $sql = "SELECT u.id, u.firstname, u.lastname FROM {user} u WHERE u.deleted = 0 AND u.id $insql";
+            $sql = "SELECT u.id, u.firstname, u.lastname, u.email
+                    FROM {user} u WHERE u.deleted = 0 AND u.id $insql";
             $managers = $DB->get_records_sql($sql, $params);
             $o = '';
             foreach ($managers as $manager){
-                $o.= fullname($manager).'<br />';
+                $o.= fullname($manager)." [{$manager->email}]<br />";
             }
             return $o;
         } else {
