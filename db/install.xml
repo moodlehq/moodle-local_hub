@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/moodleorg/db" VERSION="20120911" COMMENT="XMLDB file for moodle.org tables"
+<XMLDB PATH="local/moodleorg/db" VERSION="20120912" COMMENT="XMLDB file for moodle.org tables"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -149,7 +149,8 @@
         <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Course id" PREVIOUS="id" NEXT="lang"/>
         <FIELD NAME="lang" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="The language this course maps to" PREVIOUS="courseid" NEXT="scaleid"/>
         <FIELD NAME="scaleid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="The scale for 'useful posts' which this course uses" PREVIOUS="lang" NEXT="phmgroupid"/>
-        <FIELD NAME="phmgroupid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Particularly helpful moodlers groupid" PREVIOUS="scaleid"/>
+        <FIELD NAME="phmgroupid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Particularly helpful moodlers groupid" PREVIOUS="scaleid" NEXT="coursemanagerslist"/>
+        <FIELD NAME="coursemanagerslist" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Comma separated list of course manager ids. Hacky." PREVIOUS="phmgroupid"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" NEXT="courseid"/>

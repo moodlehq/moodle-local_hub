@@ -71,5 +71,20 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2012091100, 'local', 'moodleorg');
     }
 
+    if ($oldversion < 2012091200) {
+
+        // Define field coursemanagerslist to be added to moodleorg_useful_coursemap
+        $table = new xmldb_table('moodleorg_useful_coursemap');
+        $field = new xmldb_field('coursemanagerslist', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'phmgroupid');
+
+        // Conditionally launch add field coursemanagerslist
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // moodleorg savepoint reached
+        upgrade_plugin_savepoint(true, 2012091200, 'local', 'moodleorg');
+    }
+
     return true;
 }
