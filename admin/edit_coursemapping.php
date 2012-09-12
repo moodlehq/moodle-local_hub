@@ -66,7 +66,7 @@ if ($mform->is_cancelled()) {
     if (empty($formdata->phmgroupid)) {
         $data->phmgroupid = null;
     }else {
-        $data->phmgroupid = $formdata->scaleid;
+        $data->phmgroupid = $formdata->phmgroupid;
     }
     $data->lang = $formdata->lang;
     if (empty($coursemapping->id)) {
