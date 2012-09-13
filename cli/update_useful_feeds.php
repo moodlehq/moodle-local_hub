@@ -129,7 +129,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
         fwrite($rssfile, html_writer::end_tag('item')."\n");
 
 
-        if ($frontpagecount < 10) {
+        if ($frontpagecount < 4) {
             fwrite($frontpage, local_moodleorg_frontpage_li($post, $course));
             $frontpagecount++;
         }
