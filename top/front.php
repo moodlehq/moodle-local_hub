@@ -63,9 +63,10 @@ function latest_news($course) {
     $strmore = get_string('more', 'forum');
 
     $text = '';
-    $text .= "\n<ul class='unlist'>\n";
+    $text.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
     foreach ($discussions as $discussion) {
         $text.= local_moodleorg_frontpage_li($discussion, $course);
     }
+    $text.= html_writer::end_tag('ul');
     return $text;
 }
