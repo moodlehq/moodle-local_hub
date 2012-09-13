@@ -6,6 +6,7 @@ require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 
 require($CFG->dirroot.'/mod/forum/lib.php');
 require($CFG->dirroot.'/rating/lib.php');
+require($CFG->dirroot.'/local/moodleorg/locallib.php');
 
 $USER = guest_user();
 load_all_capabilities();
@@ -129,7 +130,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
 
 
         if ($frontpagecount < 10) {
-            fwrite($frontpage, generate_frontpage_li($post, $course));
+            fwrite($frontpage, local_moodleorg_frontpage_li($post, $course));
             $frontpagecount++;
         }
 
@@ -178,34 +179,4 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     fclose($htmlfile);
 
     ob_end_clean();
-}
-
-function generate_frontpage_li($post, $course) {
-    global $OUTPUT;
-
-    // Build an object that represents the posting user
-    $postuser = new stdClass;
-    $postuser->id        = $post->userid;
-    $postuser->firstname = $post->firstname;
-    $postuser->lastname  = $post->lastname;
-    $postuser->imagealt  = $post->imagealt;
-    $postuser->picture   = $post->picture;
-    $postuser->email     = $post->email;
-
-    $postlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
-    $postlink->set_anchor('p'.$post->id);
-    $o = '';
-    $o.= html_writer::start_tag('li')."\n";
-    $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
-    $o.= $OUTPUT->user_picture($postuser, array('courseid'=>$course->id))."\n";
-    $o.= html_writer::end_tag('div')."\n";
-    $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
-    $o.= html_writer::link($postlink, s($post->subject))."<br />\n";
-    $o.= html_writer::start_tag('span', array('style'=>'font-size:0.8em; color: grey;'));
-    $o.= 'Posted on '.gmdate('D, d M Y H:i:s',$post->modified);
-    $o.= html_writer::end_tag('span')."\n";
-    $o.= html_writer::end_tag('div')."\n";
-    $o.= '<br />';
-    $o.= html_writer::end_tag('li')."\n";
-    return $o;
 }
