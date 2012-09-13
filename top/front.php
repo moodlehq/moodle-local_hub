@@ -58,7 +58,7 @@ function latest_news($course) {
     }
     $cm = $modinfo->instances['forum'][$forum->id];
 
-    $discussions = forum_get_discussions($cm, 'p.modified DESC', false, -1, 4444);
+    $discussions = forum_get_discussions($cm, 'p.modified DESC', false, -1, 4);
     $strftimerecent = get_string('strftimerecent');
     $strmore = get_string('more', 'forum');
 
