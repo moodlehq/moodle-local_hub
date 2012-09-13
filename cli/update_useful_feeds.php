@@ -28,7 +28,6 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     $ratingoptions->userid = $USER->id;
     $rm = new rating_manager();
 
-    ob_start();   // capture all output
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
 
@@ -83,15 +82,21 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
 
     $cachedir = make_cache_directory('moodleorg/useful');
     $rsspath = $cachedir.'/rss-'.$langcode.'.xml';
+    $frontpagepath = $cachedir.'/frontpage-'.$langcode.'.html';
     $htmlpath = $cachedir.'/content-'.$langcode.'.html';
 
     $rssfile = fopen($rsspath, 'w+');
     fwrite($rssfile, file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-head.txt'));
 
+    $frontpage = fopen($frontpagepath, 'w+');
+    fwrite($frontpage, html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'))."\n");
+
     $discussions = array();
     $forums = array();
     $cms = array();
+    $frontpagecount = 0;
 
+    ob_start();   // capture all output
     foreach ($rs as $post) {
 
         context_instance_preload($post);
@@ -123,6 +128,10 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
         fwrite($rssfile, html_writer::end_tag('item')."\n");
 
 
+        if ($frontpagecount < 10) {
+            fwrite($frontpage, generate_frontpage_li($post, $course));
+            $frontpagecount++;
+        }
 
         // Output normal posts
         $fullsubject = html_writer::link($forumlink, format_string($forum->name,true));
@@ -160,10 +169,43 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     fwrite($rssfile, file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt'));
     fclose($rssfile);
 
+    fwrite($frontpage, html_writer::end_tag('ul')."\n");
+    fclose($frontpage);
+
     /// Write collected output (only if successful) to the content file
     $htmlfile = fopen($htmlpath, 'w+');
     fwrite($htmlfile, ob_get_contents());
     fclose($htmlfile);
 
     ob_end_clean();
+}
+
+function generate_frontpage_li($post, $course) {
+    global $OUTPUT;
+
+    // Build an object that represents the posting user
+    $postuser = new stdClass;
+    $postuser->id        = $post->userid;
+    $postuser->firstname = $post->firstname;
+    $postuser->lastname  = $post->lastname;
+    $postuser->imagealt  = $post->imagealt;
+    $postuser->picture   = $post->picture;
+    $postuser->email     = $post->email;
+
+    $postlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
+    $postlink->set_anchor('p'.$post->id);
+    $o = '';
+    $o.= html_writer::start_tag('li')."\n";
+    $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
+    $o.= $OUTPUT->user_picture($postuser, array('courseid'=>$course->id))."\n";
+    $o.= html_writer::end_tag('div')."\n";
+    $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
+    $o.= html_writer::link($postlink, s($post->subject))."<br />\n";
+    $o.= html_writer::start_tag('span', array('style'=>'font-size:0.8em; color: grey;'));
+    $o.= 'Posted on '.gmdate('D, d M Y H:i:s',$post->modified);
+    $o.= html_writer::end_tag('span')."\n";
+    $o.= html_writer::end_tag('div')."\n";
+    $o.= '<br />';
+    $o.= html_writer::end_tag('li')."\n";
+    return $o;
 }
