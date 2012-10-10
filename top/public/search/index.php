@@ -15,7 +15,7 @@
 
 <div class="generalbox boxaligncenter" style="text-align:center" >
 
-<form action="http://moodle.org/public/search/" id="cse-search-box">
+<form action="https://moodle.org/public/search/" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="017878793330196534763:-0qxztjngoy" />
     <input type="hidden" name="cof" value="FORID:9" />
