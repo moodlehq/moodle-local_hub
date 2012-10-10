@@ -35,7 +35,7 @@
   var googleSearchDomain = "www.google.com";
   var googleSearchPath = "/cse";
 </script>
-<script type="text/javascript" src="http://www.google.com/afsonline/show_afs_search.js"></script>
+<script type="text/javascript" src="https://www.google.com/afsonline/show_afs_search.js"></script>
 
 
 <?php
