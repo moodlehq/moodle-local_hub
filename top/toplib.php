@@ -120,7 +120,7 @@ function print_moodle_page_bottom($page, $topcourseid=0) {
 function print_moodle_content($content) {
     if (is_array($content)) {
         foreach ($content as $string) {
-            if (substr($string, 0, 5) == 'http:') {
+            if (substr($string, 0, 4) == 'http') {
                 $link = explode('|', $string);
                 echo '<div class="moodletop link"><span class="arrow sep">&#x25BA;</span> <a href="'.$link[0].'">'.get_string($link[1], 'local_moodleorg').'</a></div>';
             } else if (substr($string, -5, 5) == 'intro') {
