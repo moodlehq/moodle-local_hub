@@ -20,7 +20,7 @@
 
     echo '<ul class="unlist">';
     foreach ($courses as $course) {
-        if ($course->visible == 1 || has_capability('moodle/course:viewhiddencourses',$course->context)) {
+        if ($course->visible == 1 || has_capability('moodle/course:viewhiddencourses',get_context_instance(CONTEXT_COURSE, $course->id))) {
             echo '<li>';
             print_course($course);
             //echo '<div class="moodletop link">';
