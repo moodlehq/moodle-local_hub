@@ -169,6 +169,15 @@
     RewriteCond %{QUERY_STRING} ^cid=1$
     RewriteRule ^mod/cvsadmin/view.php(.*)$      /dev/? [R=301]
 
+# Old forums redirected to new urls:
+    RewriteCond %{REQUEST_URI} ^/course/view.php
+    RewriteCond %{QUERY_STRING} ^id=33$
+    RewriteRule ^course/view.php(.*)$      /calendar/ [R=301]
+
+    RewriteCond %{REQUEST_URI} ^/course/view.php
+    RewriteCond %{QUERY_STRING} ^id=15$
+    RewriteRule ^course/view.php(.*)$      http://hub.moodle.org [R=301]
+
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
 
