@@ -191,7 +191,7 @@ $string['supportforumslang'] = 'The key forum for Moodlers to socialise in Engli
 $string['supportforumslangname'] = 'Moodle Lounge';
 $string['supportforumslangurl'] = 'http://moodle.org/course/view.php?id=55';
 $string['supportforumslist'] = 'We have many other forums too, in many languages:';
-$string['supportforumslistname'] = 'List of all forums';
+$string['supportforumslistname'] = 'List of all courses';
 $string['supportforumstitle'] = 'Forums';
 $string['supportintro'] = 'You are not alone!  There are a variety of ways to get help with Moodle if you need it.';
 $string['top10sitesbyusers'] = 'Top 10 sites by users';

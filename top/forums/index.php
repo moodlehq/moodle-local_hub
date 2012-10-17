@@ -7,8 +7,6 @@
                      'supportforums',
                      'supportforumsenglish',
                      $CFG->wwwroot.'/course/view.php?id=5|supportforumsenglishname',
-                     'supportforumslang',
-                     get_string('supportforumslangurl', 'local_moodleorg').'|supportforumslangname',
                      'supportforumslist',
                      $CFG->wwwroot.'/course/|supportforumslistname'
                      );
