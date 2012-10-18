@@ -1,7 +1,7 @@
     RewriteEngine On
 
 # protect this script
-    Redirect /local/moodleorg/top.htaccess http://moodle.org
+    Redirect /local/moodleorg/top.htaccess https://moodle.org
 
     RewriteCond %{HTTPS} off
     RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
@@ -31,14 +31,14 @@
     # Allow empty referer
     RewriteCond %{HTTP_REFERER} !^$
     # Allow moodle.[org|com|net]
-    RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
+    RewriteCond %{HTTP_REFERER} !^https://([a-z.]{2,}\.)?moodle\.(org|com|net)($|(/(.*))) [NC]
     # Allow test site - otherwise it breaks when testing...
     RewriteCond %{HTTP_REFERER} !^http://moodleorg.moodle.local($|((/|:)(.*))) [NC]
     # Allow google for site cache, translate, image search etc..
-    RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?google\.com($|(/(.*))) [NC]
-    RewriteCond %{HTTP_REFERER} !^http://([a-z.]{2,}\.)?googleusercontent.com($|(/(.*))) [NC]
+    RewriteCond %{HTTP_REFERER} !^http(s|)://([a-z.]{2,}\.)?google\.com($|(/(.*))) [NC]
+    RewriteCond %{HTTP_REFERER} !^http(s|)://([a-z.]{2,}\.)?googleusercontent.com($|(/(.*))) [NC]
     # Allow cafepress moodle store
-    RewriteCond %{HTTP_REFERER} !^http://(www|).cafepress.com(|.au)/moodle [NC]
+    RewriteCond %{HTTP_REFERER} !^http(s|)://(www|).cafepress.com(|.au)/moodle [NC]
     # Block all theme requests
     #RewriteRule ^theme/.*$ - [F,L]
     # or just certain files
@@ -87,49 +87,49 @@
     RewriteRule ^course/view.php$ http://demo.moodle.com/? [R=301,L]
 
     RewriteCond %{QUERY_STRING} ^d=42952$
-    RewriteRule ^mod/forum/discuss.php$ http://moodle.org/mod/forum/discuss.php?d=42954 [R=301,L]
+    RewriteRule ^mod/forum/discuss.php$ https://moodle.org/mod/forum/discuss.php?d=42954 [R=301,L]
 
     RewriteCond %{QUERY_STRING} ^id=893$
-    RewriteRule ^mod/forum/view.php$ http://moodle.org/course/view.php?id=55 [R=301,L]
+    RewriteRule ^mod/forum/view.php$ https://moodle.org/course/view.php?id=55 [R=301,L]
 
     RewriteCond %{QUERY_STRING} ^id=7169$
-    RewriteRule ^mod/forum/view.php$ http://moodle.org/mod/data/view.php?d=54
+    RewriteRule ^mod/forum/view.php$ https://moodle.org/mod/data/view.php?d=54
 
     RewriteCond %{QUERY_STRING} ^id=7080$
-    RewriteRule ^mod/resource/view.php$ http://moodle.org/mod/forum/view.php?id=7128 [R=301,L]
+    RewriteRule ^mod/resource/view.php$ https://moodle.org/mod/forum/view.php?id=7128 [R=301,L]
 
     RewriteRule ^wiki/(.*) http://docs.moodle.org/ [R=301,L]
 
     RewriteRule ^bugs/(.*) http://tracker.moodle.org/browse/MDL? [R=301,L]
 
-    RewriteRule ^assets/skins/sam/yui_image.php http://moodle.org/theme/yui_image.php [R=301,L]
+    RewriteRule ^assets/skins/sam/yui_image.php https://moodle.org/theme/yui_image.php [R=301,L]
 
     #Redirect /bugs http://tracker.moodle.org/browse/MDL?from
     Redirect /xref http://xref.moodle.org
     Redirect /hosting http://moodle.com/hosting
     Redirect /helpdesk http://moodle.com/helpdesk
-    Redirect /news/news.xml http://moodle.org/rss/file.php/1/1/forum/1/rss.xml
+    Redirect /news/news.xml https://moodle.org/rss/file.php/1/1/forum/1/rss.xml
 
     Redirect /download.php http://download.moodle.org/download.php
     Redirect /docs http://docs.moodle.org
     Redirect /doc http://docs.moodle.org
-    Redirect /support/forums http://moodle.org/forums
+    Redirect /support/forums https://moodle.org/forums
 
     Redirect /mozillahelp http://mozilla.org/editor/midasdemo/securityprefs.html?
 
-    Redirect /mod/reading   http://moodle.org/mod/resource
+    Redirect /mod/reading   https://moodle.org/mod/resource
     Redirect /RELEASE.html   http://docs.moodle.org/en/Release_Notes
-    Redirect /donation   http://moodle.org/donations/
-    Redirect /help   http://moodle.org/course/view.php?id=5
-    Redirect /buzz   http://moodle.org/mod/data/view.php?id=6140
-    Redirect /themes   http://moodle.org/plugins/browse.php?list=category&id=3
+    Redirect /donation   https://moodle.org/donations/
+    Redirect /help   https://moodle.org/course/view.php?id=5
+    Redirect /buzz   https://moodle.org/mod/data/view.php?id=6140
+    Redirect /themes   https://moodle.org/plugins/browse.php?list=category&id=3
     Redirect /philosophy http://docs.moodle.org/en/Philosophy
     Redirect /faq   http://docs.moodle.org/en/Category:FAQ
-    Redirect /modules   http://moodle.org/mod/data/view.php?id=6009
-    Redirect /cvs   http://moodle.org/dev/
-    Redirect /jobs   http://moodle.org/mod/data/view.php?d=54
-    Redirect /books   http://moodle.org/mod/data/view.php?id=7246
-    Redirect /useful.php   http://moodle.org/useful/
+    Redirect /modules   https://moodle.org/mod/data/view.php?id=6009
+    Redirect /cvs   https://moodle.org/dev/
+    Redirect /jobs   https://moodle.org/mod/data/view.php?d=54
+    Redirect /books   https://moodle.org/mod/data/view.php?id=7246
+    Redirect /useful.php   https://moodle.org/useful/
 
     Redirect /mod/newmodule_template.zip http://download.moodle.org/modules/NEWMODULE.zip
 
@@ -141,9 +141,9 @@
     Redirect /mod/forum/ws http://www.google.com
 
 
-# top pages and dirs added to http://moodle.org/ - it is much easier to maintain all these in local plugin
+# top pages and dirs added to https://moodle.org/ - it is much easier to maintain all these in local plugin
 
-    Redirect    /search               http://moodle.org/public/search/
+    Redirect    /search               https://moodle.org/public/search/
     RewriteRule ^spam$ /spam/ [R=301,L]
     RewriteRule ^(favicon\.ico|invaders\.swf|moodle\.gif|nagvercheck\.php|robots\.txt|upgradeinprogress\.html)$  local/moodleorg/top/$1 [L]
     RewriteRule ^(about|audio|cafepress|community|contact|development|donations|downloads|events|forums/my|forums|images|logo|network|news|other|public/search|public|register|security|sites|spam|stats|support/commercial|support|useful|userpics)($|(/(.*))) local/moodleorg/top/$1/$4 [L]
