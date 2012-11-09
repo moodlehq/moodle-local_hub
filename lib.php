@@ -1132,7 +1132,7 @@ class local_hub {
         } else {
             //if creation mode, check that the secret doesn't exist already
             $checkedhub = $this->get_site_by_secret($siteinfo->secret);
-            if (!empty($checkedhub)) { //no registration process failed but the secret still exist              
+            if (!empty($checkedhub)) { // No registration process failed but the secret still exists.
                 throw new moodle_exception('sitesecretalreadyexist', 'local_hub');
             }
         }
@@ -1228,32 +1228,32 @@ class local_hub {
 
         return $sitetohubcommunication->token;
     }
-    
+
     /**
      * Check if a secret is valid (not marked as stolen)
-     * @param string $secret 
+     * @param string $secret
      * @return boolean true if the secret has not been marked as stolen
      */
     function check_secret_validity($secret) {
         global $DB;
         $stolensecret = $DB->get_record('hub_stolen_site_secrets', array('secret' => $secret));
-        
+
         if (!empty($stolensecret)) {
             return false;
         } else {
             return true;
         }
     }
-    
+
     /**
      * Mark a site secret as stolen.
      * @param int $siteid the site whose the secret has been stolen
      */
     function marksecretstolen($siteid) {
         global $DB;
-        
+
         $site = $this->get_site($siteid);
-        
+
         if (!empty($site)) {
             $stolensecret = new stdClass();
             $stolensecret->secret = $site->secret;
@@ -1266,7 +1266,7 @@ class local_hub {
 
     function delete_site($id, $unregistercourses = false) {
         global $CFG;
-        
+
         $sitetodelete = $this->get_site($id);
 
         //unregister the courses first
@@ -1604,7 +1604,7 @@ class local_hub {
         $directory = "hub/$level1/$courseid";
         return filesize($CFG->dataroot . '/' . $directory . '/backup_' . $courseid . ".mbz");
     }
-    
+
     /**
      * Check if the remote site is valid (not localhost and available by the hub)
      * Note: it doesn't matter if the site returns a 404 error.

@@ -368,7 +368,7 @@ class local_hub_external extends external_api {
 
         $siteurl = $hub->get_communication(WSSERVER, REGISTEREDSITE, null, $token)->remoteurl;
         $site = $hub->get_site_by_url($siteurl);
-        
+
         //check that the number of allowed publication is not reached
         if (isset($site->publicationmax)) {
             //site setting (overwrite the hub setting value)
@@ -378,7 +378,7 @@ class local_hub_external extends external_api {
         }
         if ($maxpublication !== false) {
 
-            //retrieve the number of publication for the last 24hours         
+            //retrieve the number of publication for the last 24hours
             $options = array();
             $options['lastpublished'] = strtotime("-1 day");
             $options['siteid'] = $site->id;
@@ -529,7 +529,7 @@ class local_hub_external extends external_api {
         if (empty($maxcourses)) {
             throw new moodle_exception('nocoursereturn', 'local_hub');
         }
-            
+
         $hub = new local_hub();
         //the site is requesting all his own course
         if (!empty($params['options']['siteid'])) {
@@ -613,7 +613,7 @@ class local_hub_external extends external_api {
                 //$courseinfo['rating']['aggregate'] = (float) $course->ratingaverage;
                 //the ratings has been changed from scale 0 to 10 to a "Featured" award
                 $courseinfo['rating']['aggregate'] = HUB_COURSE_RATING_SCALE;
-            }        
+            }
             $courseinfo['rating']['count'] = (int) $course->ratingcount;
             $courseinfo['rating']['scaleid'] = HUB_COURSE_RATING_SCALE;
 
@@ -634,11 +634,19 @@ class local_hub_external extends external_api {
             }
 
             //get backup size
-            if (!$course->enrollable and $hub->backup_exits($course->id)) {             
-                $courseinfo['backupsize'] = $hub->get_backup_size($course->id);
+            $returnthecourse = true;
+            if (!$course->enrollable) {
+                if ($hub->backup_exits($course->id)) {
+                    $courseinfo['backupsize'] = $hub->get_backup_size($course->id);
+                } else {
+                    // We don't return the course when backup file is not found.
+                    $returnthecourse = false;
+                }
             }
 
-            $coursesresult[] = $courseinfo;           
+            if ($returnthecourse) {
+                $coursesresult[] = $courseinfo;
+            }
         }
 
         return array('courses' => $coursesresult, 'coursetotal' => $coursetotal);
