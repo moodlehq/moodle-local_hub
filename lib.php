@@ -30,7 +30,7 @@
  *
  * @param global_navigation $nav
  */
-function moodleorg_extends_navigation(global_navigation $nav) {
+function local_moodleorg_extends_navigation(global_navigation $nav) {
     // First up: Hide the activities under site pages.
     // Find the site pages node and make sure it's valid
     $node = $nav->get(SITEID, navigation_node::TYPE_COURSE);
