@@ -225,7 +225,7 @@ if (!empty($courses)) {
     }
     $courseidslist = implode(',', $courseids);
     $sites = $DB->get_records_sql('SELECT site.* FROM {hub_course_directory} course, {hub_site_directory} site WHERE '
-            . 'course.id IN (' . $courseidslist . ') AND site.id = course.siteid  GROUP BY siteid');
+            . 'course.id IN (' . $courseidslist . ') AND site.id = course.siteid  GROUP BY site.id');
 
     foreach ($courses as &$course) {
         //get site name for each courses
