@@ -1380,13 +1380,9 @@ class local_hub {
 
         //check and assign the role to user
         $context = get_context_instance(CONTEXT_SYSTEM);
-        $roleusers = get_role_users($roleid, $context);
-        foreach ($roleusers as $roleuser) {
-            if ($roleuser->username == $username) {
-                $userfound = true;
-            }
-        }
-        if (empty($userfound)) {
+        $existingroleassign = $DB->get_records('role_assignments', array('roleid'=>$roleid,
+            'contextid'=>$context->id, 'userid'=>$user->id), 'id');
+        if (empty($existingroleassign)) {
             role_assign($roleid, $user->id, $context->id);
         }
 
