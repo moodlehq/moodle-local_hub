@@ -178,6 +178,11 @@
     RewriteCond %{QUERY_STRING} ^id=15$
     RewriteRule ^course/view.php(.*)$      http://hub.moodle.org [R=301]
 
+    # Lounge:
+    RewriteCond %{REQUEST_URI} ^/course/view.php
+    RewriteCond %{QUERY_STRING} ^id=55$
+    RewriteRule ^course/view.php(.*)$      /mod/forum/view.php?f=934 [R=301]
+
 # cafepress - can be removed if updated to use /cafepress/
     RewriteRule ^local/cafepress($|(/(.*)))   local/moodleorg/top/cafepress/$3 [L]
 
