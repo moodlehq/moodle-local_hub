@@ -7,6 +7,7 @@ gitconfig="git config core.filemode false"
 cd $basedir/blocks/cool_sites && $gitconfig && git pull
 cd $basedir/blocks/partners && $gitconfig  && git pull
 cd $basedir/blocks/unanswered_discussions && $gitconfig  && git pull
+cd $basedir/blocks/spam_deletion && $gitconfig  && git pull
 
 # filters =============================
 cd $basedir/filter/geshi && $gitconfig  && git pull
