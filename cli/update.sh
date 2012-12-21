@@ -9,6 +9,9 @@ cd $basedir/blocks/partners && $gitconfig  && git pull
 cd $basedir/blocks/unanswered_discussions && $gitconfig  && git pull
 cd $basedir/blocks/spam_deletion && $gitconfig  && git pull
 
+# enrolment plugins ===================
+cd $basedir/enrol/groupsync && $gitconfig && git pull
+
 # filters =============================
 cd $basedir/filter/geshi && $gitconfig  && git pull
 cd $basedir/filter/moodledocs && $gitconfig && git pull
@@ -26,6 +29,9 @@ cd $basedir/local/dev && $gitconfig && git pull
 
 # chatlogs plugin =====================
 cd $basedir/local/chatlogs && $gitconfig && git pull
+
+# repository plugins ===================
+cd $basedir/repository/github && $gitconfig && git pull
 
 # theme ===============================
 cd $basedir/theme/moodleofficial && $gitconfig && git pull
