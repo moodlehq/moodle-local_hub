@@ -16,7 +16,13 @@ if (!$mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $l
 </div>
 <div style="width: 25%; float: left;">
 <h1>Useful Posts</h1>
-<?php require($CFG->cachedir.'/moodleorg/useful/frontpage-'.$lang.'.html');?>
+<?php
+$cache = cache::make('local_moodleorg', 'usefulposts');
+
+if ($content = $cache->get('frontpage_'.$lang)) {
+    echo $content;
+}
+?>
 </div>
 <div style="width: 25%; float: left;">
 <h1>Events</h1>

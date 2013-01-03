@@ -11,7 +11,7 @@ require($CFG->dirroot.'/local/moodleorg/locallib.php');
 $USER = guest_user();
 load_all_capabilities();
 
-$mappings =  $DB->get_records('moodleorg_useful_coursemap');
+$mappings = $DB->get_records('moodleorg_useful_coursemap');
 foreach ($mappings as $map) {
     mtrace("Generating feed for {$map->lang} [course: {$map->courseid}, scale: {$map->scaleid}]...");
     $USER->lang = $map->lang;
@@ -22,7 +22,13 @@ die;
 
 function generate_useful_items($langcode, $courseid, $scaleid) {
     global $DB, $USER, $CFG;
-    //Set up the ratings information that will be the same for all posts
+
+    static $cache = null;
+    if ($cache === null) {
+        $cache = cache::make('local_moodleorg', 'usefulposts');
+    }
+
+    // Set up the ratings information that will be the same for all posts.
     $ratingoptions = new stdClass();
     $ratingoptions->component = 'mod_forum';
     $ratingoptions->ratingarea = 'post';
@@ -31,17 +37,15 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
 
 
     $course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
-
     list($ctxselect, $ctxjoin) = context_instance_preload_sql('cm.id', CONTEXT_MODULE, 'ctx');
     $userselect = user_picture::fields('u', null, 'uid');
 
     $params = array();
     $params['courseid'] = $courseid;
-    $params['since'] = time() - (3600*24*7);   // 7 days
+    $params['since'] = time() - (DAYSECS * 30);
     $params['cmtype'] = 'forum';
 
     if (!empty($scaleid)) {
-
         // Check some forums with the scale exist..
         $negativescaleid = $scaleid * -1;
         $forumids = $DB->get_records('forum', array('course'=>$courseid, 'scale'=>$negativescaleid), '', 'id');
@@ -81,23 +85,21 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
 
     $rs = $DB->get_recordset_sql($sql, $params, 0, 60);
 
-    $cachedir = make_cache_directory('moodleorg/useful');
-    $rsspath = $cachedir.'/rss-'.$langcode.'.xml';
-    $frontpagepath = $cachedir.'/frontpage-'.$langcode.'.html';
-    $htmlpath = $cachedir.'/content-'.$langcode.'.html';
 
-    $rssfile = fopen($rsspath, 'w+');
-    fwrite($rssfile, file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-head.txt'));
-
-    $frontpage = fopen($frontpagepath, 'w+');
-    fwrite($frontpage, html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'))."\n");
 
     $discussions = array();
     $forums = array();
     $cms = array();
     $frontpagecount = 0;
+    $rsscontent = '';
+    $frontcontent = '';
 
-    ob_start();   // capture all output
+
+    $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-head.txt');
+    $frontcontent.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'))."\n";
+
+    // Start capturing output for /useful/ (hack)
+    ob_start();
     foreach ($rs as $post) {
 
         context_instance_preload($post);
@@ -120,17 +122,17 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
         $postlink->set_anchor('p'.$post->id);
 
         // First do the rss file
-        fwrite($rssfile, html_writer::start_tag('item')."\n");
-        fwrite($rssfile, html_writer::tag('title', s($post->subject))."\n");
-        fwrite($rssfile, html_writer::tag('link', $postlink->out(false))."\n");
-        fwrite($rssfile, html_writer::tag('pubDate', gmdate('D, d M Y H:i:s',$post->modified).' GMT')."\n");
-        fwrite($rssfile, html_writer::tag('description', 'by '.htmlspecialchars(fullname($post).' <br /><br />'.format_text($post->message, $post->messageformat)))."\n");
-        fwrite($rssfile, html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n");
-        fwrite($rssfile, html_writer::end_tag('item')."\n");
+        $rsscontent.= html_writer::start_tag('item')."\n";
+        $rsscontent.= html_writer::tag('title', s($post->subject))."\n";
+        $rsscontent.= html_writer::tag('link', $postlink->out(false))."\n";
+        $rsscontent.= html_writer::tag('pubDate', gmdate('D, d M Y H:i:s',$post->modified).' GMT')."\n";
+        $rsscontent.= html_writer::tag('description', 'by '.htmlspecialchars(fullname($post).' <br /><br />'.format_text($post->message, $post->messageformat)))."\n";
+        $rsscontent.= html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n";
+        $rsscontent.= html_writer::end_tag('item')."\n";
 
 
         if ($frontpagecount < 4) {
-            fwrite($frontpage, local_moodleorg_frontpage_li($post, $course));
+            $frontcontent.= local_moodleorg_frontpage_li($post, $course);
             $frontpagecount++;
         }
 
@@ -167,16 +169,11 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     }
     $rs->close();
 
-    fwrite($rssfile, file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt'));
-    fclose($rssfile);
+    $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt');
+    $frontcontent.= html_writer::end_tag('ul')."\n";
 
-    fwrite($frontpage, html_writer::end_tag('ul')."\n");
-    fclose($frontpage);
-
-    /// Write collected output (only if successful) to the content file
-    $htmlfile = fopen($htmlpath, 'w+');
-    fwrite($htmlfile, ob_get_contents());
-    fclose($htmlfile);
-
+    $cache->set('useful_'.$langcode, ob_get_contents());
     ob_end_clean();
+    $cache->set('frontpage_'.$langcode, $frontcontent);
+    $cache->set('rss_'.$langcode, $rsscontent);
 }
