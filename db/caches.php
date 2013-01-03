@@ -15,15 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * moodle.org local plugin cache definitions
  *
  * @package    local_moodleorg
- * @copyright  2011 petr Skoda
+ * @copyright  2012 Dan Poltawski
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
-
-$plugin->version  = 2012091201;
-$plugin->requires = 2011070100;
-$plugin->component = 'local_moodleorg';
+$definitions = array(
+    // Used to the most recent useful posts
+    'usefulposts' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => false,
+        'persistent' => true,
+    ),
+);
