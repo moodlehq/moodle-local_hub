@@ -72,7 +72,7 @@ function latest_events($courseid) {
 
         $o.= html_writer::start_tag('li')."\n";
         $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
-        $o.= $OUTPUT->pix_icon('i/siteevent', get_string('globalevent', 'calendar'), 'moodle', array('class'=>'iconlarge'));
+        $o.= $OUTPUT->pix_icon('i/siteevent', get_string('globalevent', 'calendar'), 'moodle', array('style'=>'width:35px; height: 35px;'));
         $o.= html_writer::end_tag('div')."\n";
         $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
         $o.= html_writer::link($linkurl, $event->name)."<br />\n";
