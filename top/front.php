@@ -2,13 +2,35 @@
 require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 require_once($CFG->dirroot.'/calendar/lib.php');
 
-$lang = isset($SESSION->lang) ? $SESSION->lang : 'en';
-if (!$mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $lang))) {
-    //FIXME: hack, hack, hack.
-    $lang = 'en';
-    $mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $lang));
+
+// Get the users current lang.
+$userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
+
+// We will to english, unless a mapping is found.
+$lang = null;
+
+// Get the depdencies of the users lang and see if a mapping exists
+// for the current language or its parents..
+$langdeps = get_string_manager()->get_language_dependencies($userlang);
+
+// Add to english to the start of the array as get_language_dependencies() goes
+// in least specific order first.
+array_unshift($langdeps, 'en');
+
+list($insql, $inparams) = $DB->get_in_or_equal($langdeps);
+$sql = "SELECT lang, courseid FROM {moodleorg_useful_coursemap} WHERE lang $insql";
+$mappings = $DB->get_records_sql($sql, $inparams);
+
+$mapping = null;
+while (!empty($langdeps) and empty($mapping)) {
+    $thislang = array_pop($langdeps);
+
+    if (isset($mappings[$thislang])) {
+        $mapping = $mappings[$thislang];
+    }
 }
 
+if ($mapping) {
 ?>
 <div style="width: 100%; overflow: hidden;">
 <div style="width: 25%; float: left;">
@@ -20,7 +42,7 @@ if (!$mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $l
 <?php
 $cache = cache::make('local_moodleorg', 'usefulposts');
 
-if ($content = $cache->get('frontpage_'.$lang)) {
+if ($content = $cache->get('frontpage_'.$mapping->lang)) {
     echo $content;
 }
 ?>
@@ -41,6 +63,9 @@ if ($content = $cache->get('frontpage_'.$lang)) {
 </div>
 </div>
 <?php
+} else {
+    echo 'No language mapping found :-(';
+}
 
 function latest_events($courseid) {
     global $DB, $OUTPUT;
