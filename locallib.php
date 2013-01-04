@@ -16,7 +16,7 @@ function local_moodleorg_frontpage_li($post, $course) {
 
     $by = new stdClass();
     $by->name = fullname($postuser);
-    $by->date = userdate($post->modified);
+    $by->date = userdate($post->modified, get_string('strftimedaydate', 'core_langconfig'));
 
     $postlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
     $postlink->set_anchor('p'.$post->id);
