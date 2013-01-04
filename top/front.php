@@ -81,7 +81,7 @@ function recent_resources() {
             $image = $OUTPUT->pix_icon('icon', 'Plugins', 'mod_lti', array('style'=>'width:35px; height: 35px'));
         } else if (preg_match('/^Jobs: /', $title)) {
             $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_feedback', array('style'=>'width:35px; height: 35px'));
-        } else if (preg_match('/^Course: /', $title)) {
+        } else if (preg_match('/^Courses: /', $title)) {
             $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_imscp', array('style'=>'width:35px; height: 35px'));
         } else {
             $image = $OUTPUT->pix_icon('icon', 'Buzz', 'mod_label', array('style'=>'width:35px; height: 35px'));
@@ -89,7 +89,7 @@ function recent_resources() {
 
         $obj = new stdClass;
         $obj->image = $image;
-        $obj->link = html_writer::link($item->get_link(), $item->get_title());
+        $obj->link = html_writer::link(new moodle_url($item->get_link()), $item->get_title());
         $obj->smalltext = userdate($item->get_date('U'), get_string('strftimedaydate', 'core_langconfig'));
         $o.= local_moodleorg_frontpage_li($obj);
     }
