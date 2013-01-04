@@ -58,7 +58,7 @@ function latest_events($courseid) {
     }
 
     list($courses, $group, $user) = calendar_set_filters($courses);
-    $events = calendar_get_upcoming($courses, $group, $user, 365, 6);
+    $events = calendar_get_upcoming($courses, $group, $user, 365, LOCAL_MOODLEORG_FRONTPAGEITEMS);
 
     $o = '';
     $o.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
@@ -101,7 +101,7 @@ function latest_news($course) {
     }
     $cm = $modinfo->instances['forum'][$forum->id];
 
-    $discussions = forum_get_discussions($cm, 'p.modified DESC', false, -1, 4);
+    $discussions = forum_get_discussions($cm, 'p.modified DESC', false, -1, LOCAL_MOODLEORG_FRONTPAGEITEMS);
     $strftimerecent = get_string('strftimerecent');
     $strmore = get_string('more', 'forum');
 

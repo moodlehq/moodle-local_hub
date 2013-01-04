@@ -83,7 +83,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
     }
 
 
-    $rs = $DB->get_recordset_sql($sql, $params, 0, 60);
+    $rs = $DB->get_recordset_sql($sql, $params, 0, 30);
 
 
 
@@ -131,7 +131,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
         $rsscontent.= html_writer::end_tag('item')."\n";
 
 
-        if ($frontpagecount < 4) {
+        if ($frontpagecount < LOCAL_MOODLEORG_FRONTPAGEITEMS) {
             $frontcontent.= local_moodleorg_frontpage_li($post, $course);
             $frontpagecount++;
         }

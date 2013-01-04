@@ -1,5 +1,7 @@
 <?php
 
+define('LOCAL_MOODLEORG_FRONTPAGEITEMS', '6');
+
 function local_moodleorg_frontpage_li($post, $course) {
     global $OUTPUT;
 
