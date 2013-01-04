@@ -38,7 +38,7 @@ if ($mapping) {
 <?php echo latest_news($SITE) ?>
 </div>
 <div style="width: 25%; float: left;">
-<h1>Useful Posts</h1>
+<h1>Forum Posts</h1>
 <?php
 $cache = cache::make('local_moodleorg', 'usefulposts');
 
