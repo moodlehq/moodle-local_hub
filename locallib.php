@@ -2,7 +2,9 @@
 
 define('LOCAL_MOODLEORG_FRONTPAGEITEMS', '6');
 
-function local_moodleorg_frontpage_li($post, $course) {
+function local_moodleorg_frontpage_forumpost($post, $course) {
+
+
     global $OUTPUT;
 
     // Build an object that represents the posting user
@@ -20,15 +22,27 @@ function local_moodleorg_frontpage_li($post, $course) {
 
     $postlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
     $postlink->set_anchor('p'.$post->id);
+
+
+    $obj = new stdClass;
+    $obj->image = $OUTPUT->user_picture($postuser, array('courseid'=>$course->id));
+    $obj->link = html_writer::link($postlink, s($post->subject));
+    $obj->smalltext = get_string('bynameondate', 'forum', $by);
+
+    return local_moodleorg_frontpage_li($obj);
+ }
+
+
+function local_moodleorg_frontpage_li($obj) {
     $o = '';
     $o.= html_writer::start_tag('li')."\n";
     $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
-    $o.= $OUTPUT->user_picture($postuser, array('courseid'=>$course->id))."\n";
+    $o.= $obj->image."\n";
     $o.= html_writer::end_tag('div')."\n";
     $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
-    $o.= html_writer::link($postlink, s($post->subject))."<br />\n";
+    $o.= $obj->link . "<br />\n";
     $o.= html_writer::start_tag('span', array('style'=>'font-size:0.8em; color: grey;'));
-    $o.= get_string('bynameondate', 'forum', $by);
+    $o.= $obj->smalltext;
     $o.= html_writer::end_tag('span')."\n";
     $o.= html_writer::end_tag('div')."\n";
     $o.= '<br />';

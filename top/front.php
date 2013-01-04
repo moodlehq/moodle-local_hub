@@ -1,7 +1,7 @@
 <?php defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 require_once($CFG->dirroot.'/calendar/lib.php');
-
+require_once($CFG->libdir.'/simplepie/moodle_simplepie.php');
 
 // Get the users current lang.
 $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
@@ -55,16 +55,47 @@ if ($content = $cache->get('frontpage_'.$mapping->lang)) {
 </div>
 <div style="width: 25%; float: left;">
 <h1>Recent Resources</h1>
-<ul>
-<li>One</li>
-<li>Two</li>
-<li>Three</li>
-</ul>
+<?php
+echo recent_resources();
+?>
 </div>
 </div>
 <?php
 } else {
     echo 'No language mapping found :-(';
+}
+
+function recent_resources() {
+    global $OUTPUT;
+
+    //FIXME :)
+    $feed = new moodle_simplepie('http://pipes.yahoo.com/pipes/pipe.run?_id=2a7f5e44ac0ae95e1fa10bc5ee09149e&_render=rss');
+
+    $feeditems = $feed->get_items(0, LOCAL_MOODLEORG_FRONTPAGEITEMS);
+
+    $o = '';
+    $o.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
+    foreach ($feeditems as $item) {
+        $title = $item->get_title();
+        if (preg_match('/^Plugins: /', $title)) {
+            $image = $OUTPUT->pix_icon('icon', 'Plugins', 'mod_lti', array('style'=>'width:35px; height: 35px'));
+        } else if (preg_match('/^Jobs: /', $title)) {
+            $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_feedback', array('style'=>'width:35px; height: 35px'));
+        } else if (preg_match('/^Course: /', $title)) {
+            $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_imscp', array('style'=>'width:35px; height: 35px'));
+        } else {
+            $image = $OUTPUT->pix_icon('icon', 'Buzz', 'mod_label', array('style'=>'width:35px; height: 35px'));
+        }
+
+        $obj = new stdClass;
+        $obj->image = $image;
+        $obj->link = html_writer::link($item->get_link(), $item->get_title());
+        $obj->smalltext = userdate($item->get_date('U'), get_string('strftimedaydate', 'core_langconfig'));
+        $o.= local_moodleorg_frontpage_li($obj);
+    }
+    $o.= html_writer::end_tag('ul');
+
+    return $o;
 }
 
 function latest_events($courseid) {
@@ -85,28 +116,23 @@ function latest_events($courseid) {
     list($courses, $group, $user) = calendar_set_filters($courses);
     $events = calendar_get_upcoming($courses, $group, $user, 365, LOCAL_MOODLEORG_FRONTPAGEITEMS);
 
-    $o = '';
-    $o.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
 
     // Define the base url for clendar linking..
     $baseurl = new moodle_url('/calendar/view.php', array('view' => 'day', 'course'=> $courseid));
+
+    $o = '';
+    $o.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
     foreach ($events as $event) {
         $ed = usergetdate($event->timestart);
         $linkurl = calendar_get_link_href($baseurl, $ed['mday'], $ed['mon'], $ed['year']);
         $linkurl->set_anchor('event_'.$event->id);
 
-        $o.= html_writer::start_tag('li')."\n";
-        $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
-        $o.= $OUTPUT->pix_icon('i/siteevent', get_string('globalevent', 'calendar'), 'moodle', array('style'=>'width:35px; height: 35px;'));
-        $o.= html_writer::end_tag('div')."\n";
-        $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
-        $o.= html_writer::link($linkurl, $event->name)."<br />\n";
-        $o.= html_writer::start_tag('span', array('style'=>'font-size:0.8em; color: grey;'));
-        $o.= userdate($event->timestart, get_string('strftimedaydate', 'core_langconfig'));
-        $o.= html_writer::end_tag('span')."\n";
-        $o.= html_writer::end_tag('div')."\n";
-        $o.= '<br />';
-        $o.= html_writer::end_tag('li')."\n";
+        $obj = new stdClass;
+        $obj->image = $OUTPUT->pix_icon('i/siteevent', get_string('globalevent', 'calendar'), 'moodle', array('style'=>'width:35px; height: 35px;'));
+        $obj->link = html_writer::link($linkurl, $event->name);
+        $obj->smalltext = userdate($event->timestart, get_string('strftimedaydate', 'core_langconfig'));
+
+        $o.= local_moodleorg_frontpage_li($obj);
     }
     $o.= html_writer::end_tag('ul');
     return $o;
@@ -115,7 +141,6 @@ function latest_events($courseid) {
 function latest_news($course) {
     global $CFG;
     require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
-
 
     if (!$forum = forum_get_course_forum(1, 'news')) {
         return '';
@@ -133,7 +158,7 @@ function latest_news($course) {
     $text = '';
     $text.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
     foreach ($discussions as $discussion) {
-        $text.= local_moodleorg_frontpage_li($discussion, $course);
+        $text.= local_moodleorg_frontpage_forumpost($discussion, $course);
     }
     $text.= html_writer::end_tag('ul');
     return $text;

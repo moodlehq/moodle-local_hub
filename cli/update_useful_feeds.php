@@ -132,7 +132,7 @@ function generate_useful_items($langcode, $courseid, $scaleid) {
 
 
         if ($frontpagecount < LOCAL_MOODLEORG_FRONTPAGEITEMS) {
-            $frontcontent.= local_moodleorg_frontpage_li($post, $course);
+            $frontcontent.= local_moodleorg_frontpage_forumpost($post, $course);
             $frontpagecount++;
         }
 
