@@ -446,7 +446,7 @@ function local_moodle_get_mapping() {
     array_unshift($langdeps, 'en');
 
     list($insql, $inparams) = $DB->get_in_or_equal($langdeps);
-    $sql = "SELECT lang, courseid FROM {moodleorg_useful_coursemap} WHERE lang $insql";
+    $sql = "SELECT lang, courseid, scaleid FROM {moodleorg_useful_coursemap} WHERE lang $insql";
     $mappings = $DB->get_records_sql($sql, $inparams);
 
     $mapping = null;
