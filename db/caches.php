@@ -27,6 +27,12 @@ $definitions = array(
     'usefulposts' => array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
+        'simpledata' => true,
+        'persistent' => true,
+    ),
+    'frontpagecolumn' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
         'simpledata' => false,
         'persistent' => true,
     ),
