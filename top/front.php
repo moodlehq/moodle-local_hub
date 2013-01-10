@@ -4,10 +4,10 @@ require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 $mapping = local_moodle_get_mapping();
 
 if ($mapping) {
-    $news = new frontpage_column_news($mapping->lang);
-    $useful = new frontpage_column_useful($mapping->lang);
-    $events = new frontpage_column_events($mapping->lang);
-    $resources = new frontpage_column_resources($mapping->lang);
+    $news = new frontpage_column_news($mapping);
+    $useful = new frontpage_column_useful($mapping);
+    $events = new frontpage_column_events($mapping);
+    $resources = new frontpage_column_resources($mapping);
 
     echo html_writer::start_tag('div', array('style' => 'width: 100%; overflow: hidden;'));
 
