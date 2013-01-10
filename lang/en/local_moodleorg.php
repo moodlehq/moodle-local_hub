@@ -42,6 +42,7 @@ $string['activeusers24hours'] = 'Registered users accessed in past 24 hours: ';
 $string['activeuserspastmonth'] = 'Registered users accessed in past month:';
 $string['browsegittitle'] = 'Browse our source code';
 $string['communityintro'] = 'Moodle has a large and diverse user community with over <a href="http://moodle.org/userpics">{$a->usercount} registered users</a> on this Moodle site alone, speaking over <a href="http://download.moodle.org/langpack/">{$a->langcount} languages</a> in <a href="http://moodle.org/sites">{$a->countrycount} countries</a> (we have <a href="http://moodle.org/stats">more statistics</a>).';
+$string['cachedef_frontpagecolumn'] = 'Frontpage columns';
 $string['cachedef_usefulposts'] = 'Useful Posts';
 $string['conferencecenter'] = 'Moodle Conference Center';
 $string['connectedsites'] = 'Some Moodle sites have been connected to moodle.org using Moodle Networking, so you can log in there directly once you are authenticated here.';
