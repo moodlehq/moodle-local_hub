@@ -263,7 +263,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
             $negativescaleid = $this->mapping->scaleid * -1;
             $forumids = $DB->get_records('forum', array('course'=>$course->id, 'scale'=>$negativescaleid), '', 'id');
             if (empty($forumids)) {
-                debugging("No forums found for {$this->mapping->langcode} with scale {$this->mapping->scaleid}", DEBUG_DEVELOPER);
+                debugging("No forums found for {$this->mapping->lang} with scale {$this->mapping->scaleid}", DEBUG_DEVELOPER);
                 return array();
             }
 
@@ -382,9 +382,9 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt');
 
         $cache = cache::make('local_moodleorg', 'usefulposts');
-        $cache->set('useful_'.$this->mapping->langcode, ob_get_contents());
+        $cache->set('useful_'.$this->mapping->lang, ob_get_contents());
         ob_end_clean();
-        $cache->set('rss_'.$this->mapping->langcode, $rsscontent);
+        $cache->set('rss_'.$this->mapping->lang, $rsscontent);
 
         return $frontcontent;
     }
