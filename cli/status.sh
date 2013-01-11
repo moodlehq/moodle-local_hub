@@ -29,10 +29,6 @@ cd $basedir/filter/skypeicons && $gitconfig && git status && git diff
 echo -e "\n=============== local/plugins"
 cd $basedir/local/plugins && $gitconfig && git status && git diff
 
-# phpmyadmin ==========================
-echo -e "\n=============== local/phpmyadmin"
-cd $basedir/local/phpmyadmin && $gitconfig && git status && git diff
-
 # theme ===============================
 echo -e "\n=============== theme/moodleofficial"
 cd $basedir/theme/moodleofficial && $gitconfig && git status && git diff

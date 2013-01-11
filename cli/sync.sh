@@ -17,9 +17,6 @@ cd $basedir/filter/skypeicons && $gitconfig && git reset --hard
 # contrib plugins =====================
 cd $basedir/local/plugins && $gitconfig && git reset --hard
 
-# phpmyadmin ==========================
-cd $basedir/local/phpmyadmin && $gitconfig && git reset --hard
-
 # theme ===============================
 cd $basedir/theme/moodleofficial && $gitconfig && git reset --hard
 

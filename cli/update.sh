@@ -21,9 +21,6 @@ cd $basedir/filter/skypeicons && $gitconfig && git pull
 # contrib plugins =====================
 cd $basedir/local/plugins && $gitconfig && git pull
 
-# phpmyadmin ==========================
-cd $basedir/local/phpmyadmin && $gitconfig && git pull
-
 # dev plugin ==========================
 cd $basedir/local/dev && $gitconfig && git pull
 
