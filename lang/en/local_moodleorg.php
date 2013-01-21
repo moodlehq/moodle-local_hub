@@ -87,7 +87,7 @@ $string['downloadmodules'] = 'Browse through our comprehensive database of extra
 $string['downloadmodulestitle'] = 'Plugins';
 $string['downloadthemes'] = 'The appearance of a Moodle site can be changed dramatically by using a different theme.  We keep a database of themes that Moodle users have created and shared.';
 $string['downloadthemestitle'] = 'Themes';
-$string['downloadviagit'] = 'Other ways to get Moodle include <a href="http://docs.moodle.org/en/Git_for_Administrators">downloading via Git</a>.';
+$string['downloadviagit'] = 'You can also download Moodle <a href="http://docs.moodle.org/en/Git_for_Administrators">with Git</a>.';
 $string['downloadwin'] = 'If you don\'t have a web server set up already, these all-in-one packages make it very easy to install Moodle on any computer running Microsoft Windows.';
 $string['downloadwintitle'] = 'Moodle for Windows';
 $string['erroradminonly'] = 'Only admin users can access this interface.';
