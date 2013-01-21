@@ -7,7 +7,7 @@
                      'downloadcoretitle',
                      'downloadcore',
                      'http://download.moodle.org/|downloadcoretitle',
-                     'downloadviagitcvs',
+                     'downloadviagit',
                      'downloadlangtitle',
                      'downloadlang',
                      'http://download.moodle.org/langpack/|downloadlangtitle');

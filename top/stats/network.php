@@ -60,15 +60,10 @@ echo '<div id="networkstatus">';
                 "http://moodle.com!244",
                 "http://partners.moodle.com!246",
                 "http://docs.moodle.org!50",
-                "http://cvs.moodle.org!31",
                 "http://download.moodle.org!66",
                 "http://tracker.moodle.com!38",
                 "http://lists.moodle.org!32",
                 "http://demo.moodle.org!297",
-                "cvs://us.cvs.moodle.org!15",
-                "cvs://uk.cvs.moodle.org!14",
-                "cvs://eu.cvs.moodle.org!13",
-                "cvs://es.cvs.moodle.org!12",
                 );
   foreach ($hosts as &$host) {
     $array = explode("!", $host);

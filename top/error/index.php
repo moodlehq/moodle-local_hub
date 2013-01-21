@@ -215,9 +215,6 @@ if ($sendsms) {
                                     <li class="moodle-menuitem"> 
                                         <a href="http://tracker.moodle.org/" title="Moodle Tracker" class="moodle-menuitem-content">Moodle Tracker</a> 
                                     </li> 
-                                    <li class="moodle-menuitem"> 
-                                        <a href="http://cvs.moodle.org/moodle/" title="Open source code" class="moodle-menuitem-content">Open source code</a> 
-                                    </li> 
                                 </ul> 
                             </div> 
                         </div> 
