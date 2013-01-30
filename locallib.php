@@ -30,7 +30,7 @@ defined('MOODLE_INTERNAL') || die();
 abstract class frontpage_column
 {
     /** The number of items to show on the front page */
-    const MAXITEMS = 6;
+    const MAXITEMS = 4;
     /** @var string The mapping record */
     protected $mapping = null;
 
@@ -105,7 +105,7 @@ abstract class frontpage_column
         $objects = $this->get();
 
         $o = '';
-        $o.= html_writer::start_tag('ul', array('style'=>'list-style-type: none; padding:0; margin:0;'));
+        $o.= html_writer::start_tag('ul', array('class'=>'media-list'));
         foreach ($objects as $obj) {
             $o.= local_moodleorg_frontpage_li($obj);
         }
@@ -462,15 +462,17 @@ function local_moodle_get_mapping() {
 
 function local_moodleorg_frontpage_li($obj) {
     $o = '';
-    $o.= html_writer::start_tag('li')."\n";
-    $o.= html_writer::start_tag('div', array('style'=>'float: left; margin: 3px;'))."\n";
+    $o.= html_writer::start_tag('li', array('class'=> 'media'))."\n";
+    $o.= html_writer::start_tag('div', array('class'=>'pull-left'))."\n";
     $o.= $obj->image."\n";
     $o.= html_writer::end_tag('div')."\n";
-    $o.= html_writer::start_tag('div', array('style'=>'display:block;'))."\n";
-    $o.= $obj->link . "<br />\n";
-    $o.= html_writer::start_tag('span', array('style'=>'font-size:0.8em; color: grey;'));
+    $o.= html_writer::start_tag('div', array('class' => 'media-body'))."\n";
+    $o.= html_writer::start_tag('div', array('class'=> 'media-heading'))."\n";
+    $o.= $obj->link;
+    $o.= html_writer::end_tag('div')."\n";
+    $o.= html_writer::start_tag('div', array('class'=> 'muted'))."\n";
     $o.= $obj->smalltext;
-    $o.= html_writer::end_tag('span')."\n";
+    $o.= html_writer::end_tag('div')."\n";
     $o.= html_writer::end_tag('div')."\n";
     $o.= '<br />';
     $o.= html_writer::end_tag('li')."\n";
