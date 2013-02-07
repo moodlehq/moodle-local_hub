@@ -1161,6 +1161,17 @@ class local_hub {
             $siteinfo->imageurl = '';
         }
 
+        // Little hack: clean parameter from float to int
+        // TODO: change database to accept FLOAT.
+        $siteinfo->courses = (int) $siteinfo->courses;
+        $siteinfo->users = (int) $siteinfo->users;
+        $siteinfo->enrolments = (int) $siteinfo->enrolments;
+        $siteinfo->posts = (int) $siteinfo->posts;
+        $siteinfo->questions = (int) $siteinfo->questions;
+        $siteinfo->participantnumberaverage = (int) $siteinfo->participantnumberaverage;
+        $siteinfo->modulenumberaverage = (int) $siteinfo->modulenumberaverage;
+        $siteinfo->resources = (int) $siteinfo->resources;
+
         //Add or update the site into the site directory (hub)
         if (!empty($siteurltoupdate)) {
             $this->update_site($siteinfo);
