@@ -156,6 +156,7 @@ $string['pluginname'] = 'Moodle.org site';
 $string['popularissues'] = 'Most popular issues';
 $string['recentpart'] = 'This page shows some of the people using moodle.org today.';
 $string['recentparttitle'] = 'Recent participants';
+$string['recentlyratedposts'] = 'Recently rated posts';
 $string['registeredsites'] = 'Institutions are not required to inform anyone when they use Moodle, because Moodle is open source.  However, some Moodle sites have chosen to register with us and we keep a listing of them.';
 $string['registeredsitestitle'] = 'Registered sites';
 $string['registereduserstotal'] = 'Registered users total: ';
