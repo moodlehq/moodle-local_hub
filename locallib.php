@@ -69,6 +69,10 @@ abstract class frontpage_column
         return $course;
     }
 
+    protected function get_cache() {
+        return cache::make('local_moodleorg', 'frontpagecolumn');
+    }
+
     /**
      * Get the items for this column. Will get from cache or generate
      * and store from cache if it doesn't exist.
@@ -76,7 +80,7 @@ abstract class frontpage_column
      * @return array of li items to be displayed/cached.
      */
     protected function get() {
-        $cache = cache::make('local_moodleorg', 'frontpagecolumn');
+        $cache = $this->get_cache();
         $key = $this->cache_key();
         if ($content = $cache->get($key)) {
             return $content;
@@ -93,6 +97,9 @@ abstract class frontpage_column
      */
     public function update() {
         $content = $this->generate();
+
+        $cache = $this->get_cache();
+        $key = $this->cache_key();
         $cache->set($key, $content);
     }
 
@@ -239,6 +246,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
     protected function generate() {
         global $DB, $CFG;
+        require_once($CFG->dirroot.'/rating/lib.php');
 
         $course = $this->get_course();
 
@@ -381,7 +389,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
         $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt');
 
-        $cache = cache::make('local_moodleorg', 'usefulposts');
+        $cache = $this->get_cache();
         $cache->set('useful_'.$this->mapping->lang, ob_get_contents());
         ob_end_clean();
         $cache->set('rss_'.$this->mapping->lang, $rsscontent);
