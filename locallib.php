@@ -390,7 +390,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt');
 
         $cache = $this->get_cache();
-        $cache->set('useful_'.$this->mapping->lang, ob_get_contents());
+        $cache->set('useful_full_'.$this->mapping->lang, ob_get_contents());
         ob_end_clean();
         $cache->set('rss_'.$this->mapping->lang, $rsscontent);
 
@@ -400,6 +400,21 @@ class frontpage_column_useful extends frontpage_column_forumposts
     public function get_rss() {
         $cache = $this->get_cache();
         $key = 'rss_'.$this->mapping->lang;
+        if ($content = $cache->get($key)) {
+            return $content;
+        }
+
+        $this->generate();
+        if (!$content = $cache->get($key)) {
+            throw new moodle_exception('cant get content');
+        }
+
+        return $content;
+    }
+
+    public function get_full_content() {
+        $cache = $this->get_cache();
+        $key = 'useful_full_'.$this->mapping->lang;
         if ($content = $cache->get($key)) {
             return $content;
         }
