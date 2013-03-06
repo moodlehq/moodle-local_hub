@@ -225,7 +225,7 @@ class frontpage_column_news extends frontpage_column_forumposts
             return '';
         }
 
-        $url = new moodle_url('/mod/forum/view.php', array('id' => $forum->id));
+        $url = new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
         return html_writer::link($url, get_string('sitenews'));
     }
 
