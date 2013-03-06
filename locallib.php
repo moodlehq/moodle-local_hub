@@ -396,6 +396,21 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
         return $frontcontent;
     }
+
+    public function get_rss() {
+        $cache = $this->get_cache();
+        $key = 'rss_'.$this->mapping->lang;
+        if ($content = $cache->get($key)) {
+            return $content;
+        }
+
+        $this->generate();
+        if (!$content = $cache->get($key)) {
+            throw new moodle_exception('cant get content');
+        }
+
+        return $content;
+    }
 }
 
 class frontpage_column_resources extends frontpage_column
@@ -436,11 +451,16 @@ class frontpage_column_resources extends frontpage_column
     }
 }
 
-function local_moodle_get_mapping() {
+function local_moodle_get_mapping($forcelang = false) {
     global $SESSION, $DB;
 
-    // Get the users current lang.
-    $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
+    if ($forcelang) {
+        // Language has been forced by params.
+        $userlang = $forcelang;
+    } else {
+        // Get the users current lang.
+        $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
+    }
 
     // We will to english, unless a mapping is found.
     $lang = null;
