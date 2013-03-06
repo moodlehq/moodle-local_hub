@@ -56,6 +56,20 @@ abstract class frontpage_column
     abstract protected function generate();
 
     /**
+     * Generate the link to display more content
+     *
+     * @return string the more info link
+     */
+    abstract protected function more_link();
+
+    /**
+     * RSS URL to view the the content via RSS
+     *
+     * @return string the more info link
+     */
+    abstract protected function rss_url();
+
+    /**
      * Returns the course object of this lang codes mapping
      *
      * @return stdClass course object from the database
@@ -109,6 +123,8 @@ abstract class frontpage_column
      * @return string the html content
      */
     public function output() {
+        global $OUTPUT;
+
         $objects = $this->get();
 
         $o = '';
@@ -117,6 +133,16 @@ abstract class frontpage_column
             $o.= local_moodleorg_frontpage_li($obj);
         }
         $o.= html_writer::end_tag('ul');
+
+        $o.= html_writer::empty_tag('hr');
+
+        if ($rsslink = $this->rss_url()) {
+            $o.= html_writer::link($rsslink, $OUTPUT->pix_icon('i/rss', 'subscribe by rss'));
+        }
+        if ($morelink = $this->more_link()) {
+            $o.= ' '.$morelink;
+        }
+
         return $o;
     }
 }
@@ -188,6 +214,40 @@ class frontpage_column_news extends frontpage_column_forumposts
         }
         return $items;
     }
+
+    protected function more_link() {
+        global $CFG, $SITE;
+
+        //TODO: SHOULD BE CACHING THE FORUMID!
+        require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
+
+        if (!$forum = forum_get_course_forum($SITE->id, 'news')) {
+            return '';
+        }
+
+        $url = new moodle_url('/mod/forum/view.php', array('id' => $forum->id));
+        return html_writer::link($url, get_string('sitenews'));
+    }
+
+    protected function rss_url() {
+        global $CFG, $SITE;
+
+        // Wow this is really ugly....
+        require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
+        require_once($CFG->dirroot.'/lib/rsslib.php');
+
+        if (!$forum = forum_get_course_forum($SITE->id, 'news')) {
+            return '';
+        }
+
+        // La la la.
+        $modinfo = get_fast_modinfo($SITE);
+        $cm = $modinfo->instances['forum'][$forum->id];
+        $context = context_module::instance($cm->id);
+        $user = guest_user();
+
+        return rss_get_url($context->id, $user->id, 'mod_forum', $forum->id);
+    }
 }
 
 
@@ -236,7 +296,18 @@ class frontpage_column_events extends frontpage_column
         }
         return $items;
     }
+
+    protected function more_link() {
+        $url = new moodle_url('calendar/view.php', array('view' => 'month'));
+        return html_writer::link($url, 'Calendar entries');
+    }
+
+    protected function rss_url() {
+        // No RSS feed.
+        return null;
+    }
 }
+
 
 class frontpage_column_useful extends frontpage_column_forumposts
 {
@@ -426,6 +497,14 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
         return $content;
     }
+
+    protected function more_link() {
+        return html_writer::link(new moodle_url('/useful/'), 'More posts');
+    }
+
+    protected function rss_url() {
+        return new moodle_url('/useful/rss.php', array('lang' => $this->mapping->lang));
+    }
 }
 
 class frontpage_column_resources extends frontpage_column
@@ -463,6 +542,14 @@ class frontpage_column_resources extends frontpage_column
         }
 
         return $items;
+    }
+
+    protected function more_link() {
+        return null;
+    }
+
+    protected function rss_url() {
+        return self::FEEDURL;
     }
 }
 
