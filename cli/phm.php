@@ -10,6 +10,9 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
 }
 
 mtrace("Generating Particularly Helpful Moodlers for all langs..");
+phm_calculate_users();
+die;
+
 $mappings = $DB->get_records('moodleorg_useful_coursemap');
 foreach ($mappings as $map) {
     if (empty($map->scaleid)) {

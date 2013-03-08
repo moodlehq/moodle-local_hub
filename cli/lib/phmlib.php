@@ -20,7 +20,7 @@ include_once($CFG->dirroot.'/group/lib.php');
  * @param <type> $minratio
  * @param <type> $savechanges
  */
-function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days = 60, $minposts = 1, $minratings = 14, $minraters = 8, $minratio = 0.02, $savechanges = true) {
+function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $minratio = 0.02) {
     global $DB, $OUTPUT;
 
     $s = '';
@@ -36,10 +36,10 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
                   AND ctx.contextlevel = :contextlevel AND r.component = :component
                   AND r.ratingarea = :ratingarea AND r.itemid = fp.id";
 
-    $params = array('forummodid'         => $forummodid,
-                        'contextlevel'    => CONTEXT_MODULE,
-                        'component'       => 'mod_forum',
-                        'ratingarea'      => 'post'
+    $params = array('forummodid'    => $forummodid,
+                     'contextlevel' => CONTEXT_MODULE,
+                     'component'    => 'mod_forum',
+                     'ratingarea'   => 'post'
                     );
 
 
@@ -50,25 +50,30 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
     $phms = array();
     $rs = $DB->get_recordset_sql($raterssql, $params);
     foreach($rs as $record) {
-        if ($record->ratingscount < 14) {
+        if ($record->ratingscount < $minratings) {
             // Need at least 14 ratings.
-            continue;
-        }
-
-        $countsql = "SELECT COUNT(DISTINCT(r.userid)) $innersql AND fp.userid = :userid";
-        $coutnparms = array_merge($params, array('userid' => $record->userid));
-        $raterscount = $DB->count_records_sql($countsql, $coutnparms);
-
-        if ($raterscount < 8) {
-            // Need at least 8 different ratings.
             continue;
         }
 
         $totalpostcount = $DB->count_records('forum_posts', array('userid' => $record->userid));
 
+        if ($totalpostcount < $minposts) {
+            // Need a minimum of X posts
+            continue;
+        }
+
+        $countsql = "SELECT COUNT(DISTINCT(r.userid)) $innersql AND fp.userid = :userid";
+        $countparms = array_merge($params, array('userid' => $record->userid));
+        $raterscount = $DB->count_records_sql($countsql, $countparms);
+
+        if ($raterscount < $minraters) {
+            // Need at least 8 different ratings.
+            continue;
+        }
+
         $ratio = $record->ratingscount / $totalpostcount;
 
-        if ($ratio < 0.12) {
+        if ($ratio < $minratio) {
             // Need a post ratio this good.
             continue;
         }
@@ -77,8 +82,19 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
     }
     $rs->close();
 
+    list($insql, $inparams) = $DB->get_in_or_equal(array_keys($phms), SQL_PARAMS_QM, 'param', false);
+
+    // Users we'd be removing:
+    $sql = "SELECT u.firstname, u.lastname FROM user u
+            JOIN groups_members gm ON u.id = gm.userid AND gm.groupid = 1
+            AND gm.userid $insql";
+
+    $users = $DB->get_records_sql($sql, $inparams);
+    foreach ($users as $u) {
+        echo "{$u->firstname} {$u->lastname} \n";
+    }
+
     print_object(count($phms));
-    print_object($phms);
 
     return true;
 }
