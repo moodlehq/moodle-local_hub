@@ -59,7 +59,7 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
             continue;
         }
 
-        $totalpostcount = $DB->count_records('forum_posts', 'userid = :userid AND timecreated > :mintime', array('userid' => $record->userid, 'mintime' => $minposttime));
+        $totalpostcount = $DB->count_records_select('forum_posts', 'userid = :userid AND timecreated > :mintime', array('userid' => $record->userid, 'mintime' => $minposttime));
 
         if ($totalpostcount < $minposts) {
             // Need a minimum of X posts
