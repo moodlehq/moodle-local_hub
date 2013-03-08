@@ -77,6 +77,7 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
     }
     $rs->close();
 
+    print_object(count($phms));
     print_object($phms);
 
     return true;
