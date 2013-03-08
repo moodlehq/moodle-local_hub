@@ -73,7 +73,7 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
             continue;
         }
 
-        $phms[$record->userid] = array('totalratings' => $record->raterscount, 'postcount' =>  $totalposts, 'raters' => $raterscount);
+        $phms[$record->userid] = array('totalratings' => $record->ratingscount, 'postcount' =>  $totalpostcount, 'raters' => $raterscount);
     }
     $rs->close();
 
