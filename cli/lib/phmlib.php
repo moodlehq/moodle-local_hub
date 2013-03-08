@@ -24,6 +24,7 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
     global $DB, $OUTPUT;
 
     $s = '';
+    $minposttime = time() - YEARSECS;
 
     $forummodid = $DB->get_field('modules', 'id', array('name' => 'forum'));
 
@@ -34,12 +35,15 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
                   JOIN {rating} r ON r.contextid = ctx.id
                   WHERE cm.module = :forummodid
                   AND ctx.contextlevel = :contextlevel AND r.component = :component
-                  AND r.ratingarea = :ratingarea AND r.itemid = fp.id";
+                  AND r.ratingarea = :ratingarea AND r.itemid = fp.id
+                  AND fp.created > :minposttime
+                  ";
 
     $params = array('forummodid'    => $forummodid,
                      'contextlevel' => CONTEXT_MODULE,
                      'component'    => 'mod_forum',
-                     'ratingarea'   => 'post'
+                     'ratingarea'   => 'post',
+                     'minposttime'  => $minposttime
                     );
 
 
@@ -55,7 +59,7 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
             continue;
         }
 
-        $totalpostcount = $DB->count_records('forum_posts', array('userid' => $record->userid));
+        $totalpostcount = $DB->count_records('forum_posts', 'userid = :userid AND timecreated > :mintime', array('userid' => $record->userid, 'mintime' => $minposttime));
 
         if ($totalpostcount < $minposts) {
             // Need a minimum of X posts
