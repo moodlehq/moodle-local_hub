@@ -57,7 +57,7 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
 
         $countsql = "SELECT COUNT(DISTINCT(r.userid)) $innersql AND fp.userid = :userid";
         $coutnparms = array_merge($params, array('userid' => $record->userid));
-        $raterscount = $DB->count_records_sql($sql, $coutnparms);
+        $raterscount = $DB->count_records_sql($countsql, $coutnparms);
 
         if ($raterscount < 8) {
             // Need at least 8 different ratings.
