@@ -64,7 +64,7 @@ function phm_calculate_users($emailusers, $courseid, $groupid, $scaleid, $days =
             continue;
         }
 
-        $totalposts = $DB->count_records('forum_posts', array('userid' => $record->userid));
+        $totalpostcount = $DB->count_records('forum_posts', array('userid' => $record->userid));
 
         $ratio = $record->ratingscount / $totalpostcount;
 
