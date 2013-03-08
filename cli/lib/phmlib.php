@@ -87,7 +87,7 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
     // Users we'd be removing:
     $sql = "SELECT u.id, u.firstname, u.lastname FROM user u
             JOIN groups_members gm ON u.id = gm.userid AND gm.groupid = 1
-            AND gm.userid $insql";
+            WHERE gm.userid $insql";
 
     $users = $DB->get_records_sql($sql, $inparams);
     echo "Would remove ".count($users)." users\n";
@@ -98,7 +98,7 @@ function phm_calculate_users($minposts = 14, $minratings = 14, $minraters = 8, $
     list($insql, $inparams) = $DB->get_in_or_equal(array_keys($phms));
     $sql = "SELECT u.id, u.firstname, u.lastname FROM user u
             LEFT JOIN groups_members gm ON u.id = gm.userid AND gm.groupid = 1
-            AND u.id $insql AND gm.userid IS NULL";
+            WHERE u.id $insql AND gm.userid IS NULL";
 
     $users = $DB->get_records_sql($sql, $inparams);
     echo "Would add ".count($users)." users\n";
