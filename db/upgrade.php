@@ -86,5 +86,23 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2012091200, 'local', 'moodleorg');
     }
 
+    if ($oldversion < 2013031100) {
+
+        // Define field phmgroupid to be dropped from moodleorg_useful_coursemap.
+        $table = new xmldb_table('moodleorg_useful_coursemap');
+        $key = new xmldb_key('phmgroupid', XMLDB_KEY_FOREIGN, array('phmgroupid'), 'groups', array('id'));
+
+        $dbman->drop_key($table, $key);
+
+        $field = new xmldb_field('phmgroupid');
+        // Conditionally launch drop field phmgroupid.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Moodleorg savepoint reached.
+        upgrade_plugin_savepoint(true, 2013031100, 'local', 'moodleorg');
+    }
+
     return true;
 }

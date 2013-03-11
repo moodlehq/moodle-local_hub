@@ -7,16 +7,14 @@ class local_moodleorg_useful_mapping_table extends table_sql {
     public function __construct($uniqueid) {
         parent::__construct($uniqueid);
         $fields = 'c.id, c.shortname, c.fullname AS coursename, m.id AS mappingid,
-                   m.lang, s.name AS scalename, s.scale, m.phmgroupid, g.name AS groupname,
-                   m.coursemanagerslist';
+                   m.lang, s.name AS scalename, s.scale, m.coursemanagerslist';
         $from   = '{course} c
                    LEFT JOIN {moodleorg_useful_coursemap} m ON c.id = m.courseid
-                   LEFT JOIN {scale} s ON m.scaleid = s.id
-                   LEFT JOIN {groups} g ON m.phmgroupid = g.id';
+                   LEFT JOIN {scale} s ON m.scaleid = s.id';
         $where = 'c.visible = 1 AND c.id != :siteid';
         $params = array('siteid' => SITEID);
-        $this->define_headers(array('ID', 'Shortname', 'Course Name', 'Language', 'Scale', 'PHM Group', 'Course Managers', 'Edit'));
-        $this->define_columns(array('id', 'shortname', 'coursename', 'lang', 'scale', 'groupname', 'coursemanagers', 'edit'));
+        $this->define_headers(array('ID', 'Shortname', 'Course Name', 'Language', 'Scale', 'Course Managers', 'Edit'));
+        $this->define_columns(array('id', 'shortname', 'coursename', 'lang', 'scale', 'coursemanagers', 'edit'));
         $this->no_sorting('edit');
         $this->set_sql($fields, $from, $where, $params);
         $this->collapsible(false);
@@ -37,14 +35,6 @@ class local_moodleorg_useful_mapping_table extends table_sql {
     public function col_lang($row) {
         if (!empty($row->lang)) {
             return $row->lang;
-        } else {
-            return '-';
-        }
-    }
-
-    public function col_groupname($row) {
-        if (!empty($row->phmgroupid)) {
-            return "{$row->groupname} [{$row->phmgroupid}]";
         } else {
             return '-';
         }

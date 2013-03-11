@@ -26,14 +26,6 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
             $mform->setDefault('lang', $CFG->lang);
         }
 
-        $groups = groups_get_all_groups($course->id);
-        $groupchoices = array();
-        $groupchoices[0] = 'Do not create a PHM group.';
-        foreach ($groups as $group) {
-            $groupchoices[$group->id] = "{$group->name} [{$group->id}]";
-        }
-        unset($groups);
-        $mform->addElement('select', 'phmgroupid', 'PHM Group:', $groupchoices);
         $mform->addElement('text', 'coursemanagerslist', 'Course manager ids (seperated by commas)');
         $mform->addRule('coursemanagerslist', 'The course managers must be userids seperated by commas only.', 'regex', '/^(\d+,?)*$/');
         $this->add_action_buttons();
@@ -60,7 +52,6 @@ if ($mform->is_cancelled()) {
     $data->courseid = $courseid;
 
     $data->scaleid = !empty($formdata->scaleid) ? $formdata->scaleid : null;
-    $data->phmgroupid = !empty($formdata->phmgroupid) ? $formdata->phmgroupid : null;
     $data->coursemanagerslist= !empty($formdata->coursemanagerslist) ? $formdata->coursemanagerslist : null;
     $data->lang = $formdata->lang;
 
