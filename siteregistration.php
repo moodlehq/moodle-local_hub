@@ -74,6 +74,15 @@ $moodleversion              = optional_param('moodleversion', '', PARAM_FLOAT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
 
+// Retrieve the current url of MOOCH.
+// We do that because we switched to moodle.net from hub.moodle.org and we need both url to be registrable.
+if ($_SERVER['HTTP_HOST'] == 'hub.moodle.org') {
+    $huburl = 'http://hub.moodle.org';
+} else {
+    $huburl = $CFG->wwwroot;
+}
+define('HUBURL', $huburl);
+
 //hack to support Xlanguage MDL-30281 - Moodle regression explains in MDL-30297
 if (empty($language)) {
     $language = optional_param('Xlanguage', '', PARAM_ALPHANUMEXT);
@@ -151,7 +160,7 @@ if (!empty($freshmoodletoken) and !empty($freshmoodleid)) {
                 //previously installed error. So it's not that bad.
                 redirect(new moodle_url($freshregistration['newsite']['url']
                         ."/admin/registration/confirmregistration.php",
-                    array('newtoken' => $newtoken, 'url' => $CFG->wwwroot,
+                    array('newtoken' => $newtoken, 'url' => HUBURL,
                         'token' => $freshregistration['newsite']['secret'],
                         'hubname' => get_config('local_hub', 'name'))));
             } else {
@@ -220,7 +229,7 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
 
             //redirect to the Moodle site confirming the registration.
             redirect(new moodle_url($url."/admin/registration/confirmregistration.php",
-                array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $token,
+                array('newtoken' => $newtoken, 'url' => HUBURL, 'token' => $token,
                     'hubname' => get_config('local_hub', 'name'))));
 
             break;
@@ -228,7 +237,7 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
 
             //request the Moodle site to generate a new secret (=> new registration)
             redirect(new moodle_url($url."/admin/registration/renewregistration.php",
-            array('url' => $CFG->wwwroot, 'token' => $token,
+            array('url' => HUBURL, 'token' => $token,
                 'hubname' => get_config('local_hub', 'name'))));
 
         default:
@@ -351,6 +360,6 @@ function process_registration ($sitevalues, $secretexists, $urlexists, $sitewith
 
         //Redirect to the site with the created token
         redirect(new moodle_url($sitevalues->url . "/admin/registration/confirmregistration.php",
-                        array('newtoken' => $newtoken, 'url' => $CFG->wwwroot, 'token' => $sitevalues->token,
+                        array('newtoken' => $newtoken, 'url' => HUBURL, 'token' => $sitevalues->token,
                             'hubname' => get_config('local_hub', 'name'))));
 }
