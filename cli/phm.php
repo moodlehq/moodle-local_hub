@@ -11,28 +11,4 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
 
 mtrace("Generating Particularly Helpful Moodlers for all langs..");
 phm_calculate_users();
-die;
-
-$mappings = $DB->get_records('moodleorg_useful_coursemap');
-foreach ($mappings as $map) {
-    if (empty($map->scaleid)) {
-        mtrace("{$map->lang}...SKIPPING - no scale set.");
-        continue;
-    }
-
-    mtrace("{$map->lang}... generating PHM [Course: {$map->courseid} Scale: {$map->scaleid}]");
-
-    $managers = array();
-    if (!empty($map->coursemanagerslist)) {
-        list($insql, $params) = $DB->get_in_or_equal(explode(',', $map->coursemanagerslist));
-        $sql = "SELECT u.* FROM {user} u WHERE u.deleted = 0 AND u.id $insql";
-        $managers = $DB->get_records_sql($sql, $params);
-    }
-    $result = phm_calculate_users($managers, $map->courseid, $map->scaleid);
-    if ($result) {
-        mtrace("{$map->lang}... DONE.");
-    } else {
-        mtrace("{$map->lang}... FAILED.");
-    }
-}
 mtrace("Done generating PHMs");

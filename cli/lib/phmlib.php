@@ -2,8 +2,98 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-include_once($CFG->dirroot.'/mod/forum/lib.php');
-include_once($CFG->dirroot.'/group/lib.php');
+require_once($CFG->dirroot.'/cohort/lib.php');
+
+class local_moodleorg_phm_cohort_manager {
+    /** @var object cohort object from cohort table */
+    private $cohort;
+    /** @var array of cohort members indexed by userid */
+    private $existingusers;
+    /** @var array of cohort members indexed by userid */
+    private $currentusers;
+
+
+    /**
+     * Creates a cohort for identifier if it doesn't exist
+     *
+     * @param string $identifier identifier of cohort uniquely identifiying cohorts between dev plugin generated cohorts
+     */
+    public function __construct() {
+        global $DB;
+
+        $cohort = new stdClass;
+        $cohort->idnumber = 'local_moodleorg:particularly-helpful-moodlers';
+        $cohort->component = 'local_moodleorg';
+
+        if ($existingcohort = $DB->get_record('cohort', (array) $cohort)) {
+            $this->cohort = $existingcohort;
+            // populate cohort members array based on existing members
+            $this->existingusers = $DB->get_records('cohort_members', array('cohortid' => $this->cohort->id), 'userid', 'userid');
+            $this->currentusers = array();
+        } else {
+            $cohort->contextid = context_system::instance()->id;
+            $cohort->name = 'Particularly helpful moodlers';
+            $cohort->description = 'Automatically generated cohort from particularly helpful moodler scripts.';
+            $cohort->id = cohort_add_cohort($cohort);
+
+            $this->cohort = $cohort;
+            // no existing members as we've just created cohort
+            $this->existingusers = array();
+            $this->currentusers = array();
+        }
+    }
+
+    /**
+     * Add a member to the cohort keeps track of members who have been added.
+     *
+     * @param int $userid id from user table of user
+     * @return bool true if member is a new member of cohort
+     */
+    public function add_member($userid) {
+        if (!isset($this->existingusers[$userid])) {
+            cohort_add_member($this->cohort->id, $userid);
+        }
+        $this->currentusers[$userid] = $userid;
+    }
+
+    /**
+     * Returns the usersids who have not been to the cohort since this manager was created
+     *
+     * @param array array of removed users indexed by userid
+     */
+    public function old_users() {
+        return array_diff_key($this->existingusers, $this->currentusers);
+    }
+
+    /**
+     * Returns the cohort record
+     *
+     * @param stdClass cohort record
+     */
+    public function cohort() {
+        return $this->cohort;
+    }
+
+    /**
+     * Returns the current users of the cohort
+     *
+     * @param array array of removed users indexed by userid
+     */
+    public function current_users() {
+        return $this->currentusers;
+    }
+
+    public function remove_old_users() {
+        $userids = $this->old_users();
+
+        foreach($userids as $userid => $value) {
+            cohort_remove_member($this->cohort->id, $userid);
+            unset($this->existingusers[$userid]);
+        }
+
+        return $userids;
+    }
+}
 
 /**
  *
