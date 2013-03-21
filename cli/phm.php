@@ -2,13 +2,22 @@
 
 define('CLI_SCRIPT', true);
 
-require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
-require_once(dirname(__FILE__).'/lib/phmlib.php');
-
 if (isset($_SERVER['REMOTE_ADDR'])) {
     exit(1);
 }
 
+require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
+require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
+
+
 mtrace("Generating Particularly Helpful Moodlers for all langs..");
-phm_calculate_users();
+$phms = local_moodleorg_get_phms();
 mtrace("Done generating PHMs");
+
+mtrace("Populating phm cohort..");
+$cohortmanager = new local_moodleorg_phm_cohort_manager();
+
+foreach ($phms as $userid => $phmdetails) {
+    $cohortmanager->add_member($userid);
+}
+mtrace("Done Populating phm cohort.");

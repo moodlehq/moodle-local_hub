@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
-require_once($CFG->dirroot.'/local/moodleorg/cli/lib/phmlib.php');
+require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 
 class local_moodleorg_phmlib_testcase extends advanced_testcase {
     public function test_phm_cohort_manager() {
