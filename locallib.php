@@ -527,7 +527,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
       <width>140</width>
       <height>35</height>
     </image>
-EOF
+EOF;
     }
     private function rss_footer() {
         return "</channel>\n</rss>";
