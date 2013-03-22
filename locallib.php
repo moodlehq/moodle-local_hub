@@ -385,7 +385,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $frontcontent = array();
 
 
-        $rsscontent.= $self->rss_header();
+        $rsscontent.= $this->rss_header();
 
         // Start capturing output for /useful/ (hack)
         ob_start();
@@ -458,7 +458,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         }
         $rs->close();
 
-        $rsscontent.= $self->rss_footer();
+        $rsscontent.= $this->rss_footer();
 
         $cache = $this->get_cache();
         $cache->set('useful_full_'.$this->mapping->lang, ob_get_contents());
