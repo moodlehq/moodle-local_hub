@@ -385,7 +385,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $frontcontent = array();
 
 
-        $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-head.txt');
+        $rsscontent.= $self->rss_header();
 
         // Start capturing output for /useful/ (hack)
         ob_start();
@@ -458,7 +458,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         }
         $rs->close();
 
-        $rsscontent.= file_get_contents($CFG->dirroot.'/local/moodleorg/top/useful/rss-foot.txt');
+        $rsscontent.= $self->rss_footer();
 
         $cache = $this->get_cache();
         $cache->set('useful_full_'.$this->mapping->lang, ob_get_contents());
@@ -504,6 +504,33 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
     protected function rss_url() {
         return new moodle_url('/useful/rss.php', array('lang' => $this->mapping->lang));
+    }
+
+    private function rss_header() {
+        $title = get_string('rsstitle', 'local_moodleorg');
+        $description = get_string('rssdescription', 'local_moodleorg');
+        $year = date("Y");
+
+       return <<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>$title</title>
+    <link>http://moodle.org/useful/</link>
+    <description>$description</description>
+    <generator>Moodle</generator>
+    <copyright>&amp;#169; $year Moodle.org</copyright>
+    <image>
+      <url>http://moodle.org/pix/i/rsssitelogo.gif</url>
+      <title>moodle</title>
+      <link>http://moodle.org</link>
+      <width>140</width>
+      <height>35</height>
+    </image>
+EOF
+    }
+    private function rss_footer() {
+        return "</channel>\n</rss>";
     }
 }
 
