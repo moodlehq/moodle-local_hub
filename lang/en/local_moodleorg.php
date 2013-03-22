@@ -165,6 +165,8 @@ $string['registrationgraphalt'] = 'All Moodle registrations over time';
 $string['registrationgraphdesc'] = 'We perform <a href="http://docs.moodle.org/en/Usage">regular bulk checking of sites</a> to make sure they still exist, so occasionally you may see reductions in the count';
 $string['registrationslast6months'] = 'Registrations in the past 6 months';
 $string['registrationstotal'] = 'All current registrations';
+$string['rsstitle'] = 'Moodle.org forum posts';
+$string['rssdescription'] = 'Recent or usefully rated useful forum posts from moodle.org';
 $string['roadmap'] = 'Moodle Roadmap';
 $string['schooldemommoodlenet'] = 'Mount Orange School';
 $string['shop'] = 'Looking for some way to show you are part of our community?  See our shop for shirts, mugs and all kinds of other things.';
