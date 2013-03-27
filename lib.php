@@ -1722,7 +1722,7 @@ class local_hub {
         $fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['language'] = optional_param('language', current_language(), PARAM_ALPHANUMEXT);
         $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['downloadable'] = optional_param('downloadable', 0, PARAM_ALPHANUM);
+        $fromformdata['downloadable'] = optional_param('downloadable', 1, PARAM_ALPHANUM);
         $fromformdata['orderby'] = optional_param('orderby', 'newest', PARAM_ALPHA);
         $fromformdata['search'] = $search;
         $coursesearchform = new course_search_form('', $fromformdata, 'get');

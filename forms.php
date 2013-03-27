@@ -151,7 +151,7 @@ class course_search_form extends moodleform {
         if (isset($this->_customdata['downloadable'])) {
             $downloadable = $this->_customdata['downloadable'];
         } else {
-            $downloadable = 0;
+            $downloadable = 1;
         }
         if (isset($this->_customdata['siteid'])) {
             $siteid = $this->_customdata['siteid'];
@@ -178,6 +178,7 @@ class course_search_form extends moodleform {
         }
         $mform->addElement('select', 'downloadable', get_string('enroldownload', 'local_hub'), $options);
         $mform->addHelpButton('downloadable', 'enroldownload', 'local_hub');
+        $mform->setDefault('downloadable', $downloadable);
 
         //visible field
         //Note: doesn't matter if form html is hacked, index script does not return any invisible courses
@@ -275,16 +276,21 @@ class course_search_form extends moodleform {
         $mform->setDefault('language', $language);
         $mform->addHelpButton('language', 'language', 'local_hub');
 
-        $mform->addElement('radio', 'orderby', get_string('orderby', 'local_hub'),
-                get_string('orderbynewest', 'local_hub'), 'newest');
-        $mform->addElement('radio', 'orderby', null, get_string('orderbyeldest', 'local_hub'), 'eldest');
-        $mform->addElement('radio', 'orderby', null, get_string('orderbyname', 'local_hub'), 'fullname');
-        $mform->addElement('radio', 'orderby', null, get_string('orderbypublisher', 'local_hub'), 'publisher');
-        $mform->addElement('radio', 'orderby', null, get_string('orderbyratingaverage', 'local_hub'),
-                'ratingaverage');
+        $mform->addElement('select', 'orderby', get_string('orderby', 'local_hub'),
+                array('newest' => get_string('orderbynewest', 'local_hub'),
+                    'eldest' => get_string('orderbyeldest', 'local_hub'),
+                    'fullname' => get_string('orderbyname', 'local_hub'),
+                    'publisher' => get_string('orderbypublisher', 'local_hub'),
+                    'ratingaverage' => get_string('orderbyratingaverage', 'local_hub')));
         $mform->setDefault('orderby', $orderby);
         $mform->setType('orderby', PARAM_ALPHA);
 
+        $mform->setAdvanced('audience');
+        $mform->setAdvanced('educationallevel');
+        $mform->setAdvanced('subject');
+        $mform->setAdvanced('licence');
+        $mform->setAdvanced('language');
+        $mform->setAdvanced('orderby');
 
         if (key_exists('adminform', $this->_customdata)) {
             if ($hub->get_sites(array(), 0, 0, true) < 100) { // field not humanly usable over 100 sites.
