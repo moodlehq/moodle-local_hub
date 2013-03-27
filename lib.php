@@ -1720,7 +1720,8 @@ class local_hub {
         $fromformdata['siteid'] = optional_param('siteid', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['lastmodified'] = optional_param('lastmodified', HUB_LASTMODIFIED_WEEK, PARAM_ALPHANUMEXT);
         $fromformdata['audience'] = optional_param('audience', 'all', PARAM_ALPHANUMEXT);
-        $fromformdata['language'] = optional_param('language', current_language(), PARAM_ALPHANUMEXT);
+        $currentlanguage = explode('_', current_language()); 
+        $fromformdata['language'] = optional_param('language', $currentlanguage[0], PARAM_ALPHANUMEXT);
         $fromformdata['educationallevel'] = optional_param('educationallevel', 'all', PARAM_ALPHANUMEXT);
         $fromformdata['downloadable'] = optional_param('downloadable', 1, PARAM_ALPHANUM);
         $fromformdata['orderby'] = optional_param('orderby', 'newest', PARAM_ALPHA);

@@ -284,7 +284,7 @@ class course_search_form extends moodleform {
                     'ratingaverage' => get_string('orderbyratingaverage', 'local_hub')));
         $mform->setDefault('orderby', $orderby);
         $mform->setType('orderby', PARAM_ALPHA);
-
+        $mform->addHelpButton('orderby', 'orderby', 'local_hub');
         $mform->setAdvanced('audience');
         $mform->setAdvanced('educationallevel');
         $mform->setAdvanced('subject');
