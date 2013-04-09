@@ -26,10 +26,6 @@
 //This is temporary till MDL-25115 is implemented
 function xmldb_local_hub_install() {
     global $DB;
-    $messageprovider = new stdClass();
-    $messageprovider->name = 'coursehubmessage';
-    $messageprovider->component = 'local/hub';
-    $DB->insert_record('message_providers', $messageprovider);
 
     //create a new scale called featured, at this moment moment we have no alternative than adding it to the DB
     //core TODO: better way to create a scale or adding a scale MDL-21631, MDL-16474

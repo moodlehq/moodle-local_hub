@@ -233,6 +233,7 @@ $string['maxmessagesent'] = 'You cannot send anymore message for today, try tomo
 $string['maxwscourseresult'] = 'Maximum returned courses to remote sites.';
 $string['maxwscourseresult_help'] = 'Define the maximum number of course the hub will return for one remote Moodle site request. (0 or empty: no course returned)';
 $string['maxwscourseresultempty'] = 'Maximum course result must be > 0';
+$string['messageprovider:coursehubmessage'] = 'Hub message';
 $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';

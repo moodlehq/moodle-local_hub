@@ -119,7 +119,7 @@ if (!empty($data) and confirm_sesskey()) {
             $courseurl = new moodle_url('/local/hub/admin/managecourses.php', array('courseid' => $id));
             $courselink = html_writer::tag('a', $hubcourse->fullname, array('href' => $courseurl));
             $eventdata = new stdClass();
-            $eventdata->component = 'local/hub';
+            $eventdata->component = 'local_hub';
             $eventdata->name = 'coursehubmessage';
             $eventdata->userfrom = $fromuser;
             $eventdata->userto = get_admin();

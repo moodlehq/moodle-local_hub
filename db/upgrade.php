@@ -388,5 +388,18 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2012051600, 'local', 'hub');
     }
 
+    if ($oldversion < 2013040913) {
+        $messageprovider = $DB->get_record('message_providers',
+            array('component' => 'local/hub', 'name' => 'coursehubmessage'));
+
+        if (!empty($messageprovider)) {
+            $messageprovider->component = 'local_hub';
+            $DB->update_record('message_providers', $messageprovider);
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2013040913, 'local', 'hub');
+    }
+
     return $result;
 }
