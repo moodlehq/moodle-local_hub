@@ -401,5 +401,37 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2013040913, 'local', 'hub');
     }
 
+    if ($oldversion < 2013040914) {
+        $processors = $DB->get_records('message_processors');
+        foreach($processors as $processor) {
+            // update permitted
+            $processorconfig = $DB->get_record('config_plugins', array('plugin' => 'message',
+                'name' => $processor->name.'_provider_local/hub_coursehubmessage_permitted'));
+            if (!empty($processorconfig)) {
+                $processorconfig->name = $processor->name.'_provider_local_hub_coursehubmessage_permitted';
+                $DB->update_record('config_plugins', $processorconfig);
+            }
+
+            // loggedin
+            $processorconfig = $DB->get_record('config_plugins', array('plugin' => 'message',
+                'name' => $processor->name.'_provider_local/hub_coursehubmessage_loggedin'));
+            if (!empty($processorconfig)) {
+                $processorconfig->name = $processor->name.'_provider_local_hub_coursehubmessage_loggedin';
+                $DB->update_record('config_plugins', $processorconfig);
+            }
+
+            //loggedoff
+            $processorconfig = $DB->get_record('config_plugins', array('plugin' => 'message',
+                'name' => $processor->name.'_provider_local/hub_coursehubmessage_loggedoff'));
+            if (!empty($processorconfig)) {
+                $processorconfig->name = $processor->name.'_provider_local_hub_coursehubmessage_loggedoff';
+                $DB->update_record('config_plugins', $processorconfig);
+            }
+        }
+
+        // hub savepoint reached
+        upgrade_plugin_savepoint(true, 2013040914, 'local', 'hub');
+    }
+
     return $result;
 }
