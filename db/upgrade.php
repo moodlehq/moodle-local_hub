@@ -433,5 +433,27 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2013040914, 'local', 'hub');
     }
 
+     if ($oldversion < 2013050614) {
+
+        // Define field badges to be added to hub_site_directory.
+        $table = new xmldb_table('hub_site_directory');
+        $badgesfield = new xmldb_field('badges', XMLDB_TYPE_INTEGER, '10', null, null, null, '-1', 'publicationmax');
+
+        // Conditionally launch add field badges.
+        if (!$dbman->field_exists($table, $badgesfield)) {
+            $dbman->add_field($table, $badgesfield);
+        }
+
+        $issuedbadgesfield = new xmldb_field('issuedbadges', XMLDB_TYPE_INTEGER, '10', null, null, null, '-1', 'badges');
+
+        // Conditionally launch add field issuedbadges.
+        if (!$dbman->field_exists($table, $issuedbadgesfield)) {
+            $dbman->add_field($table, $issuedbadgesfield);
+        }
+
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2013050614, 'local', 'hub');
+    }
+
     return $result;
 }

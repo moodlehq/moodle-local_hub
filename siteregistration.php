@@ -73,6 +73,8 @@ $modulenumberaverage        = optional_param('modulenumberaverage', '', PARAM_FL
 $moodleversion              = optional_param('moodleversion', '', PARAM_FLOAT);
 $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
+$badges                     = optional_param('badges', '', PARAM_INT);
+$issuedbadges               = optional_param('issuedbadges','', PARAM_INT);
 
 // Retrieve the current url of MOOCH.
 // We do that because we switched to moodle.net from hub.moodle.org and we need both url to be registrable.
@@ -114,7 +116,9 @@ $sitevalues = array('name' => $name,
         'modulenumberaverage' => $modulenumberaverage,
         'moodleversion' => $moodleversion,
         'moodlerelease' => $moodlerelease,
-        'password' => $password);
+        'password' => $password,
+        'badges' => $badges,
+        'issuedbadges' => $issuedbadges);
 
 $hub = new local_hub();
 
