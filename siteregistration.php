@@ -150,7 +150,7 @@ if (!empty($freshmoodletoken) and !empty($freshmoodleid)) {
                 set_config($freshmoodleid, null, 'local_hub_unregistration');
 
                 //log the fresh install
-                add_to_log(SITEID, 'local_hub', 'fresh/moved site on previously registered', '',
+                add_to_log(SITEID, 'local_hub', 'fresh/moved site on registered url', '',
                         $freshregistration['newsite']['id'] . ', ' . $freshregistration['newsite']['url']
                         .',' . $freshregistration['oldsite']['url']);
 
@@ -255,22 +255,34 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
 
     //check if a site already attempt a registration
     $registrationattempt = get_config('local_hub_unregistration', $sitewithsameurl->id);
-    if (!empty($registrationattempt)) {
-        throw new moodle_exception('freshmoodleregistrationerror2', 'local_hub',
-                new moodle_url($url));
-    }
 
-    //create a temporary registration token to identify the previously registered site administrator
-    //The previously registered site admin will receive an email with a link
-    //when clicking on the link he will be able to update the registration.
-    $freshmoodletoken = md5(uniqid(rand(),1));
-    $sitevalues['secret'] = $sitevalues['token'];
-    unset($sitevalues['password']);
-    unset($sitevalues['token']);
-    set_config($sitewithsameurl->id, serialize(
-            array('newsite' => $sitevalues, 'oldsite' => $sitewithsameurl,
-                'freshmoodletoken' => $freshmoodletoken)),
-            'local_hub_unregistration');
+    if (!empty($registrationattempt)) {
+        $registrationattempt = unserialize($registrationattempt);
+        // Backward compatibility code for freshmoodletoken without time attribut.
+        if (empty($registrationattempt['time'])) {
+            $registrationattempt['time'] = 0;
+        }
+        // If the previous registration attempt was a day older. Resend an email with existing temporary registration token.
+        if (time() > $registrationattempt['time'] + (24 * 60 * 60)) {
+            $freshmoodletoken = $registrationattempt['freshmoodletoken'];
+        } else {
+            // Otherwise throw an error (to avoid spam attack).
+            throw new moodle_exception('freshmoodleregistrationerror2', 'local_hub',
+                new moodle_url($url));
+        }
+    } else {
+        //create a temporary registration token to identify the previously registered site administrator
+        //The previously registered site admin will receive an email with a link
+        //when clicking on the link he will be able to update the registration.
+        $freshmoodletoken = md5(uniqid(rand(),1));
+        $sitevalues['secret'] = $sitevalues['token'];
+        unset($sitevalues['password']);
+        unset($sitevalues['token']);
+        set_config($sitewithsameurl->id, serialize(
+                array('newsite' => $sitevalues, 'oldsite' => $sitewithsameurl,
+                    'freshmoodletoken' => $freshmoodletoken, 'time' => time())),
+                'local_hub_unregistration');
+    }
 
     //alert existing "secret" site administrator
     $contactuser = new stdClass();
