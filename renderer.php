@@ -214,7 +214,7 @@ class local_hub_renderer extends plugin_renderer_base {
                 $movedoption), get_string('moved', 'local_hub'), 'post');
         $formcopied = new single_button(new moodle_url($huburl . "/local/hub/siteregistration.php", $copiedoption),
                         get_string('copied', 'local_hub'), 'post');
-        return $this->output->confirm($confirmationmsgbox, $formmoved, $formcopied);
+        return $this->output->confirm($confirmationmsgbox, $formcopied, $formmoved);
     }
 
     /**

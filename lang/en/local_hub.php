@@ -225,7 +225,7 @@ $string['logourl'] = 'Logo URL';
 $string['managecourses'] = 'Manage courses';
 $string['managesites'] = 'Manage sites';
 $string['markstolen'] = 'Mark as stolen';
-$string['markstolenmsg'] = ' Any sites related to this token are going to be removed from the site listing - 
+$string['markstolenmsg'] = ' Any sites related to this token are going to be removed from the site listing -
 A message will be sent to the site administrators asking them to register a new time - All people trying to register with this secret will be asked to regenerate a secret for this hub server.';
 $string['maxcoursesperday'] = 'Maximum courses published per day';
 $string['maxcoursesperday_help'] = 'The maximum number of courses that can be published per site per day. This setting is to avoid automatic spam. Once reaching the maximum number, an error will be displayed on the registered site during the next 24 hours. (0 = none, empty = unlimited)';
@@ -238,10 +238,9 @@ $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
 $string['moved'] = 'Update registration url for an existing site';
-$string['movedorcopiedmsg'] = 'We detected that you try to register a Moodle 2 site that has already been registered on a different url.
-If you moved an existing Moodle 2 site to another url, then press \'Update registration url for an existing site\'. 
-Your original Moodle 2 registration will be updated. In any other cases (you duplicated an existing site, you moved a Moodle 1.9 site to this url, you just did a fresh install...) press \'Register a new site\'.
-You will be redirected to your site to regenerate your site identifier and a clean registration can be processed.';
+$string['movedorcopiedmsg'] = 'you tried to register a Moodle 2.X site which had already been registered on a different url.
+If you didn\'t know that (or if you don\'t know the site in the left column),
+then  click  \'Register a new site\'. If you are moving your own already registered site (left column) to new URL (right column) then click "Update registration".';
 $string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
 --------------------------------------------------------------------------------------
