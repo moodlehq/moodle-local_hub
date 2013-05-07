@@ -201,9 +201,18 @@ class local_hub_renderer extends plugin_renderer_base {
         $copiedoption['action'] = 'copied';
         $copiedoption = array_merge($copiedoption, $sitevalues);
 
-        $formmoved = new single_button(new moodle_url("/local/hub/siteregistration.php",
+        // Little hack for Moodle.net. The url needs to be set to http://hub.moodle.org.
+        // We do that because we switched to moodle.net from hub.moodle.org (but hacked moodle.net to works with the previous url).
+        // Moodle sites still except the previous url.
+        if ($_SERVER['HTTP_HOST'] == 'hub.moodle.org') {
+            $huburl = 'http://hub.moodle.org';
+        } else {
+            $huburl = '';
+        }
+
+        $formmoved = new single_button(new moodle_url($huburl . "/local/hub/siteregistration.php",
                 $movedoption), get_string('moved', 'local_hub'), 'post');
-        $formcopied = new single_button(new moodle_url("/local/hub/siteregistration.php", $copiedoption),
+        $formcopied = new single_button(new moodle_url($huburl . "/local/hub/siteregistration.php", $copiedoption),
                         get_string('copied', 'local_hub'), 'post');
         return $this->output->confirm($confirmationmsgbox, $formmoved, $formcopied);
     }
