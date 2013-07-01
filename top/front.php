@@ -10,22 +10,22 @@ if ($mapping) {
 
     echo html_writer::start_tag('div', array('class' => 'row-fluid'));
 
-    echo html_writer::start_tag('div', array('class' => 'span3 announcements-column'));
+    echo html_writer::start_tag('div', array('class' => 'span3 announcements feed'));
     echo $OUTPUT->heading('Announcements');
     echo $news->output();
     echo html_writer::end_tag('div');
 
-    echo html_writer::start_tag('div', array('class' => 'span3 forumposts-column'));
+    echo html_writer::start_tag('div', array('class' => 'span3 forumposts feed'));
     echo $OUTPUT->heading('Forum Posts');
     echo $useful->output();
     echo html_writer::end_tag('div');
 
-    echo html_writer::start_tag('div', array('class' => 'span3 events-column'));
+    echo html_writer::start_tag('div', array('class' => 'span3 events feed'));
     echo $OUTPUT->heading('Events');
     echo $events->output();
     echo html_writer::end_tag('div');
 
-    echo html_writer::start_tag('div', array('class' => 'span3 resources-column'));
+    echo html_writer::start_tag('div', array('class' => 'span3 resources feed'));
     echo $OUTPUT->heading('Recent resources');
     echo $resources->output();
     echo html_writer::end_tag('div');
