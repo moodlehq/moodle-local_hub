@@ -18,12 +18,13 @@
  * Version details.
  *
  * @package    local_moodleorg
- * @copyright  2011 petr Skoda
+ * @copyright  2011 Petr Skoda {@link http://skodak.org}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version  = 2013121200;
-$plugin->requires = 2011070100;
 $plugin->component = 'local_moodleorg';
+$plugin->version = 2013121200;
+$plugin->requires = 2011070100;
+$plugin->maturity = MATURITY_STABLE;
