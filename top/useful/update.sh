@@ -1,2 +1,3 @@
-cd /web/html/local/moodleorg/top/useful
-/usr/bin/php update.php
+#!/bin/bash
+cd "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+/usr/bin/env php update.php
