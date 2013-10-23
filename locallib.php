@@ -264,13 +264,14 @@ class frontpage_column_events extends frontpage_column
         $course = $this->get_course();
 
         // Preload course context dance..
-        list ($select, $join) = context_instance_preload_sql('c.id', CONTEXT_COURSE, 'ctx');
+        $select = ', ' . context_helper::get_preload_record_columns_sql('ctx');
+        $join = "LEFT JOIN {context} ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel)";
         $sql = "SELECT c.* $select
             FROM {course} c
             $join
             WHERE EXISTS (SELECT 1 FROM {event} e WHERE e.courseid = c.id)
-            AND c.id = ?";
-        $courses = $DB->get_records_sql($sql, array($course->id));
+            AND c.id = :courseid";
+        $courses = $DB->get_records_sql($sql, array('contextlevel' => CONTEXT_COURSE, 'courseid' => $course->id));
         foreach ($courses as $course) {
             context_helper::preload_from_record($course);
         }
@@ -329,13 +330,15 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $rm = new rating_manager();
 
 
-        list($ctxselect, $ctxjoin) = context_instance_preload_sql('cm.id', CONTEXT_MODULE, 'ctx');
+        $ctxselect = ', ' . context_helper::get_preload_record_columns_sql('ctx');
+        $ctxjoin = "LEFT JOIN {context} ctx ON (ctx.instanceid = cm.id AND ctx.contextlevel = :contextlevel)";
         $userselect = user_picture::fields('u', null, 'uid');
 
         $params = array();
         $params['courseid'] = $course->id;
         $params['since'] = time() - (DAYSECS * 30);
         $params['cmtype'] = 'forum';
+        $params['contextlevel'] = CONTEXT_MODULE;
 
         if (!empty($this->mapping->scaleid)) {
             // Check some forums with the scale exist..
