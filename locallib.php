@@ -23,6 +23,49 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+/**
+ * Gets mapping on local moodleorg for feeds.
+ * @global type $SESSION
+ * @global type $DB
+ * @param type $forcelang
+ * @return type
+ */
+function local_moodleorg_get_mapping($forcelang = false) {
+    global $SESSION, $DB;
+
+    if ($forcelang) {
+        // Language has been forced by params.
+        $userlang = $forcelang;
+    } else {
+        // Get the users current lang.
+        $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
+    }
+
+    // We will to english, unless a mapping is found.
+    $lang = null;
+
+    // Get the depdencies of the users lang and see if a mapping exists
+    // for the current language or its parents..
+    $langdeps = get_string_manager()->get_language_dependencies($userlang);
+
+    // Add to english to the start of the array as get_language_dependencies() goes
+    // in least specific order first.
+    array_unshift($langdeps, 'en');
+
+    list($insql, $inparams) = $DB->get_in_or_equal($langdeps);
+    $sql = "SELECT lang, courseid, scaleid FROM {moodleorg_useful_coursemap} WHERE lang $insql";
+    $mappings = $DB->get_records_sql($sql, $inparams);
+
+    $mapping = null;
+    while (!empty($langdeps) and empty($mapping)) {
+        $thislang = array_pop($langdeps);
+
+        if (isset($mappings[$thislang])) {
+            $mapping = $mappings[$thislang];
+        }
+    }
+    return $mapping;
+}
 
 class local_moodleorg_phm_cohort_manager {
     /** @var object cohort object from cohort table */
