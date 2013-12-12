@@ -5,7 +5,7 @@ require($CFG->dirroot.'/local/moodleorg/locallib.php');
 
 $lang = optional_param('lang', 'en', PARAM_LANG);
 
-if (!$mapping = local_moodle_get_mapping($lang)) {
+if (!$mapping = local_moodleorg_get_mapping($lang)) {
     throw new moodle_exception('mapping not found..');
 }
 

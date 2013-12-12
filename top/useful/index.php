@@ -3,7 +3,7 @@ require('../../../../config.php');
 require($CFG->dirroot.'/local/moodleorg/locallib.php');
 
 $PAGE->set_url(new moodle_url('/useful/'));
-if (!$mapping = local_moodle_get_mapping()) {
+if (!$mapping = local_moodleorg_get_mapping()) {
     throw new moodle_exception('mapping not found..');
 }
 
