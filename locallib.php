@@ -391,7 +391,7 @@ class frontpage_column_events extends frontpage_column
     }
 
     protected function more_link() {
-        $url = new moodle_url('calendar/view.php', array('view' => 'month'));
+        $url = new moodle_url('calendar/view.php'); //, array('view' => 'month'));
         return html_writer::link($url, 'Calendar entries');
     }
 
