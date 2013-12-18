@@ -398,8 +398,17 @@ class frontpage_column_events extends frontpage_column
     }
 
     protected function rss_url() {
-        // No RSS feed.
-        return null;
+        global $CFG, $USER, $DB, $OUTPUT;
+        // No RSS feed, provide iCal if possible.
+        if (isloggedin()) {
+            $authtoken = sha1($USER->id . $DB->get_field('user', 'password', array('id'=>$USER->id)) . $CFG->calendar_exportsalt);
+            $link = new moodle_url('/calendar/export_execute.php', array('preset_what'=>'all', 'preset_time'=>'recentupcoming', 'userid' => $USER->id, 'authtoken'=>$authtoken));
+            return $link;
+        } else {
+            $authtoken = sha1('1' . $DB->get_field('user', 'password', array('id'=>1)) . $CFG->calendar_exportsalt);
+            $link = new moodle_url('/calendar/export_execute.php', array('preset_what'=>'all', 'preset_time'=>'recentupcoming', 'userid' => 1, 'authtoken'=>$authtoken));
+            return $link;
+        }
     }
 }
 
