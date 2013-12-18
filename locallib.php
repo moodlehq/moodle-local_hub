@@ -151,7 +151,7 @@ abstract class frontpage_column
         $cache = $this->get_cache();
         $key = $this->cache_key();
         if ($content = $cache->get($key)) {
-            return $content;
+//            return $content;
         }
 
         $content = $this->generate();
@@ -271,7 +271,9 @@ abstract class frontpage_column_forumposts extends frontpage_column
         $item = new stdClass;
         $item->image = $OUTPUT->user_picture($postuser, array('courseid' => $course->id));
         $item->link = html_writer::link($link, s($post->subject));
-        $item->smalltext = get_string('bynameondate', 'forum', $by);
+        $item->smalltext = html_writer::div(get_string('bynameondate_by', 'local_moodleorg'), 'by'). 
+                html_writer::div($by->name, 'name'). html_writer::div(get_string('bynameondate_dash', 'local_moodleorg'), 'dash').
+                html_writer::div($by->date, 'date');
         return $item;
     }
 }
