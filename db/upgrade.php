@@ -103,6 +103,62 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         // Moodleorg savepoint reached.
         upgrade_plugin_savepoint(true, 2013031100, 'local', 'moodleorg');
     }
-
+// commented to not provide false records for any local deployments as it will break. 
+// This is here for the record. (Helen had mapped the courses on clone.moodle.org around 2013/12.)
+// 
+//        if ($oldversion < 201312XX00) {
+//
+//        // Define field phmgroupid to be dropped from moodleorg_useful_coursemap.
+//        $table = new xmldb_table('moodleorg_useful_coursemap');
+//
+//        if ($dbman->table_exists($table)) {
+//            // initial values for moodle.org and clone.moodle.org course mappings.
+//            // as created by Helen on clone.moodle.org
+//            // INSERT INTO `moodleorg_useful_coursemap` VALUES 
+//            $mappingrecords = array(
+//                array(5,'en',88,NULL),
+//                array(11,'es',92,NULL),
+//                array(13,'nl',123,NULL),
+//                array(14,'ja',115,NULL),
+//                array(17219,'he',113,NULL),
+//                array(18,'de',112,NULL),
+//                array(16,'ar',131,NULL),
+//                array(17,'tr',129,NULL),
+//                array(20,'fr',96,NULL),
+//                array(21,'ko',134,NULL),
+//                array(22,'pl',125,NULL),
+//                array(23,'it',121,NULL),
+//                array(24,'pt',120,NULL),
+//                array(25,'ru',126,NULL),
+//                array(26,'sv',128,NULL),
+//                array(35,'pt_br',119,NULL),
+//                array(36,'th',122,NULL),
+//                array(39,'ca',NULL,NULL),
+//                array(40,'id',114,NULL),
+//                array(42,'eu',136,NULL),
+//                array(43,'bg',111,NULL),
+//                array(45,'vi',130,NULL),
+//                array(53,'sr',127,NULL),
+//                array(54,'nn',124,NULL),
+//                array(1008,'fa',132,NULL)
+//                );
+//
+//            $table = 'moodleorg_useful_coursemap';
+//
+//            foreach ($mappingrecords as $mappingrecord) {
+//                if( !$DB->record_exists($table, array('courseid' => $mappingrecord[0]))) {
+//                    $obj = new stdClass();
+//                    $obj->courseid = $mappingrecord[0];
+//                    $obj->lang = $mappingrecord[1];
+//                    $obj->scaleid = $mappingrecord[2];
+//                    $obj->coursemanagerslist = $mappingrecord[3];
+//                    $DB->insert_record('moodleorg_useful_coursemap', $obj);
+//                }
+//            }
+//        }
+//
+//        // Moodleorg savepoint reached.
+//        upgrade_plugin_savepoint(true, 201312XX00, 'local', 'moodleorg');
+//    }
     return true;
 }
