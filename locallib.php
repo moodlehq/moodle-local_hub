@@ -348,7 +348,7 @@ class frontpage_column_news extends frontpage_column_forumposts
 class frontpage_column_events extends frontpage_column
 {
     protected function cache_key() {
-        return 'events_'.$this->mapping->lang;
+        return 'events_'.current_language();
     }
 
     protected function generate() {
@@ -421,7 +421,7 @@ class frontpage_column_events extends frontpage_column
 class frontpage_column_useful extends frontpage_column_forumposts
 {
     protected function cache_key() {
-        return 'useful_'.$this->mapping->lang;
+        return 'useful_'.current_language();
     }
 
     protected function generate() {

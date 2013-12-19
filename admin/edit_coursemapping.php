@@ -13,6 +13,8 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
         $course = $this->_customdata['course'];
 
         $mform->addElement('hidden', 'courseid');
+        $mform->setType('courseid', PARAM_INT);
+
         $mform->addElement('static', 'coursename', 'Course:', $course->fullname.' ('.$course->shortname.')');
         $scales = get_scales_menu($course->id);
         $scales[0] = 'Do not use a scale. Retrieve recent posts.';
@@ -27,6 +29,7 @@ class local_moodleorg_useful_coursemap_form extends moodleform {
         }
 
         $mform->addElement('text', 'coursemanagerslist', 'Course manager ids (seperated by commas)');
+        $mform->setType('coursemanagerslist', PARAM_RAW);
         $mform->addRule('coursemanagerslist', 'The course managers must be userids seperated by commas only.', 'regex', '/^(\d+,?)*$/');
         $this->add_action_buttons();
     }
