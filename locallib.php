@@ -501,7 +501,6 @@ class frontpage_column_useful extends frontpage_column_forumposts
         // Start capturing output for /useful/ (hack)
         ob_start();
         foreach ($rs as $post) {
-
             context_instance_preload($post);
 
             if (!array_key_exists($post->discussion, $discussions)) {
@@ -610,7 +609,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
     }
 
     protected function more_link() {
-        return html_writer::link(new moodle_url('/useful/'), 'More posts');
+        return html_writer::link(new moodle_url('/course/view.php', array('id' => $this->mapping->courseid)), 'More posts');
     }
 
     protected function rss_url() {
