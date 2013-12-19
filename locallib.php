@@ -410,6 +410,12 @@ class frontpage_column_events extends frontpage_column
             return $link;
         }
     }
+    public function rsslink() {
+        global $OUTPUT;
+        if ($rsslink = $this->rss_url()) {
+            return html_writer::link($rsslink, $OUTPUT->pix_icon('i/rss', 'download calendar iCal file'));
+        }
+    }
 }
 
 class frontpage_column_useful extends frontpage_column_forumposts
