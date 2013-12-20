@@ -41,7 +41,7 @@ $string['aboutstatisticsheading'] = 'Moodle Statistics';
 $string['activeusers24hours'] = 'Registered users accessed in past 24 hours: ';
 $string['activeuserspastmonth'] = 'Registered users accessed in past month:';
 $string['browsegittitle'] = 'Browse our source code';
-$string['bynameondate_by'] = 'by';
+$string['bynameondate_by'] = 'by ';
 $string['bynameondate_dash'] = ' - ';
 $string['communityintro'] = 'Moodle has a large and diverse user community with over <a href="http://moodle.org/userpics">{$a->usercount} registered users</a> on this Moodle site alone, speaking over <a href="http://download.moodle.org/langpack/">{$a->langcount} languages</a> in <a href="http://moodle.org/sites">{$a->countrycount} countries</a> (we have <a href="http://moodle.org/stats">more statistics</a>).';
 $string['cachedef_frontpagecolumn'] = 'Frontpage columns';

@@ -28,9 +28,10 @@ defined('MOODLE_INTERNAL') || die();
  * @global type $SESSION
  * @global type $DB
  * @param type $forcelang
+ * @param int $forcepop try to pop off a number of dependency langs (we won't pop off the first 'en')
  * @return type
  */
-function local_moodleorg_get_mapping($forcelang = false) {
+function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
     global $SESSION, $DB;
 
     if ($forcelang) {
@@ -47,6 +48,13 @@ function local_moodleorg_get_mapping($forcelang = false) {
     // Get the depdencies of the users lang and see if a mapping exists
     // for the current language or its parents..
     $langdeps = get_string_manager()->get_language_dependencies($userlang);
+
+    // pop off some , we're probably searching for a higher lang (for posts/content there).
+    if ($forcepop) {
+        for ($x=0; $x<$forcepop; $x++) {
+            array_pop($langdeps);
+        }
+    }
 
     // Add to english to the start of the array as get_language_dependencies() goes
     // in least specific order first.
@@ -129,10 +137,12 @@ abstract class frontpage_column
      * @return stdClass course object from the database
      * @throws exception if mapping/course doesn't exist.
      */
-    protected function get_course() {
+    protected function get_course($mapping = null) {
         global $DB;
 
-        $mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $this->mapping->lang), '*', MUST_EXIST);
+        if (is_null($mapping)) {
+            $mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $this->mapping->lang), '*', MUST_EXIST);
+        }
         $course = $DB->get_record('course', array('id' => $mapping->courseid), '*', MUST_EXIST);
         return $course;
     }
@@ -271,9 +281,9 @@ abstract class frontpage_column_forumposts extends frontpage_column
         $item = new stdClass;
         $item->image = $OUTPUT->user_picture($postuser, array('courseid' => $course->id));
         $item->link = html_writer::link($link, s($post->subject));
-        $item->smalltext = html_writer::div(get_string('bynameondate_by', 'local_moodleorg'), 'by').
-                html_writer::div($by->name, 'name'). html_writer::div(get_string('bynameondate_dash', 'local_moodleorg'), 'dash').
-                html_writer::div($by->date, 'date');
+        $item->smalltext = html_writer::span(get_string('bynameondate_by', 'local_moodleorg'), 'by').
+                html_writer::span($by->name, 'name'). html_writer::span(get_string('bynameondate_dash', 'local_moodleorg'), 'dash').
+                html_writer::span($by->date, 'date');
         return $item;
     }
 }
@@ -437,7 +447,57 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $ratingoptions->userid = $CFG->siteguest;
         $rm = new rating_manager();
 
+        $rs = $this->getposts($course);
 
+        $rsscontent = '';
+        $fullcontents = '';
+        $frontcontent = array();
+        $frontpagecount = 0;
+
+        $rsscontent.= $this->rss_header();
+
+        foreach ($rs as $post) {
+             //function prints also which we capture via buffer
+            list($frontcontentbit, $rsscontentbit, $fullcontentbits) = $this->processprintpost($post, $course, $rm, $ratingoptions, $rsscontent);
+            $rsscontent .= $rsscontentbit;
+            if ($frontpagecount < self::MAXITEMS) {
+                $frontcontent[] = $frontcontentbit;
+                $frontpagecount++;
+            }
+            $fullcontents .= $fullcontentbits;
+        }
+        $rs->close();
+
+        // check number of posts, get more if not enough from other mappings.
+        // no loop,just one look towards 'parent' langs for now
+        if ($frontpagecount < self::MAXITEMS && $this->mapping->lang !== 'en') {
+            $moremapping = local_moodleorg_get_mapping(false, 1);
+            $anothercourse = $this->get_course($moremapping);
+            $rs = $this->getposts($anothercourse);
+
+            foreach ($rs as $post) {
+                 //function prints also which we capture via buffer
+                list($frontcontentbit, $rsscontentbit, $fullcontentbits) = $this->processprintpost($post, $anothercourse, $rm, $ratingoptions);
+                 $rsscontent .= $rsscontentbit; //lets keep the content same for sanity.
+                if ($frontpagecount < self::MAXITEMS) {
+                    $frontcontent[] = $frontcontentbit;
+                    $frontpagecount++;
+                }
+                $fullcontents .= $fullcontentbits;
+            }
+            $rs->close();
+        }
+
+        $rsscontent.= $this->rss_footer();
+        $cache = $this->get_cache();
+        $cache->set('useful_full_'.$this->mapping->lang, $fullcontents);
+        $cache->set('rss_'.$this->mapping->lang, $rsscontent);
+
+        return $frontcontent;
+    }
+
+    protected function getposts($course) {
+        global $DB;
         $ctxselect = ', ' . context_helper::get_preload_record_columns_sql('ctx');
         $ctxjoin = "LEFT JOIN {context} ctx ON (ctx.instanceid = cm.id AND ctx.contextlevel = :contextlevel)";
         $userselect = user_picture::fields('u', null, 'uid');
@@ -486,41 +546,37 @@ class frontpage_column_useful extends frontpage_column_forumposts
         }
 
 
-        $rs = $DB->get_recordset_sql($sql, $params, 0, 30);
+        return $DB->get_recordset_sql($sql, $params, 0, 30);
+    }
+
+    protected function processprintpost($post, $course, $rm, $ratingoptions, $rsscontent = false) {
+        global $DB;
 
         $discussions = array();
         $forums = array();
         $cms = array();
-        $frontpagecount = 0;
-        $rsscontent = '';
-        $frontcontent = array();
 
+        context_helper::preload_from_record($post);
 
-        $rsscontent.= $this->rss_header();
-
-        // Start capturing output for /useful/ (hack)
-        ob_start();
-        foreach ($rs as $post) {
-            context_instance_preload($post);
-
-            if (!array_key_exists($post->discussion, $discussions)) {
-                $discussions[$post->discussion] = $DB->get_record('forum_discussions', array('id'=>$post->discussion));
-                if (!array_key_exists($post->forum, $forums)) {
-                    $forums[$post->forum] = $DB->get_record('forum', array('id'=>$post->forum));
-                    $cms[$post->forum] = get_coursemodule_from_instance('forum', $post->forum, $course->id);
-                }
+        if (!array_key_exists($post->discussion, $discussions)) {
+            $discussions[$post->discussion] = $DB->get_record('forum_discussions', array('id'=>$post->discussion));
+            if (!array_key_exists($post->forum, $forums)) {
+                $forums[$post->forum] = $DB->get_record('forum', array('id'=>$post->forum));
+                $cms[$post->forum] = get_coursemodule_from_instance('forum', $post->forum, $course->id);
             }
+        }
 
-            $discussion = $discussions[$post->discussion];
-            $forum = $forums[$post->forum];
-            $cm = $cms[$post->forum];
+        $discussion = $discussions[$post->discussion];
+        $forum = $forums[$post->forum];
+        $cm = $cms[$post->forum];
 
-            $forumlink = new moodle_url('/mod/forum/view.php', array('f'=>$post->forum));
-            $discussionlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
-            $postlink = clone $discussionlink;
-            $postlink->set_anchor('p'.$post->id);
+        $forumlink = new moodle_url('/mod/forum/view.php', array('f'=>$post->forum));
+        $discussionlink = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
+        $postlink = clone $discussionlink;
+        $postlink->set_anchor('p'.$post->id);
 
-            // First do the rss file
+        // First do the rss file
+        if ($rsscontent !== false) {
             $rsscontent.= html_writer::start_tag('item')."\n";
             $rsscontent.= html_writer::tag('title', s($post->subject))."\n";
             $rsscontent.= html_writer::tag('link', $postlink->out(false))."\n";
@@ -528,54 +584,45 @@ class frontpage_column_useful extends frontpage_column_forumposts
             $rsscontent.= html_writer::tag('description', 'by '.htmlspecialchars(fullname($post).' <br /><br />'.format_text($post->message, $post->messageformat)))."\n";
             $rsscontent.= html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n";
             $rsscontent.= html_writer::end_tag('item')."\n";
-
-
-            if ($frontpagecount < self::MAXITEMS) {
-                $frontcontent[] = $this->item_from_post($post, $course);
-                $frontpagecount++;
-            }
-
-            // Output normal posts
-            $fullsubject = html_writer::link($forumlink, format_string($forum->name,true));
-            if ($forum->type != 'single') {
-                $fullsubject .= ' -> '.html_writer::link($discussionlink->out(false), format_string($post->subject,true));
-                if ($post->parent != 0) {
-                    $fullsubject .= ' -> '.html_writer::link($postlink->out(false), format_string($post->subject,true));
-                }
-            }
-            $post->subject = $fullsubject;
-            $fulllink = html_writer::link($postlink, get_string("postincontext", "forum"));
-
-            echo "<br /><br />";
-            //add the ratings information to the post
-            //Unfortunately seem to have do this individually as posts may be from different forums
-            if ($forum->assessed != RATING_AGGREGATE_NONE) {
-                $modcontext = get_context_instance(CONTEXT_MODULE, $cm->id);
-                $ratingoptions->context = $modcontext;
-                $ratingoptions->items = array($post);
-                $ratingoptions->aggregate = $forum->assessed;//the aggregation method
-                $ratingoptions->scaleid = $forum->scale;
-                $ratingoptions->assesstimestart = $forum->assesstimestart;
-                $ratingoptions->assesstimefinish = $forum->assesstimefinish;
-                $postswithratings = $rm->get_ratings($ratingoptions);
-
-                if ($postswithratings && count($postswithratings)==1) {
-                    $post = $postswithratings[0];
-                }
-            }
-            forum_print_post($post, $discussion, $forum, $cm, $course, false, false, false, $fulllink);
-
         }
-        $rs->close();
 
-        $rsscontent.= $this->rss_footer();
+        $frontcontentbit = $this->item_from_post($post, $course);
 
-        $cache = $this->get_cache();
-        $cache->set('useful_full_'.$this->mapping->lang, ob_get_contents());
+        // Output normal posts
+        $fullsubject = html_writer::link($forumlink, format_string($forum->name,true));
+        if ($forum->type != 'single') {
+            $fullsubject .= ' -> '.html_writer::link($discussionlink->out(false), format_string($post->subject,true));
+            if ($post->parent != 0) {
+                $fullsubject .= ' -> '.html_writer::link($postlink->out(false), format_string($post->subject,true));
+            }
+        }
+        $post->subject = $fullsubject;
+        $fulllink = html_writer::link($postlink, get_string("postincontext", "forum"));
+
+        ob_start();
+        echo "<br /><br />";
+        //add the ratings information to the post
+        //Unfortunately seem to have do this individually as posts may be from different forums
+        if ($forum->assessed != RATING_AGGREGATE_NONE) {
+            $modcontext = context_module::instance($cm->id, MUST_EXIST);
+            $ratingoptions->context = $modcontext;
+            $ratingoptions->items = array($post);
+            $ratingoptions->aggregate = $forum->assessed;//the aggregation method
+            $ratingoptions->scaleid = $forum->scale;
+            $ratingoptions->assesstimestart = $forum->assesstimestart;
+            $ratingoptions->assesstimefinish = $forum->assesstimefinish;
+            $postswithratings = $rm->get_ratings($ratingoptions);
+
+            if ($postswithratings && count($postswithratings)==1) {
+                $post = $postswithratings[0];
+            }
+        }
+        // the actual reason for buffer follows
+        forum_print_post($post, $discussion, $forum, $cm, $course, false, false, false, $fulllink);
+
+        $fullcontentbit = ob_get_contents();
         ob_end_clean();
-        $cache->set('rss_'.$this->mapping->lang, $rsscontent);
-
-        return $frontcontent;
+        return array($frontcontentbit, $rsscontent, $fullcontentbit);
     }
 
     public function get_rss() {
