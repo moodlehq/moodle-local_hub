@@ -468,27 +468,27 @@ class frontpage_column_useful extends frontpage_column_forumposts
                 $fullcontents .= $fullcontentbit;
             }
             $rs->close();
+        }
 
-            // check number of posts, get more if not enough from other mappings.
-            // no loop,just one look towards 'parent' langs for now
-            if ($frontpagecount < self::MAXITEMS && $this->mapping->lang !== 'en') {
-                $moremapping = local_moodleorg_get_mapping(false, 1);
-                $anothercourse = $this->get_course($moremapping);
-                $rs = $this->getposts($anothercourse);
+        // check number of posts, get more if not enough from other mappings.
+        // no loop,just one look towards 'parent' langs for now
+        if ($frontpagecount < self::MAXITEMS && $this->mapping->lang !== 'en') {
+            $moremapping = local_moodleorg_get_mapping(false, 1);
+            $anothercourse = $this->get_course($moremapping);
+            $rs = $this->getposts($anothercourse);
 
-                if (!empty($rs)) {
-                    foreach ($rs as $post) {
-                         //function prints also which we capture via buffer
-                        list($frontcontentbit, $rsscontentbit, $fullcontentbit) = $this->processprintpost($post, $anothercourse, $rm, $ratingoptions);
-                         $rsscontent .= $rsscontentbit; //lets keep the content same for sanity.
-                        if ($frontpagecount < self::MAXITEMS) {
-                            $frontcontent[] = $frontcontentbit;
-                            $frontpagecount++;
-                        }
-                        $fullcontents .= $fullcontentbit;
+            if (!empty($rs)) {
+                foreach ($rs as $post) {
+                     //function prints also which we capture via buffer
+                    list($frontcontentbit, $rsscontentbit, $fullcontentbit) = $this->processprintpost($post, $anothercourse, $rm, $ratingoptions);
+                     $rsscontent .= $rsscontentbit; //lets keep the content same for sanity.
+                    if ($frontpagecount < self::MAXITEMS) {
+                        $frontcontent[] = $frontcontentbit;
+                        $frontpagecount++;
                     }
-                    $rs->close();
+                    $fullcontents .= $fullcontentbit;
                 }
+                $rs->close();
             }
         }
 
