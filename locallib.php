@@ -458,13 +458,13 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
         foreach ($rs as $post) {
              //function prints also which we capture via buffer
-            list($frontcontentbit, $rsscontentbit, $fullcontentbits) = $this->processprintpost($post, $course, $rm, $ratingoptions, $rsscontent);
+            list($frontcontentbit, $rsscontentbit, $fullcontentbit) = $this->processprintpost($post, $course, $rm, $ratingoptions);
             $rsscontent .= $rsscontentbit;
             if ($frontpagecount < self::MAXITEMS) {
                 $frontcontent[] = $frontcontentbit;
                 $frontpagecount++;
             }
-            $fullcontents .= $fullcontentbits;
+            $fullcontents .= $fullcontentbit;
         }
         $rs->close();
 
@@ -477,13 +477,13 @@ class frontpage_column_useful extends frontpage_column_forumposts
 
             foreach ($rs as $post) {
                  //function prints also which we capture via buffer
-                list($frontcontentbit, $rsscontentbit, $fullcontentbits) = $this->processprintpost($post, $anothercourse, $rm, $ratingoptions);
+                list($frontcontentbit, $rsscontentbit, $fullcontentbit) = $this->processprintpost($post, $anothercourse, $rm, $ratingoptions);
                  $rsscontent .= $rsscontentbit; //lets keep the content same for sanity.
                 if ($frontpagecount < self::MAXITEMS) {
                     $frontcontent[] = $frontcontentbit;
                     $frontpagecount++;
                 }
-                $fullcontents .= $fullcontentbits;
+                $fullcontents .= $fullcontentbit;
             }
             $rs->close();
         }
@@ -549,13 +549,13 @@ class frontpage_column_useful extends frontpage_column_forumposts
         return $DB->get_recordset_sql($sql, $params, 0, 30);
     }
 
-    protected function processprintpost($post, $course, $rm, $ratingoptions, $rsscontent = false) {
+    protected function processprintpost($post, $course, $rm, $ratingoptions) {
         global $DB;
 
         $discussions = array();
         $forums = array();
         $cms = array();
-
+        $rsscontent = '';
         context_helper::preload_from_record($post);
 
         if (!array_key_exists($post->discussion, $discussions)) {
@@ -576,15 +576,14 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $postlink->set_anchor('p'.$post->id);
 
         // First do the rss file
-        if ($rsscontent !== false) {
-            $rsscontent.= html_writer::start_tag('item')."\n";
-            $rsscontent.= html_writer::tag('title', s($post->subject))."\n";
-            $rsscontent.= html_writer::tag('link', $postlink->out(false))."\n";
-            $rsscontent.= html_writer::tag('pubDate', gmdate('D, d M Y H:i:s',$post->modified).' GMT')."\n";
-            $rsscontent.= html_writer::tag('description', 'by '.htmlspecialchars(fullname($post).' <br /><br />'.format_text($post->message, $post->messageformat)))."\n";
-            $rsscontent.= html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n";
-            $rsscontent.= html_writer::end_tag('item')."\n";
-        }
+        $rsscontent.= html_writer::start_tag('item')."\n";
+        $rsscontent.= html_writer::tag('title', s($post->subject))."\n";
+        $rsscontent.= html_writer::tag('link', $postlink->out(false))."\n";
+        $rsscontent.= html_writer::tag('pubDate', gmdate('D, d M Y H:i:s',$post->modified).' GMT')."\n";
+        $post->message = file_rewrite_pluginfile_urls($post->message, 'pluginfile.php', $cm->id, 'mod_forum', 'post', $post->id);
+        $rsscontent.= html_writer::tag('description', 'by '.htmlspecialchars(fullname($post).' <br /><br />'.format_text($post->message, $post->messageformat)))."\n";
+        $rsscontent.= html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n";
+        $rsscontent.= html_writer::end_tag('item')."\n";
 
         $frontcontentbit = $this->item_from_post($post, $course);
 
