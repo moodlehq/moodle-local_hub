@@ -292,7 +292,7 @@ class frontpage_column_news extends frontpage_column_forumposts
 {
     const MAXITEMS=3;
     protected function cache_key() {
-        return 'news';
+        return 'news_'. current_language();
     }
 
     protected function generate() {
@@ -698,7 +698,7 @@ class frontpage_column_resources extends frontpage_column
 {
     const FEEDURL = 'http://pipes.yahoo.com/pipes/pipe.run?_id=2a7f5e44ac0ae95e1fa10bc5ee09149e&_render=rss';
     protected function cache_key() {
-        return 'resources';
+        return 'resources_'. current_language();
     }
 
     protected function generate() {
