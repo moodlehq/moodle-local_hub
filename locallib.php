@@ -334,7 +334,7 @@ class frontpage_column_news extends frontpage_column_forumposts
         }
 
         $url = new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
-        return html_writer::link($url, get_string('sitenews'));
+        return html_writer::link($url, get_string('feed_news_more', 'theme_moodleorgcleaned'));
     }
 
     protected function rss_url() {
