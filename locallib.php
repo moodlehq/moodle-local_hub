@@ -218,7 +218,7 @@ abstract class frontpage_column
         $o.= html_writer::start_tag('ul', array('class'=>'media-list'));
 
         $o .= html_writer::start_tag('li', array('class' => 'media heading '. $span));
-        $o .= $OUTPUT->heading(get_string('feed_'. $this->name(), 'theme_moodleorgcleaned'), 3, 'feedheading');
+        $o .= $OUTPUT->heading(get_string('feed_'. $this->name(), 'theme_moodleorgcleaned'), 2, 'feedheading');
         $o .= html_writer::start_div('detailoverviews');
         $o .= html_writer::div($this->morelink(), 'morelink');
         $o .= html_writer::div($this->rsslink(), 'rsslink');
