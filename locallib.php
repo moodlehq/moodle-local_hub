@@ -316,7 +316,9 @@ class frontpage_column_news extends frontpage_column_forumposts
 
         $items = array();
         foreach ($posts as $post) {
-            $items[] = $this->item_from_post($post, $SITE);
+            $item = $this->item_from_post($post, $SITE);
+            $item->image = '';
+            $items[] = $item;
         }
         return $items;
     }
