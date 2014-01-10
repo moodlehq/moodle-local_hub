@@ -516,31 +516,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $params['cmtype'] = 'forum';
         $params['contextlevel'] = CONTEXT_MODULE;
 
-        if (!empty($this->mapping->scaleid)) {
-            // Check some forums with the scale exist..
-            $negativescaleid = $this->mapping->scaleid * -1;
-            $forumids = $DB->get_records('forum', array('course'=>$course->id, 'scale'=>$negativescaleid), '', 'id');
-            if (empty($forumids)) {
-                debugging("No forums found for {$this->mapping->lang} with scale {$this->mapping->scaleid}", DEBUG_DEVELOPER);
-                return array();
-            }
-
-            $params['scaleid'] = $negativescaleid;
-            $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
-                FROM {forum_posts} fp
-                JOIN {user} u ON u.id = fp.userid
-                JOIN {forum_discussions} fd ON fd.id = fp.discussion
-                JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
-                JOIN {modules} m ON (cm.module = m.id)
-                $ctxjoin
-                JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid AND r.scaleid = :scaleid)
-                WHERE fd.course = :courseid
-                AND m.name = :cmtype
-                AND r.timecreated > :since
-                GROUP BY fp.id, fd.forum, ctx.id, u.id
-                ORDER BY MAX(r.timecreated) DESC";
-        } else {
-            $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
+        $noscalesql = "SELECT fp.*, fd.forum $ctxselect, $userselect
                 FROM {forum_posts} fp
                 JOIN {user} u ON u.id = fp.userid
                 JOIN {forum_discussions} fd ON fd.id = fp.discussion
@@ -551,6 +527,33 @@ class frontpage_column_useful extends frontpage_column_forumposts
                 AND m.name = :cmtype
                 AND fp.created > :since
                 ORDER BY fp.created DESC";
+
+        if (!empty($this->mapping->scaleid)) {
+            // Check some forums with the scale exist..
+            $negativescaleid = $this->mapping->scaleid * -1;
+            $forumids = $DB->get_records('forum', array('course'=>$course->id, 'scale'=>$negativescaleid), '', 'id');
+            if (empty($forumids)) {
+                debugging("No forums found for {$this->mapping->lang} with scale {$this->mapping->scaleid}", DEBUG_DEVELOPER);
+                // forum admin may have removed the scale, try without scale (latest posts) ..
+                $sql = $noscalesql;
+            } else {
+                $params['scaleid'] = $negativescaleid;
+                $sql = "SELECT fp.*, fd.forum $ctxselect, $userselect
+                    FROM {forum_posts} fp
+                    JOIN {user} u ON u.id = fp.userid
+                    JOIN {forum_discussions} fd ON fd.id = fp.discussion
+                    JOIN {course_modules} cm ON (cm.course = fd.course AND cm.instance = fd.forum)
+                    JOIN {modules} m ON (cm.module = m.id)
+                    $ctxjoin
+                    JOIN {rating} r ON (r.contextid = ctx.id AND fp.id = r.itemid AND r.scaleid = :scaleid)
+                    WHERE fd.course = :courseid
+                    AND m.name = :cmtype
+                    AND r.timecreated > :since
+                    GROUP BY fp.id, fd.forum, ctx.id, u.id
+                    ORDER BY MAX(r.timecreated) DESC";
+            }
+        } else {
+            $sql = $noscalesql;
         }
 
 
