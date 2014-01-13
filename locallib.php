@@ -1,4 +1,5 @@
 <?php
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,13 +24,14 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
 /**
- * Gets mapping on local moodleorg for feeds.
- * @global type $SESSION
- * @global type $DB
- * @param type $forcelang
+ * Picks the most appropriate course mapping for feeds the current user
+ *
+ * @todo use MUC instead of fetching mappings from the database over and over again
+ * @param string $forcelang force the given language code instead of the detected one
  * @param int $forcepop try to pop off a number of dependency langs (we won't pop off the first 'en')
- * @return type
+ * @return stdClass|null the course mapping or null of not found
  */
 function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
     global $SESSION, $DB;
@@ -42,7 +44,7 @@ function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
         $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
     }
 
-    // We will to english, unless a mapping is found.
+    // We will default to English, unless a mapping is found.
     $lang = null;
 
     // Get the depdencies of the users lang and see if a mapping exists
@@ -56,7 +58,7 @@ function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
         }
     }
 
-    // Add to english to the start of the array as get_language_dependencies() goes
+    // Prepend English to the start of the array as get_language_dependencies() goes
     // in least specific order first.
     array_unshift($langdeps, 'en');
 
@@ -72,26 +74,69 @@ function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
             $mapping = $mappings[$thislang];
         }
     }
+
     return $mapping;
 }
 
-// put back Dan's frontpage classes here instead of being in theme as its breaking stuff.
-// frontpagefeeds() in theme_moodleorgcleaned now takes care of avoiding the frontpageinclude hack.
 /**
- * Frontpage column of information to end up as a ul .
+ * Represents a frontpage block to display a feed of information (such as
+ * site news, useful posts, events and resources).
  */
-abstract class frontpage_column
-{
+abstract class frontpage_column {
+
     /** The number of items to show on the front page */
     const MAXITEMS = 4;
-    /** @var string The mapping record */
+
+    /** @var string the associated mapping record */
     protected $mapping = null;
 
     /**
      * Constructor.
+     *
+     * @param stdClass $mapping optional course mapping if needed
      */
-    public function __construct($mapping) {
+    public function __construct($mapping = null) {
         $this->mapping = $mapping;
+    }
+
+    /**
+     * Returns items for this column
+     *
+     * Uses cached items if they are available.
+     *
+     * @return array of items to be displayed
+     */
+    public function get() {
+
+        if (debugging('', DEBUG_DEVELOPER)) {
+            // Do not rely on cached structures in developer mode.
+            $skipcache = true;
+        }
+
+        $cache = $this->get_cache();
+        $key = $this->cache_key();
+
+        // If we have a valid cache, use it.
+        if (empty($skipcache) and ($content = $cache->get($key))) {
+            return $content;
+        }
+
+        // Otherwise re-generate the contents.
+        $content = $this->generate();
+        $cache->set($key, $content);
+
+        return $content;
+    }
+
+    /**
+     * Force the update of the content
+     */
+    public function update() {
+
+        $content = $this->generate();
+        $cache = $this->get_cache();
+        $key = $this->cache_key();
+        $cache->set($key, $content);
     }
 
     /**
@@ -109,27 +154,14 @@ abstract class frontpage_column
     abstract protected function generate();
 
     /**
-     * Generate the link to display more content
-     *
-     * @return string the more info link
+     * @return moodle_url|string|null URL to display more data or null if not available
      */
-    abstract protected function more_link();
+    abstract protected function more_url();
 
     /**
-     * RSS URL to view the the content via RSS
-     *
-     * @return string the more info link
+     * @return moodle_url|string|null URL to display info via RSS or null if not available
      */
     abstract protected function rss_url();
-
-    /**
-     * A name to use with css (or strings)
-     *
-     * @return string css class name
-     */
-    public function name() {
-        return substr(get_class($this), 17);
-    }
 
     /**
      * Returns the course object of this lang codes mapping
@@ -137,218 +169,93 @@ abstract class frontpage_column
      * @return stdClass course object from the database
      * @throws exception if mapping/course doesn't exist.
      */
-    protected function get_course($mapping = null) {
+    protected function get_mapped_course($mapping = null) {
         global $DB;
 
         if (is_null($mapping)) {
             $mapping = $DB->get_record('moodleorg_useful_coursemap', array('lang' => $this->mapping->lang), '*', MUST_EXIST);
         }
+
         $course = $DB->get_record('course', array('id' => $mapping->courseid), '*', MUST_EXIST);
+
         return $course;
     }
 
+    /**
+     * @return cache frontpagecolumn cache defined in local_moodleorg/db/caches.php
+     */
     protected function get_cache() {
-        return cache::make('local_moodleorg', 'frontpagecolumn'); //defined in local_moodleorg/db/caches.php
-    }
-
-    /**
-     * Get the items for this column. Will get from cache or generate
-     * and store from cache if it doesn't exist.
-     *
-     * @return array of li items to be displayed/cached.
-     */
-    protected function get() {
-        $cache = $this->get_cache();
-        $key = $this->cache_key();
-        if ($content = $cache->get($key)) {
-            return $content;
-        }
-
-        $content = $this->generate();
-        $cache->set($key, $content);
-        return $content;
-    }
-
-    /**
-     * Force the update of the content.
-     * @return void
-     */
-    public function update() {
-        $content = $this->generate();
-
-        $cache = $this->get_cache();
-        $key = $this->cache_key();
-        $cache->set($key, $content);
-    }
-
-    /**
-     * Generates the HTML for display of the content
-     *
-     * @return string the html content
-     */
-    public function output() {
-        global $OUTPUT;
-
-        $objects = $this->get();
-
-        $o = '';
-        $o.= html_writer::start_tag('ul', array('class'=>'media-list'));
-        foreach ($objects as $obj) {
-            $o.= $OUTPUT->frontpage_li($obj, '');
-        }
-        $o.= html_writer::end_tag('ul');
-
-        $o.= html_writer::empty_tag('hr');
-
-//        if ($rsslink = $this->rss_url()) {
-//            $o.= html_writer::link($rsslink, $OUTPUT->pix_icon('i/rss', 'subscribe by rss'));
-//        }
-        if ($morelink = $this->more_link()) {
-            $o.= ' '.$morelink;
-        }
-
-        return $o;
-    }
-        public function output_row() {
-        global $OUTPUT;
-
-        $objects = $this->get();
-        $span = 'span'. (int)12/self::MAXITEMS;
-        $o = '';
-        $o.= html_writer::start_tag('ul', array('class'=>'media-list'));
-
-        $o .= html_writer::start_tag('li', array('class' => 'media heading '. $span));
-        $o .= $OUTPUT->heading(get_string('feed_'. $this->name(), 'theme_moodleorgcleaned'), 2, 'feedheading');
-        $o .= html_writer::div($this->rsslink(), 'rsslink');
-        $o .= html_writer::start_div('detailoverviews');
-        $o .= html_writer::div($this->morelink(), 'morelink');
-        $o .= html_writer::end_div();
-        $o .= html_writer::end_tag('li');
-
-        foreach ($objects as $obj) {
-            $o.= $OUTPUT->frontpage_li($obj, $span);
-        }
-        $o.= html_writer::end_tag('ul');
-
-        return $o;
-    }
-
-    public function rsslink() {
-        global $OUTPUT;
-        if ($rsslink = $this->rss_url()) {
-            return html_writer::link($rsslink, $OUTPUT->pix_icon('i/rss', 'subscribe by rss'));
-        }
-    }
-    public function morelink() {
-        global $OUTPUT;
-        if ($morelink = $this->more_link()) {
-            return $morelink;
-        }
+        return cache::make('local_moodleorg', 'frontpagecolumn');
     }
 }
+
 
 /**
- * Specialised from page column for displaying forum content
+ * Site news (aka Announcements)
  */
-abstract class frontpage_column_forumposts extends frontpage_column
-{
-    /**
-     * Creates an object from a li for the forum
-     *
-     * @param stdClass $post record frm the database
-     * @param stdClass $course record frm the database
-     * @return stdClass li object
-     */
-    protected function item_from_post($post, $course) {
-        global $OUTPUT;
+class frontpage_column_news extends frontpage_column {
 
-        $postuser = new stdClass;
-        $postuser->id        = $post->userid;
-        $postuser->firstname = $post->firstname;
-        $postuser->lastname  = $post->lastname;
-        $postuser->imagealt  = $post->imagealt;
-        $postuser->picture   = $post->picture;
-        $postuser->email     = $post->email;
-        foreach (get_all_user_name_fields() as $addname) {
-            $postuser->$addname = $post->$addname;
-        }
-
-        $by = new stdClass();
-        $by->name = fullname($postuser);
-        $by->date = userdate($post->modified, get_string('strftimedaydate', 'core_langconfig'));
-
-        $link = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
-        $link->set_anchor('p'.$post->id);
-
-        $item = new stdClass;
-        $item->image = $OUTPUT->user_picture($postuser, array('courseid' => $course->id));
-        $item->link = html_writer::link($link, s($post->subject));
-        $item->smalltext = html_writer::span(get_string('bynameondate_by', 'local_moodleorg'), 'by').
-                html_writer::span($by->name, 'name'). html_writer::span(get_string('bynameondate_dash', 'local_moodleorg'), 'dash').
-                html_writer::span($by->date, 'date');
-        return $item;
-    }
-}
-
-class frontpage_column_news extends frontpage_column_forumposts
-{
-    const MAXITEMS=3;
     protected function cache_key() {
         return 'news_'. current_language();
     }
 
     protected function generate() {
-        global $CFG, $SITE, $OUTPUT;
-
+        global $CFG, $SITE;
         require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
 
+        // Structure to be returned
+        $data = (object)array(
+            'timegenerated' => time(),
+            'rssurl' => (string) $this->rss_url(),
+            'moreurl' => (string) $this->more_url(),
+            'items' => array(),
+        );
+
         if (!$forum = forum_get_course_forum($SITE->id, 'news')) {
-            return array();
+            return $data;
         }
 
         $modinfo = get_fast_modinfo($SITE);
         if (empty($modinfo->instances['forum'][$forum->id])) {
-            return array();
+            return $data;
         }
         $cm = $modinfo->instances['forum'][$forum->id];
 
         $posts = forum_get_discussions($cm, 'p.modified DESC', false, -1, self::MAXITEMS);
 
-        $items = array();
         foreach ($posts as $post) {
-            $item = $this->item_from_post($post, $SITE);
-            $item->image = '';
-            $items[] = $item;
+            $url = new moodle_url('/mod/forum/discuss.php', array('d' => $post->discussion));
+            $url->set_anchor('p'.$post->id);
+            $data->items[] = (object) array(
+                'title' => s($post->subject),
+                'date' => userdate($post->modified, get_string('strftimedaydate', 'core_langconfig')),
+                'url' => $url->out(),
+            );
         }
-        return $items;
+
+        return $data;
     }
 
-    protected function more_link() {
+    protected function more_url() {
         global $CFG, $SITE;
-
-        //TODO: SHOULD BE CACHING THE FORUMID!
-        require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
+        require_once($CFG->dirroot.'/mod/forum/lib.php');
 
         if (!$forum = forum_get_course_forum($SITE->id, 'news')) {
             return '';
         }
 
-        $url = new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
-        return html_writer::link($url, get_string('feed_news_more', 'theme_moodleorgcleaned'));
+        return new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
     }
 
     protected function rss_url() {
         global $CFG, $SITE;
-
-        // Wow this is really ugly....
-        require_once($CFG->dirroot.'/mod/forum/lib.php');   // We'll need this
+        require_once($CFG->dirroot.'/mod/forum/lib.php');
         require_once($CFG->dirroot.'/lib/rsslib.php');
 
         if (!$forum = forum_get_course_forum($SITE->id, 'news')) {
             return '';
         }
 
-        // La la la.
         $modinfo = get_fast_modinfo($SITE);
         $cm = $modinfo->instances['forum'][$forum->id];
         $context = context_module::instance($cm->id);
@@ -359,26 +266,27 @@ class frontpage_column_news extends frontpage_column_forumposts
 }
 
 
-class frontpage_column_events extends frontpage_column
-{
+/**
+ * Events
+ */
+class frontpage_column_events extends frontpage_column {
+
     protected function cache_key() {
         return 'events_'.current_language();
     }
 
     protected function generate() {
-        global $CFG, $DB, $OUTPUT;
+        global $CFG, $DB;
         require_once($CFG->dirroot.'/calendar/lib.php');
 
-        $course = $this->get_course();
+        $course = $this->get_mapped_course();
 
-        // Preload course context dance..
-        $select = ', ' . context_helper::get_preload_record_columns_sql('ctx');
-        $join = "LEFT JOIN {context} ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel)";
-        $sql = "SELECT c.* $select
-            FROM {course} c
-            $join
-            WHERE EXISTS (SELECT 1 FROM {event} e WHERE e.courseid = c.id)
-            AND c.id = :courseid";
+        // Preload course contexts
+        $sql = "SELECT c.*, ".context_helper::get_preload_record_columns_sql('ctx')."
+                  FROM {course} c
+             LEFT JOIN {context} ctx ON (ctx.instanceid = c.id AND ctx.contextlevel = :contextlevel)
+                 WHERE EXISTS (SELECT 1 FROM {event} e WHERE e.courseid = c.id)
+                       AND c.id = :courseid";
         $courses = $DB->get_records_sql($sql, array('contextlevel' => CONTEXT_COURSE, 'courseid' => $course->id));
         foreach ($courses as $course) {
             context_helper::preload_from_record($course);
@@ -387,53 +295,70 @@ class frontpage_column_events extends frontpage_column
         list($courses, $group, $user) = calendar_set_filters($courses);
         $events = calendar_get_upcoming($courses, $group, $user, 365, self::MAXITEMS);
 
-
-        // Define the base url for clendar linking..
+        // Define the base url for calendar linking
         $baseurl = new moodle_url('/calendar/view.php', array('view' => 'day', 'course'=> $course->id));
 
-        $items = array();
+        // Structure to be returned
+        $data = (object)array(
+            'timegenerated' => time(),
+            'rssurl' => (string) $this->rss_url(),
+            'moreurl' => (string) $this->more_url(),
+            'items' => array(),
+        );
+
         foreach ($events as $event) {
             $ed = usergetdate($event->timestart);
             $linkurl = calendar_get_link_href($baseurl, $ed['mday'], $ed['mon'], $ed['year']);
             $linkurl->set_anchor('event_'.$event->id);
-
-            $obj = new stdClass;
-            $obj->image = $OUTPUT->pix_icon('i/siteevent', get_string('globalevent', 'calendar'), 'moodle', array('style'=>'width:35px; height: 35px;'));
-            $obj->link = html_writer::link($linkurl, $event->name);
-            $obj->smalltext = userdate($event->timestart, get_string('strftimedaydate', 'core_langconfig'));
-            $items[] = $obj;
+            $data->items[] = (object) array(
+                'title' => s($event->name),
+                'url '=> (string) $linkurl,
+                'date' => userdate($event->timestart, get_string('strftimedaydate', 'core_langconfig')),
+            );
         }
-        return $items;
+
+        return $data;
     }
 
-    protected function more_link() {
-        $url = new moodle_url('calendar/view.php'); //, array('view' => 'month'));
-        return html_writer::link($url, 'Calendar entries');
+    protected function more_url() {
+        return new moodle_url('calendar/view.php');
     }
 
+    /**
+     * We have no RSS feed here, provide iCal if possible
+     */
     protected function rss_url() {
-        global $CFG, $USER, $DB, $OUTPUT;
-        // No RSS feed, provide iCal if possible.
+        global $CFG, $USER, $DB;
+
         if (isloggedin()) {
             $authtoken = sha1($USER->id . $DB->get_field('user', 'password', array('id'=>$USER->id)) . $CFG->calendar_exportsalt);
-            $link = new moodle_url('/calendar/export_execute.php', array('preset_what'=>'all', 'preset_time'=>'recentupcoming', 'userid' => $USER->id, 'authtoken'=>$authtoken));
+            $link = new moodle_url('/calendar/export_execute.php', array(
+                'preset_what' => 'all',
+                'preset_time' => 'recentupcoming',
+                'userid' => $USER->id,
+                'authtoken'=>$authtoken,
+            ));
             return $link;
+
         } else {
             $authtoken = sha1('1' . $DB->get_field('user', 'password', array('id'=>1)) . $CFG->calendar_exportsalt);
-            $link = new moodle_url('/calendar/export_execute.php', array('preset_what'=>'all', 'preset_time'=>'recentupcoming', 'userid' => 1, 'authtoken'=>$authtoken));
+            $link = new moodle_url('/calendar/export_execute.php', array(
+                'preset_what' => 'all',
+                'preset_time' => 'recentupcoming',
+                'userid' => 1,
+                'authtoken' => $authtoken,
+            ));
             return $link;
-        }
-    }
-    public function rsslink() {
-        global $OUTPUT;
-        if ($rsslink = $this->rss_url()) {
-            return html_writer::link($rsslink, $OUTPUT->pix_icon('i/rss', 'download calendar iCal file'));
         }
     }
 }
 
-class frontpage_column_useful extends frontpage_column_forumposts
-{
+
+/**
+ * Useful posts
+ */
+class frontpage_column_useful extends frontpage_column {
+
     protected function cache_key() {
         return 'useful_'.current_language();
     }
@@ -442,7 +367,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         global $DB, $CFG;
         require_once($CFG->dirroot.'/rating/lib.php');
 
-        $course = $this->get_course();
+        $course = $this->get_mapped_course();
 
         // Set up the ratings information that will be the same for all posts.
         $ratingoptions = new stdClass();
@@ -478,7 +403,7 @@ class frontpage_column_useful extends frontpage_column_forumposts
         // no loop,just one look towards 'parent' langs for now
         if ($frontpagecount < self::MAXITEMS && $this->mapping->lang !== 'en') {
             $moremapping = local_moodleorg_get_mapping(false, 1);
-            $anothercourse = $this->get_course($moremapping);
+            $anothercourse = $this->get_mapped_course($moremapping);
             $rs = $this->getposts($anothercourse);
 
             if (!empty($rs)) {
@@ -501,7 +426,12 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $cache->set('useful_full_'.$this->mapping->lang, $fullcontents);
         $cache->set('rss_'.$this->mapping->lang, $rsscontent);
 
-        return $frontcontent;
+        return (object)array(
+            'timegenerated' => time(),
+            'rssurl' => (string) $this->rss_url(),
+            'moreurl' => (string) $this->more_url(),
+            'items' => $frontcontent,
+        );
     }
 
     protected function getposts($course) {
@@ -556,7 +486,6 @@ class frontpage_column_useful extends frontpage_column_forumposts
             $sql = $noscalesql;
         }
 
-
         return $DB->get_recordset_sql($sql, $params, 0, 30);
     }
 
@@ -596,7 +525,26 @@ class frontpage_column_useful extends frontpage_column_forumposts
         $rsscontent.= html_writer::tag('guid', $postlink->out(false), array('isPermaLink'=>'true'))."\n";
         $rsscontent.= html_writer::end_tag('item')."\n";
 
-        $frontcontentbit = $this->item_from_post($post, $course);
+        $postuser = new stdClass();
+        $postuser->id        = $post->userid;
+        $postuser->firstname = $post->firstname;
+        $postuser->lastname  = $post->lastname;
+        $postuser->imagealt  = $post->imagealt;
+        $postuser->picture   = $post->picture;
+        $postuser->email     = $post->email;
+        foreach (get_all_user_name_fields() as $addname) {
+            $postuser->$addname = $post->$addname;
+        }
+
+        $link = new moodle_url('/mod/forum/discuss.php', array('d'=>$post->discussion));
+        $link->set_anchor('p'.$post->id);
+
+        $frontcontentbit = new stdClass();
+        $frontcontentbit->courseid = $course->id;
+        $frontcontentbit->user = $postuser;
+        $frontcontentbit->url = (string)$link;
+        $frontcontentbit->title = s($post->subject);
+        $frontcontentbit->date = userdate($post->modified, get_string('strftimedaydate', 'core_langconfig'));
 
         // Output normal posts
         $fullsubject = html_writer::link($forumlink, format_string($forum->name,true));
@@ -665,8 +613,8 @@ class frontpage_column_useful extends frontpage_column_forumposts
         return $content;
     }
 
-    protected function more_link() {
-        return html_writer::link(new moodle_url('/course/view.php', array('id' => $this->mapping->courseid)), 'More posts');
+    protected function more_url() {
+        return new moodle_url('/course/view.php', array('id' => $this->mapping->courseid));
     }
 
     protected function rss_url() {
@@ -701,44 +649,71 @@ EOF;
     }
 }
 
-class frontpage_column_resources extends frontpage_column
-{
+/**
+ * Resources
+ */
+class frontpage_column_resources extends frontpage_column {
+
     const FEEDURL = 'http://pipes.yahoo.com/pipes/pipe.run?_id=2a7f5e44ac0ae95e1fa10bc5ee09149e&_render=rss';
+
     protected function cache_key() {
         return 'resources_'. current_language();
     }
 
     protected function generate() {
-        global $CFG, $OUTPUT;
+        global $CFG;
         require_once($CFG->libdir.'/simplepie/moodle_simplepie.php');
 
         $feed = new moodle_simplepie(self::FEEDURL);
         $feeditems = $feed->get_items(0,self::MAXITEMS);
 
-        $items = array();
+        // Structure to be returned
+        $data = (object)array(
+            'timegenerated' => time(),
+            'rssurl' => (string) $this->rss_url(),
+            'moreurl' => (string) $this->more_url(),
+            'items' => array(),
+        );
+
         foreach ($feeditems as $item) {
-            $title = $item->get_title();
+            $title = s($item->get_title());
             if (preg_match('/^Plugins: /', $title)) {
-                $image = $OUTPUT->pix_icon('icon', 'Plugins', 'mod_lti', array('style'=>'width:35px; height: 35px'));
+                $imagename = 'icon';
+                $imagecomponent = 'mod_lti';
+                $imagealt = 'Plugins';
+
             } else if (preg_match('/^Jobs: /', $title)) {
-                $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_feedback', array('style'=>'width:35px; height: 35px'));
+                $imagename = 'icon';
+                $imagecomponent = 'mod_feedback';
+                $imagealt = 'Jobs';
+
             } else if (preg_match('/^Courses: /', $title)) {
-                $image = $OUTPUT->pix_icon('icon', 'Jobs', 'mod_imscp', array('style'=>'width:35px; height: 35px'));
+                $imagename = 'icon';
+                $imagecomponent = 'mod_imscp';
+                $imagealt = 'Courses';
+
             } else {
-                $image = $OUTPUT->pix_icon('icon', 'Buzz', 'mod_label', array('style'=>'width:35px; height: 35px'));
+                $imagename = 'icon';
+                $imagecomponent = 'mod_label';
+                $imagealt = 'Buzz';
             }
 
-            $obj = new stdClass;
-            $obj->image = $image;
-            $obj->link = html_writer::link(new moodle_url($item->get_link()), $item->get_title());
-            $obj->smalltext = userdate($item->get_date('U'), get_string('strftimedaydate', 'core_langconfig'));
-            $items[] = $obj;
+            $data->items[] = (object) array(
+                'title' => $title,
+                'url' => (string) new moodle_url($item->get_link()),
+                'date' => userdate($item->get_date('U'), get_string('strftimedaydate', 'core_langconfig')),
+                'image' =>  (object) array(
+                    'name' => $imagename,
+                    'component' => $imagecomponent,
+                    'alt' => $imagealt,
+                )
+            );
         }
 
-        return $items;
+        return $data;
     }
 
-    protected function more_link() {
+    protected function more_url() {
         return null;
     }
 
@@ -748,13 +723,13 @@ class frontpage_column_resources extends frontpage_column
 }
 
 class local_moodleorg_phm_cohort_manager {
+
     /** @var object cohort object from cohort table */
     private $cohort;
     /** @var array of cohort members indexed by userid */
     private $existingusers;
     /** @var array of cohort members indexed by userid */
     private $currentusers;
-
 
     /**
      * Creates a cohort for identifier if it doesn't exist
@@ -851,7 +826,7 @@ class local_moodleorg_phm_cohort_manager {
  * @return array of phms indexed by userid. Containing array('totalratings' => X 'postcount' => Y, 'raters' => Z)
  */
 function local_moodleorg_get_phms($minposts = 14, $minratings = 14, $minraters = 8, $minratio = 0.02) {
-    global $DB, $OUTPUT;
+    global $DB;
 
     $s = '';
     $minposttime = time() - YEARSECS;
