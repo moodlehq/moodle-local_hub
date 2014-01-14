@@ -312,7 +312,7 @@ class frontpage_column_events extends frontpage_column {
             $linkurl->set_anchor('event_'.$event->id);
             $data->items[] = (object) array(
                 'title' => s($event->name),
-                'url '=> (string) $linkurl,
+                'url'=> (string) $linkurl,
                 'date' => userdate($event->timestart, get_string('strftimedaydate', 'core_langconfig')),
             );
         }
