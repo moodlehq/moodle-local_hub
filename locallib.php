@@ -225,7 +225,6 @@ class frontpage_column_news extends frontpage_column {
 
         foreach ($posts as $post) {
             $url = new moodle_url('/mod/forum/discuss.php', array('d' => $post->discussion));
-            $url->set_anchor('p'.$post->id);
             $data->items[] = (object) array(
                 'title' => s($post->subject),
                 'date' => userdate($post->modified, get_string('strftimedaydate', 'core_langconfig')),
@@ -309,7 +308,6 @@ class frontpage_column_events extends frontpage_column {
         foreach ($events as $event) {
             $ed = usergetdate($event->timestart);
             $linkurl = calendar_get_link_href($baseurl, $ed['mday'], $ed['mon'], $ed['year']);
-            $linkurl->set_anchor('event_'.$event->id);
             $data->items[] = (object) array(
                 'title' => s($event->name),
                 'url'=> (string) $linkurl,
