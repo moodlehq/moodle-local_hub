@@ -461,7 +461,7 @@ class frontpage_column_useful extends frontpage_column {
             $negativescaleid = $this->mapping->scaleid * -1;
             $forumids = $DB->get_records('forum', array('course'=>$course->id, 'scale'=>$negativescaleid), '', 'id');
             if (empty($forumids)) {
-                debugging("No forums found for {$this->mapping->lang} with scale {$this->mapping->scaleid}", DEBUG_DEVELOPER);
+                debugging("No forums found for {$this->mapping->lang} with scale {$this->mapping->scaleid} (or not enough posts in the forums)", DEBUG_DEVELOPER);
                 // forum admin may have removed the scale, try without scale (latest posts) ..
                 $sql = $noscalesql;
             } else {
