@@ -33,7 +33,7 @@ $strregistration = get_string("registration");
 $strregistrationinfo = get_string("registrationinfo");
 $countries = get_string_manager()->get_list_of_countries();
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/register/'));
 $PAGE->set_title("$site->shortname: $strregistration");
 $PAGE->set_heading($site->fullname);

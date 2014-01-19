@@ -17,7 +17,7 @@ if (!$site = $DB->get_record('registry', array('id'=>$siteid, 'confirmed'=>1))) 
     redirect('http://moodle.org/sites/', 'You can\'t call this script directly');
 }
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/sites/contact.php', array('siteid'=>$siteid)));
 $PAGE->set_title('Contact a Moodle site');
 $PAGE->set_heading($PAGE->title);

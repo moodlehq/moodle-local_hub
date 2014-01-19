@@ -13,7 +13,7 @@ $siteid = required_param('id', PARAM_INT);
 $site = $DB->get_record('registry', array('id' => $siteid), '*', MUST_EXIST);
 
 $PAGE->set_pagelayout('embedded');
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title('moodle.org: View site votes');
 $PAGE->set_heading("Votes for $site->sitename");
 $PAGE->set_url(new moodle_url('/sites/showvotes.php', array('id'=>$siteid)));

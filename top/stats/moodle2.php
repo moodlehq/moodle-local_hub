@@ -27,7 +27,7 @@ require('../../../../config.php');
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('aboutstatisticstitle', 'local_moodleorg'));
 $PAGE->set_heading('Registered sites: Moodle 2.0.x');
 $PAGE->set_url(new moodle_url('/stats/moodle2.php'));

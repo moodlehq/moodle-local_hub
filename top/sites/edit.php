@@ -76,7 +76,7 @@ if (!empty($delete)) {
     $url->param('delete', $delete);
 }
 $PAGE->set_url($url);
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title('moodle.org: Moodle sites management');
 $PAGE->set_heading('Moodle sites management');
 

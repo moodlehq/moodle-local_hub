@@ -60,7 +60,7 @@ if ($data = data_submitted()) {
 
 /// Print headings
 $PAGE->set_url('/donations/');
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title('Moodle: Donations: Thanks!');
 $PAGE->set_heading('Donations: Thanks!');
 $PAGE->navbar->add($PAGE->heading, $PAGE->url);

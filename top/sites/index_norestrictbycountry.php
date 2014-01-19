@@ -33,7 +33,7 @@ $hide_all_links = false;
 $mostrecent = 0;
 $strresources = get_string("modulenameplural", "resource");
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/sites/index_norecordset.php'));
 $PAGE->set_title('Moodle: Moodle sites');
 $PAGE->set_heading('Moodle sites');

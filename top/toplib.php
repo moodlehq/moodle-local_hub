@@ -14,7 +14,7 @@ function print_moodle_page_top($page, $content="", $navlinks=array()) {
 
     global $CFG, $USER, $SITE, $PAGE, $OUTPUT, $DB;
 
-    $PAGE->set_context(get_system_context());
+    $PAGE->set_context(context_system::instance());
     if ($page === 'mycourse') {
         $PAGE->set_url('/forums/my/');
     } else {

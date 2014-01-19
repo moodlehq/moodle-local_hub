@@ -3,7 +3,7 @@
 require('../../../../config.php');
 
 $PAGE->set_url(new moodle_url('/logo/index.php'));
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 
 // print_header("Moodle.org: Images", "moodle", build_navigation($navlinks), "", "", true, false);
 $PAGE->set_title('Moodle.org: Moodle logos');

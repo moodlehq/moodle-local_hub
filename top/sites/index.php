@@ -19,7 +19,7 @@ $uncool = optional_param('uncool', 0, PARAM_INT);
 $sitevoting = optional_param('voting', 0, PARAM_INT);
 $edit = optional_param('edit', '', PARAM_ALPHA);
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/sites/'));
 
 $isadmin = ismoodlesiteadmin();

@@ -3,7 +3,7 @@
 require('../../../../config.php');
 
 $PAGE->set_url('/donations/test.php');
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title('Test');
 $PAGE->set_heading('Testing 2checkout');
 

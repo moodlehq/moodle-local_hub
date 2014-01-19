@@ -7,7 +7,7 @@ if (isset($_GET['record'])) {
 
 require('../../../../config.php');
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/stats/network.php'));
 $PAGE->set_title('Moodle.org: Moodle server availability');
 $PAGE->set_heading('Moodle server availability');

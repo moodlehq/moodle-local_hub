@@ -43,7 +43,7 @@ $moodle = local_moodleorg_stats_update_moodle_users();
 $stats = local_moodleorg_stats_get_registry_stats();
 
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('aboutstatisticstitle', 'local_moodleorg'));
 $PAGE->set_heading(get_string('aboutstatisticsheading', 'local_moodleorg'));
 $PAGE->set_url(new moodle_url('/stats/'));

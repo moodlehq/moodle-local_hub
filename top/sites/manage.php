@@ -27,7 +27,7 @@ What the hell is this doing?
   $CFG->wwwroot = '';
 ***************************/
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url('/sites/manage.php');
 $PAGE->set_title('moodle.org: Manage sites');
 

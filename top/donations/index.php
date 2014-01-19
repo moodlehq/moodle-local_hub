@@ -2,7 +2,7 @@
 
 require('../../../../config.php');
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/donations/'));
 $PAGE->set_title('Moodle.org: donations');
 $PAGE->set_heading(get_string('donationstitle', 'local_moodleorg'));
