@@ -223,8 +223,15 @@ class frontpage_column_news extends frontpage_column {
 
         $posts = forum_get_discussions($cm, 'p.modified DESC', false, -1, self::MAXITEMS);
 
+        $isfirstpost = true;
         foreach ($posts as $post) {
-            $url = new moodle_url('/mod/forum/discuss.php', array('d' => $post->discussion));
+            //$url = new moodle_url('/mod/forum/discuss.php', array('d' => $post->discussion));
+            $url = new moodle_url('/news/');
+            if ($isfirstpost) {
+                $isfirstpost = false;
+            } else {
+                $url->set_anchor('p'.$post->id);
+            }
             $data->items[] = (object) array(
                 'title' => s($post->subject),
                 'date' => userdate($post->modified, get_string('strftimedaydate', 'core_langconfig')),
@@ -243,7 +250,8 @@ class frontpage_column_news extends frontpage_column {
             return '';
         }
 
-        return new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
+        #return new moodle_url('/mod/forum/view.php', array('f' => $forum->id));
+        return new moodle_url('/news/');
     }
 
     protected function rss_url() {
