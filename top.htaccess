@@ -1,3 +1,7 @@
+# This file is deprecated and outdated. It should not be used any more.
+# Please see the local/moodleorg/conf/*.conf files for up-to-date configuration
+# to be added to your vhost.
+
     RewriteEngine On
 
 # protect this script
