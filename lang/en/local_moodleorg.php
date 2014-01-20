@@ -25,16 +25,6 @@
 
 //TODO: this pack is supposed to be used instead of the moodle.org.php file!
 
-$string['aboutdemosite'] = 'Our demonstration sites enable you to explore Moodle as a teacher, student or even an administrator. Don\'t worry about making a mess, as both sites are reset to a clean state every hour.';
-$string['aboutdemositetitle'] = 'Demonstration sites';
-$string['aboutintro'] = 'Moodle is an Open Source Course Management System (CMS), also known as a Learning Management System (LMS) or a Virtual Learning Environment (VLE).  It has become very popular among educators around the world as a tool for creating online dynamic web sites for their students.  To work, it needs to be installed on a web server somewhere, either on one of your own computers or one at a web hosting company.';
-$string['aboutoverview'] = '<p>The focus of the Moodle project is always on giving educators the best tools to manage and promote learning, but there are many ways to use Moodle:</p>
-<ul>
-<li>Moodle has features that allow it to scale to very large deployments and hundreds of thousands of students, yet it can also be used for a primary school or an education hobbyist.</li>
-<li>Many institutions use it as their platform to conduct fully online courses, while some use it simply to augment face-to-face courses (known as blended learning).</li>
-<li>Many of our users love to use the activity modules (such as forums, databases and wikis) to build richly collaborative communities of learning around their subject matter (in the social constructionist tradition), while others prefer to use Moodle as a way to deliver content to students (such as standard SCORM packages) and assess learning using assignments or quizzes.</li>
-</ul>';
-$string['aboutoverviewtitle'] = 'What is Moodle?';
 $string['aboutstatistics'] = 'Moodle is free to download and registration is voluntary, so we don\'t have full information about everyone that uses it.  However, using what we do know, we automatically generate some interesting graphs and numbers on our Statistics page.';
 $string['aboutstatisticstitle'] = 'Moodle.org: Moodle Statistics';
 $string['aboutstatisticsheading'] = 'Moodle Statistics';
@@ -77,7 +67,6 @@ $string['contactsecurity'] = 'Security issues can also be reported safely in the
 $string['contactsent'] = 'Your message was sent via email to the Moodle Community Manager.';
 $string['contactsupport'] = 'For support with using Moodle software, please see our support page which lists many helpful resources available to you.';
 $string['contactsupporttitle'] = 'Support';
-$string['demomoodlenet'] = 'Demonstration site';
 $string['developercredits'] = 'Developer credits';
 $string['developerlist'] = 'Full list of developers with write access';
 $string['developermeetings'] = 'Developer meetings';
@@ -124,7 +113,6 @@ $string['graphregistrationmap'] = 'Moodle registration map';
 $string['graphregistrationmapdesc'] = 'Top 10 from registered sites in {$a} countries';
 $string['jobs'] = 'Visit our jobs database for information on Moodle-related positions world-wide.';
 $string['jobstitle'] = 'Moodle Jobs';
-$string['moodledocs'] = 'Moodle Docs';
 $string['moodlepartnersinfo'] = '<p><a href="http://moodle.com/partners/" title="Moodle.com - Partners"><img src="http://moodle.com/wp-content/themes/moodle/images/mpcsp-hor-trans.png" alt="Moodle Partner - Certified Services Provider" style="float: right;"></a><br /> Moodle Partners are Certified Service Providers worldwide that can help you with your Moodle implementation.</p> <p>They provide services such as hosting, customisation, support, training and even full management of a Moodle project.</p> <p>Partners contribute 10% of their earnings to support the development and maintenance of the Moodle project, so to help improve the Moodle software we ask that you always use certified Moodle Partners!</p>';
 $string['moodlepartner_corporate'] = 'Corporate training';
 $string['moodlepartner_other'] = 'Other sectors';
@@ -183,7 +171,6 @@ $string['registrationstotal'] = 'All current registrations';
 $string['rsstitle'] = 'Moodle.org forum posts';
 $string['rssdescription'] = 'Recent or usefully rated useful forum posts from moodle.org';
 $string['roadmap'] = 'Moodle Roadmap';
-$string['schooldemommoodlenet'] = 'Mount Orange School';
 $string['shop'] = 'Looking for some way to show you are part of our community?  See our shop for shirts, mugs and all kinds of other things.';
 $string['shoptitle'] = 'Moodle Shop';
 $string['sourcecodetitle'] = 'Open source code';
