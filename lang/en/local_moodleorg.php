@@ -152,6 +152,7 @@ $string['newsplanetdetail'] = 'Aggregated blogs from Moodle developers';
 $string['newsrecent'] = 'Recent news';
 $string['newssecurity'] = 'Security news';
 $string['newssecuritydetail'] = 'Important information about security issues';
+$string['newstitle'] = 'Announcements';
 $string['noenrolledcoursesyet'] = 'You haven\'t enrolled in any courses on this site yet';
 $string['overviewabout'] = 'An overview about Moodle';
 $string['overviewcommunity'] = 'An overview of the Moodle community';
