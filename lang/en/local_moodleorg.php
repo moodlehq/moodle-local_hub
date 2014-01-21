@@ -86,7 +86,12 @@ $string['downloadcoretitle'] = 'Moodle standard packages';
 $string['downloadintro'] = 'Moodle is open source under the <a href="http://docs.moodle.org/dev/License">GPL licence</a>.  Everything we produce is available for you to download and use for free.';
 $string['downloadlang'] = 'In current versions of Moodle, adding support for new languages has been automated from the administration menu within your site.  However, for some older versions of Moodle, new language packs need to be downloaded manually.';
 $string['downloadlangtitle'] = 'Language packs';
-$string['downloadlogotitle'] = 'Moodle logos';
+$string['logotitle'] = 'Moodle logo';
+$string['logoinfo'] = 'The name Moodle™ is a registered trademark of the Moodle Trust.
+
+If you are intending to use the name and/or the logo to advertise generic Moodle services (eg Moodle hosting, Moodle support, Moodle certification, Moodle training, Moodle consulting, Moodle customisation, Moodle courseware development, Moodle theme design, Moodle integrations, Moodle installations, etc) or as the name of a software package, then you must seek and receive direct permission in writing from the Moodle Trust via the [moodle.com helpdesk](http://moodle.com/helpdesk/), in accordance with normal trademark restrictions.
+
+There are no restrictions on how you use the name in other contexts (for example, if you use Moodle just to provide courses then you can use the name freely to refer to it.) If you aren\'t sure of a particular case, please ask us via the [moodle.com helpdesk](http://moodle.com/helpdesk/). We\'ll be happy to either provide you with official permission in writing or help you fix your wording.';
 $string['downloadmac'] = 'If you don\'t have a web server set up already, these all-in-one packages make it very easy to install Moodle on any Apple computer running Mac OS X.';
 $string['downloadmactitle'] = 'Moodle for Mac OS X';
 $string['downloadmodules'] = 'Browse through our comprehensive database of extra modules and plugins that can be added to your Moodle site to give it extra functionality beyond the core packages.';
