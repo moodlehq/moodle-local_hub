@@ -177,6 +177,7 @@ $string['registrationstotal'] = 'All current registrations';
 $string['rsstitle'] = 'Moodle.org forum posts';
 $string['rssdescription'] = 'Recent or usefully rated useful forum posts from moodle.org';
 $string['roadmap'] = 'Moodle Roadmap';
+$string['searchmoodleorg'] = 'Search moodle.org';
 $string['shop'] = 'Looking for some way to show you are part of our community?  See our shop for shirts, mugs and all kinds of other things.';
 $string['shoptitle'] = 'Moodle Shop';
 $string['sourcecodetitle'] = 'Open source code';
