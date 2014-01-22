@@ -47,6 +47,8 @@ $fromdate = time() - 31536000;
 
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter boxwidthwide', 'style'=>'padding:20px;'));
 
+$donations = array();
+
 $bigdonations = $DB->get_records_select("register_donations", "timedonated > ? AND ".$DB->sql_cast_char2real('amount')." >= 1000", array($fromdate), "timedonated DESC");
 
 foreach ($bigdonations as $key => $donation) {
@@ -71,59 +73,61 @@ foreach ($otherdonations as $key => $donation) {
     $donations[] = $donation;
 }
 
-echo "<table style=\"margin-left:auto; margin-right:auto; text-align: center;\" cellpadding=\"3\">";
-echo "<tr><td style=\"font-size:large\" colspan=\"3\"><hr /><b>Previous donations over $1000</b></td></tr>";
-foreach ($donations as $donation) {
-    $string = '';
-    // Make proper xhtml
-    $donation->name = trim(htmlspecialchars($donation->name, ENT_COMPAT, 'UTF-8'));
-    $donation->org = trim(htmlspecialchars($donation->org, ENT_COMPAT, 'UTF-8'));
-    $donation->url = trim($donation->url);
-    if ($donation->name) {
-        $string = $donation->name;
-    }
+if (!empty($donations)) {
+    echo "<table style=\"margin-left:auto; margin-right:auto; text-align: center;\" cellpadding=\"3\">";
+    echo "<tr><td style=\"font-size:large\" colspan=\"3\"><hr /><b>Previous donations over $1000</b></td></tr>";
+    foreach ($donations as $donation) {
+        $string = '';
+        // Make proper xhtml
+        $donation->name = trim(htmlspecialchars($donation->name, ENT_COMPAT, 'UTF-8'));
+        $donation->org = trim(htmlspecialchars($donation->org, ENT_COMPAT, 'UTF-8'));
+        $donation->url = trim($donation->url);
+        if ($donation->name) {
+            $string = $donation->name;
+        }
 
-    $donation->url = '';   // 4 September 2008  -  New policy from MD: no links at all
+        $donation->url = '';   // 4 September 2008  -  New policy from MD: no links at all
 
-    if ($donation->org and $donation->url) {
-        if ($string) { $string .= ", "; }
-        $string .= "<a rel=\"nofollow\" href=\"$donation->url\">$donation->org</a>";
-    } else if ($donation->org) {
-        if ($string) { $string .= ", "; }
-        $string .= "$donation->org";
-    } else if ($donation->url) {
-        if (!$string) { $string = $donation->url;}
-        $string = "<a rel=\"nofollow\" href=\"$donation->url\">$string</a>";
+        if ($donation->org and $donation->url) {
+            if ($string) { $string .= ", "; }
+            $string .= "<a rel=\"nofollow\" href=\"$donation->url\">$donation->org</a>";
+        } else if ($donation->org) {
+            if ($string) { $string .= ", "; }
+            $string .= "$donation->org";
+        } else if ($donation->url) {
+            if (!$string) { $string = $donation->url;}
+            $string = "<a rel=\"nofollow\" href=\"$donation->url\">$string</a>";
+        }
+        if ($donation->amount >= 1000) {
+            $star = "**";
+            $amount = round($donation->amount);
+            $string = "<b>$string</b> (\$$amount)";
+            $section = 1000;
+        } else if ($donation->amount >= 500) {
+            if ($section > 500) {
+                $section = 500;
+                echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations over $500</b></td></tr>";
+            }
+            $star = "**";
+        } else if ($donation->amount >= 200) {
+            if ($section > 200) {
+                $section = 200;
+                echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations over $200</b></td></tr>";
+            }
+            $star = "*";
+        } else {
+            if ($section > 10) {
+                $section = 10;
+                echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations of $10 or over</b></td></tr>";
+            }
+            $star = "";
+        }
+        $time = userdate($donation->timedonated, '%d %B %Y');
+        echo "<tr style=\"font-size:small;white-space: nowrap;\" valign=\"top\"><td style=\"width:5pt\">$star</td><td align=\"left\">$string</td>".
+             "<td align=\"right\">$time</td></tr>";
     }
-    if ($donation->amount >= 1000) {
-        $star = "**";
-        $amount = round($donation->amount);
-        $string = "<b>$string</b> (\$$amount)";
-        $section = 1000;
-    } else if ($donation->amount >= 500) {
-        if ($section > 500) {
-            $section = 500;
-            echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations over $500</b></td></tr>";
-        }
-        $star = "**";
-    } else if ($donation->amount >= 200) {
-        if ($section > 200) {
-            $section = 200;
-            echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations over $200</b></td></tr>";
-        }
-        $star = "*";
-    } else {
-        if ($section > 10) {
-            $section = 10;
-            echo "<tr><td style=\"font-size:medium\" colspan=\"3\"><hr /><b>Other donations of $10 or over</b></td></tr>";
-        }
-        $star = "";
-    }
-    $time = userdate($donation->timedonated, '%d %B %Y');
-    echo "<tr style=\"font-size:small;white-space: nowrap;\" valign=\"top\"><td style=\"width:5pt\">$star</td><td align=\"left\">$string</td>".
-         "<td align=\"right\">$time</td></tr>";
+    echo "</table>";
 }
-echo "</table>";
 
 echo html_writer::end_tag('div');
 
