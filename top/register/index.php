@@ -1,8 +1,6 @@
 <?php
 
-// Allows the admin to create, delete and rename course categories
-
-require('../../../../config.php');
+require(__DIR__.'/../../../../config.php');
 require_once($CFG->dirroot.'/local/moodleorg/top/register/update_list_subscription.php');
 
 if (!$site = get_site()) {
@@ -51,7 +49,7 @@ if (!$form = data_submitted()) {
 if (empty($form->url)) {
     notice(get_string("missingurl"));
 
-} else if (substr_count(strtolower($form->url), "localhost") or 
+} else if (substr_count(strtolower($form->url), "localhost") or
            substr_count(strtolower($form->url), "127.0.0.1") or
            substr_count(strtolower($form->url), ".local/") or
            substr_count(strtolower($form->url), "http://10.") or
@@ -109,22 +107,22 @@ if (empty($form->url)) {
        case 'CT':  // Catalan is Spain
            $entry->country = 'ES';
            break;
-       case 'ZR':  // Catalan is Spain
+       case 'ZR':
            $entry->country = 'CD';
            break;
-       case 'TP':  // Catalan is Spain
+       case 'TP':
            $entry->country = 'TL';
            break;
-       case 'FX':  // Catalan is Spain
+       case 'FX':
            $entry->country = 'FR';
            break;
-       case 'KO':  // Catalan is Spain
+       case 'KO':
            $entry->country = 'RS';
            break;
-       case 'WA':  // Catalan is Spain
+       case 'WA':
            $entry->country = 'GB';
            break;
-       case 'CS':  // Catalan is Spain
+       case 'CS':
            $entry->country = 'RS';
            break;
     }

@@ -25,16 +25,6 @@
 
 //TODO: this pack is supposed to be used instead of the moodle.org.php file!
 
-$string['aboutdemosite'] = 'Our demonstration sites enable you to explore Moodle as a teacher, student or even an administrator. Don\'t worry about making a mess, as both sites are reset to a clean state every hour.';
-$string['aboutdemositetitle'] = 'Demonstration sites';
-$string['aboutintro'] = 'Moodle is an Open Source Course Management System (CMS), also known as a Learning Management System (LMS) or a Virtual Learning Environment (VLE).  It has become very popular among educators around the world as a tool for creating online dynamic web sites for their students.  To work, it needs to be installed on a web server somewhere, either on one of your own computers or one at a web hosting company.';
-$string['aboutoverview'] = '<p>The focus of the Moodle project is always on giving educators the best tools to manage and promote learning, but there are many ways to use Moodle:</p>
-<ul>
-<li>Moodle has features that allow it to scale to very large deployments and hundreds of thousands of students, yet it can also be used for a primary school or an education hobbyist.</li>
-<li>Many institutions use it as their platform to conduct fully online courses, while some use it simply to augment face-to-face courses (known as blended learning).</li>
-<li>Many of our users love to use the activity modules (such as forums, databases and wikis) to build richly collaborative communities of learning around their subject matter (in the social constructionist tradition), while others prefer to use Moodle as a way to deliver content to students (such as standard SCORM packages) and assess learning using assignments or quizzes.</li>
-</ul>';
-$string['aboutoverviewtitle'] = 'What is Moodle?';
 $string['aboutstatistics'] = 'Moodle is free to download and registration is voluntary, so we don\'t have full information about everyone that uses it.  However, using what we do know, we automatically generate some interesting graphs and numbers on our Statistics page.';
 $string['aboutstatisticstitle'] = 'Moodle.org: Moodle Statistics';
 $string['aboutstatisticsheading'] = 'Moodle Statistics';
@@ -77,7 +67,6 @@ $string['contactsecurity'] = 'Security issues can also be reported safely in the
 $string['contactsent'] = 'Your message was sent via email to the Moodle Community Manager.';
 $string['contactsupport'] = 'For support with using Moodle software, please see our support page which lists many helpful resources available to you.';
 $string['contactsupporttitle'] = 'Support';
-$string['demomoodlenet'] = 'Demonstration site';
 $string['developercredits'] = 'Developer credits';
 $string['developerlist'] = 'Full list of developers with write access';
 $string['developermeetings'] = 'Developer meetings';
@@ -97,7 +86,12 @@ $string['downloadcoretitle'] = 'Moodle standard packages';
 $string['downloadintro'] = 'Moodle is open source under the <a href="http://docs.moodle.org/dev/License">GPL licence</a>.  Everything we produce is available for you to download and use for free.';
 $string['downloadlang'] = 'In current versions of Moodle, adding support for new languages has been automated from the administration menu within your site.  However, for some older versions of Moodle, new language packs need to be downloaded manually.';
 $string['downloadlangtitle'] = 'Language packs';
-$string['downloadlogotitle'] = 'Moodle logos';
+$string['logotitle'] = 'Moodle logo';
+$string['logoinfo'] = 'The name Moodle™ is a registered trademark of the Moodle Trust.
+
+If you are intending to use the name and/or the logo to advertise generic Moodle services (eg Moodle hosting, Moodle support, Moodle certification, Moodle training, Moodle consulting, Moodle customisation, Moodle courseware development, Moodle theme design, Moodle integrations, Moodle installations, etc) or as the name of a software package, then you must seek and receive direct permission in writing from the Moodle Trust via the [moodle.com helpdesk](http://moodle.com/helpdesk/), in accordance with normal trademark restrictions.
+
+There are no restrictions on how you use the name in other contexts (for example, if you use Moodle just to provide courses then you can use the name freely to refer to it.) If you aren\'t sure of a particular case, please ask us via the [moodle.com helpdesk](http://moodle.com/helpdesk/). We\'ll be happy to either provide you with official permission in writing or help you fix your wording.';
 $string['downloadmac'] = 'If you don\'t have a web server set up already, these all-in-one packages make it very easy to install Moodle on any Apple computer running Mac OS X.';
 $string['downloadmactitle'] = 'Moodle for Mac OS X';
 $string['downloadmodules'] = 'Browse through our comprehensive database of extra modules and plugins that can be added to your Moodle site to give it extra functionality beyond the core packages.';
@@ -124,7 +118,6 @@ $string['graphregistrationmap'] = 'Moodle registration map';
 $string['graphregistrationmapdesc'] = 'Top 10 from registered sites in {$a} countries';
 $string['jobs'] = 'Visit our jobs database for information on Moodle-related positions world-wide.';
 $string['jobstitle'] = 'Moodle Jobs';
-$string['moodledocs'] = 'Moodle Docs';
 $string['moodlepartnersinfo'] = '<p><a href="http://moodle.com/partners/" title="Moodle.com - Partners"><img src="http://moodle.com/wp-content/themes/moodle/images/mpcsp-hor-trans.png" alt="Moodle Partner - Certified Services Provider" style="float: right;"></a><br /> Moodle Partners are Certified Service Providers worldwide that can help you with your Moodle implementation.</p> <p>They provide services such as hosting, customisation, support, training and even full management of a Moodle project.</p> <p>Partners contribute 10% of their earnings to support the development and maintenance of the Moodle project, so to help improve the Moodle software we ask that you always use certified Moodle Partners!</p>';
 $string['moodlepartner_corporate'] = 'Corporate training';
 $string['moodlepartner_other'] = 'Other sectors';
@@ -143,11 +136,11 @@ $string['namedownloads'] = 'Downloads';
 $string['nameevents'] = 'Events';
 $string['nameforums'] = 'Forums';
 $string['namemycourses'] = 'My courses';
-$string['namenetwork'] = 'Connected sites';
+$string['networktitle'] = 'Connected sites';
+$string['networkinfo'] = 'The following Moodle sites have been connected to moodle.org using Moodle networking, so you can log in there directly from here.';
 $string['namenews'] = 'News';
 $string['namesecurity'] = 'Security news';
 $string['namesupport'] = 'Support';
-$string['networkintro'] = 'The following Moodle sites have been connected to moodle.org using Moodle networking, so you can log in there directly from here.';
 $string['newregistrations'] = 'New registrations';
 $string['newsbuzz'] = 'Moodle Buzz';
 $string['newsbuzzdetail'] = 'Moodle-related publications from around the world';
@@ -159,6 +152,7 @@ $string['newsplanetdetail'] = 'Aggregated blogs from Moodle developers';
 $string['newsrecent'] = 'Recent news';
 $string['newssecurity'] = 'Security news';
 $string['newssecuritydetail'] = 'Important information about security issues';
+$string['newstitle'] = 'Announcements';
 $string['noenrolledcoursesyet'] = 'You haven\'t enrolled in any courses on this site yet';
 $string['overviewabout'] = 'An overview about Moodle';
 $string['overviewcommunity'] = 'An overview of the Moodle community';
@@ -183,7 +177,8 @@ $string['registrationstotal'] = 'All current registrations';
 $string['rsstitle'] = 'Moodle.org forum posts';
 $string['rssdescription'] = 'Recent or usefully rated useful forum posts from moodle.org';
 $string['roadmap'] = 'Moodle Roadmap';
-$string['schooldemommoodlenet'] = 'Mount Orange School';
+$string['securitytitle'] = 'Security announcements';
+$string['searchmoodleorg'] = 'Search moodle.org';
 $string['shop'] = 'Looking for some way to show you are part of our community?  See our shop for shirts, mugs and all kinds of other things.';
 $string['shoptitle'] = 'Moodle Shop';
 $string['sourcecodetitle'] = 'Open source code';

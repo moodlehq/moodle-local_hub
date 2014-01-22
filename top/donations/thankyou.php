@@ -77,6 +77,7 @@ echo "<P align=center>You should have received a confirmation in your email.</P>
 echo "<p align=center>Every dollar is very much appreciated!</p>";
 
 if (is_siteadmin()) {
+    $form = new stdClass();
     $form->amount = 100;
     $form->name = fullname($USER);
     $form->code = $SESSION->paymentcode = 'fakeentry';
