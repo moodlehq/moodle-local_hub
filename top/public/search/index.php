@@ -26,7 +26,6 @@ echo $OUTPUT->heading($PAGE->heading);
 </script>
 <gcse:search></gcse:search>
 </div>
-<script type="text/javascript" src="https://www.google.com/afsonline/show_afs_search.js"></script>
 
 <?php
 echo $OUTPUT->footer();
