@@ -213,3 +213,4 @@ $string['top10sitesbyusers'] = 'Top 10 sites by users';
 $string['top10sitesbycourses'] = 'Top 10 sites by courses';
 $string['top10countriesbyregistration'] = 'Top 10 countries by registrations';
 $string['versionsused'] = 'Versions used';
+$string['url-about'] = 'http://docs.moodle.org/en/About_Moodle';
