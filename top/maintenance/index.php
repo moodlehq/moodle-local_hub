@@ -6,14 +6,13 @@
  */
 
 $host = strtolower($_SERVER['HTTP_HOST']);
-$hashtag = str_replace('.', '', $host);
 ?>
 
 <!doctype html>
 <html lang="en">
     <head>
         <meta charset="utf-8"/>
-        <title><?php echo $host; ?> is undergoing maintenance</title>
+        <title><?php echo $host; ?> is currently unavailable</title>
         <style>
         body {
             background-image: url(<?php echo $CFG->wwwroot.'/maintenance/tile.png' ?>);
@@ -75,13 +74,10 @@ $hashtag = str_replace('.', '', $host);
     <body>
         <div id='logo'><img src='<?php echo $CFG->wwwroot.'/maintenance/moodle.png' ?>' /></div>
         <div id='message'>
-            <span id='host'><?php echo $host; ?></span> is currently undergoing maintenance.<br />
-            We apologise for the inconvenience.<br />
-            <br />
-            You can watch <a href='https://twitter.com/#<?php echo $hashtag; ?>'>#<?php echo $hashtag; ?></a> on Twitter for further updates on this site, or follow <a href='https://twitter.com/moodlesites'>@moodlesites</a> to keep up with all our sites.<br />
-            <br />
-            Our other sites include:<br />
-            <br />
+            <p><span id='host'><?php echo $host; ?></span> is currently unavailable.</p>
+            <p>We apologise for the inconvenience.</p>
+            <p>You can follow <a href="https://twitter.com/moodlesites">@moodlesites</a> for updates.</p>
+            <p>In the meantime, how about visiting one of our other Moodle community sites:</p>
             <div id="resources">
                 <div id="resource-row">
                     <div id="resource">
@@ -117,8 +113,8 @@ $hashtag = str_replace('.', '', $host);
                         <span>Mount Orange School (Moodle demo)</span>
                     </div>
                     <div id="resource">
-                        <a href="http://learn.moodle.net/">learn.moodle.net</a><br />
-                        <span>Learn Moodle MOOC</span>
+                        <a href="http://moodle.com/">moodle.com</a><br />
+                        <span>Moodle Pty Ltd</span>
                     </div>
                     <div id="resource">
                         <a href="http://research.moodle.net">research.moodle.net</a><br />
