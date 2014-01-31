@@ -1,3 +1,4 @@
+<!-- DEPRECATED, DO NOT USE ANY MORE -->
 <ul id="Menu1" class="MM">
   <li class="first"><a title="<?php print_string('overviewabout', 'local_moodleorg') ?>" href="http://moodle.org/about/"><?php print_string('nameabout', 'local_moodleorg') ?></a>
     <ul>
