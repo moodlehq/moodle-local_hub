@@ -1,0 +1,22 @@
+#
+# Configuration file for mdt (moodle deployment tools)
+#
+
+#
+# Our frankenstyle component name
+#
+mdt_component=local_moodleorg
+
+#
+# Our path within the Moodle source code tree
+#
+mdt_relpath=local/moodleorg/
+
+#
+# Snapshot mappings
+#
+# mdt_snapshot["site.url-X.Y"]="our_source_branch:their_target_branch"
+#
+declare -A mdt_snapshot
+
+mdt_snapshot["moodle.org-2.6"]="origin/master:${mdt_component}-addon"
