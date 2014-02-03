@@ -82,7 +82,7 @@ switch ($httpstatus) {
 <html dir="ltr" lang="en" xml:lang="en">
 <head>
     <title>moodle.org error</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300&amp;subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300&amp;subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="keywords" content="moodle, moodle.org, error" />
     <meta http-equiv="pragma" content="no-cache" />
