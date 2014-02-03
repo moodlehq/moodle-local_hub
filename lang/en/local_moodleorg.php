@@ -162,6 +162,7 @@ $string['newregistrations'] = 'New registrations';
 $string['newstitle'] = 'Announcements';
 $string['noenrolledcoursesyet'] = 'You haven\'t enrolled in any courses on this site yet';
 $string['partnerslogan'] = 'The Moodle Project is supported by 60 certified Moodle Partners globally.<br/><a href="http://moodle.com/partners/about/">Learn more</a> about the Moodle Partner program and <a href="http://moodle.com/partners">find a Moodle Partner</a> near you.';
+$string['permalink'] = 'Permalink';
 $string['pluginname'] = 'Moodle.org site';
 $string['popularissues'] = 'Most popular issues';
 $string['recentpart'] = 'This page shows some of the people using moodle.org today.';
