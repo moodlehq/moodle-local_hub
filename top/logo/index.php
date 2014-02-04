@@ -17,16 +17,26 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading($PAGE->heading);
 
 echo html_writer::div(format_text(get_string('logoinfo', 'local_moodleorg'), FORMAT_MARKDOWN), 'logoinfo');
-echo html_writer::empty_tag('hr');
-
-foreach (array(
-    'moodle-logo',
-    'moodle-logo-grey-hat',
-    'moodle-logo-white'
-) as $logo) {
-    echo html_writer::div(
-        html_writer::empty_tag('img', array('src' => $logo.'.png', 'alt' => $logo)),
-        'logo '.$logo);
-}
-
+?>
+<hr />
+<div class="row-fluid">
+    <div class="span6">
+        <div class="logo moodle-logo">
+            <img src="preview-moodle-logo.png" width="260" height="66" alt="Moodle logo" />
+            <div>
+                <a href="moodle-logo.png">PNG (4010 x 1023 px)</a> | <a href="moodle-logo.svg">SVG</a>
+            </div>
+        </div>
+    </div>
+    <div class="span6">
+        <div class="logo moodle-logo-white">
+            <img src="preview-moodle-logo-white.png" width="260" height="66" alt="Moodle logo - white" />
+            <div>
+                <a href="moodle-logo-white.png">PNG (4010 x 1023 px)</a>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<?php
 echo $OUTPUT->footer();
