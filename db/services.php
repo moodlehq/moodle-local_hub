@@ -72,6 +72,15 @@ $functions = array(
                 'description' => 'Get multiple courses',
                 'type'        => 'read',
         ),
+
+        'hub_get_sites' => array(
+                'classname'   => 'local_hub_external',
+                'methodname'  => 'get_sites',
+                'classpath'   => 'local/hub/externallib.php',
+                'description' => 'Get multiple sites',
+                'type'        => 'read',
+                'capabilities' => 'local/hub:viewinfo'
+        ),
 );
 
 $services = array(
@@ -88,6 +97,11 @@ $services = array(
 
         'Public site' => array(
                 'functions' => array ('hub_get_courses'),
+                'enabled'=>1,
+        ),
+
+        'Moodle.org statistics' => array(
+                'functions' => array ('hub_get_sites'),
                 'enabled'=>1,
         ),
 );
