@@ -32,16 +32,44 @@ if (isset($_SERVER['REMOTE_ADDR'])) {
 
 require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
+require_once($CFG->libdir.'/clilib.php');
 
+list($options, $unrecognized) = cli_get_params(array('help' => null, 'verbose' => null), array('h' => 'help', 'v' => 'verbose'));
 
-mtrace("Generating Particularly Helpful Moodlers for all langs..");
-$phms = local_moodleorg_get_phms();
-mtrace("Done generating PHMs");
+if ($options['help']) {
+    mtrace("
+This script is looking for new particularly helpful moodlers among the authors
+of posts in forums. The forum must use one of mapped scales for rating in order
+to be searched.
 
-mtrace("Populating phm cohort..");
+Execute with --verbose to get detailed output for debugging
+");
+    exit(1);
+}
+
+cli_separator();
+mtrace(date('Y-m-d H:i', time()));
+
+if ($options['verbose']) {
+    mtrace("Generating the list of particularly helpful moodlers ...");
+}
+
+$phms = local_moodleorg_get_phms(array('verbose' => $options['verbose']));
+
+if ($options['verbose']) {
+    mtrace("Updating the PHM cohort members ...");
+}
+
 $cohortmanager = new local_moodleorg_phm_cohort_manager();
 
 foreach ($phms as $userid => $phmdetails) {
     $cohortmanager->add_member($userid);
 }
-mtrace("Done Populating phm cohort.");
+
+$oldmembers = $cohortmanager->old_users();
+$newmembers = $cohortmanager->new_users();
+
+mtrace(sprintf("Removing %d old members %s", count($oldmembers), implode(',', array_keys($oldmembers))));
+mtrace(sprintf("Adding %d new members %s", count($newmembers), implode(',', array_keys($newmembers))));
+
+$cohortmanager->remove_old_users();
