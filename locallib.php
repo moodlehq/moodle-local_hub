@@ -822,20 +822,34 @@ class local_moodleorg_phm_cohort_manager {
 
 /**
  * Works out the particularly helpful moodlers across the whole site and returns
- * metadata about the phms.
+ * metadata about the PHMs.
  *
- * @param int $minposts the minimum number of posts to be counted as a PHM
- * @param int $minratings the minimum number of ratings to be coutned as a PHM
- * @param int $minraters the minimum number of raters
- * @param float $minratio the ratio of posts to 'useful' ratings to be coutned as phm.
+ * Supported options:
  *
- * @return array of phms indexed by userid. Containing array('totalratings' => X 'postcount' => Y, 'raters' => Z)
+ * bool verbose - produce debugging information via {@link mtrace()}
+ * int minposts - the minimum number of posts to be counted as a PHM
+ * int minratings - the minimum number of ratings to be coutned as a PHM
+ * int minraters - the minimum number of raters
+ * float minratio - the ratio of posts to 'useful' ratings to be coutned as phm.
+ * int minposttime - analyse all mapped posts after this timestamp
+ *
+ * The returned array is the list of PHMs candidates, indexed by userid. For
+ * each PHM, array with following keys is returned:
+ *
+ * userid, firstname, lastname, email, totalratings, postcount, raters, ratio
+ *
+ * @param array $options parameters for criteria for granting the PHM status
+ * @return array of phms indexed by userid
  */
-function local_moodleorg_get_phms($minposts = 14, $minratings = 14, $minraters = 8, $minratio = 0.02) {
+function local_moodleorg_get_phms(array $options = array()) {
     global $DB;
 
-    $s = '';
-    $minposttime = time() - YEARSECS;
+    $verbose = isset($options['verbose']) ? $options['verbose'] : false;
+    $minposts = isset($options['minposts']) ? $options['minposts'] : 14;
+    $minratings = isset($options['minratings']) ? $options['minratings'] : 14;
+    $minraters = isset($options['minraters']) ? $options['minraters'] : 8;
+    $minratio = isset($options['minratio']) ? $options['minratio'] : 0.020;
+    $minposttime = isset($options['minposttime']) ? $options['minposttime'] : time() - YEARSECS;
 
     $forummodid = $DB->get_field('modules', 'id', array('name' => 'forum'));
 
@@ -844,10 +858,13 @@ function local_moodleorg_get_phms($minposts = 14, $minratings = 14, $minraters =
                   JOIN {course_modules} cm ON cm.instance = fd.forum
                   JOIN {context} ctx ON ctx.instanceid = cm.id
                   JOIN {rating} r ON r.contextid = ctx.id
+                  JOIN {moodleorg_useful_coursemap} m ON -r.scaleid = m.scaleid
+                  JOIN {user} u ON fp.userid = u.id
                   WHERE cm.module = :forummodid
                   AND ctx.contextlevel = :contextlevel AND r.component = :component
                   AND r.ratingarea = :ratingarea AND r.itemid = fp.id
                   AND fp.created > :minposttime
+                  AND u.deleted = 0
                   ";
 
     $params = array('forummodid'    => $forummodid,
@@ -858,22 +875,25 @@ function local_moodleorg_get_phms($minposts = 14, $minratings = 14, $minraters =
                     );
 
 
-    $raterssql = "SELECT fp.userid, COUNT(r.id) AS ratingscount
+    $raterssql = "SELECT fp.userid, u.firstname, u.lastname, u.email, COUNT(r.id) AS ratingscount
                     $innersql
-                  GROUP BY fp.userid";
+                  GROUP BY fp.userid, u.firstname, u.lastname, u.email";
 
     $phms = array();
     $rs = $DB->get_recordset_sql($raterssql, $params);
     foreach($rs as $record) {
+
+        $verbose and mtrace(sprintf('Processing user %d "%s %s" (%s)', $record->userid, $record->firstname, $record->lastname, $record->email));
+
         if ($record->ratingscount < $minratings) {
-            // Need at least 14 ratings.
+            $verbose and mtrace(' not enough ratings ('.$record->ratingscount.' / '.$minratings.')');
             continue;
         }
 
         $totalpostcount = $DB->count_records_select('forum_posts', 'userid = :userid AND created > :mintime', array('userid' => $record->userid, 'mintime' => $minposttime));
 
         if ($totalpostcount < $minposts) {
-            // Need a minimum of X posts
+            $verbose and mtrace(' not enough total posts ('.$totalpostcount.' / '.$minposts.')');
             continue;
         }
 
@@ -882,18 +902,29 @@ function local_moodleorg_get_phms($minposts = 14, $minratings = 14, $minraters =
         $raterscount = $DB->count_records_sql($countsql, $countparms);
 
         if ($raterscount < $minraters) {
-            // Need at least 8 different ratings.
+            $verbose and mtrace(' not enough raters ('.$raterscount.' / '.$minraters.')');
             continue;
         }
 
-        $ratio = $record->ratingscount / $totalpostcount;
+        $ratio = round($record->ratingscount / $totalpostcount, 3);
 
         if ($ratio < $minratio) {
-            // Need a post ratio this good.
+            $verbose and mtrace(' not enough ratio ('.$ratio.' / '.$minratio.')');
             continue;
         }
 
-        $phms[$record->userid] = array('totalratings' => $record->ratingscount, 'postcount' =>  $totalpostcount, 'raters' => $raterscount);
+        $phms[$record->userid] = array(
+            'userid' => $record->userid,
+            'firstname' => $record->firstname,
+            'lastname' => $record->lastname,
+            'email' => $record->email,
+            'totalratings' => $record->ratingscount,
+            'postcount' => $totalpostcount,
+            'raters' => $raterscount,
+            'ratio' => $ratio,
+        );
+
+        $verbose and mtrace(' looking good');
     }
     $rs->close();
 
