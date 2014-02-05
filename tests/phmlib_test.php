@@ -44,19 +44,31 @@ class local_moodleorg_phmlib_testcase extends advanced_testcase {
         $this->assertEmpty($cohortmanager1->old_users());
         $this->assertEmpty($cohortmanager1->current_users());
 
-        $cohortmanager1->add_member($user1->id);
-        $cohortmanager1->add_member($user2->id);
-        $cohortmanager1->add_member($user3->id);
+        // Add new members and make sure they are real new members.
+        $this->assertTrue($cohortmanager1->add_member($user1->id));
+        $this->assertTrue($cohortmanager1->add_member($user2->id));
+        $this->assertTrue($cohortmanager1->add_member($user3->id));
+
+        // Nothing changes if adding the same user more times
+        $this->assertTrue($cohortmanager1->add_member($user3->id));
 
         // Check the users are in the internal structures:
         $this->assertArrayHasKey($user1->id, $cohortmanager1->current_users());
         $this->assertArrayHasKey($user2->id, $cohortmanager1->current_users());
         $this->assertArrayHasKey($user3->id, $cohortmanager1->current_users());
+        $this->assertArrayHasKey($user1->id, $cohortmanager1->new_users());
+        $this->assertArrayHasKey($user2->id, $cohortmanager1->new_users());
+        $this->assertArrayHasKey($user3->id, $cohortmanager1->new_users());
+        $this->assertEmpty($cohortmanager1->old_users());
+
         // Check the users are in the DB:
         $dbmembers = $DB->get_records('cohort_members', array('cohortid' => $cohortmanager1->cohort()->id), 'userid', 'userid');
         $this->assertArrayHasKey($user1->id, $dbmembers);
         $this->assertArrayHasKey($user2->id, $dbmembers);
         $this->assertArrayHasKey($user3->id, $dbmembers);
+
+        // Nothing to be pruned now.
+        $this->assertEmpty($cohortmanager1->remove_old_users());
 
         $cohortmanager2 = new local_moodleorg_phm_cohort_manager();
 
@@ -72,8 +84,8 @@ class local_moodleorg_phmlib_testcase extends advanced_testcase {
         $this->assertArrayHasKey($user3->id, $oldusers);
 
         // Add users 3 and 4 to the cohort..
-        $cohortmanager2->add_member($user3->id);
-        $cohortmanager2->add_member($user4->id);
+        $this->assertFalse($cohortmanager2->add_member($user3->id));
+        $this->assertTrue($cohortmanager2->add_member($user4->id));
 
         $removedusers = $cohortmanager2->remove_old_users();
 
@@ -84,6 +96,10 @@ class local_moodleorg_phmlib_testcase extends advanced_testcase {
         // users 3 and 4 should be in place..
         $this->assertArrayHasKey($user3->id, $cohortmanager2->current_users());
         $this->assertArrayHasKey($user4->id, $cohortmanager2->current_users());
+
+        // user 4 is a new member, user 3 is not
+        $this->assertArrayNotHasKey($user3->id, $cohortmanager2->new_users());
+        $this->assertArrayHasKey($user4->id, $cohortmanager2->new_users());
 
         // Check the users are in the DB:
         $dbmembers = $DB->get_records('cohort_members', array('cohortid' => $cohortmanager2->cohort()->id), 'userid', 'userid');

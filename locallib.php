@@ -728,6 +728,14 @@ class frontpage_column_resources extends frontpage_column {
     }
 }
 
+
+/**
+ * Helper class to update the list of thr PHM cohort members
+ *
+ * 1. Make an instance of this manager
+ * 2. Call add_member() for every user to add/confirm
+ * 3. Call remove_old_users() to prune existing members not added in 2.
+ */
 class local_moodleorg_phm_cohort_manager {
 
     /** @var object cohort object from cohort table */
@@ -775,14 +783,32 @@ class local_moodleorg_phm_cohort_manager {
      * @return bool true if member is a new member of cohort
      */
     public function add_member($userid) {
-        if (!isset($this->existingusers[$userid])) {
+        if (!isset($this->existingusers[$userid]) and !isset($this->currentusers[$userid])) {
             cohort_add_member($this->cohort->id, $userid);
         }
+
+        if (isset($this->existingusers[$userid])) {
+            $isnewmember = false;
+        } else {
+            $isnewmember = true;
+        }
+
         $this->currentusers[$userid] = $userid;
+
+        return $isnewmember;
     }
 
     /**
-     * Returns the usersids who have not been to the cohort since this manager was created
+     * Returns the userids who have been added to the cohort since the manager was created
+     *
+     * @return array array of new members indexed by userid
+     */
+    public function new_users() {
+        return array_diff_key($this->currentusers, $this->existingusers);
+    }
+
+    /**
+     * Returns the usersids who have not been added to the cohort since this manager was created
      *
      * @param array array of removed users indexed by userid
      */
