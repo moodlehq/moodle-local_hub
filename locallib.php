@@ -853,16 +853,15 @@ class local_moodleorg_phm_cohort_manager {
  * Supported options:
  *
  * bool verbose - produce debugging information via {@link mtrace()}
- * int minposts - the minimum number of posts to be counted as a PHM
- * int minratings - the minimum number of ratings to be coutned as a PHM
+ * int minratings - the minimum number of ratings to be counted as a PHM
  * int minraters - the minimum number of raters
  * float minratio - the ratio of posts to 'useful' ratings to be coutned as phm.
- * int minposttime - analyse all mapped posts after this timestamp
+ * int recentposttime - phm must have posted something somewhere after this timestamp
  *
  * The returned array is the list of PHMs candidates, indexed by userid. For
  * each PHM, array with following keys is returned:
  *
- * userid, firstname, lastname, email, totalratings, postcount, raters, ratio
+ * userid, firstname, lastname, totalratings, postcount, raters, ratio
  *
  * @param array $options parameters for criteria for granting the PHM status
  * @return array of phms indexed by userid
@@ -871,11 +870,10 @@ function local_moodleorg_get_phms(array $options = array()) {
     global $DB;
 
     $verbose = isset($options['verbose']) ? $options['verbose'] : false;
-    $minposts = isset($options['minposts']) ? $options['minposts'] : 14;
     $minratings = isset($options['minratings']) ? $options['minratings'] : 14;
     $minraters = isset($options['minraters']) ? $options['minraters'] : 8;
     $minratio = isset($options['minratio']) ? $options['minratio'] : 0.020;
-    $minposttime = isset($options['minposttime']) ? $options['minposttime'] : time() - YEARSECS;
+    $recentposttime = isset($options['recentposttime']) ? $options['recentposttime'] : time() - 60 * DAYSECS;
 
     $forummodid = $DB->get_field('modules', 'id', array('name' => 'forum'));
 
@@ -889,7 +887,6 @@ function local_moodleorg_get_phms(array $options = array()) {
                   WHERE cm.module = :forummodid
                   AND ctx.contextlevel = :contextlevel AND r.component = :component
                   AND r.ratingarea = :ratingarea AND r.itemid = fp.id
-                  AND fp.created > :minposttime
                   AND u.deleted = 0
                   ";
 
@@ -897,29 +894,21 @@ function local_moodleorg_get_phms(array $options = array()) {
                      'contextlevel' => CONTEXT_MODULE,
                      'component'    => 'mod_forum',
                      'ratingarea'   => 'post',
-                     'minposttime'  => $minposttime
                     );
 
 
-    $raterssql = "SELECT fp.userid, u.firstname, u.lastname, u.email, COUNT(r.id) AS ratingscount
+    $raterssql = "SELECT fp.userid, u.firstname, u.lastname, COUNT(r.id) AS ratingscount
                     $innersql
-                  GROUP BY fp.userid, u.firstname, u.lastname, u.email";
+                  GROUP BY fp.userid, u.firstname, u.lastname";
 
     $phms = array();
     $rs = $DB->get_recordset_sql($raterssql, $params);
     foreach($rs as $record) {
 
-        $verbose and mtrace(sprintf('Processing user %d "%s %s" (%s)', $record->userid, $record->firstname, $record->lastname, $record->email));
+        $verbose and mtrace(sprintf('Processing user %d %s %s', $record->userid, $record->firstname, $record->lastname));
 
         if ($record->ratingscount < $minratings) {
             $verbose and mtrace(' not enough ratings ('.$record->ratingscount.' / '.$minratings.')');
-            continue;
-        }
-
-        $totalpostcount = $DB->count_records_select('forum_posts', 'userid = :userid AND created > :mintime', array('userid' => $record->userid, 'mintime' => $minposttime));
-
-        if ($totalpostcount < $minposts) {
-            $verbose and mtrace(' not enough total posts ('.$totalpostcount.' / '.$minposts.')');
             continue;
         }
 
@@ -932,6 +921,8 @@ function local_moodleorg_get_phms(array $options = array()) {
             continue;
         }
 
+        $totalpostcount = $DB->count_records_select('forum_posts', 'userid = :userid', array('userid' => $record->userid));
+
         $ratio = round($record->ratingscount / $totalpostcount, 3);
 
         if ($ratio < $minratio) {
@@ -939,11 +930,18 @@ function local_moodleorg_get_phms(array $options = array()) {
             continue;
         }
 
+        $recentpostcount = $DB->count_records_select('forum_posts', "userid = :userid AND created > :recentposttime",
+            array('userid' => $record->userid, 'recentposttime' => $recentposttime));
+
+        if ($recentpostcount < 1) {
+            $verbose and mtrace(' no post in last 60 days');
+            continue;
+        }
+
         $phms[$record->userid] = array(
             'userid' => $record->userid,
             'firstname' => $record->firstname,
             'lastname' => $record->lastname,
-            'email' => $record->email,
             'totalratings' => $record->ratingscount,
             'postcount' => $totalpostcount,
             'raters' => $raterscount,
