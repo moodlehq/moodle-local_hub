@@ -812,7 +812,7 @@ class local_hub_external extends external_api {
         $params = self::validate_parameters(self::get_sitesregister_parameters(),
                         array('fromid' => $fromid, 'numrecs' => $numrecs));
         $hub = new local_hub();
-        $sites = $hub->get_sitesregister($params['fromid'], $numrecs);
+        $sites = $hub->get_sitesregister($params['fromid'], $params['numrecs']);
 
         // query to export data into moodle.org for modelling data exported here.
         //        SELECT `id` AS hubid, `name` AS sitename, `url` , `description` , `secret`, `trusted`, `language` as lang,
