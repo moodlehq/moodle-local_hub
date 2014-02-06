@@ -784,4 +784,126 @@ class local_hub_external extends external_api {
         );
     }
 
+    /**
+     * TODO: not in use yet, will be prompt to change
+     * Returns description of method parameters
+     * @return external_function_parameters
+     */
+    public static function get_sitesregister_parameters() {
+        return new external_function_parameters(
+                array(
+                    'fromid' => new external_value(PARAM_INT, 'data greater than this id.'),
+                )
+        );
+    }
+
+    /**
+     * Get sites data for moodle.org
+     * @return array sites
+     */
+    public static function get_sitesregister($fromid) {
+        global $DB;
+
+        // Ensure the current user is allowed to run this function
+        $context = get_context_instance(CONTEXT_SYSTEM);
+        self::validate_context($context);
+        require_capability('local/hub:viewinfo', $context);
+        $params = self::validate_parameters(self::get_sitesregister_parameters(),
+                        array('fromid' => $fromid));
+        $hub = new local_hub();
+        $sites = $hub->get_sitesregister($params['fromid']);
+
+        // query to export data into moodle.org for modelling data exported here.
+        //        SELECT `id` AS hubid, `name` AS sitename, `url` , `description` , `secret`, `trusted`, `language` as lang,
+        //        `timeregistered` as timecreated, `timemodified` as timeupdated, `contactname` as adminname,
+        //        `contactemail` as adminemail, `contactphone` as adminphone, `imageurl`, `prioritise`, `countrycode` as country, `regioncode`,
+        //        `street`, `geolocation`, `moodlerelease`, `moodleversion`, `ip` as ipaddress, `courses`, `users`, `enrolments`,
+        //        `resources`, `questions`, `modulenumberaverage`, `posts`, `participantnumberaverage`, `deleted`, `publicationmax`
+        //        FROM `mdl_hub_site_directory`
+        //        WHERE id >31126
+
+        //create result. moodle.org (transformed for it.)
+        $result = array();
+        foreach ($sites as $site) {
+            $siteinfo = array();
+            $siteinfo['hubid'] = $site->id;
+            $siteinfo['sitename'] = $site->name;
+            $siteinfo['url'] = $site->url;
+            $siteinfo['description'] = $site->description;
+            $siteinfo['secret'] = $site->secret;
+            $siteinfo['trusted'] = $site->trusted;
+            $siteinfo['lang'] = $site->language;
+            $siteinfo['timecreated'] = $site->timeregistered;
+            $siteinfo['timeupdated'] = $site->timemodified;
+            $siteinfo['adminname'] = $site->contactname;
+            $siteinfo['adminemail'] = $site->contactemail;
+            $siteinfo['adminphone'] = $site->contactphone;
+            $siteinfo['imageurl'] = $site->imageurl;
+            $siteinfo['prioritise'] = $site->prioritise;
+            $siteinfo['country'] = $site->countrycode;
+            $siteinfo['regioncode'] = $site->regioncode;
+            $siteinfo['street'] = $site->street;
+            $siteinfo['geolocation'] = $site->geolocation;
+            $siteinfo['moodlerelease'] = $site->moodlerelease;
+            $siteinfo['moodleversion'] = $site->moodleversion;
+            $siteinfo['ipaddress'] = $site->ip;
+            $siteinfo['courses'] = $site->courses;
+            $siteinfo['users'] = $site->users;
+            $siteinfo['enrolments'] = $site->enrolments;
+            $siteinfo['resources'] = $site->resources;
+            $siteinfo['questions'] = $site->questions;
+            $siteinfo['modulenumberaverage'] = $site->modulenumberaverage;
+            $siteinfo['posts'] = $site->posts;
+            $siteinfo['participantnumberaverage'] = $site->participantnumberaverage;
+            $siteinfo['deleted'] = $site->deleted;
+            $siteinfo['publicationmax'] = $site->publicationmax;
+            $result[] = $siteinfo;
+        }
+
+        return $result;
+    }
+
+    /**
+     * TODO: not in use yet, will be prompt to change
+     * Returns description of method result value
+     * @return boolean
+     */
+    public static function get_sitesregister_returns() {
+        return new external_multiple_structure(
+                new external_single_structure(
+                        array(
+                            'hubid' => new external_value(PARAM_INTEGER, 'id'),
+                            'sitename' => new external_value(PARAM_TEXT, 'name'),
+                            'url' => new external_value(PARAM_URL, 'url'),
+                            'description' => new external_value(PARAM_TEXT, 'description'),
+                            'secret' => new external_value(PARAM_TEXT, 'secret'),
+                            'trusted' => new external_value(PARAM_INT, 'trust flag'),
+                            'lang' => new external_value(PARAM_TEXT, 'language'),
+                            'timecreated' => new external_value(PARAM_INT, 'time registeration occured'),
+                            'timeupdated' => new external_value(PARAM_INT, 'time modificatin occured'),
+                            'adminname' => new external_value(PARAM_TEXT, 'contactname for the site'),
+                            'adminemail' => new external_value(PARAM_TEXT, 'contactemail for the site'),
+                            'adminphone' => new external_value(PARAM_TEXT, 'contactphone for the site'),
+                            'imageurl' => new external_value(PARAM_TEXT, 'imageurl'),
+                            'prioritise' => new external_value(PARAM_INT, 'prioritise field'),
+                            'country' => new external_value(PARAM_TEXT, 'country field'),
+                            'regioncode' => new external_value(PARAM_TEXT, 'regioncode'),
+                            'street' => new external_value(PARAM_TEXT, 'street field'),
+                            'geolocation' => new external_value(PARAM_TEXT, 'geolocation field'),
+                            'moodlerelease' => new external_value(PARAM_TEXT, 'moodlerelease field'),
+                            'moodleversion' => new external_value(PARAM_TEXT, 'moodleversion field'),
+                            'ipaddress' => new external_value(PARAM_TEXT, 'ip field'),
+                            'courses' => new external_value(PARAM_INT, 'num courses'),
+                            'users' => new external_value(PARAM_INT, 'num users'),
+                            'enrolments' => new external_value(PARAM_INT, 'num enrolments'),
+                            'resources' => new external_value(PARAM_INT, 'num resources'),
+                            'questions' => new external_value(PARAM_INT, 'num questions'),
+                            'modulenumberaverage' => new external_value(PARAM_INT, 'num modules avg'),
+                            'posts' => new external_value(PARAM_INT, 'num posts'),
+                            'participantnumberaverage' => new external_value(PARAM_INT, 'num participants avg'),
+                            'deleted' => new external_value(PARAM_INT, 'deleted field'),
+                            'publicationmax' => new external_value(PARAM_INT, 'publicationmax field'),
+                        ), 'site register info')
+        );
+    }
 }

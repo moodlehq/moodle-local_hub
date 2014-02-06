@@ -73,9 +73,9 @@ $functions = array(
                 'type'        => 'read',
         ),
 
-        'hub_get_sites' => array(
+        'hub_get_sitesregister' => array(
                 'classname'   => 'local_hub_external',
-                'methodname'  => 'get_sites',
+                'methodname'  => 'get_sitesregister',
                 'classpath'   => 'local/hub/externallib.php',
                 'description' => 'Get multiple sites',
                 'type'        => 'read',
@@ -101,7 +101,7 @@ $services = array(
         ),
 
         'Moodle.org statistics' => array(
-                'functions' => array ('hub_get_sites'),
+                'functions' => array ('hub_get_sitesregister'),
                 'enabled'=>1,
         ),
 );
