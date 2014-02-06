@@ -793,6 +793,7 @@ class local_hub_external extends external_api {
         return new external_function_parameters(
                 array(
                     'fromid' => new external_value(PARAM_INT, 'data greater than this id.'),
+                    'numrecs' => new external_value(PARAM_INT, 'number of records to fetch.'),
                 )
         );
     }
@@ -801,7 +802,7 @@ class local_hub_external extends external_api {
      * Get sites data for moodle.org
      * @return array sites
      */
-    public static function get_sitesregister($fromid) {
+    public static function get_sitesregister($fromid, $numrecs=50) {
         global $DB;
 
         // Ensure the current user is allowed to run this function
@@ -809,9 +810,9 @@ class local_hub_external extends external_api {
         self::validate_context($context);
         require_capability('local/hub:viewinfo', $context);
         $params = self::validate_parameters(self::get_sitesregister_parameters(),
-                        array('fromid' => $fromid));
+                        array('fromid' => $fromid, 'numrecs' => $numrecs));
         $hub = new local_hub();
-        $sites = $hub->get_sitesregister($params['fromid']);
+        $sites = $hub->get_sitesregister($params['fromid'], $numrecs);
 
         // query to export data into moodle.org for modelling data exported here.
         //        SELECT `id` AS hubid, `name` AS sitename, `url` , `description` , `secret`, `trusted`, `language` as lang,

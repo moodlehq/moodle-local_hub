@@ -722,9 +722,9 @@ class local_hub {
      * Return number of visible registered sites
      * @return integer
      */
-    public function get_sitesregister($fromid=0) {
+    public function get_sitesregister($fromid=0, $numrecs=50) {
         global $DB;
-        return $DB->get_records_select('hub_site_directory', 'id > :id', array('id' => $fromid));
+        return $DB->get_records_select('hub_site_directory', 'id > :id', array('id' => $fromid), '', '*', 0, $numrecs);
     }
 
     /**
