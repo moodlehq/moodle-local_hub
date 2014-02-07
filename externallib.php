@@ -814,15 +814,6 @@ class local_hub_external extends external_api {
         $hub = new local_hub();
         $sites = $hub->get_sitesregister($params['fromid'], $params['numrecs']);
 
-        // query to export data into moodle.org for modelling data exported here.
-        //        SELECT `id` AS hubid, `name` AS sitename, `url` , `description` , `secret`, `trusted`, `language` as lang,
-        //        `timeregistered` as timecreated, `timemodified` as timeupdated, `contactname` as adminname,
-        //        `contactemail` as adminemail, `contactphone` as adminphone, `imageurl`, `prioritise`, `countrycode` as country, `regioncode`,
-        //        `street`, `geolocation`, `moodlerelease`, `moodleversion`, `ip` as ipaddress, `courses`, `users`, `enrolments`,
-        //        `resources`, `questions`, `modulenumberaverage`, `posts`, `participantnumberaverage`, `deleted`, `publicationmax`
-        //        FROM `mdl_hub_site_directory`
-        //        WHERE id >31126
-
         //create result. moodle.org (transformed for it.)
         $result = array();
         foreach ($sites as $site) {
@@ -858,6 +849,26 @@ class local_hub_external extends external_api {
             $siteinfo['participantnumberaverage'] = $site->participantnumberaverage;
             $siteinfo['deleted'] = $site->deleted;
             $siteinfo['publicationmax'] = $site->publicationmax;
+            $siteinfo['badges'] = $site->badges;
+            $siteinfo['issuedbadges'] = $site->issuedbadges;
+
+            // other mappings that seem to apply
+            // so going by what http://wiki.moodle.com/display/sysadmin/moodle.net+moodle.org+statistics+table+mapping+txt has lets try
+            switch ($site->privacy) {
+                case 'notdisplayed':
+                    $siteinfo['public'] = 0;
+                    break;
+                case 'linked':
+                    $siteinfo['public'] = 1;
+                    break;
+                case 'named':
+                    $siteinfo['public'] = 2;
+                    break;
+                default:
+                    $siteinfo['public'] = 0;
+                    break;
+            }
+
             $result[] = $siteinfo;
         }
 
@@ -874,36 +885,39 @@ class local_hub_external extends external_api {
                 new external_single_structure(
                         array(
                             'hubid' => new external_value(PARAM_INTEGER, 'id'),
-                            'sitename' => new external_value(PARAM_TEXT, 'name'),
-                            'url' => new external_value(PARAM_URL, 'url'),
-                            'description' => new external_value(PARAM_TEXT, 'description'),
+                            'sitename' => new external_value(PARAM_TEXT, 'site name'),
+                            'url' => new external_value(PARAM_URL, 'site url'),
+                            'description' => new external_value(PARAM_TEXT, 'site description'), //allows for multilang in newer data.
                             'secret' => new external_value(PARAM_TEXT, 'secret'),
                             'trusted' => new external_value(PARAM_INT, 'trust flag'),
-                            'lang' => new external_value(PARAM_TEXT, 'language'),
+                            'lang' => new external_value(PARAM_ALPHANUMEXT, 'site main language'),
                             'timecreated' => new external_value(PARAM_INT, 'time registeration occured'),
                             'timeupdated' => new external_value(PARAM_INT, 'time modificatin occured'),
-                            'adminname' => new external_value(PARAM_TEXT, 'contactname for the site'),
-                            'adminemail' => new external_value(PARAM_TEXT, 'contactemail for the site'),
-                            'adminphone' => new external_value(PARAM_TEXT, 'contactphone for the site'),
-                            'imageurl' => new external_value(PARAM_TEXT, 'imageurl'),
+                            'adminname' => new external_value(PARAM_TEXT, 'site server administrator name'),
+                            'adminemail' => new external_value(PARAM_EMAIL, 'site server administrator email'),
+                            'adminphone' => new external_value(PARAM_TEXT, 'site server administrator phone'),
+                            'imageurl' => new external_value(PARAM_URL, 'site logo url'),
                             'prioritise' => new external_value(PARAM_INT, 'prioritise field'),
-                            'country' => new external_value(PARAM_TEXT, 'country field'),
-                            'regioncode' => new external_value(PARAM_TEXT, 'regioncode'),
-                            'street' => new external_value(PARAM_TEXT, 'street field'),
-                            'geolocation' => new external_value(PARAM_TEXT, 'geolocation field'),
-                            'moodlerelease' => new external_value(PARAM_TEXT, 'moodlerelease field'),
-                            'moodleversion' => new external_value(PARAM_TEXT, 'moodleversion field'),
+                            'country' => new external_value(PARAM_ALPHANUMEXT, 'ISO 3166 country code'),
+                            'regioncode' => new external_value(PARAM_ALPHANUMEXT, 'ISO 3166-2 region code'),
+                            'street' => new external_value(PARAM_TEXT, 'physical address'),
+                            'geolocation' => new external_value(PARAM_RAW, 'geolocation'),
+                            'moodlerelease' => new external_value(PARAM_TEXT, 'moodle release'),
+                            'moodleversion' => new external_value(PARAM_FLOAT, 'moodle version'),
                             'ipaddress' => new external_value(PARAM_TEXT, 'ip field'),
-                            'courses' => new external_value(PARAM_INT, 'num courses'),
-                            'users' => new external_value(PARAM_INT, 'num users'),
-                            'enrolments' => new external_value(PARAM_INT, 'num enrolments'),
-                            'resources' => new external_value(PARAM_INT, 'num resources'),
-                            'questions' => new external_value(PARAM_INT, 'num questions'),
-                            'modulenumberaverage' => new external_value(PARAM_INT, 'num modules avg'),
-                            'posts' => new external_value(PARAM_INT, 'num posts'),
-                            'participantnumberaverage' => new external_value(PARAM_INT, 'num participants avg'),
+                            'courses' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of courses'),
+                            'users' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of users'),
+                            'enrolments' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of enrolments'),
+                            'resources' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of resources'),
+                            'questions' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of questions'),
+                            'modulenumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise verage number of course modules'),
+                            'posts' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of posts'),
+                            'participantnumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise average number of participants'),
                             'deleted' => new external_value(PARAM_INT, 'deleted field'),
                             'publicationmax' => new external_value(PARAM_INT, 'publicationmax field'),
+                            'public' => new external_value(PARAM_INT, 'site privacy'),
+                            'badges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of badges.', VALUE_OPTIONAL),
+                            'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL)
                         ), 'site register info')
         );
     }
