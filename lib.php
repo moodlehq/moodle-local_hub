@@ -1,7 +1,7 @@
 <?php
 
 function local_moodleorg_cron() {
-    global $DB;
+    global $CFG, $DB;
     require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 
     //update registry table from moodle.net
