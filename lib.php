@@ -16,7 +16,6 @@ function local_moodleorg_cron() {
         if (isset($site->hubid)) {
             $DB->insert_record('registry', $site, false, true);
         } else {
-            var_dump($site);
             error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats()');
         }
     }
