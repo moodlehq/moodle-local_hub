@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_moodleorg';
-$plugin->version = 2014020600;
+$plugin->version = 2014020601;
 $plugin->requires = 2011070100;
 $plugin->maturity = MATURITY_STABLE;
+$plugin->cron = 60*60*24;

@@ -2,7 +2,7 @@
 
 function local_moodleorg_cron() {
     global $DB;
-    include ('locallib.php');
+    require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 
     //update registry table from moodle.net
     $token = '4fde6b68a062e616d39a6ba4b97bd5b8';
