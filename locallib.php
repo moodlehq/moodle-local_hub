@@ -954,3 +954,24 @@ function local_moodleorg_get_phms(array $options = array()) {
 
     return $phms;
 }
+
+/**
+ * Gets statistics from moodle.net via webservice and inserts into registry table.
+ * @return $sites data for insertion into registry table.
+ */
+function local_moodleorg_get_moodlenet_stats($token, $moodleneturl, $fromid=0, $numrecs=50) {
+    global $CFG;
+
+    $functionname = 'hub_get_sitesregister';
+    $restformat = 'json';
+    $params = array ('fromid' => $fromid, 'numrecs' => $numrecs);
+
+    /// REST CALL
+    $serverurl = $moodleneturl . '/webservice/rest/server.php'. '?wstoken=' . $token . '&wsfunction='.$functionname;
+    $curl = new curl;
+    //if rest format == 'xml', then we do not add the param for backward compatibility with Moodle < 2.2
+    $restformat = ($restformat == 'json')?'&moodlewsrestformat=' . $restformat:'';
+    $resp = $curl->post($serverurl . $restformat, $params);
+    $sites = json_decode($resp);
+    return $sites;
+}
