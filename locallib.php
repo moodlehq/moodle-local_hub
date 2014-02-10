@@ -940,11 +940,12 @@ function local_moodleorg_get_phms(array $options = array()) {
 
         $phms[$record->userid] = array(
             'userid' => $record->userid,
-            'firstname' => $record->firstname,
             'lastname' => $record->lastname,
-            'totalratings' => $record->ratingscount,
-            'postcount' => $totalpostcount,
-            'raters' => $raterscount,
+            'firstname' => $record->firstname,
+            'totalpostcount' => $totalpostcount,
+            'recentpostcount' => $recentpostcount,
+            'ratingscount' => $record->ratingscount,
+            'raterscount' => $raterscount,
             'ratio' => $ratio,
         );
 
@@ -953,6 +954,95 @@ function local_moodleorg_get_phms(array $options = array()) {
     $rs->close();
 
     return $phms;
+}
+
+/**
+ * Send e-mail notification about the PHM cohort update
+ *
+ * At the moment, this sends the e-mail to a list of hard-coded people only.
+ * In the future, this may be improved so that we take recipients from our own
+ * mapping table and e-mail them info about the PHMs who are also enrolled in
+ * some of their course.
+ *
+ * @param array $phms as returned by {@link local_moodleorg_get_phms()}
+ * @param array $newmembers indexed by userid
+ * @param array $removedmembers indexed by userid
+ */
+function local_moodleorg_notify_phm_cohort_status(array $phms, array $newmembers, array $removedmembers) {
+    global $CFG, $DB;
+
+    if (empty($phms)) {
+        // This is weird and should not happen. Consider raising an alarm here.
+        return;
+    }
+
+    if (empty($newmembers) and empty($removedmembers)) {
+        // Nothing has changed in the cohort, no need to report anything.
+        return;
+    }
+
+    $message = "The PHM cohort at moodle.org has been updated:\n";
+    $message .= sprintf(" %d members added\n", count($newmembers));
+    $message .= sprintf(" %d members removed\n\n", count($removedmembers));
+
+    if (!empty($newmembers)) {
+        $message .= "Newly added PHM cohort members:\n";
+        foreach ($newmembers as $newmemberid => $unused) {
+            $message .= sprintf("* %s %s (https://moodle.org/user/profile.php?id=%d)\n",
+                $phms[$newmemberid]['firstname'],
+                $phms[$newmemberid]['lastname'],
+                $phms[$newmemberid]['userid']);
+        }
+    }
+
+    if (!empty($removedmembers)) {
+        list($subsql, $params) = $DB->get_in_or_equal(array_keys($removedmembers));
+        $sql = "SELECT id,firstname,lastname
+                  FROM {user}
+                 WHERE id $subsql";
+        $names = $DB->get_records_sql($sql, $params);
+        $message .= " Removed cohort members:\n";
+        foreach ($removedmembers as $removedmemberid => $unused) {
+            $message .= sprintf("* %s %s (https://moodle.org/user/profile.php?id=%d)\n",
+                $names[$removedmemberid]->firstname,
+                $names[$removedmemberid]->lastname,
+                $names[$removedmemberid]->id);
+        }
+    }
+
+    echo "\nSee the attached file for more details.\n";
+    $vars = array_keys(reset($phms));
+
+    // $report will hold CSV formatted per RFC 4180
+    $report = implode(';', $vars);
+    $report .= ";status\r\n";
+
+    foreach ($phms as $phm) {
+        $line = array();
+        foreach ($vars as $var) {
+            $line[] = '"'.$phm[$var].'"';
+        }
+        if (isset($newmembers[$phm['userid']])) {
+            $line[] = '"NEW"';
+        } else {
+            $line[] = '""';
+        }
+        $line = implode(';', $line);
+        $report .= $line."\r\n";
+    }
+
+    $attachment = tempnam($CFG->dataroot, 'tmp_phm_report_');
+    file_put_contents($attachment, $report);
+
+    $subject = '[moodle.org] Particularly helpful Moodlers';
+
+    $helen = $DB->get_record('user', array('id' => 24152), '*', MUST_EXIST);
+    email_to_user($helen, 'moodle.org', $subject, $message, '', basename($attachment), 'phm_report.csv', false);
+
+    $david = $DB->get_record('user', array('id' => 1601), '*', MUST_EXIST);
+    email_to_user($david, 'moodle.org', $subject, $message, '', basename($attachment), 'phm_report.csv', false);
+
+    unlink($attachment);
 }
 
 /**
