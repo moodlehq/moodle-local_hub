@@ -34,7 +34,7 @@ require(dirname(dirname(dirname(dirname(__FILE__)))).'/config.php');
 require_once($CFG->dirroot.'/local/moodleorg/locallib.php');
 require_once($CFG->libdir.'/clilib.php');
 
-list($options, $unrecognized) = cli_get_params(array('help' => null, 'verbose' => null), array('h' => 'help', 'v' => 'verbose'));
+list($options, $unrecognized) = cli_get_params(array('help' => null, 'verbose' => null, 'no-emails' => false), array('h' => 'help', 'v' => 'verbose'));
 
 if ($options['help']) {
     mtrace("
@@ -42,7 +42,11 @@ This script is looking for new particularly helpful moodlers among the authors
 of posts in forums. The forum must use one of mapped scales for rating in order
 to be searched.
 
-Execute with --verbose to get detailed output for debugging
+Options:
+--help, -h          produce this usage information
+--verbose, -v       produce detailed output for debugging
+--no-emails         do not send notification e-mails to facilitators
+
 ");
     exit(1);
 }
@@ -73,3 +77,7 @@ mtrace(sprintf("Removing %d old members %s", count($oldmembers), implode(',', ar
 mtrace(sprintf("Adding %d new members %s", count($newmembers), implode(',', array_keys($newmembers))));
 
 $cohortmanager->remove_old_users();
+
+if (empty($options['no-emails'])) {
+    local_moodleorg_notify_phm_cohort_status($phms, $newmembers, $oldmembers);
+}
