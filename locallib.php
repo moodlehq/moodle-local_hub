@@ -982,11 +982,11 @@ function local_moodleorg_notify_phm_cohort_status(array $phms, array $newmembers
     }
 
     $message = "The PHM cohort at moodle.org has been updated:\n";
-    $message .= sprintf(" %d members added\n", count($newmembers));
-    $message .= sprintf(" %d members removed\n\n", count($removedmembers));
+    $message .= sprintf(" %d member(s) added\n", count($newmembers));
+    $message .= sprintf(" %d member(s) removed\n", count($removedmembers));
 
     if (!empty($newmembers)) {
-        $message .= "Newly added PHM cohort members:\n";
+        $message .= "\nNewly added PHM cohort members:\n";
         foreach ($newmembers as $newmemberid => $unused) {
             $message .= sprintf("* %s %s (https://moodle.org/user/profile.php?id=%d)\n",
                 $phms[$newmemberid]['firstname'],
@@ -1001,7 +1001,7 @@ function local_moodleorg_notify_phm_cohort_status(array $phms, array $newmembers
                   FROM {user}
                  WHERE id $subsql";
         $names = $DB->get_records_sql($sql, $params);
-        $message .= " Removed cohort members:\n";
+        $message .= "\nRemoved cohort members:\n";
         foreach ($removedmembers as $removedmemberid => $unused) {
             $message .= sprintf("* %s %s (https://moodle.org/user/profile.php?id=%d)\n",
                 $names[$removedmemberid]->firstname,
@@ -1010,7 +1010,7 @@ function local_moodleorg_notify_phm_cohort_status(array $phms, array $newmembers
         }
     }
 
-    echo "\nSee the attached file for more details.\n";
+    $message .= "\nSee the attached file for more details.\n";
     $vars = array_keys(reset($phms));
 
     // $report will hold CSV formatted per RFC 4180
