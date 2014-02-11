@@ -1,3 +1,4 @@
 *.swp
 /top/stats/xml/*.xml
 .DS_Store
+/phpunit.xml
