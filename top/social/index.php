@@ -19,7 +19,7 @@ echo html_writer::tag('p', get_string('socialinfo', 'local_moodleorg'));
 
 echo html_writer::start_tag('dl', array('class' => 'dl-horizontal', 'id' => 'social-media-list'));
 echo local_moodleorg_top_social_media('googleplus', 'moodle');
-echo local_moodleorg_top_social_media('googleplus', 'community');
+echo local_moodleorg_top_social_media('googleplus', 'community', 'https://plus.google.com/u/0/communities/106727905874888429913');
 echo local_moodleorg_top_social_media('twitter', 'moodle');
 echo local_moodleorg_top_social_media('twitter', 'moodledev');
 echo local_moodleorg_top_social_media('twitter', 'moodlesecurity');
