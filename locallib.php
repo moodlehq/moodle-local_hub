@@ -42,6 +42,9 @@ function local_moodleorg_get_mapping($forcelang = false, $forcepop = null) {
     } else {
         // Get the users current lang.
         $userlang = isset($SESSION->lang) ? $SESSION->lang : 'en';
+        if ($userlang === 'es_mx') { //hardcode mapping lookups for es_mx to es.
+            $userlang = 'es';
+        }
     }
 
     // We will default to English, unless a mapping is found.
