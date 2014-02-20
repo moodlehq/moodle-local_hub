@@ -794,6 +794,7 @@ class local_hub_external extends external_api {
                 array(
                     'fromid' => new external_value(PARAM_INT, 'data greater than this id.'),
                     'numrecs' => new external_value(PARAM_INT, 'number of records to fetch.'),
+                    'modifiedafter' => new external_value(PARAM_INT, 'fetch records after this time.'),
                 )
         );
     }
@@ -802,7 +803,7 @@ class local_hub_external extends external_api {
      * Get sites data for moodle.org
      * @return array sites
      */
-    public static function get_sitesregister($fromid, $numrecs=50) {
+    public static function get_sitesregister($fromid, $numrecs=50, $modifiedafter=0) {
         global $DB;
 
         // Ensure the current user is allowed to run this function
@@ -810,9 +811,9 @@ class local_hub_external extends external_api {
         self::validate_context($context);
         require_capability('local/hub:viewinfo', $context);
         $params = self::validate_parameters(self::get_sitesregister_parameters(),
-                        array('fromid' => $fromid, 'numrecs' => $numrecs));
+                        array('fromid' => $fromid, 'numrecs' => $numrecs, 'modifiedafter' => $modifiedafter));
         $hub = new local_hub();
-        $sites = $hub->get_sitesregister($params['fromid'], $params['numrecs']);
+        $sites = $hub->get_sitesregister($params['fromid'], $params['numrecs'], $params['modifiedafter']);
 
         //create result. moodle.org (transformed for it.)
         $result = array();
