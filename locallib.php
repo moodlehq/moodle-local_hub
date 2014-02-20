@@ -121,6 +121,7 @@ abstract class frontpage_column {
 
         // If we have a valid cache, use it.
         if (empty($skipcache) and ($content = $cache->get($key))) {
+            $content->source = 'cache/'.$key;
             return $content;
         }
 
@@ -128,6 +129,7 @@ abstract class frontpage_column {
         $content = $this->generate();
         $cache->set($key, $content);
 
+        $content->source = 'fresh/'.$key;
         return $content;
     }
 
