@@ -34,7 +34,7 @@ function local_moodleorg_cron() {
     $token = '4fde6b68a062e616d39a6ba4b97bd5b8';
     $moodleneturl = 'http://moodle.net';
     $fromid = (int)$DB->get_field_sql('SELECT MAX(hubid) from {registry}');
-    $newsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, 100); //small for testing.
+    $newsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, 1000);
 
     // attempt to insert fetched data into registry now.
     foreach ($newsites as $site) {
