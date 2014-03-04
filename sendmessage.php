@@ -29,7 +29,9 @@ require_once($CFG->dirroot . '/local/hub/lib.php');
 require_once($CFG->dirroot . "/local/hub/forms.php");
 
 require_login();
-
+if (isguestuser()) { //guest can't send messages
+    redirect(get_login_url());
+}
 $id = optional_param('id', 0, PARAM_INT);
 $admin = optional_param('admin', 0, PARAM_INT); //access from admin page
 
