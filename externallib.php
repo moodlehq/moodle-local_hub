@@ -794,7 +794,7 @@ class local_hub_external extends external_api {
                 array(
                     'fromid' => new external_value(PARAM_INT, 'data greater than this id.'),
                     'numrecs' => new external_value(PARAM_INT, 'number of records to fetch.'),
-                    'modifiedafter' => new external_value(PARAM_INT, 'fetch records after this time.'),
+                    'modifiedafter' => new external_value(PARAM_INT, 'fetch records after this time.', VALUE_OPTIONAL),
                 )
         );
     }
