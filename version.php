@@ -28,4 +28,4 @@ $plugin->component = 'local_moodleorg';
 $plugin->version = 2014030500;
 $plugin->requires = 2011070100;
 $plugin->maturity = MATURITY_STABLE;
-//$plugin->cron = 60*60*24;
+$plugin->cron = 60*60*24;
