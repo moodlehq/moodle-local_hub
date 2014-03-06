@@ -33,8 +33,29 @@ function local_moodleorg_cron() {
     //update registry table from moodle.net
     $token = '4fde6b68a062e616d39a6ba4b97bd5b8';
     $moodleneturl = 'http://moodle.net';
+
+    //update old data then later get new data.
+    $fromtime = (int)$DB->get_field_sql('SELECT MAX(timeupdated) from {registry}');
+    $updatedsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, $fromtime, 10000);
+    mtrace('Processing updates for '. count($updatedsites). ' sites from '. $moodleneturl);
+    // attempt to insert fetched data into registry now.
+    foreach ($updatedsites as $site) {
+        mtrace('Processing obtained hubid info:'. $site->hubid);
+        $dbsite = $DB->get_record('registry', array('hubid' => $site->hubid) );
+        //mtrace('Processing local hubid info:'. $site->hubid);
+        if (isset($dbsite->hubid)) {
+            foreach (get_object_vars($site) as $field=>$val) {
+                $dbsite->$field = $site->$field;
+            }
+            $DB->update_record('registry', $dbsite, true);
+        } else {
+            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (updating site) This is weird, theres no hubid with a site called: '. $site->name);
+        }
+    }
+
     $fromid = (int)$DB->get_field_sql('SELECT MAX(hubid) from {registry}');
-    $newsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, 1000);
+    $newsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, 0, 1000);
+    mtrace('Processing new registrations for '. count($newsites). ' sites from '. $moodleneturl);
 
     // attempt to insert fetched data into registry now.
     foreach ($newsites as $site) {
@@ -42,7 +63,7 @@ function local_moodleorg_cron() {
         if (isset($site->hubid)) {
             $DB->insert_record('registry', $site, false, true);
         } else {
-            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats()');
+            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (new site) This is weird, theres no hubid with a site called: '. $site->name);
         }
     }
 }

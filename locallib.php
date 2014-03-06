@@ -1054,12 +1054,12 @@ function local_moodleorg_notify_phm_cohort_status(array $phms, array $newmembers
  * Gets statistics from moodle.net via webservice and inserts into registry table.
  * @return $sites data for insertion into registry table.
  */
-function local_moodleorg_get_moodlenet_stats($token, $moodleneturl, $fromid=0, $numrecs=50) {
+function local_moodleorg_get_moodlenet_stats($token, $moodleneturl, $fromid=0, $modifiedafter=0, $numrecs=50) {
     global $CFG;
 
     $functionname = 'hub_get_sitesregister';
     $restformat = 'json';
-    $params = array ('fromid' => $fromid, 'numrecs' => $numrecs);
+    $params = array ('fromid' => $fromid, 'numrecs' => $numrecs, 'modifiedafter' => $modifiedafter);
 
     /// REST CALL
     $serverurl = $moodleneturl . '/webservice/rest/server.php'. '?wstoken=' . $token . '&wsfunction='.$functionname;
