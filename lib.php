@@ -40,9 +40,7 @@ function local_moodleorg_cron() {
     mtrace('Processing updates for '. count($updatedsites). ' sites from '. $moodleneturl);
     // attempt to insert fetched data into registry now.
     foreach ($updatedsites as $site) {
-        mtrace('Processing obtained hubid info:'. $site->hubid);
         $dbsite = $DB->get_record('registry', array('hubid' => $site->hubid) );
-        //mtrace('Processing local hubid info:'. $site->hubid);
         if (isset($dbsite->hubid)) {
             foreach (get_object_vars($site) as $field=>$val) {
                 $dbsite->$field = $site->$field;
