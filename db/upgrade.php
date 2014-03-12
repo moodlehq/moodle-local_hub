@@ -455,5 +455,71 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2013050614, 'local', 'hub');
     }
 
+    if ($oldversion < 2014031200) {
+        // Here we're adding link checker fields. These were originally in the registry table on moodle.org and also a copy elsewheres. Now this data is just on 2 server.
+        // (1) the hub here (2) synced to moodle.org for display/stats/etc
+
+        // Define field unreachable to be added to hub_site_directory.
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('unreachable', XMLDB_TYPE_INTEGER, '11', null, XMLDB_NOTNULL, null, '0', 'issuedbadges');
+
+        // Conditionally launch add field unreachable.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('timeunreachable', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'unreachable');
+
+        // Conditionally launch add field timeunreachable.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('score', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'timeunreachable');
+
+        // Conditionally launch add field score.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('errormsg', XMLDB_TYPE_CHAR, '255', null, XMLDB_NOTNULL, null, '0', 'score');
+
+        // Conditionally launch add field errormsg.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('timelinkchecked', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'errormsg');
+
+        // Conditionally launch add field timelinkchecked.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('serverstring', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'timelinkchecked');
+
+        // Conditionally launch add field serverstring.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('override', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'serverstring');
+
+        // Conditionally launch add field override.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('fingerprint', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'override');
+
+        // Conditionally launch add field fingerprint.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2014031200, 'local', 'hub');
+    }
+
     return $result;
 }
