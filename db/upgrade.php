@@ -455,7 +455,7 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2013050614, 'local', 'hub');
     }
 
-    if ($oldversion < 2014031200) {
+    if ($oldversion < 2014031201) {
         // Here we're adding link checker fields. These were originally in the registry table on moodle.org and also a copy elsewheres. Now this data is just on 2 server.
         // (1) the hub here (2) synced to moodle.org for display/stats/etc
 
@@ -518,7 +518,20 @@ function xmldb_local_hub_upgrade($oldversion) {
         }
 
         // Hub savepoint reached.
-        upgrade_plugin_savepoint(true, 2014031200, 'local', 'hub');
+        upgrade_plugin_savepoint(true, 2014031201, 'local', 'hub');
+    }
+
+    if ($oldversion < 2014031202) {
+
+        // Changing type of field serverstring on table hub_site_directory to text. (some server strings are really long -> avoids failed DB sql)
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('serverstring', XMLDB_TYPE_TEXT, null, null, null, null, null, 'timelinkchecked');
+
+        // Launch change of type for field serverstring.
+        $dbman->change_field_type($table, $field);
+
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2014031202, 'local', 'hub');
     }
 
     return $result;
