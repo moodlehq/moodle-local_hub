@@ -852,6 +852,14 @@ class local_hub_external extends external_api {
             $siteinfo['publicationmax'] = $site->publicationmax;
             $siteinfo['badges'] = $site->badges;
             $siteinfo['issuedbadges'] = $site->issuedbadges;
+            $siteinfo['unreachable'] = $site->unreachable;
+            $siteinfo['timeunreachable'] = $site->timeunreachable;
+            $siteinfo['score'] = $site->score;
+            $siteinfo['errormsg'] = $site->errormsg;
+            $siteinfo['timelinkchecked'] = $site->timelinkchecked;
+            $siteinfo['serverstring'] = $site->serverstring;
+            $siteinfo['override'] = $site->override;
+//            $siteinfo['fingerprint'] = $site->fingerprint; // no need to send this out (also doesn't exist on moodle.org at all)
 
             // other mappings that seem to apply
             // so going by what http://wiki.moodle.com/display/sysadmin/moodle.net+moodle.org+statistics+table+mapping+txt has lets try
@@ -888,7 +896,7 @@ class local_hub_external extends external_api {
                             'hubid' => new external_value(PARAM_INTEGER, 'id'),
                             'sitename' => new external_value(PARAM_TEXT, 'site name'),
                             'url' => new external_value(PARAM_URL, 'site url'),
-                            'description' => new external_value(PARAM_TEXT, 'site description'), //allows for multilang in newer data.
+                            'description' => new external_value(PARAM_RAW, 'site description'), //allows for multilang in newer data.
                             'secret' => new external_value(PARAM_TEXT, 'secret'),
                             'trusted' => new external_value(PARAM_INT, 'trust flag'),
                             'lang' => new external_value(PARAM_ALPHANUMEXT, 'site main language'),
@@ -918,7 +926,14 @@ class local_hub_external extends external_api {
                             'publicationmax' => new external_value(PARAM_INT, 'publicationmax field'),
                             'public' => new external_value(PARAM_INT, 'site privacy'),
                             'badges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of badges.', VALUE_OPTIONAL),
-                            'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL)
+                            'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL),
+                            'unreachable' => new external_value(PARAM_INT, 'times not reached'),
+                            'timeunreachable' => new external_value(PARAM_INT, 'time checked'),
+                            'score' => new external_value(PARAM_INT, 'scraper linkchecking score'),
+                            'errormsg' => new external_value(PARAM_TEXT, 'linkchecking errors'),
+                            'timelinkchecked' => new external_value(PARAM_INT, 'time link was checked'),
+                            'serverstring' => new external_value(PARAM_TEXT, 'a http header'),
+                            'override' => new external_value(PARAM_INT, 'force avoids linkchecking'),
                         ), 'site register info')
         );
     }
