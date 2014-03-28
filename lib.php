@@ -34,9 +34,18 @@ function local_moodleorg_cron() {
     $token = '4fde6b68a062e616d39a6ba4b97bd5b8';
     $moodleneturl = 'http://moodle.net';
 
+    // allow override from $CFG for token and moodleneturl (for testing: next.* sites)
+    // note : avoided a whole settings page etc - this is just here, for one next.* so its ok special knowledge of the devs!
+    if (isset($CFG->moodleneturl)) { //if in config.php
+        $moodleneturl = $CFG->moodleneturl;
+    }
+    if (isset($CFG->moodlenettoken)) { //if in config.php
+        $token = $CFG->moodlenettoken;
+    }
+
     //update old data then later get new data.
     $fromtime = (int)$DB->get_field_sql('SELECT MAX(timeupdated) from {registry}');
-    $updatedsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, $fromtime, 10000);
+    $updatedsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, 0, $fromtime, 10000);
     mtrace('Processing updates for '. count($updatedsites). ' sites from '. $moodleneturl);
     // attempt to insert fetched data into registry now.
     foreach ($updatedsites as $site) {
@@ -47,7 +56,7 @@ function local_moodleorg_cron() {
             }
             $DB->update_record('registry', $dbsite, true);
         } else {
-            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (updating site) This is weird, theres no hubid with a site called: '. $site->name);
+            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (updating site) This is weird, theres no hubid with a site called: '. $site->sitename);
         }
     }
 
@@ -61,7 +70,7 @@ function local_moodleorg_cron() {
         if (isset($site->hubid)) {
             $DB->insert_record('registry', $site, false, true);
         } else {
-            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (new site) This is weird, theres no hubid with a site called: '. $site->name);
+            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (new site) This is weird, theres no hubid with a site called: '. $site->sitename);
         }
     }
 }
