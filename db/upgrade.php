@@ -534,5 +534,18 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014031202, 'local', 'hub');
     }
 
+    if ($oldversion < 2014041000) {
+
+        // Changing precision of field ip on table hub_site_directory to (45).
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('ip', XMLDB_TYPE_CHAR, '45', null, null, null, null, 'moodlerelease');
+
+        // Launch change of precision for field ip.
+        $dbman->change_field_precision($table, $field);
+
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2014041000, 'local', 'hub');
+    }
+
     return $result;
 }
