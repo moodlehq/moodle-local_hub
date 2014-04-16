@@ -94,7 +94,7 @@ if (!empty($fromform) and confirm_sesskey()) {
     if (!empty($fromform->addscreenshots)) {
         $screenshots = $fromform->addscreenshots;
         $fs = get_file_storage();
-        $ctx = context_system::instance_by_id($USER->id);
+        $ctx = context_user::instance($USER->id);
         $files = $fs->get_area_files( $ctx->id, 'user', 'draft', $screenshots);
         if (!empty($files)) {
             $level1 = floor($course->id / 1000) * 1000;
