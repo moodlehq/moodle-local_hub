@@ -1860,6 +1860,7 @@ class local_hub {
 
             require_once($CFG->dirroot . '/comment/lib.php');
             foreach ($courses as $course) {
+                $commentoptions = new stdClass();
                 $commentoptions->context = context_course::instance(SITEID);
                 $commentoptions->area = 'local_hub';
                 $commentoptions->itemid = $course->id;
