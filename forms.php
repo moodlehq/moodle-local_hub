@@ -309,6 +309,7 @@ class course_search_form extends moodleform {
         }
 
         $mform->addElement('text', 'search', get_string('keywords', 'local_hub'));
+        $mform->setType('search', PARAM_ALPHANUMEXT);
         $mform->addHelpButton('search', 'keywords', 'local_hub');
         $mform->setDefault('search', $search);
 
