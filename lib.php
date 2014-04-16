@@ -1399,7 +1399,7 @@ class local_hub {
         }
 
         //check and assign the role to user
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         $existingroleassign = $DB->get_records('role_assignments', array('roleid'=>$roleid,
             'contextid'=>$context->id, 'userid'=>$user->id), 'id');
         if (empty($existingroleassign)) {
@@ -1842,7 +1842,7 @@ class local_hub {
             //load ratings and comments
             require_once($CFG->dirroot . '/rating/lib.php');
             $ratingoptions = new stdclass();
-            $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+            $ratingoptions->context = context_course::instance(SITEID); //front page course
             $ratingoptions->items = $courses;
             $ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
             $ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"
@@ -1860,7 +1860,7 @@ class local_hub {
 
             require_once($CFG->dirroot . '/comment/lib.php');
             foreach ($courses as $course) {
-                $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
+                $commentoptions->context = context_course::instance(SITEID);
                 $commentoptions->area = 'local_hub';
                 $commentoptions->itemid = $course->id;
                 $commentoptions->showcount = true;
@@ -1889,15 +1889,15 @@ class local_hub {
             $search = empty($search) ? 0 : urlencode($search);
             //retrieve guest user if user not logged in
             $userid = empty($USER->id) ? $CFG->siteguest : $USER->id;
-
+            $ctx = context_course::instance(SITEID);
             //add the link tage to the header
-            $rsslink = rss_get_url(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
+            $rsslink = rss_get_url($ctx->id, $userid, 'local_hub',
                             $downloadable . '/' . $audience . '/' . $educationallevel
                             . '/' . $subject . '/' . $licence
                             . '/' . $language . '/' . $search . '/');
             $PAGE->add_alternate_version('RSS', $rsslink, 'application/rss+xml');
             //create the rss icon
-            $rssicon = rss_get_link(get_context_instance(CONTEXT_COURSE, SITEID)->id, $userid, 'local_hub',
+            $rssicon = rss_get_link($ctx->id, $userid, 'local_hub',
                             $downloadable . '/' . $audience . '/' . $educationallevel
                             . '/' . $subject . '/' . $licence
                             . '/' . $language . '/' . $search . '/' . $orderby . '/',
@@ -2048,7 +2048,7 @@ function local_hub_rating_validate($params) {
         throw new rating_exception('invalidratingitemid');
     }
     //validate context id
-    if (get_context_instance(CONTEXT_COURSE, SITEID)->id != $params['context']->id) {
+    if (context_course::instance(SITEID)->id != $params['context']->id) {
         throw new rating_exception('invalidcontext');
     }
 
@@ -2079,7 +2079,7 @@ function local_hub_comment_validate($comment_param) {
         throw new comment_exception('invalidcommentitemid');
     }
     //validate context id
-    if (get_context_instance(CONTEXT_COURSE, SITEID)->id != $comment_param->context->id) {
+    if (context_course::instance(SITEID)->id != $comment_param->context->id) {
         throw new comment_exception('invalidcontext');
     }
     return true;

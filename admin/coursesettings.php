@@ -94,7 +94,8 @@ if (!empty($fromform) and confirm_sesskey()) {
     if (!empty($fromform->addscreenshots)) {
         $screenshots = $fromform->addscreenshots;
         $fs = get_file_storage();
-        $files = $fs->get_area_files(get_context_instance(CONTEXT_USER, $USER->id)->id, 'user', 'draft', $screenshots);
+        $ctx = context_system::instance_by_id($USER->id);
+        $files = $fs->get_area_files( $ctx->id, 'user', 'draft', $screenshots);
         if (!empty($files)) {
             $level1 = floor($course->id / 1000) * 1000;
             $directory = "hub/$level1/$course->id";

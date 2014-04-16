@@ -246,7 +246,7 @@ if (!empty($courses)) {
     //add rating information to the course
     require_once($CFG->dirroot . '/rating/lib.php');
     $ratingoptions = new stdclass();
-    $ratingoptions->context = get_context_instance(CONTEXT_COURSE, SITEID); //front page course
+    $ratingoptions->context = context_course::instance(SITEID); //front page course
     $ratingoptions->items = $courses;
     $ratingoptions->aggregate = RATING_AGGREGATE_COUNT; //the aggregation method
     $ratingoptions->scaleid = 0 - get_config('local_hub', 'courseratingscaleid'); //rating API is expecting "minus scaleid"

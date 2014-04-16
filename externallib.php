@@ -43,7 +43,7 @@ class local_hub_external extends external_api {
      */
     public static function get_info() {
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
 
         //viewinfo: hub directory
@@ -150,7 +150,7 @@ class local_hub_external extends external_api {
      */
     public static function update_site_info($siteinfo) {
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:updateinfo', $context);
 
@@ -208,7 +208,7 @@ class local_hub_external extends external_api {
     public static function unregister_site() {
         global $DB, $CFG;
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:updateinfo', $context);
 
@@ -271,7 +271,7 @@ class local_hub_external extends external_api {
     public static function unregister_courses($courseids) {
         global $DB;
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:unregistercourse', $context);
 
@@ -356,7 +356,7 @@ class local_hub_external extends external_api {
     public static function register_courses($courses) {
         global $DB;
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:registercourse', $context);
 
@@ -472,7 +472,7 @@ class local_hub_external extends external_api {
         global $DB, $CFG, $USER;
 
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:view', $context);
 
@@ -620,7 +620,7 @@ class local_hub_external extends external_api {
             $courseinfo['rating']['scaleid'] = HUB_COURSE_RATING_SCALE;
 
             //get comments
-            $commentoptions->context = get_context_instance(CONTEXT_COURSE, SITEID);
+            $commentoptions->context = context_course::instance(SITEID);
             $commentoptions->area = 'local_hub';
             $commentoptions->itemid = $course->id;
             $commentoptions->showcount = true;
@@ -741,7 +741,7 @@ class local_hub_external extends external_api {
         global $DB;
 
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:view', $context); //TODO: will need to be change for hub:siteview
         //hub:view should concern only courses
@@ -807,7 +807,7 @@ class local_hub_external extends external_api {
         global $DB;
 
         // Ensure the current user is allowed to run this function
-        $context = get_context_instance(CONTEXT_SYSTEM);
+        $context = context_system::instance();
         self::validate_context($context);
         require_capability('local/hub:viewinfo', $context);
         $params = self::validate_parameters(self::get_sitesregister_parameters(),
