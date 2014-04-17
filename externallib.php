@@ -860,23 +860,9 @@ class local_hub_external extends external_api {
             $siteinfo['serverstring'] = $site->serverstring;
             $siteinfo['override'] = $site->override;
 //            $siteinfo['fingerprint'] = $site->fingerprint; // no need to send this out (also doesn't exist on moodle.org at all)
+            $siteinfo['privacy'] = $site->privacy; //there is a privacy field at moodle.org registery table (as well as a 'public' field) - lets map directly now.
 
-            // other mappings that seem to apply
-            // so going by what http://wiki.moodle.com/display/sysadmin/moodle.net+moodle.org+statistics+table+mapping+txt has lets try
-            switch ($site->privacy) {
-                case 'notdisplayed':
-                    $siteinfo['public'] = 0;
-                    break;
-                case 'linked':
-                    $siteinfo['public'] = 1;
-                    break;
-                case 'named':
-                    $siteinfo['public'] = 2;
-                    break;
-                default:
-                    $siteinfo['public'] = 0;
-                    break;
-            }
+            // so going by what http://wiki.moodle.com/display/sysadmin/moodle.net+moodle.org+statistics+table+mapping+txt
 
             $result[] = $siteinfo;
         }
