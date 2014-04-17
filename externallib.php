@@ -910,7 +910,7 @@ class local_hub_external extends external_api {
                             'participantnumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise average number of participants'),
                             'deleted' => new external_value(PARAM_INT, 'deleted field'),
                             'publicationmax' => new external_value(PARAM_INT, 'publicationmax field'),
-                            'public' => new external_value(PARAM_INT, 'site privacy'),
+                            'privacy' => new external_value(PARAM_ALPHANUM, 'site privacy'),
                             'badges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of badges.', VALUE_OPTIONAL),
                             'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL),
                             'unreachable' => new external_value(PARAM_INT, 'times not reached'),
