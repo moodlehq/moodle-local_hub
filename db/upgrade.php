@@ -547,5 +547,20 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014041000, 'local', 'hub');
     }
 
+    if ($oldversion < 2014041700) {
+
+        // Define index idxurl (not unique) to be added to hub_site_directory.
+        $table = new xmldb_table('hub_site_directory');
+        $index = new xmldb_index('idxurl', XMLDB_INDEX_NOTUNIQUE, array('url'));
+
+        // Conditionally launch add index idxurl.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2014041700, 'local', 'hub');
+    }
+
     return $result;
 }

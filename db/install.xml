@@ -1,153 +1,156 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20130506" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20140417" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
   <TABLES>
-    <TABLE NAME="hub_site_directory" COMMENT="Sites registered into the hub server" NEXT="hub_course_directory">
+    <TABLE NAME="hub_site_directory" COMMENT="Sites registered into the hub server">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="name"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="site name" PREVIOUS="id" NEXT="description"/>
-        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="site description" PREVIOUS="name" NEXT="url"/>
-        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="site root url" PREVIOUS="description" NEXT="secret"/>
-        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the site secret" PREVIOUS="url" NEXT="trusted"/>
-        <FIELD NAME="trusted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="when a site is trusted, then the courses are automatically updated" PREVIOUS="secret" NEXT="language"/>
-        <FIELD NAME="language" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="default lang of the site" PREVIOUS="trusted" NEXT="timeregistered"/>
-        <FIELD NAME="timeregistered" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="time the site has been registered (first time)" PREVIOUS="language" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the last time the site information has been updated" PREVIOUS="timeregistered" NEXT="timevalidationfailed"/>
-        <FIELD NAME="timevalidationfailed" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="last time the validation failed (test if the site is available)" PREVIOUS="timemodified" NEXT="contactname"/>
-        <FIELD NAME="contactname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="name of the site administrator" PREVIOUS="timevalidationfailed" NEXT="contactemail"/>
-        <FIELD NAME="contactemail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="site admin email" PREVIOUS="contactname" NEXT="contactphone"/>
-        <FIELD NAME="contactphone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="site admin phone" PREVIOUS="contactemail" NEXT="contactable"/>
-        <FIELD NAME="contactable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="set to yes if user can contact the admin from a contact form" PREVIOUS="contactphone" NEXT="imageurl"/>
-        <FIELD NAME="imageurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="url of the site logo" PREVIOUS="contactable" NEXT="visible"/>
-        <FIELD NAME="visible" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="if the site is visible (previously 'confirm' field)" PREVIOUS="imageurl" NEXT="prioritise"/>
-        <FIELD NAME="prioritise" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="if set to yes, the site would be displayed at the top of the list" PREVIOUS="visible" NEXT="countrycode"/>
-        <FIELD NAME="countrycode" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="the ISO country code" PREVIOUS="prioritise" NEXT="regioncode"/>
-        <FIELD NAME="regioncode" TYPE="char" LENGTH="6" NOTNULL="false" SEQUENCE="false" COMMENT="the region code following the ISO 3166-2 standard" PREVIOUS="countrycode" NEXT="street"/>
-        <FIELD NAME="street" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="street address" PREVIOUS="regioncode" NEXT="geolocation"/>
-        <FIELD NAME="geolocation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="the geolocation number" PREVIOUS="street" NEXT="moodleversion"/>
-        <FIELD NAME="moodleversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle version of the site" PREVIOUS="geolocation" NEXT="moodlerelease"/>
-        <FIELD NAME="moodlerelease" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle release" PREVIOUS="moodleversion" NEXT="ip"/>
-        <FIELD NAME="ip" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the last IP (updated after a valid validation)" PREVIOUS="moodlerelease" NEXT="courses"/>
-        <FIELD NAME="courses" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of courses, -1 if unknown" PREVIOUS="ip" NEXT="users"/>
-        <FIELD NAME="users" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of users, -1 if unknown" PREVIOUS="courses" NEXT="enrolments"/>
-        <FIELD NAME="enrolments" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of enrolment, -1 if unknown" PREVIOUS="users" NEXT="resources"/>
-        <FIELD NAME="resources" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of resources, -1 if unknown" PREVIOUS="enrolments" NEXT="questions"/>
-        <FIELD NAME="questions" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of questions, -1 if unknown" PREVIOUS="resources" NEXT="modulenumberaverage"/>
-        <FIELD NAME="modulenumberaverage" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="average number of course modules (in non-empty courses)" PREVIOUS="questions" NEXT="emailalert"/>
-        <FIELD NAME="emailalert" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="1" SEQUENCE="false" COMMENT="set to 1 to receive hub alert email" PREVIOUS="modulenumberaverage" NEXT="privacy"/>
-        <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="this is the privacy setting of this site on the hub" PREVIOUS="emailalert" NEXT="posts"/>
-        <FIELD NAME="posts" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of posts into the site" PREVIOUS="privacy" NEXT="participantnumberaverage"/>
-        <FIELD NAME="participantnumberaverage" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="average number of participants (in non-empty courses)" PREVIOUS="posts" NEXT="deleted"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the site is unregistered" PREVIOUS="participantnumberaverage" NEXT="publicationmax"/>
-        <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the maximum number of publication a day for this site. If null, the value is taken from the hub setting." PREVIOUS="deleted" NEXT="badges"/>
-        <FIELD NAME="badges" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of badges available in the site, -1 if unknown" PREVIOUS="publicationmax" NEXT="issuedbadges"/>
-        <FIELD NAME="issuedbadges" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of issued badges, -1 if unknown" PREVIOUS="badges"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="site name"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="site description"/>
+        <FIELD NAME="url" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="site root url"/>
+        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the site secret"/>
+        <FIELD NAME="trusted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="when a site is trusted, then the courses are automatically updated"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="default lang of the site"/>
+        <FIELD NAME="timeregistered" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="time the site has been registered (first time)"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the last time the site information has been updated"/>
+        <FIELD NAME="timevalidationfailed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="last time the validation failed (test if the site is available)"/>
+        <FIELD NAME="contactname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="name of the site administrator"/>
+        <FIELD NAME="contactemail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="site admin email"/>
+        <FIELD NAME="contactphone" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="site admin phone"/>
+        <FIELD NAME="contactable" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="set to yes if user can contact the admin from a contact form"/>
+        <FIELD NAME="imageurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="url of the site logo"/>
+        <FIELD NAME="visible" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="if the site is visible (previously 'confirm' field)"/>
+        <FIELD NAME="prioritise" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="if set to yes, the site would be displayed at the top of the list"/>
+        <FIELD NAME="countrycode" TYPE="char" LENGTH="2" NOTNULL="false" SEQUENCE="false" COMMENT="the ISO country code"/>
+        <FIELD NAME="regioncode" TYPE="char" LENGTH="6" NOTNULL="false" SEQUENCE="false" COMMENT="the region code following the ISO 3166-2 standard"/>
+        <FIELD NAME="street" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="street address"/>
+        <FIELD NAME="geolocation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="the geolocation number"/>
+        <FIELD NAME="moodleversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle version of the site"/>
+        <FIELD NAME="moodlerelease" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle release"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the last IP (updated after a valid validation)"/>
+        <FIELD NAME="courses" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of courses, -1 if unknown"/>
+        <FIELD NAME="users" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of users, -1 if unknown"/>
+        <FIELD NAME="enrolments" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of enrolment, -1 if unknown"/>
+        <FIELD NAME="resources" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of resources, -1 if unknown"/>
+        <FIELD NAME="questions" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of questions, -1 if unknown"/>
+        <FIELD NAME="modulenumberaverage" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="average number of course modules (in non-empty courses)"/>
+        <FIELD NAME="emailalert" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="set to 1 to receive hub alert email"/>
+        <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="this is the privacy setting of this site on the hub"/>
+        <FIELD NAME="posts" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of posts into the site"/>
+        <FIELD NAME="participantnumberaverage" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="-1" SEQUENCE="false" COMMENT="average number of participants (in non-empty courses)"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the site is unregistered"/>
+        <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the maximum number of publication a day for this site. If null, the value is taken from the hub setting."/>
+        <FIELD NAME="badges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of badges available in the site, -1 if unknown"/>
+        <FIELD NAME="issuedbadges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of issued badges, -1 if unknown"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="idxurl" UNIQUE="false" FIELDS="url" COMMENT="for faster search by url"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="hub_course_directory" COMMENT="List of registered courses">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the site where the course come from"/>
+        <FIELD NAME="sitecourseid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="course id on the site =&amp;gt; siteid + sitecourseid are the unique identifier of this table for enrollable type. Several downloadable type can have the same siteid+ sitecourseid"/>
+        <FIELD NAME="contributornames" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="course manager names or whoever the publisher nominates, separated by commas"/>
+        <FIELD NAME="coverage" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="user tags"/>
+        <FIELD NAME="creatorname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="main teacher name or copyright holder or whoever the publisher nominates"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="ate this was last published/updated"/>
+        <FIELD NAME="description" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="course description"/>
+        <FIELD NAME="format" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="mbz / url"/>
+        <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="course shortname (unique on the original site)"/>
+        <FIELD NAME="language" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="based on lang.php"/>
+        <FIELD NAME="publishername" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the name of the person who caused this record to be entered here"/>
+        <FIELD NAME="licenceshortname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="one of a standard set of open source, creative commons and other licenses"/>
+        <FIELD NAME="courseurl" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="original URL of the course"/>
+        <FIELD NAME="subject" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The best-matching item from Course Standard Tags"/>
+        <FIELD NAME="fullname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ourse fullname"/>
+        <FIELD NAME="audience" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="Educators | Students | Admins"/>
+        <FIELD NAME="educationallevel" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="ducational level being discussed (for educators audience only): Tertiary | Secondary | Primary | Government | Corporate | Association | Other"/>
+        <FIELD NAME="coursemapid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Simple XML description of course structure, could be rendered graphically later CompendiumLD"/>
+        <FIELD NAME="creatornotes" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="describes how to use the course, where it came from, context, more description etc"/>
+        <FIELD NAME="creatornotesformat" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="HTML etc"/>
+        <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="public/private"/>
+        <FIELD NAME="downloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a local cached mbz but could be anything else, including empty for non-downloadable"/>
+        <FIELD NAME="originaldownloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a download script on the original Moodle site, used by Hub to get cache"/>
+        <FIELD NAME="demourl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="a URL, if any, where the course can be seen in action"/>
+        <FIELD NAME="enrollable" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Is the course enrollable anyone with an account?"/>
+        <FIELD NAME="enrolcost" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="enrolcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="downloadcost" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="downloadcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="publisheremail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The email of the publisher"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the course has been deleted from the course directory (unpublished/unregistered)"/>
+        <FIELD NAME="screenshots" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false" COMMENT="The number of screenshots"/>
+        <FIELD NAME="timepublished" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="the first time the course has been published"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_course_directory" COMMENT="List of registered courses" PREVIOUS="hub_site_directory" NEXT="hub_course_feedbacks">
+    <TABLE NAME="hub_course_feedbacks" COMMENT="Course feedbacks. A feedback is message sent to the publisher">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="siteid"/>
-        <FIELD NAME="siteid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="the site where the course come from" PREVIOUS="id" NEXT="sitecourseid"/>
-        <FIELD NAME="sitecourseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="course id on the site =&amp;gt; siteid + sitecourseid are the unique identifier of this table for enrollable type. Several downloadable type can have the same siteid+ sitecourseid" PREVIOUS="siteid" NEXT="contributornames"/>
-        <FIELD NAME="contributornames" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="course manager names or whoever the publisher nominates, separated by commas" PREVIOUS="sitecourseid" NEXT="coverage"/>
-        <FIELD NAME="coverage" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="user tags" PREVIOUS="contributornames" NEXT="creatorname"/>
-        <FIELD NAME="creatorname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="main teacher name or copyright holder or whoever the publisher nominates" PREVIOUS="coverage" NEXT="timemodified"/>
-        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" COMMENT="ate this was last published/updated" PREVIOUS="creatorname" NEXT="description"/>
-        <FIELD NAME="description" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="course description" PREVIOUS="timemodified" NEXT="format"/>
-        <FIELD NAME="format" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="mbz / url" PREVIOUS="description" NEXT="shortname"/>
-        <FIELD NAME="shortname" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="course shortname (unique on the original site)" PREVIOUS="format" NEXT="language"/>
-        <FIELD NAME="language" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="based on lang.php" PREVIOUS="shortname" NEXT="publishername"/>
-        <FIELD NAME="publishername" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="the name of the person who caused this record to be entered here" PREVIOUS="language" NEXT="licenceshortname"/>
-        <FIELD NAME="licenceshortname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="one of a standard set of open source, creative commons and other licenses" PREVIOUS="publishername" NEXT="courseurl"/>
-        <FIELD NAME="courseurl" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="original URL of the course" PREVIOUS="licenceshortname" NEXT="subject"/>
-        <FIELD NAME="subject" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The best-matching item from Course Standard Tags" PREVIOUS="courseurl" NEXT="fullname"/>
-        <FIELD NAME="fullname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="ourse fullname" PREVIOUS="subject" NEXT="audience"/>
-        <FIELD NAME="audience" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="Educators | Students | Admins" PREVIOUS="fullname" NEXT="educationallevel"/>
-        <FIELD NAME="educationallevel" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="ducational level being discussed (for educators audience only): Tertiary | Secondary | Primary | Government | Corporate | Association | Other" PREVIOUS="audience" NEXT="coursemapid"/>
-        <FIELD NAME="coursemapid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="Simple XML description of course structure, could be rendered graphically later CompendiumLD" PREVIOUS="educationallevel" NEXT="creatornotes"/>
-        <FIELD NAME="creatornotes" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" COMMENT="describes how to use the course, where it came from, context, more description etc" PREVIOUS="coursemapid" NEXT="creatornotesformat"/>
-        <FIELD NAME="creatornotesformat" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="HTML etc" PREVIOUS="creatornotes" NEXT="privacy"/>
-        <FIELD NAME="privacy" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="public/private" PREVIOUS="creatornotesformat" NEXT="downloadurl"/>
-        <FIELD NAME="downloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a local cached mbz but could be anything else, including empty for non-downloadable" PREVIOUS="privacy" NEXT="originaldownloadurl"/>
-        <FIELD NAME="originaldownloadurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="usually a download script on the original Moodle site, used by Hub to get cache" PREVIOUS="downloadurl" NEXT="demourl"/>
-        <FIELD NAME="demourl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="a URL, if any, where the course can be seen in action" PREVIOUS="originaldownloadurl" NEXT="enrollable"/>
-        <FIELD NAME="enrollable" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="Is the course enrollable anyone with an account?" PREVIOUS="demourl" NEXT="enrolcost"/>
-        <FIELD NAME="enrolcost" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="enrollable" NEXT="enrolcostcurrency"/>
-        <FIELD NAME="enrolcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" PREVIOUS="enrolcost" NEXT="downloadcost"/>
-        <FIELD NAME="downloadcost" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" PREVIOUS="enrolcostcurrency" NEXT="downloadcostcurrency"/>
-        <FIELD NAME="downloadcostcurrency" TYPE="char" LENGTH="3" NOTNULL="false" SEQUENCE="false" PREVIOUS="downloadcost" NEXT="publisheremail"/>
-        <FIELD NAME="publisheremail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="The email of the publisher" PREVIOUS="downloadcostcurrency" NEXT="deleted"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if the course has been deleted from the course directory (unpublished/unregistered)" PREVIOUS="publisheremail" NEXT="screenshots"/>
-        <FIELD NAME="screenshots" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="The number of screenshots" PREVIOUS="deleted" NEXT="timepublished"/>
-        <FIELD NAME="timepublished" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="the first time the course has been published" PREVIOUS="screenshots"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="text" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the user that wrote the feedback"/>
+        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the time when the feedback was created"/>
+        <FIELD NAME="senttouserid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="user id to who the message is sent"/>
+        <FIELD NAME="senttoemail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="email where the message has been sent"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_course_feedbacks" COMMENT="Course feedbacks. A feedback is message sent to the publisher" PREVIOUS="hub_course_directory" NEXT="hub_course_contents">
+    <TABLE NAME="hub_course_contents" COMMENT="Course content. A content can be activities, resources, forum, blocks,..">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="type"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" PREVIOUS="courseid" NEXT="text"/>
-        <FIELD NAME="text" TYPE="text" LENGTH="big" NOTNULL="false" SEQUENCE="false" PREVIOUS="type" NEXT="userid"/>
-        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the user that wrote the feedback" PREVIOUS="text" NEXT="time"/>
-        <FIELD NAME="time" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="the time when the feedback was created" PREVIOUS="userid" NEXT="senttouserid"/>
-        <FIELD NAME="senttouserid" TYPE="int" LENGTH="10" NOTNULL="false" UNSIGNED="true" SEQUENCE="false" COMMENT="user id to who the message is sent" PREVIOUS="time" NEXT="senttoemail"/>
-        <FIELD NAME="senttoemail" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="email where the message has been sent" PREVIOUS="senttouserid"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="moduletype" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="modulename" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="contentcount" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_course_contents" COMMENT="Course content. A content can be activities, resources, forum, blocks,.." PREVIOUS="hub_course_feedbacks" NEXT="hub_course_outcomes">
+    <TABLE NAME="hub_course_outcomes" COMMENT="Course outcomes">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="moduletype"/>
-        <FIELD NAME="moduletype" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" PREVIOUS="courseid" NEXT="modulename"/>
-        <FIELD NAME="modulename" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" PREVIOUS="moduletype" NEXT="contentcount"/>
-        <FIELD NAME="contentcount" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="modulename"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="outcome" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_course_outcomes" COMMENT="Course outcomes" PREVIOUS="hub_course_contents" NEXT="hub_communications">
+    <TABLE NAME="hub_communications" COMMENT="All token known by the site in order to communicate between all different entities">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="courseid"/>
-        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="false" PREVIOUS="id" NEXT="outcome"/>
-        <FIELD NAME="outcome" TYPE="text" LENGTH="big" NOTNULL="true" SEQUENCE="false" PREVIOUS="courseid"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="the type of communication SERVER or CLIENT"/>
+        <FIELD NAME="token" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="remoteentity" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="remoteurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="remotename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the remote entity"/>
+        <FIELD NAME="confirmed" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if ever the site has been unregistered"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
       </KEYS>
     </TABLE>
-    <TABLE NAME="hub_communications" COMMENT="All token known by the site in order to communicate between all different entities" PREVIOUS="hub_course_outcomes" NEXT="hub_stolen_site_secrets">
+    <TABLE NAME="hub_stolen_site_secrets" COMMENT="Reference any stolen site secret">
       <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="type"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" COMMENT="the type of communication SERVER or CLIENT" PREVIOUS="id" NEXT="token"/>
-        <FIELD NAME="token" TYPE="char" LENGTH="40" NOTNULL="true" SEQUENCE="false" PREVIOUS="type" NEXT="remoteentity"/>
-        <FIELD NAME="remoteentity" TYPE="char" LENGTH="30" NOTNULL="true" SEQUENCE="false" PREVIOUS="token" NEXT="remoteurl"/>
-        <FIELD NAME="remoteurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" PREVIOUS="remoteentity" NEXT="remotename"/>
-        <FIELD NAME="remotename" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Name of the remote entity" PREVIOUS="remoteurl" NEXT="confirmed"/>
-        <FIELD NAME="confirmed" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" PREVIOUS="remotename" NEXT="deleted"/>
-        <FIELD NAME="deleted" TYPE="int" LENGTH="1" NOTNULL="true" UNSIGNED="true" DEFAULT="0" SEQUENCE="false" COMMENT="1 if ever the site has been unregistered" PREVIOUS="confirmed"/>
-      </FIELDS>
-      <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-      </KEYS>
-    </TABLE>
-    <TABLE NAME="hub_stolen_site_secrets" COMMENT="Reference any stolen site secret" PREVIOUS="hub_communications">
-      <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="true" SEQUENCE="true" NEXT="secret"/>
-        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" PREVIOUS="id" NEXT="siteurl"/>
-        <FIELD NAME="siteurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the site url when the token was declared stolen" PREVIOUS="secret" NEXT="blockeddate"/>
-        <FIELD NAME="blockeddate" TYPE="int" LENGTH="10" NOTNULL="true" UNSIGNED="false" SEQUENCE="false" COMMENT="the timestamp when the secret was declared stolen" PREVIOUS="siteurl"/>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="secret" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="siteurl" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="the site url when the token was declared stolen"/>
+        <FIELD NAME="blockeddate" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="the timestamp when the secret was declared stolen"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
