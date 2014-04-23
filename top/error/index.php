@@ -81,13 +81,15 @@ switch ($httpstatus) {
 ?><!DOCTYPE html>
 <html dir="ltr" lang="en" xml:lang="en">
 <head>
-	<title>moodle.org error</title>
+	<title>Moodle.org: Error</title>
 	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,300&amp;subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic' rel='stylesheet' type='text/css'>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48 64x64" href="/error/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="/error/favicon.ico" />
+    <!--[if IE]><link rel="shortcut icon" href="/error/favicon.ico" /><![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="keywords" content="moodle, moodle.org, error"/>
 	<meta http-equiv="pragma" content="no-cache"/>
 	<meta http-equiv="expires" content="0"/>
-	<!-- <link rel="stylesheet" type="text/css" href="/error/styles.css"/> -->
 	<style>
 		html,
 		body {
@@ -243,7 +245,7 @@ switch ($httpstatus) {
 		</div>
 	</div>
 	<footer class="footer">
-        <p>Moodle™ is a <a href="http://docs.moodle.org/dev/License">registered trademark</a></p>
+        <p>Moodle™ is a <a href="http://moodle.com/trademarks/">registered trademark</a>.</p>
     </footer>
 </body>
 </html>
