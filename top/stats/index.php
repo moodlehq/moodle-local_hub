@@ -217,7 +217,7 @@ $fullminorversiongraph = minor_version_pie_graph($fullversioninfo, 'All Moodle r
 
 echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo html_writer::empty_tag('img', array('src'=>$minorversiongraph, 'alt'=>get_string('registrationslast6months', 'local_moodleorg')));
+echo html_writer::empty_tag('img', array('src'=>$minorversiongraph, 'alt'=>get_string('registrationslastmonths', 'local_moodleorg', 6)));
 echo html_writer::empty_tag('img', array('src'=>$fullminorversiongraph, 'alt'=>get_string('registrationstotal', 'local_moodleorg')));
 echo html_writer::end_tag('p');
 echo html_writer::end_tag('div');

@@ -171,6 +171,7 @@ $string['registereduserslastday'] = 'New users in the past 24 hours: ';
 $string['registrationgraphalt'] = 'All Moodle registrations over time';
 $string['registrationgraphdesc'] = 'We perform <a href="http://docs.moodle.org/en/Usage">regular bulk checking of sites</a> to make sure they still exist, so occasionally you may see reductions in the count';
 $string['registrationslast6months'] = 'Registrations in the past 6 months';
+$string['registrationslast6months'] = 'Registrations in the past {$a} months';
 $string['registrationstotal'] = 'All current registrations';
 $string['resources_buzz'] = 'Buzz';
 $string['resources_courses'] = 'Courses';
