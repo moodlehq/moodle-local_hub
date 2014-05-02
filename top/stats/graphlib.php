@@ -50,6 +50,7 @@ function gather_version_information($years = 1, $months = 0, $days = 0) {
     $fromtime = mktime(0,0,0,date('m')-$months, date('d')-$days, date('Y')-$years);
 
     // score is provided directly by webservice<->linkchecker within moodle.net
+    // seriously watch out for cloudflare's really long caching when testing these images. scp them to check!
     $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
               FROM {registry}
              WHERE (confirmed = 1 or (score>2 and hubid is not null)) AND
