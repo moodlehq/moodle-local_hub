@@ -44,7 +44,7 @@ function local_moodleorg_cron() {
     }
 
     //update old data then later get new data.
-    $fromtime = (int)$DB->get_field_sql('SELECT MAX(timeupdated) from {registry}');
+    $fromtime = (int)$DB->get_field_sql('SELECT MAX(timelinkchecked) from {registry}');
     $updatedsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, 0, $fromtime, 10000);
     mtrace('Processing updates for '. count($updatedsites). ' sites from '. $moodleneturl);
     // attempt to insert fetched data into registry now.
