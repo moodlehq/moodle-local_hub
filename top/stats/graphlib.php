@@ -48,10 +48,11 @@ function gather_version_information($years = 1, $months = 0, $days = 0) {
     global $CFG, $DB;
     $start = microtime(true);
     $fromtime = mktime(0,0,0,date('m')-$months, date('d')-$days, date('Y')-$years);
-    
+
+    // score is provided directly by webservice<->linkchecker within moodle.net
     $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
               FROM {registry}
-             WHERE confirmed = 1 AND
+             WHERE (confirmed = 1 or (score>2 and hubid is not null)) AND
                    timecreated > ?
           GROUP BY moodlerelease';
     $resultingversions = $DB->get_records_sql($sql, array($fromtime));
