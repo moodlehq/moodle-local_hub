@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_moodleorg';
-$plugin->version = 2014030500;
-$plugin->requires = 2011070100;
+$plugin->version = 2014050400;
+$plugin->requires = 2014050200; // 2.7rc1 (moodle.org-2.7-base)
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 60*60*1; // hourly : updates from moodle.net are coming in very often - number changes mostly (courses, teachers etc)
