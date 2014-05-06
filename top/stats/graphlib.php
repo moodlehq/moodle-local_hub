@@ -53,7 +53,7 @@ function gather_version_information($years = 1, $months = 0, $days = 0) {
     // seriously watch out for cloudflare's really long caching when testing these images. scp them to check!
     $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
               FROM {registry}
-             WHERE (confirmed = 1 or (score>2 and hubid is not null)) AND
+             WHERE score>2 AND
                    timecreated > ?
           GROUP BY moodlerelease';
     $resultingversions = $DB->get_records_sql($sql, array($fromtime));
