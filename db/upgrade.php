@@ -160,5 +160,77 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
 //        // Moodleorg savepoint reached.
 //        upgrade_plugin_savepoint(true, 201312XX00, 'local', 'moodleorg');
 //    }
+
+    if ($oldversion < 2014052800) {
+
+        // port over data for 1.9 sites for the 'public' field that we're going to delete
+        // -> to the 'privacy' field , mapping also used in local/moodleorg/top/register/index.php
+        $sql = "UPDATE {registry} SET privacy =
+                ELT(public+1, 'notdisplayed', 'named', 'linked')
+                WHERE hubid is null and privacy is null";
+        $DB->execute($sql);
+
+        // Define field privacy to be dropped from registry.
+        $table = new xmldb_table('registry');
+        $field = new xmldb_field('public');
+
+        // Conditionally launch drop field 'public' (which is a reserved word btw).
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field); //uncomment this when all 19 reg code is refactored
+        }
+
+        $index = new xmldb_index('country', XMLDB_INDEX_NOTUNIQUE, array('country'));
+        // Conditionally launch drop index countrycode.
+        if ($dbman->index_exists($table, $index)) {
+            $dbman->drop_index($table, $index);
+        }
+
+        // lots of renaming to refactor the table to sync easily with moodle.net's {hub_site_directory}
+        $field = new xmldb_field('sitename', XMLDB_TYPE_TEXT, null, null, null, null, null, 'url');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'name');
+        }
+        $field = new xmldb_field('lang', XMLDB_TYPE_CHAR, '30', null, null, null, null, 'ip');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'language');
+        }
+        $field = new xmldb_field('country', XMLDB_TYPE_CHAR, '10', null, null, null, null, 'trusted');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'countrycode'); // 'country' is a reserved word.
+        }
+        $field = new xmldb_field('adminname', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'geolocation');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'contactname');
+        }
+        $field = new xmldb_field('adminemail', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'contactname');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'contactemail');
+        }
+        $field = new xmldb_field('adminphone', XMLDB_TYPE_CHAR, '20', null, null, null, null, 'contactemail');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'contactphone');
+        }
+        $field = new xmldb_field('ipaddress', XMLDB_TYPE_CHAR, '100', null, null, null, null, 'host');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'ip');
+        }
+        $field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'timemodified');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'timeregistered');
+        }
+        $field = new xmldb_field('timeupdated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'confirmed');
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'timemodified');
+        }
+
+        $index = new xmldb_index('countrycode', XMLDB_INDEX_NOTUNIQUE, array('countrycode'));
+        // Conditionally launch add index confirmed. (recreate)
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Moodleorg savepoint reached.
+        upgrade_plugin_savepoint(true, 2014052800, 'local', 'moodleorg');
+    }
     return true;
 }

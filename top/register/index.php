@@ -99,51 +99,74 @@ if (empty($form->url)) {
 } else {  // Everything is OK, so proceed
 
     $timenow = time();
-    $entry = $form;
-    $entry->timeupdated = $timenow;
+    $entry = $form; //$entry contains (see below) transformed data for 2.x compatibility
+
+    //1.9 to 2.x field map 'public' -> 'privacy' (for syncs with moodle.net)
+    $map = array(
+        0 => 'notdisplayed',
+        1 => 'named',
+        2 => 'linked',
+    );
+    $entry->privacy = $map[$entry->public];
+    unset($entry->public);
+    //other 1.9->2.x in moodle.net related refactorings MDLSITE-3041
+    $entry->contactname = $entry->adminname;
+    $entry->contactemail = $entry->adminemail;
+    $entry->contactphone = $entry->adminphone;
+    unset($entry->adminname);
+    unset($entry->adminemail);
+    unset($entry->adminphone);
+    $entry->name = $entry->sitename;
+    $entry->language = $entry->lang;
+    $entry->countrycode = $entry->country;
+    unset($entry->sitename);
+    unset($entry->lang);
+    unset($entry->country);
+
+    $entry->timemodified = $timenow;
     $entry->url = clean_text($entry->url);
-    $entry->sitename = clean_text(strip_tags($entry->sitename));
-    switch ($entry->country) {
+    $entry->name = clean_text(strip_tags($entry->name));
+    switch ($entry->countrycode) {
        case 'CT':  // Catalan is Spain
-           $entry->country = 'ES';
+           $entry->countrycode = 'ES';
            break;
        case 'ZR':
-           $entry->country = 'CD';
+           $entry->countrycode = 'CD';
            break;
        case 'TP':
-           $entry->country = 'TL';
+           $entry->countrycode = 'TL';
            break;
        case 'FX':
-           $entry->country = 'FR';
+           $entry->countrycode = 'FR';
            break;
        case 'KO':
-           $entry->country = 'RS';
+           $entry->countrycode = 'RS';
            break;
        case 'WA':
-           $entry->country = 'GB';
+           $entry->countrycode = 'GB';
            break;
        case 'CS':
-           $entry->country = 'RS';
+           $entry->countrycode = 'RS';
            break;
     }
 
-    $entry->ipaddress = getremoteaddr();
+    $entry->ip = getremoteaddr();
 
-    $from->email = $entry->adminemail;
-    $from->firstname = $entry->adminname;
+    $from->email = $entry->contactemail;
+    $from->firstname = $entry->contactname;
     $from->lastname = "";
     $from->maildisplay = true;
 
-    $message = "Management form: http://moodle.org/sites/manage.php\n\n".
+    $message = "Management form: http://moodle.net/local/hub/admin/managesites.php\n\n".
                "     URL: $entry->url\n".
-               "    Site: ".$entry->sitename."\n".
+               "    Site: ".$entry->name."\n".
                " Version: $entry->release ($entry->version)\n".
                "    Host: $entry->host\n".
                "  Secret: $entry->secret\n".
-               "Language: $entry->lang\n".
-               " Country: ".$countries[$entry->country]."\n".
-               "   Admin: $entry->adminname ($entry->adminemail)\n".
-               "  Public: $entry->public\n".
+               "Language: $entry->language\n".
+               " Country: ".$countries[$entry->countrycode]."\n".
+               "   Admin: $entry->contactname ($entry->contactemail)\n".
+               "  Public: $entry->privacy\n".
                "  Mailme: $entry->mailme\n";
 
     $destination = $entry->url.'/admin/index.php?id='.$entry->secret;
@@ -167,9 +190,9 @@ if (empty($form->url)) {
     if ($authenticated) {    // simply update the main entry
         $entry->id = $confirmed->id;
         if ($DB->update_record("registry", $entry)) {
-            update_list_subscription($confirmed->adminemail, $confirmed->mailme, $entry->adminemail, $entry->mailme);
+            update_list_subscription($confirmed->contactemail, $confirmed->mailme, $entry->contactemail, $entry->mailme);
             if (!empty($entry->mailme)) {
-                //email_to_user($admin, $from, "Moodle Registry updated - $entry->sitename", $message);
+                //email_to_user($admin, $from, "Moodle Registry updated - $entry->name", $message);
             }
             notice("Thank you for keeping your entry updated.  <p>Your previous information
                     has been overwritten and your new information is active immediately.
@@ -184,7 +207,7 @@ if (empty($form->url)) {
         $entry->id = $pending->id;
         if ($DB->update_record("registry", $entry)) {
             if (!empty($entry->mailme)) {
-                //email_to_user($admin, $from, "Moodle Registry updated (unverified) - $entry->sitename", $message);
+                //email_to_user($admin, $from, "Moodle Registry updated (unverified) - $entry->name", $message);
             }
             if ($entry->confirmed) {
                 notice("Thank you for registering your information.
@@ -200,17 +223,17 @@ if (empty($form->url)) {
 
     } else {   // No entry exists yet, so make a new one.
         $entry->confirmed = 1;    // Always now!  We don't check numbers of things any more. Rely on sitechecker later  MD 22/8/11
-        $entry->timecreated = $timenow;
+        $entry->timeregistered = $timenow;
 
         if ($DB->insert_record("registry", $entry)) {
             if ($entry->confirmed) {
-                update_list_subscription('', 0, $entry->adminemail, $entry->mailme);
+                update_list_subscription('', 0, $entry->contactemail, $entry->mailme);
             }
             if (!empty($entry->mailme)) {
-               // email_to_user($admin, $from, "Moodle Registry added - $entry->sitename", $message);
+               // email_to_user($admin, $from, "Moodle Registry added - $entry->name", $message);
             }
             /*foreach ($notify as $notifyuser) {
-                email_to_user($notifyuser, $from, "Moodle registry added - $entry->sitename", $message);
+                email_to_user($notifyuser, $from, "Moodle registry added - $entry->name", $message);
             }*/
             if ($entry->confirmed) {
                 notice("Thank you for registering your information.
@@ -230,7 +253,7 @@ if (empty($form->url)) {
 }
 
 if (!empty($databaseerror)) {
-    email_to_user($admin, $from, "Moodle Registry error - $entry->sitename", $message);
+    email_to_user($admin, $from, "Moodle Registry error - $entry->name", $message);
     error("Sorry, but your entry could not be updated due to a database error:
            please contact martin@moodle.org");
 }
