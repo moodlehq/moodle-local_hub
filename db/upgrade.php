@@ -232,5 +232,21 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         // Moodleorg savepoint reached.
         upgrade_plugin_savepoint(true, 2014052800, 'local', 'moodleorg');
     }
+
+    if ($oldversion < 2014052801) {
+
+        // Define field timelastsynced to be added to registry.
+        $table = new xmldb_table('registry');
+        $field = new xmldb_field('timelastsynced', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'longitude');
+
+        // Conditionally launch add field timelastsynced.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Moodleorg savepoint reached.
+        upgrade_plugin_savepoint(true, 2014052801, 'local', 'moodleorg');
+    }
+
     return true;
 }
