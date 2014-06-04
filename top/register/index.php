@@ -99,7 +99,7 @@ if (empty($form->url)) {
 } else {  // Everything is OK, so proceed
 
     $timenow = time();
-    $entry = $form; //$entry contains (see below) transformed data for 2.x compatibility
+    $entry = clone $form; //$entry contains (see below) transformed data for 2.x compatibility
 
     //1.9 to 2.x field map 'public' -> 'privacy' (for syncs with moodle.net)
     $map = array(
@@ -122,6 +122,8 @@ if (empty($form->url)) {
     unset($entry->sitename);
     unset($entry->lang);
     unset($entry->country);
+    $entry->contactable = $entry->contact;
+    unset($entry->contact);
 
     $entry->timemodified = $timenow;
     $entry->url = clean_text($entry->url);

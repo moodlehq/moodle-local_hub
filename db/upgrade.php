@@ -248,5 +248,29 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014052801, 'local', 'moodleorg');
     }
 
+    if ($oldversion < 2014060100) {
+
+        // Rename field contactable on table registry to contactable.
+        $table = new xmldb_table('registry');
+        $field = new xmldb_field('contact', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'privacy');
+
+        // Launch rename field contactable.
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->rename_field($table, $field, 'contactable');
+        }
+
+        // $field = new xmldb_field('confirmed'); --> this field stays, 1.9 sites are confirmed @ moodle.org/register/index.php (see $pending var)
+
+        $field = new xmldb_field('errormsg');
+
+        // Conditionally launch drop field errormsg - linkchecker runs at moodle.net
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        // Moodleorg savepoint reached.
+        upgrade_plugin_savepoint(true, 2014060100, 'local', 'moodleorg');
+    }
+
     return true;
 }

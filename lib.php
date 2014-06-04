@@ -43,34 +43,15 @@ function local_moodleorg_cron() {
         $token = $CFG->moodlenettoken;
     }
 
-    //update old data then later get new data.
-    $fromtime = (int)$DB->get_field_sql('SELECT MAX(timelinkchecked) from {registry}');
-    $updatedsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, 0, $fromtime, 10000);
-    mtrace('Processing updates for '. count($updatedsites). ' sites from '. $moodleneturl);
-    // attempt to insert fetched data into registry now.
-    foreach ($updatedsites as $site) {
-        $dbsite = $DB->get_record('registry', array('hubid' => $site->hubid) );
-        if (isset($dbsite->hubid)) {
-            foreach (get_object_vars($site) as $field=>$val) {
-                $dbsite->$field = $site->$field;
-            }
-            $DB->update_record('registry', $dbsite, true);
-        } else {
-            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (updating site) This is weird, theres no hubid with a site called: '. $site->sitename);
-        }
-    }
+    $mintimelastsynced = (int)$DB->get_field_sql('SELECT MIN(timelastsynced) from {registry}');
+    $newdatasince = (int)$DB->get_records_sql('SELECT * FROM registry WHERE timelastsynced >'. $mintimelastsynced);
+    mtrace('Processing new 1.x registration data sync to '. $moodleneturl. ' for '. count($newdatasince). ' updated/new sites.');
+    // just send 1.9 registration data to moodle.net (receivein reply the confirmation time of successful sync)
+    $newtimesynced = local_moodleorg_send_moodlenet_stats_19_sites($token, $moodleneturl, $mintimelastsynced, $newdatasince);
 
-    $fromid = (int)$DB->get_field_sql('SELECT MAX(hubid) from {registry}');
-    $newsites = local_moodleorg_get_moodlenet_stats($token, $moodleneturl, (int)$fromid, 0, 1000);
-    mtrace('Processing new registrations for '. count($newsites). ' sites from '. $moodleneturl);
-
-    // attempt to insert fetched data into registry now.
-    foreach ($newsites as $site) {
-//        $site->confirmed = 1; //this is linkcheckers job really.
-        if (isset($site->hubid)) {
-            $DB->insert_record('registry', $site, false, true);
-        } else {
-            error_log('error with local_moodleorg_cron: local_moodleorg_get_moodlenet_stats() - (new site) This is weird, theres no hubid with a site called: '. $site->sitename);
-        }
+    // update the above synced records with newsynctime (or if it failed -> 0 so that it will be tried again)
+    $DB->update_record_raw('UPDATE {registry} SET timelastsynced = '. clean_param($newtimesynced, PARAM_INT)); //clean externally received data.
+    if ($newtimesynced <= 0) {
+        error_log('error with local_moodleorg_cron: local_moodleorg_send_moodlenet_stats_19_sites() - sending data $mintimelastsynced='. $mintimelastsynced );
     }
 }

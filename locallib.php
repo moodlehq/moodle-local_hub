@@ -1070,3 +1070,24 @@ function local_moodleorg_get_moodlenet_stats($token, $moodleneturl, $fromid=0, $
     $sites = json_decode($resp);
     return $sites;
 }
+
+/**
+ * Gets statistics from moodle.net via webservice and inserts into registry table.
+ * @return $sites data for insertion into registry table.
+ */
+function local_moodleorg_send_moodlenet_stats_19_sites($token, $moodleneturl, $mintimelastsynced, $newdatasince) {
+    global $CFG;
+
+    $functionname = 'hub_sync_into_sitesregister';
+    $restformat = 'json';
+    $params = array ('prevsynctime' => $mintimelastsynced, 'newdatasince' => $newdatasince);
+
+    /// REST CALL
+    $serverurl = $moodleneturl . '/webservice/rest/server.php'. '?wstoken=' . $token . '&wsfunction='.$functionname;
+    $curl = new curl;
+    //if rest format == 'xml', then we do not add the param for backward compatibility with Moodle < 2.2
+    $restformat = ($restformat == 'json')?'&moodlewsrestformat=' . $restformat:'';
+    $resp = $curl->post($serverurl . $restformat, $params);
+    $newsynctime = json_decode($resp);
+    return $newsynctime;
+}
