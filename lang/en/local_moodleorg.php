@@ -223,6 +223,7 @@ $string['supportforumslangurl'] = 'http://moodle.org/course/view.php?id=55';
 $string['supportforumslist'] = 'We have many other forums too, in many languages:';
 $string['supportforumslistname'] = 'List of all courses';
 $string['supportintro'] = 'You are not alone!  There are a variety of ways to get help with Moodle if you need it.';
+$string['syncregistrationstask'] = 'Sync registration updates to moodle.net';
 $string['top10sitesbyusers'] = 'Top 10 sites by users';
 $string['top10sitesbycourses'] = 'Top 10 sites by courses';
 $string['top10countriesbyregistration'] = 'Top 10 countries by registrations';
