@@ -56,16 +56,49 @@ class sync_sites extends \core\task\scheduled_task {
         }
 
         mtrace('Processing new 1.x registration data sync of sites to hub..');
-        $newdatasince = $DB->get_records_sql('SELECT * FROM {registry} WHERE timelastsynced = 0 OR timelastsynced < timemodified LIMIT 2');
-        print_r($newdatasince);
+        // LIMIT: may exceed max_input_vars php.ini grr..
+        // We've about 50 fields per record in {registry} - going by 1000 (default)) input fields we should be ok at a limit of 10 for 500
+        $newdatasince = $DB->get_records_sql('SELECT * FROM {registry} WHERE timelastsynced = 0 OR timelastsynced < timemodified LIMIT 10');
+        $status = 0;
+        foreach ($newdatasince as $site) {
+            $otpnull = md5(time(). rand(999, 9999));
+            foreach (get_object_vars($site) as $prop => $val) {
+            if (is_null($val) || (is_string($val) && empty($val) && $val != '0')) { //it must've been allowed in the DB. , convert old blank strings to null as well
+                    $site->$prop = $otpnull;
+                    $site->otpnull = $otpnull;
+                }
+            }
+        }
         mtrace('Processing new 1.x registration data sync to '. $moodleneturl. ' for '. count($newdatasince). ' updated/new sites.');
         // just send 1.9 registration data to moodle.net (receivein reply the confirmation time of successful sync)
-        $syncresult = local_moodleorg_send_moodlenet_stats_19_sites($token, $moodleneturl, $newdatasince ); // returns timesynced, reghubidmap 
-    print_r($syncresult);  
-        // update the above synced records with newsynctime (not returned/populated if failed.)
-    //    $DB->update_record_raw('UPDATE {registry} SET timelastsynced = '. clean_param($newtimesynced, PARAM_INT)); //clean externally received data.
-    //    if ($newtimesynced <= 0) {
-    //        error_log('error with local_moodleorg_cron: local_moodleorg_send_moodlenet_stats_19_sites() - sending data $mintimelastsynced='. $mintimelastsynced );
-    //    }
+        $syncresult = local_moodleorg_send_moodlenet_stats_19_sites($token, $moodleneturl, $newdatasince ); // returns timesynced, reghubidmap
+        if (isset($syncresult->exception)) {
+            $errrec = $newdatasince[0];
+            var_dump($errrec);
+            $DB->update_record('registry',array('id'=>$errrec->id, 'hubid'=> null, 'timelastsynced'=>time()));
+            throw new \moodle_exception('There has been an error during sync - initial record in web service call is failing.'. $syncresult->exception);
+        }
+        // update the above synced records with new sync time (not returned/populated if failed.)
+        $syncresult->timesynced = clean_param($syncresult->timesynced, PARAM_INT);
+        foreach ($syncresult->reghubidmap as $recnum => $syncrec) {
+            $DB->update_record('registry',array('id'=>$syncrec->id, 'hubid'=> $syncrec->hubid, 'timelastsynced'=>$syncresult->timesynced));
+            if (!$syncrec->hubid > 0) {
+                mtrace('Error syncing registry table record '. $syncrec->id. '. It will be tried again when the timemodifed shows it has been updated.');
+                var_dump($syncrec);
+                $status = 1;
+            }
+        }
+        if ($status || isset($syncresult->exception)) {
+            throw new \moodle_exception('There has been an error during sync - the remote server has responded but there are sync records with error hubid received (or not synced). ('. $syncresult->exception.')');
+        }
+        // throw an exception always to indicate in scheduled tasks list (2.7) if there are any records that failed sync in the whole table. This also triggers the sync - good for a quick catch up of sync.
+        $unsyncedcount = $DB->count_records_select('registry', 'timelastsynced = 0 OR timelastsynced < timemodified');
+        if ( $unsyncedcount > 0) {
+            throw new \moodle_exception('There are '. $unsyncedcount. ' unsynced unattempted records.');
+        }
+        $unsyncedcount = $DB->count_records_select('registry', 'hubid is null and timelastsynced > timemodified');
+        if ( $unsyncedcount > 0) {
+            throw new \moodle_exception('There are '. $unsyncedcount. ' unsynced failing records that are unchanged since last attempt.');
+        }
     }
 }
