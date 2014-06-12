@@ -208,9 +208,11 @@ class local_hub {
      * @return object site
      * @throws dml_exception if error
      */
-    public function add_site($site) {
+    public function add_site($site, $usegivenregtime=false) {
         global $DB;
-        $site->timeregistered = time();
+        if (!$usegivenregtime) {
+            $site->timeregistered = time();
+        }
         $site->timemodified = time();
 
         //check if a deleted site exist

@@ -1056,10 +1056,10 @@ class local_hub_external extends external_api {
                     $hub->update_site($registrysite); // has its own timemodified stamp
                     $syncrec->hubid = $registrysite->id; // regsiteid -> hubid
                 } else if( $registrysite->hubid == null ) { // add new unsycned site record
-                    // check! (remote may have failed in updating hubid, so this may just be a skippable update)
+                    // check! (remote may have failed in updating hubid, so this may just be an old skippable update to try again)
                         unset($registrysite->id);
                         unset($registrysite->hubid);
-                        $hubsite = $hub->add_site($registrysite); // has its own timecreated stamp
+                        $hubsite = $hub->add_site($registrysite, true); // has its own timecreated stamp
                         $syncrec->hubid = $hubsite->id;
                 } else {
                     // just try to see if there is any match by url. (hubid would be < 1 to indicate previously failed syncs)
