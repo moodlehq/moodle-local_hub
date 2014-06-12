@@ -930,4 +930,246 @@ class local_hub_external extends external_api {
                         ), 'site register info')
         );
     }
+
+    /**
+     * see sync_into_sitesregister(), also see sync_into_sitesregister_parameters_safe() for safer no PARAM_RAW version.
+     * @return \external_function_parameters
+     */
+    public static function sync_into_sitesregister_parameters() {
+        return new external_function_parameters(
+            array(
+               'newdatasince' => new external_multiple_structure(
+                                    new external_single_structure(
+                                        array(
+                                            'id' => new external_value(PARAM_INT, 'id as current in moodle.org'),
+                                            'hubid' => new external_value(PARAM_RAW, 'hubid as current in moodle.org'), //PARAM_INT but possibly null @ moodle.org (legacy)
+                                            'url' => new external_value(PARAM_RAW, 'url'), //PARAM_URL but possibly null @ moodle.org (legacy)
+                                            'name' => new external_value(PARAM_RAW, 'name of registered site'), //PARAM_ALPHANUMEXT but possibly null @ moodle.org (legacy)
+                                            'description' => new external_value(PARAM_RAW, 'description of site'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'moodleversion' => new external_value(PARAM_RAW, 'moodle version'),//PARAM_FLOAT but possibly null @ moodle.org (legacy)
+                                            'moodlerelease' => new external_value(PARAM_RAW, 'moodle release'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'serverstring' => new external_value(PARAM_RAW, 'a http header'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'host' => new external_value(PARAM_RAW, 'host'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'ip' => new external_value(PARAM_RAW, 'ip field'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'language' => new external_value(PARAM_RAW, 'language'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'courses' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of courses'),
+                                            'users' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of users'),
+                                            'enrolments' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of enrolments'),
+                                            'teachers' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of teachers'),
+                                            'posts' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of posts'),
+                                            'participantnumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise average number of participants'),
+                                            'resources' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of resources'),
+                                            'questions' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of questions'),
+                                            'modulenumberaverage' => new external_value(PARAM_RAW, '-1 if private info, otherwise verage number of course modules'),//PARAM_FLOAT but possibly null @ moodle.org (legacy)
+                                            'secret' => new external_value(PARAM_RAW, 'secret'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'trusted' => new external_value(PARAM_INT, 'trusted flag'),
+                                            'countrycode' => new external_value(PARAM_RAW, 'ISO 3166 country code'),//PARAM_ALPHANUMEXT but possibly null @ moodle.org (legacy)
+                                            'deleted' => new external_value(PARAM_RAW, 'deleted field'),//PARAM_INT but possibly null @ moodle.org (legacy)
+                                            'publicationmax' => new external_value(PARAM_RAW, 'publicationmax field'),//PARAM_INT but possibly null @ moodle.org (legacy)
+                                            'prioritise' => new external_value(PARAM_INT, 'prioritise field'),
+                                            'regioncode' => new external_value(PARAM_RAW, 'ISO 3166-2 region code'),//PARAM_ALPHANUMEXT but possibly null @ moodle.org (legacy)
+                                            'street' => new external_value(PARAM_RAW, 'physical address'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'geolocation' => new external_value(PARAM_RAW, 'geolocation'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'contactname' => new external_value(PARAM_RAW, 'site server administrator name'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'contactemail' => new external_value(PARAM_RAW, 'site server administrator email'),//PARAM_EMAIL but possibly null @ moodle.org (legacy)
+                                            'contactphone' => new external_value(PARAM_RAW, 'site server administrator phone'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'imageurl' => new external_value(PARAM_RAW, 'site logo url'),//PARAM_URL but possibly null @ moodle.org (legacy)
+                                            'mailme' => new external_value(PARAM_INT, 'flag to send email'),
+                                            'privacy' => new external_value(PARAM_RAW, 'site privacy'),//PARAM_ALPHANUM but possibly null @ moodle.org (legacy)
+                                            'contactable' => new external_value(PARAM_INT, 'flag about person wanting contact (registrationcontactyesno)'),
+                                            // ''confirmed' is generated @moodle.org during 1.9 registration
+                                            'confirmed' => new external_value(PARAM_INT, 'site confirmation'),
+                                            'timemodified' => new external_value(PARAM_INT, 'time modification occured'),
+                                            'timeregistered' => new external_value(PARAM_INT, 'time registeration occured'),
+                                            'timeunreachable' => new external_value(PARAM_INT, 'time checked'),
+                                            'unreachable' => new external_value(PARAM_INT, 'times not reached'),
+                                            'score' => new external_value(PARAM_INT, 'scraper linkchecking score'),
+                                            'timelinkchecked' => new external_value(PARAM_INT, 'time link was checked'),
+                                            'cool' => new external_value(PARAM_INT, '--'), // still in registry table at moodle.org (local/moodleorg still contains scripts affecting these fields)
+                                            'cooldate' => new external_value(PARAM_INT, '--'), // still in registry table at moodle.org
+                                            'override' => new external_value(PARAM_INT, 'force avoids linkchecking'),
+                                            'redirectto' => new external_value(PARAM_RAW, 'redirectto'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'latitude' => new external_value(PARAM_RAW, 'latitude'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'longitude' => new external_value(PARAM_RAW, 'longitude'),//PARAM_TEXT but possibly null @ moodle.org (legacy)
+                                            'timelastsynced' => new external_value(PARAM_INT, 'time of sync used in records'),
+                                            'otpnull' => new external_value(PARAM_ALPHANUM, 'OTP hash indicating a NULL'), // used to convert values equal to otpnull back to === NULL
+                                        )
+                                    )
+                                )
+                )
+        );
+    }
+
+    /**
+     * Updates sites data (from moodle.org) into {hub_sites_directory} in moodle.net (hub.moodle.org)
+     * @return object
+     */
+    public static function sync_into_sitesregister($sites) {
+        global $DB;
+        // Ensure the current user is allowed to run this function
+        $context = context_system::instance();
+        self::validate_context($context);
+        require_capability('local/hub:viewinfo', $context);
+        $returnable =  new stdClass();
+        try {
+            $params = self::validate_parameters(self::sync_into_sitesregister_parameters(),  array( 'newdatasince' => $sites) );
+        } catch (invalid_parameter_exception $ex) {
+            // record and send back later - but try individual records (with individual stricter validation)
+            $returnable->exception = $ex->debuginfo;
+        }
+
+        //do our own additional validation (to circumvent core and proceed with using/replacing nulls.)
+        $nullablefields = array ('hubid', 'url', 'name', 'description', 'moodleversion', 'moodlerelease', 'serverstring', 'host', 'ip',
+            'language', 'secret', 'countrycode', 'deleted', 'publicationmax', 'regioncode', 'street', 'geolocation', 'contactname',
+            'contactemail', 'contactphone', 'imageurl', 'privacy', 'confirmed', 'redirectto', 'latitude', 'longitude',
+            );
+        $nullableisint = array ('deleted' => 0, 'publicationmax' => null); //in mdl_hub_site_directory:(int defaults to 0, int defaults to null)
+
+        $hub = new local_hub();
+        $syncerecs = array();
+        foreach ($params['newdatasince'] as $registrysite) {
+            try {
+                $syncrec = new stdClass(); //used in catch so we'll init here.
+                $registrysite = (object) $registrysite;
+                $syncrec->id = $registrysite->id;
+                $syncrec->hubid = null;
+
+                $objvars = get_object_vars($registrysite);
+                //convert back to null and run extra validation.
+                foreach ($objvars as $prop => $val) {
+                    if ($registrysite->otpnull === $val) { //got a null marker.
+                        if (array_key_exists($prop, $nullableisint)) {
+                            $registrysite->$prop = $nullableisint[$prop];
+                        } else if (in_array($prop, $nullablefields)) { //check on agreed nullables (remove if this is too restrictive in future)
+                            $registrysite->$prop = null;
+                        }
+                    }
+                }
+                //drop otpnull and revalidate.
+                unset($registrysite->otpnull);
+                $registrysite = (object)self::validate_parameters(self::sync_into_sitesregister_parameters_safe(), (array)$registrysite);
+
+                if ($registrysite->hubid > 0) { // update this record
+                    $registrysite->id = $registrysite->hubid;
+                    unset($registrysite->hubid); // we don't care about registry ids at hub.
+                    $registrysite->unreachable = 0; //updated site means we should re-check this.
+                    $hub->update_site($registrysite); // has its own timemodified stamp
+                    $syncrec->hubid = $registrysite->id; // regsiteid -> hubid
+                } else if( $registrysite->hubid == null ) { // add new unsycned site record
+                    // check! (remote may have failed in updating hubid, so this may just be a skippable update)
+                        unset($registrysite->id);
+                        unset($registrysite->hubid);
+                        $hubsite = $hub->add_site($registrysite); // has its own timecreated stamp
+                        $syncrec->hubid = $hubsite->id;
+                } else {
+                    // just try to see if there is any match by url. (hubid would be < 1 to indicate previously failed syncs)
+                    $matchedsite = $hub->get_site_by_url($registrysite->url);
+                    if ($matchedsite && $registrysite->hubid < 1 && $matchedsite->secret == $registrysite->secret) {
+                        foreach(get_object_vars($registrysite) as $prop => $val) {
+                            if (isset($matchedsite->$prop)) {
+                                $matchedsite->$prop = $val;
+                            }
+                        }
+                        $hub->update_site($matchedsite);
+                        $syncrec->hubid = $matchedsite->id;
+                    }
+                }
+            } catch (Exception $ex) { // don't limit type of exception - carry on for all exceptions since we're working per record now.
+                $syncrec->exception = $ex->debuginfo;
+            }
+            if (isset($syncrec->exception)) {
+                error_log('id '. $syncrec->id);
+                error_log('hubid '. $syncrec->hubid);
+                error_log('url '. $registrysite->url);
+                error_log('exception: '. $syncrec->exception);
+            }
+            $syncerecs[] = $syncrec;
+        }
+        $returnable->reghubidmap = $syncerecs;
+        $returnable->timesynced = time();
+        return $returnable;
+    }
+
+    /**
+     * see sync_into_sitesregister
+     * @return \external_multiple_structure
+     */
+    public static function sync_into_sitesregister_returns() {
+        return new external_single_structure(
+                    array(
+                        'exception' =>  new external_value(PARAM_RAW, 'any general exception with the call.', VALUE_OPTIONAL),
+                        'timesynced' => new external_value(PARAM_INT, 'time of sync used in records'),
+                        'reghubidmap' => new external_multiple_structure(
+                                            new external_single_structure(
+                                                array(
+                                                    'id' => new external_value(PARAM_INT, 'id as current in moodle.org'),
+                                                    'hubid' => new external_value(PARAM_INT, 'hubid as current in hub'),
+                                                    'exception' =>  new external_value(PARAM_RAW, 'exception with the record.', VALUE_OPTIONAL),
+                                                ),
+                                            'map of registry ids received to hub ids updated/added')
+                                        )
+                    ),'site register info');
+    }
+
+    /**
+     * This parameter check does not allow PARAM_RAW in the data set.
+     * @return \external_single_structure
+     */
+    public static function sync_into_sitesregister_parameters_safe() {
+        return new external_single_structure(
+                        array(
+                            'id' => new external_value(PARAM_INT, 'id as current in moodle.org'),
+                            'hubid' => new external_value(PARAM_INT, 'hubid as current in moodle.org'),
+                            'url' => new external_value(PARAM_URL, 'url'),
+                            'name' => new external_value(PARAM_TEXT, 'name of registered site'),
+                            'description' => new external_value(PARAM_TEXT, 'description of site'),
+                            'moodleversion' => new external_value(PARAM_FLOAT, 'moodle version'),
+                            'moodlerelease' => new external_value(PARAM_TEXT, 'moodle release'),
+                            'serverstring' => new external_value(PARAM_TEXT, 'a http header'),
+                            'host' => new external_value(PARAM_TEXT, 'host'),
+                            'ip' => new external_value(PARAM_TEXT, 'ip field'),
+                            'language' => new external_value(PARAM_TEXT, 'language'),
+                            'courses' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of courses'),
+                            'users' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of users'),
+                            'enrolments' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of enrolments'),
+                            'teachers' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise, number of teachers'),
+                            'posts' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of posts'),
+                            'participantnumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise average number of participants'),
+                            'resources' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of resources'),
+                            'questions' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise number of questions'),
+                            'modulenumberaverage' => new external_value(PARAM_FLOAT, '-1 if private info, otherwise verage number of course modules'),
+                            'secret' => new external_value(PARAM_TEXT, 'secret'),
+                            'trusted' => new external_value(PARAM_INT, 'trusted flag'),
+                            'countrycode' => new external_value(PARAM_ALPHANUMEXT, 'ISO 3166 country code'),
+                            'deleted' => new external_value(PARAM_INT, 'deleted field'),
+                            'publicationmax' => new external_value(PARAM_INT, 'publicationmax field'),
+                            'prioritise' => new external_value(PARAM_INT, 'prioritise field'),
+                            'regioncode' => new external_value(PARAM_ALPHANUMEXT, 'ISO 3166-2 region code'),
+                            'street' => new external_value(PARAM_TEXT, 'physical address'),
+                            'geolocation' => new external_value(PARAM_TEXT, 'geolocation'),
+                            'contactname' => new external_value(PARAM_TEXT, 'site server administrator name'),
+                            'contactemail' => new external_value(PARAM_EMAIL, 'site server administrator email'),
+                            'contactphone' => new external_value(PARAM_TEXT, 'site server administrator phone'),
+                            'imageurl' => new external_value(PARAM_URL, 'site logo url'),
+                            'mailme' => new external_value(PARAM_INT, 'flag to send email'),
+                            'privacy' => new external_value(PARAM_ALPHANUM, 'site privacy'),
+                            'contactable' => new external_value(PARAM_INT, 'flag about person wanting contact (registrationcontactyesno)'),
+                            // ''confirmed' is generated @moodle.org during 1.9 registration
+                            'confirmed' => new external_value(PARAM_INT, 'site confirmation'),
+                            'timemodified' => new external_value(PARAM_INT, 'time modification occured'),
+                            'timeregistered' => new external_value(PARAM_INT, 'time registeration occured'),
+                            'timeunreachable' => new external_value(PARAM_INT, 'time checked'),
+                            'unreachable' => new external_value(PARAM_INT, 'times not reached'),
+                            'score' => new external_value(PARAM_INT, 'scraper linkchecking score'),
+                            'timelinkchecked' => new external_value(PARAM_INT, 'time link was checked'),
+                            'cool' => new external_value(PARAM_INT, '--'), // still in registry table at moodle.org (local/moodleorg still contains scripts affecting these fields)
+                            'cooldate' => new external_value(PARAM_INT, '--'), // still in registry table at moodle.org
+                            'override' => new external_value(PARAM_INT, 'force avoids linkchecking'),
+                            'redirectto' => new external_value(PARAM_TEXT, 'redirectto'),
+                            'latitude' => new external_value(PARAM_TEXT, 'latitude'),
+                            'longitude' => new external_value(PARAM_TEXT, 'longitude'),
+                            'timelastsynced' => new external_value(PARAM_INT, 'time of sync used in records'),
+                        )
+                );
+    }
 }
