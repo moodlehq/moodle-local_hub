@@ -25,6 +25,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_moodleorg';
-$plugin->version = 2014061015;
+$plugin->version = 2014061301;
 $plugin->requires = 2014050200; // 2.7rc1 (moodle.org-2.7-base)
 $plugin->maturity = MATURITY_STABLE;

@@ -272,5 +272,13 @@ function xmldb_local_moodleorg_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014060100, 'local', 'moodleorg');
     }
 
+    if ($oldversion < 2014061301) {
+        // we're reversing the moodle.org moodlenet sync to sync TO moodle.net. mark all current records with a hubid as already synced since they are FROM moodle.net
+        $sql = 'UPDATE {registry} SET timelastsynced= '. time(). ' WHERE hubid is not null';
+        $DB->execute($sql);
+
+        // Moodleorg savepoint reached.
+        upgrade_plugin_savepoint(true, 2014061301, 'local', 'moodleorg');
+    }
     return true;
 }
