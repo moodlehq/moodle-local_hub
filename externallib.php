@@ -1023,7 +1023,7 @@ class local_hub_external extends external_api {
             'language', 'secret', 'countrycode', 'deleted', 'publicationmax', 'regioncode', 'street', 'geolocation', 'contactname',
             'contactemail', 'contactphone', 'imageurl', 'privacy', 'confirmed', 'redirectto', 'latitude', 'longitude',
             );
-        $nullableisint = array ('deleted' => 0, 'publicationmax' => null); //in mdl_hub_site_directory:(int defaults to 0, int defaults to null)
+        $nullable_map = array ('name' => ' ', 'deleted' => 0, 'publicationmax' => null); //what they should be in mdl_hub_site_directory
 
         $hub = new local_hub();
         $syncerecs = array();
@@ -1038,8 +1038,8 @@ class local_hub_external extends external_api {
                 //convert back to null and run extra validation.
                 foreach ($objvars as $prop => $val) {
                     if ($registrysite->otpnull === $val) { //got a null marker.
-                        if (array_key_exists($prop, $nullableisint)) {
-                            $registrysite->$prop = $nullableisint[$prop];
+                        if (array_key_exists($prop, $nullable_map)) {
+                            $registrysite->$prop = $nullable_map[$prop];
                         } else if (in_array($prop, $nullablefields)) { //check on agreed nullables (remove if this is too restrictive in future)
                             $registrysite->$prop = null;
                         }
@@ -1047,8 +1047,32 @@ class local_hub_external extends external_api {
                 }
                 //drop otpnull and revalidate.
                 unset($registrysite->otpnull);
-                $registrysite = (object)self::validate_parameters(self::sync_into_sitesregister_parameters_safe(), (array)$registrysite);
+                try {
+                    $registrysite = (object)self::validate_parameters(self::sync_into_sitesregister_parameters_safe(), (array)$registrysite);
+                } catch (invalid_parameter_exception $ex) {
+                    //allow if it had been confirmed during moodle.org registration process.
+                    if (strpos($ex->debuginfo, 'url') == 0) { //exception starts with fieldname.
+                        if ($registrysite->confirmed == 0) {
+                            throw $ex;
+                        }
+                    } else {
+                        throw $ex;
+                    }
+                }
 
+                //fix some common data length errors - just truncate (original is stored in moodle.org registry and a 2.x upgrade can fix it at hub)
+                if (strlen($registrysite->moodlerelease) > 50) {
+                    $registrysite->moodlerelease = substr($registrysite->moodlerelease, 0, 49);
+                }
+                if (strlen($registrysite->ip) > 45) {
+                    $registrysite->ip = substr($registrysite->ip, 0, 44);
+                }
+                if (strlen($registrysite->name) > 255) {
+                    $registrysite->name = substr($registrysite->name, 0, 254);
+                }
+                if (strlen($registrysite->countrycode) > 2) {
+                    $registrysite->countrycode = 'ZZ'; //the code for unknown country. solve this later in some checker.
+                }
                 if ($registrysite->hubid > 0) { // update this record
                     $registrysite->id = $registrysite->hubid;
                     unset($registrysite->hubid); // we don't care about registry ids at hub.
@@ -1078,7 +1102,7 @@ class local_hub_external extends external_api {
                 $syncrec->exception = $ex->debuginfo;
             }
             if (isset($syncrec->exception)) {
-                error_log('id '. $syncrec->id);
+                error_log('sync_into_sitesregister() failed processing id '. $syncrec->id);
                 error_log('hubid '. $syncrec->hubid);
                 error_log('url '. $registrysite->url);
                 error_log('exception: '. $syncrec->exception);
