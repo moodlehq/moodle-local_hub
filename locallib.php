@@ -1087,7 +1087,6 @@ function local_moodleorg_send_moodlenet_stats_19_sites($token, $moodleneturl, $n
     mtrace('using ws-samples curl class (not moodle core\'s). '. $CFG->dirroot);
     require_once($CFG->dirroot. '/local/moodleorg/curlws.php');
     $curl = new curlws;
-    //if rest format == 'xml', then we do not add the param for backward compatibility with Moodle < 2.2
     $restformat = ($restformat == 'json')?'&moodlewsrestformat=' . $restformat:'';
     $resp = $curl->post($serverurl . $restformat, $params);
     $resp = json_decode($resp);
