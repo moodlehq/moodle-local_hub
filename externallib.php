@@ -1067,8 +1067,10 @@ class local_hub_external extends external_api {
                 if (strlen($registrysite->ip) > 45) {
                     $registrysite->ip = substr($registrysite->ip, 0, 44);
                 }
-                if (strlen($registrysite->name) > 255) {
-                    $registrysite->name = substr($registrysite->name, 0, 254);
+                if (mb_detect_encoding($registrysite->name) == 'UTF-8' && mb_strlen($registrysite->name) > 255) {
+                    $registrysite->name = mb_substr($registrysite->name, 0, 246 ); //truncate must be mb safe!...
+                } else if (strlen($registrysite->name) > 255) {
+                    $registrysite->name = substr($registrysite->name, 0, 248);
                 }
                 if (strlen($registrysite->countrycode) > 2) {
                     $registrysite->countrycode = 'ZZ'; //the code for unknown country. solve this later in some checker.
@@ -1105,6 +1107,7 @@ class local_hub_external extends external_api {
                 error_log('sync_into_sitesregister() failed processing id '. $syncrec->id);
                 error_log('hubid '. $syncrec->hubid);
                 error_log('url '. $registrysite->url);
+                $syncrec->exception = utf8_encode($syncrec->exception); //avoid character codings (non-utf8) causing response validation errors.
                 error_log('exception: '. $syncrec->exception);
             }
             $syncerecs[] = $syncrec;
