@@ -12,10 +12,10 @@ function get_combined_country_info() {
     list($confirmedwhere, $confirmedparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pub');
 
     $countries = get_string_manager()->get_list_of_countries();
-    $sql = "SELECT r.country, COUNT('x') AS totalcount, SUM(SIGN(r.public)) AS publiccount
+    $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM(privacy = 'named' or privacy = 'linked') AS publiccount
               FROM {registry} r
              WHERE $confirmedwhere
-          GROUP BY r.country
+          GROUP BY r.countrycode
             HAVING (COUNT('x')) > 0
           ORDER BY (COUNT('x')) DESC";
     $resultingcountries = $DB->get_records_sql($sql, $confirmedparams);
@@ -66,10 +66,10 @@ function get_sites_for_country($countrycode) {
     $params['countrycode'] = $countrycode;
 
     $country = new stdClass;
-    $country->totalsites =   $DB->count_records_select('registry', "country LIKE :countrycode AND $where", $params);
-    $country->privatesites = $DB->count_records_select('registry', "country LIKE :countrycode AND public = 0 AND $where", $params);
+    $country->totalsites =   $DB->count_records_select('registry', "countrycode LIKE :countrycode AND $where", $params);
+    $country->privatesites = $DB->count_records_select('registry', "countrycode LIKE :countrycode AND privacy = 'notlinked' AND $where", $params);
     $country->publicsites =  $country->totalsites - $country->privatesites;
-    $country->sites =        $DB->get_records_select('registry', "country LIKE :countrycode AND public != 0 AND $where", $params, 'sitename, url', 'id,sitename,url,country,public,timecreated,cool,mailme');
+    $country->sites =        $DB->get_records_select('registry', "countrycode LIKE :countrycode AND (privacy = 'named' or privacy = 'linked') AND $where", $params, 'name, url', 'id,name,url,countrycode,privacy,timeregistered,cool,mailme');
     return $country;
 }
 
@@ -349,7 +349,7 @@ function vote_for_site($siteid, $votemodifier) {
     if ($site = get_record('registry', 'id', $siteid)) {  // site exists
         $country = $site->country;
         if (record_exists('registry_votes', 'userid', $USER->id, 'siteid', $site->id)) {
-            $message = notify('You have already voted for "'.s($site->sitename).'"', 'notifyproblem', 'center', true);
+            $message = notify('You have already voted for "'.s($site->name).'"', 'notifyproblem', 'center', true);
         } else {
             $coolsite = new Object;
             $coolsite->id = $site->id;
@@ -363,9 +363,9 @@ function vote_for_site($siteid, $votemodifier) {
                 $vote->timevoted = time();
                 if (insert_record('registry_votes', $vote)) {
                     if ($votemodifier==1) {
-                        $message = notify('Your positive feeling for "'.s($site->sitename).'" has been recorded', 'notifysuccess', 'center', true);
+                        $message = notify('Your positive feeling for "'.s($site->name).'" has been recorded', 'notifysuccess', 'center', true);
                     } else {
-                        $message = notify('Your negative feeling against "'.s($site->sitename).'" has been recorded', 'notifyproblem', 'center', true);
+                        $message = notify('Your negative feeling against "'.s($site->name).'" has been recorded', 'notifyproblem', 'center', true);
                     }
                 }
             }

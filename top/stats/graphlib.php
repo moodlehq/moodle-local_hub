@@ -54,7 +54,7 @@ function gather_version_information($years = 1, $months = 0, $days = 0) {
     $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
               FROM {registry}
              WHERE score>2 AND
-                   timecreated > ?
+                   timeregistered > ?
           GROUP BY moodlerelease';
     $resultingversions = $DB->get_records_sql($sql, array($fromtime));
     if (!is_array($resultingversions)) {
@@ -214,10 +214,10 @@ function new_registrations_graph() {
     $sql = "SELECT r.dateorder, COUNT(r.id) AS count
               FROM (
                 SELECT id,
-                       FROM_UNIXTIME(timecreated, '%Y%m') AS dateorder
+                       FROM_UNIXTIME(timeregistered, '%Y%m') AS dateorder
                   FROM {registry}
-                 WHERE timecreated > 0 AND
-                       timecreated < :thismonth AND
+                 WHERE timeregistered > 0 AND
+                       timeregistered < :thismonth AND
                        confirmed = 1
                    ) r
           GROUP BY r.dateorder
@@ -276,11 +276,11 @@ function all_sites_graph() {
     $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
     $sql = "SELECT r1.dateorder, r1.created, COALESCE(r2.unreachable, 0) as unreachable
             FROM (
-                SELECT FROM_UNIXTIME(r.timecreated, '%Y%m') AS dateorder,
+                SELECT FROM_UNIXTIME(r.timeregistered, '%Y%m') AS dateorder,
                        COUNT(r.id) AS created
                   FROM {registry} r
-                 WHERE r.timecreated > 0 AND
-                       r.timecreated < :thismonth1 AND
+                 WHERE r.timeregistered > 0 AND
+                       r.timeregistered < :thismonth1 AND
                        r.confirmed = 1
               GROUP BY dateorder
             ) r1
@@ -355,20 +355,20 @@ function moodle_implementation_map_graph() {
     }
 
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
-    $sql = "SELECT r.country, COUNT(r.id) AS countrycount
+    $sql = "SELECT r.countrycode, COUNT(r.id) AS countrycount
               FROM {registry} r
              WHERE $where
-          GROUP BY r.country
+          GROUP BY r.countrycode
           ORDER BY countrycount DESC";
     $countryresults = $DB->get_records_sql($sql, $params);
     $count = 0;
     while ($count < 40) {
         $country = array_shift($countryresults);
-        $graph->add_value($country->country, 100-($count*5));
+        $graph->add_value($country->countrycode, 100-($count*5));
         $count++;
     }
     foreach ($countryresults as $country) {
-        $graph->add_value($country->country, 5);
+        $graph->add_value($country->countrycode, 5);
     }
     
     return $graph;

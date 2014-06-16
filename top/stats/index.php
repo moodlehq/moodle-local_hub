@@ -99,7 +99,7 @@ $table->align = array('left','right');
 $top10countries = local_moodleorg_stats_top_10_countries();
 $countrynames = get_string_manager()->get_list_of_countries();
 foreach ($top10countries as $row) {
-    $data = Array($countrynames[$row->country], number_format($row->countrycount));
+    $data = Array($countrynames[$row->countrycode], number_format($row->countrycount));
     $table->data[] = $data;
 }
 echo html_writer::table($table);

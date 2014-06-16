@@ -108,10 +108,10 @@ if ($country!==null && array_key_exists($country, $countries)) {
     $newtimestamp = time() - (60*60*24*14);
     if (!is_array($sites->sites)) $sites->sites = Array();
     foreach ($sites->sites as $site) {
-        if (trim($site->sitename) == '') {
+        if (trim($site->name) == '') {
             $name = $site->url;
         } else {
-            $name = $site->sitename;
+            $name = $site->name;
         }
 
         if ($site->cool >= MAXVOTES) {
@@ -119,7 +119,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
         }
 
         $properties='';
-        if ($site->timecreated>$newtimestamp) {
+        if ($site->timeregistered>$newtimestamp) {
             $properties .= "&nbsp;<img src='/pix/i/new.gif' height='11' width='28' alt='(new)'>";
         }
 
@@ -134,7 +134,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
             $properties .= '&nbsp;<img title="Cool site!" src="/pix/s/cool.gif" height="15" width="15" alt="Cool!" border="0">';
         }
 
-        if (!empty($USER->sitevoting) && $site->public) {
+        if (!empty($USER->sitevoting) && $site->privacy) {
             $properties .= '&nbsp;&nbsp;&nbsp;';
             if (!isset($oldvotes[$site->id])) {
                 $properties .= '<a title="I like this site!" href="/sites/index.php?cool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" /></a>';
@@ -172,7 +172,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
             //$properties .= '&nbsp;<a href="edit.php?delete='.$site->id.'&amp;sesskey='.sesskey().'"><img src="/pix/t/delete.gif" height="11" width="11" alt="delete" border="0"></a>';
         }
 
-        if ($site->public==2) {
+        if ($site->privacy=='linked') {
             $list->data[] = "<a href='$site->url'>$name</a>$properties";
         } else if ($USER->siteediting===true) {
             $list->data[] = "<a class='dimmed' href='$site->url'>$name</a>$properties";

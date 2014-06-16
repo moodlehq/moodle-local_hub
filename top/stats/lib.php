@@ -42,7 +42,7 @@ function local_moodleorg_stats_get_registry_stats() {
                 SUM(r.posts) posts,
                 SUM(r.resources) resources,
                 SUM(r.questions) questions,
-                COUNT(DISTINCT r.country) countrycount
+                COUNT(DISTINCT r.countrycode) countrycount
             FROM {registry} r
             WHERE '.$where;
     $stats = $DB->get_record_sql($sql, $params);
@@ -87,10 +87,10 @@ function local_moodleorg_stats_top_10_sites_by_courses() {
 function local_moodleorg_stats_top_10_countries() {
     global $DB;
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
-    $sql = 'SELECT r.country, COUNT(DISTINCT r.id) countrycount
+    $sql = 'SELECT r.countrycode, COUNT(DISTINCT r.id) countrycount
               FROM {registry} r
              WHERE '.$where.'
-          GROUP BY r.country
+          GROUP BY r.countrycode
           ORDER BY countrycount DESC
              LIMIT 10';
     return $DB->get_records_sql($sql, $params);
@@ -102,8 +102,8 @@ function local_moodleorg_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '
     } else {
         $prefix = $prefix.'.';
     }
-    $sql = "{$prefix}timecreated > 0 AND
-            {$prefix}timecreated < :thismonth{$aliassuffix} AND
+    $sql = "{$prefix}timeregistered > 0 AND
+            {$prefix}timeregistered < :thismonth{$aliassuffix} AND
             {$prefix}confirmed = 1 AND
             ({$prefix}unreachable <= :maxunreachable{$aliassuffix} OR {$prefix}override BETWEEN 1 AND 3)";
     $params = array(
