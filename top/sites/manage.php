@@ -39,8 +39,8 @@ if (isset($delete) and confirm_sesskey()) {
 
     $site = $DB->get_record("registry", array('id' => $siteid, "confirmed", "0"), '*', MUST_EXIST);
 
-    $to->email = $site->adminemail;
-    $to->firstname = $site->adminname;
+    $to->email = $site->contactemail;
+    $to->firstname = $site->contactname;
     $to->lastname = "";
     $message = "Thanks for registering details of your Moodle site with Moodle.org!\n\n".
                "    $site->url\n\n".
@@ -55,13 +55,13 @@ if (isset($delete) and confirm_sesskey()) {
                     "  - the site was obviously only a temporary testing site\n\n";
     }
     $message .= "If this situation changes in future, please try registering again!\n\n";
-    email_to_user($to, $USER, "Your Moodle site was not accepted by Moodle.org: $site->sitename", $message);
-    // email_to_user($adminaccount, $USER, "Your Moodle site was not accepted by Moodle.org: $site->sitename", $message);
-    // email_to_user($USER, $USER, "Your Moodle site was not accepted by Moodle.org: $site->sitename", $message);
+    email_to_user($to, $USER, "Your Moodle site was not accepted by Moodle.org: $site->name", $message);
+    // email_to_user($adminaccount, $USER, "Your Moodle site was not accepted by Moodle.org: $site->name", $message);
+    // email_to_user($USER, $USER, "Your Moodle site was not accepted by Moodle.org: $site->name", $message);
 
     $DB->delete_records("registry", array("id" => $siteid));
-    echo $OUTPUT->notification("$site->adminname ($site->adminemail) has been emailed", 'notifysuccess');
-    echo $OUTPUT->notification("Site '$site->sitename' has been removed from the registry", 'notifysuccess');
+    echo $OUTPUT->notification("$site->contactname ($site->contactemail) has been emailed", 'notifysuccess');
+    echo $OUTPUT->notification("Site '$site->name' has been removed from the registry", 'notifysuccess');
 
     echo '<center><a href="manage.php?frame=index" target="index">Continue</a></center>';
 
@@ -79,18 +79,18 @@ if ((isset($confirm) or isset($cool)) and confirm_sesskey()) {
     $site = $DB->get_record("registry", array('id' => $siteid, "confirmed", "0"), '*', MUST_EXIST);
 
     $site->url = strip_tags($_POST['url']);
-    $site->sitename = strip_tags($_POST['sitename']);
-    $site->adminname = strip_tags($_POST['adminname']);
-    $site->adminemail = strip_tags($_POST['adminemail']);
-    $site->country = $_POST['country'];
-    $site->public = $_POST['public'];
+    $site->name = strip_tags($_POST['name']);
+    $site->contactname = strip_tags($_POST['contactname']);
+    $site->contactemail = strip_tags($_POST['contactemail']);
+    $site->countrycode = $_POST['countrycode'];
+    $site->privacy = $_POST['privacy'];
     $site->mailme = $_POST['mailme'];
 
     if ($oldsite = $DB->get_record("registry", array("url" => $site->url, "confirmed" => "1"))) {
         $newsite = clone($site);
         $newsite->confirmed = 1;
         $newsite->id = $oldsite->id;
-        $newsite->timecreated = $oldsite->timecreated;
+        $newsite->timeregistered = $oldsite->timeregistered;
         if (isset($cool)) {
             $newsite->cool = MAXVOTES;
             $newsite->cooldate = time();
@@ -99,13 +99,13 @@ if ((isset($confirm) or isset($cool)) and confirm_sesskey()) {
         $DB->update_record("registry", $newsite);
         $DB->delete_records("registry", array("id"=> $site->id));
 
-        update_list_subscription($oldsite->adminemail, $oldsite->mailme, $newsite->adminemail, $newsite->mailme);  // subscribe them to list
+        update_list_subscription($oldsite->contactemail, $oldsite->mailme, $newsite->contactemail, $newsite->mailme);  // subscribe them to list
         $site = $newsite;
 
     } else {
         $DB->set_field("registry", "confirmed", 1, array("id" => $site->id));
 
-        update_list_subscription('', 0, $site->adminemail, $site->mailme);  // subscribe them to list
+        update_list_subscription('', 0, $site->contactemail, $site->mailme);  // subscribe them to list
         if (isset($cool)) {
              $DB->set_field("registry", "cool", MAXVOTES, array("id" => $site->id));
              $DB->set_field("registry", "cooldate", time(), array("id" => $site->id));
@@ -113,25 +113,25 @@ if ((isset($confirm) or isset($cool)) and confirm_sesskey()) {
     }
 
 
-    $to->email = $site->adminemail;
-    $to->firstname = $site->adminname;
+    $to->email = $site->contactemail;
+    $to->firstname = $site->contactname;
     $to->lastname = "";
     $message = "Thank you for registering your Moodle site!\n\n".
                "    $site->url\n\n".
                "It has been confirmed and added to the list:\n\n".
                "    http://moodle.org/sites/\n\n";
-    if (empty($site->public)) {
+    if (empty($site->privacy)) {
         $message .= "(Because you wanted privacy your site will not be shown)\n\n";
     }
     $message .= "For Moodle support please see http://moodle.org/\n";
     if (!empty($reason)) {
         $message .= "\n--------------------\n\nPersonal note: ".s($reason)."\n";
     }
-    email_to_user($to, $USER, "Registry confirmed: $site->sitename", $message);
-    //email_to_user($adminaccount, $USER, "Registry confirmed: $site->sitename", $message);
+    email_to_user($to, $USER, "Registry confirmed: $site->name", $message);
+    //email_to_user($adminaccount, $USER, "Registry confirmed: $site->name", $message);
 
-    echo $OUTPUT->notification("$site->sitename (<a href=\"$site->url\">$site->url</a>) confirmed.", 'notifysuccess');
-    echo $OUTPUT->notification("$site->adminname ($site->adminemail) has been emailed", 'notifysuccess');
+    echo $OUTPUT->notification("$site->name (<a href=\"$site->url\">$site->url</a>) confirmed.", 'notifysuccess');
+    echo $OUTPUT->notification("$site->contactname ($site->contactemail) has been emailed", 'notifysuccess');
 
     echo '<center><a href="manage.php?frame=index" target="index">Continue</a></center>';
 
@@ -196,7 +196,7 @@ if ($frame == 'info') {
 
 if ($frame == 'index') {
 
-    $filter = optional_param('filter_sitename', 0,PARAM_TEXT);
+    $filter = optional_param('filter_name', 0,PARAM_TEXT);
 
     $PAGE->set_pagelayout('embedded');
 
@@ -204,16 +204,16 @@ if ($frame == 'index') {
     echo $OUTPUT->single_button(new moodle_url('manage.php', array('frame' => 'index')), 'Refresh');
 
     echo "<form action=\"manage.php\" method=\"get\"><div><input type=\"hidden\" name=\"frame\" value=\"index\" />";
-    echo "Sitename: <input type=text name=filter_sitename size=10 value='".s($filter)."'><input type=submit value=Search><br />";
+    echo "Sitename: <input type=text name=filter_name size=10 value='".s($filter)."'><input type=submit value=Search><br />";
     echo "<font size=1>Enrolments: 0:italic, 1-10:normal, >10 bold</font><br /></br />";
     $weekago = time() - (60*60*24*7*1);
 
     if (!empty($filter)) {
-        $like = $DB->sql_like('sitename', '?', false);
-        $sql = "SELECT * FROM {registry} WHERE confirmed = 0 AND timecreated <= ? AND $like ORDER BY timecreated ASC";
+        $like = $DB->sql_like('name', '?', false);
+        $sql = "SELECT * FROM {registry} WHERE confirmed = 0 AND timeregistered <= ? AND $like ORDER BY timeregistered ASC";
         $params = array($weekago, '%'.$filter.'%');
     }else {
-        $sql = "SELECT * FROM registry WHERE confirmed = 0 AND timecreated <= $weekago ORDER BY timecreated ASC";
+        $sql = "SELECT * FROM {registry} WHERE confirmed = 0 AND timeregistered <= $weekago ORDER BY timeregistered ASC";
         $params = array();
     }
     if (!$sites = $DB->get_records_sql($sql, $params)) {
@@ -224,17 +224,17 @@ if ($frame == 'index') {
     echo "<font size=1>\n<ol>";
     foreach ($sites as $site) {
         $site->url = clean_text($site->url);
-        $site->sitename = trim(clean_text($site->sitename));
-        if (empty($site->sitename)) {
-            $site->sitename = "?????";
+        $site->name = trim(clean_text($site->name));
+        if (empty($site->name)) {
+            $site->name = "?????";
         }
         echo '<li><a target=main title="'.$site->url.'" href="manage.php?frame=site&id='.$site->id.'">';
         if ($site->enrolments == 0) {
-            echo '<i>'.$site->sitename.'</i>';
+            echo '<i>'.$site->name.'</i>';
         } else if ($site->enrolments >= 10) {
-            echo '<b>'.$site->sitename.'</b>';
+            echo '<b>'.$site->name.'</b>';
         } else {
-            echo $site->sitename;
+            echo $site->name;
         }
         echo '</a></li>';
     }
@@ -250,7 +250,7 @@ if ($frame == 'site') {
 
     ?>
     <html>
-     <head><title><?php p($site->sitename) ?></title></head>
+     <head><title><?php p($site->name) ?></title></head>
      <frameset rows="250,*" border="5">
        <frame src="manage.php?frame=siteedit&id=<?php echo $site->id ?>" name="siteedit"
               scrolling="yes"  marginwidth="0" marginheight="0">
@@ -268,12 +268,19 @@ if ($frame == 'siteedit') {
 
     $site = $DB->get_record("registry", array("id" => $siteid, "confirmed" => "0"), '*', MUST_EXIST);
     $PAGE->set_pagelayout('embedded');
-    $PAGE->set_heading(s($site->sitename));
+    $PAGE->set_heading(s($site->name));
     echo $OUTPUT->header();
 
-    $PUBLIC[0] = "Not to be listed";
-    $PUBLIC[1] = "Listed, but not linked";
-    $PUBLIC[2] = "Listed and linked";
+//    $PUBLIC[0] = "Not to be listed";
+//    $PUBLIC[1] = "Listed, but not linked";
+//    $PUBLIC[2] = "Listed and linked";
+
+    //1.9 to 2.x field map 'public' -> 'privacy' (for syncs with moodle.net)
+    $PUBLIC = array(
+        0 => 'notdisplayed',
+        1 => 'named',
+        2 => 'linked',
+    );
 
     $MAILME[0] = "No, do not mail me notifications";
     $MAILME[1] = "Yes, mail me security notifications";
@@ -296,21 +303,22 @@ if ($frame == 'siteedit') {
     echo "<form name=\"form$site->id\" method=\"post\" action=\"manage.php\">";
     echo "<input type=hidden name=id value=\"$site->id\">";
     echo "<input size=40 type=text name=url value=\"".s($site->url)."\">";
-    echo " (".format_time(time() - $site->timecreated)." ago)<br />";
-    echo "<input size=40 type=text name=sitename value=\"".s($site->sitename)."\">";
+    echo " (".format_time(time() - $site->timeregistered)." ago)<br />";
+    echo "<input size=40 type=text name=name value=\"".s($site->name)."\">";
     if (!empty($site->errormsg)) {
       echo " [-] ".$site->errormsg;
     }
-    echo "<br /><input size=40 type=text name=adminname value=\"".s($site->adminname)."\"><br />";
-    echo "<input size=40 type=text name=adminemail value=\"".s($site->adminemail)."\"><br />";
-    echo html_writer::select($countries, 'country', $site->country); echo '<br />';
-    echo html_writer::select($PUBLIC, 'public', $site->public); echo '<br />';
+    echo "<br /><input size=40 type=text name=contactname value=\"".s($site->contactname)."\"><br />";
+    echo "<input size=40 type=text name=contactemail value=\"".s($site->contactemail)."\"><br />";
+    echo html_writer::select($countries, 'countrycode', $site->countrycode); echo '<br />';
+    $rmap = array_flip($PUBLIC);
+    echo html_writer::select($PUBLIC, 'privacy', $rmap[$site->privacy]); echo '<br />';
     echo html_writer::select($MAILME, 'mailme', $site->mailme); echo '<br />';
 
-    echo '<input type=submit name=confirm value="Confirm!">';
-    echo '<input type=submit name=cool value="Confirm as cool">';
-    echo '<input type=submit name=delete value="Reject"><br/>';
-    echo '<input type=hidden name=sesskey value="'.sesskey().'"><br/>';
+    echo '<input type=submit name=confirm value="Confirm!" disabled=true>';
+    echo '<input type=submit name=cool value="Confirm as cool" disabled=true>';
+    echo '<input type=submit name=delete value="Reject" disabled=true><br/>';
+    echo '<input type=hidden name=sesskey value="'.sesskey().'" disabled=true><br/>';
     echo 'Include note: <input size=40 type=text name=reason value=""> (optional)';
     echo "</form>";
 
@@ -319,14 +327,14 @@ if ($frame == 'siteedit') {
         echo "<h4>Information being replaced:</h4>";
         echo "<UL>";
         echo "<LI><a href=\"$oldsite->url\">$oldsite->url</a>";
-        echo "<LI>$oldsite->sitename";
+        echo "<LI>$oldsite->name";
         echo "<LI>$oldsite->moodlerelease ($oldsite->moodleversion)";
         echo "<LI>$oldsite->host";
         echo "<LI>$oldsite->lang";
         echo "<LI>$oldsite->secret";
-        echo "<LI>".$countries[$oldsite->country];
-        echo "<LI>Admin: $oldsite->adminname ($oldsite->adminemail)";
-        echo "<LI>Public: $oldsite->public (".$PUBLIC[$oldsite->public].")";
+        echo "<LI>".$countries[$oldsite->countrycode];
+        echo "<LI>Admin: $oldsite->contactname ($oldsite->contactemail)";
+        echo "<LI>Public: $oldsite->privacy (".$PUBLIC[$oldsite->privacy].")";
         echo "<LI>Mailme: $oldsite->mailme (".$MAILME[$oldsite->mailme].")";
         echo "</UL>";
         echo html_writer::end_tag('div');
