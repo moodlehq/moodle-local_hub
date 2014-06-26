@@ -1,0 +1,13 @@
+#
+# Configuration file for mdt (moodle deployment tools)
+#
+
+#
+# Our frankenstyle component name
+#
+mdt_component=local_moodleorg
+
+#
+# Our path within the Moodle source code tree
+#
+mdt_relpath=local/moodleorg/
