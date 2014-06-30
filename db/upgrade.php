@@ -562,5 +562,26 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014041700, 'local', 'hub');
     }
 
+    if ($oldversion < 2014063000) {
+
+        // Define field cool to be added to hub_site_directory.
+        $table = new xmldb_table('hub_site_directory');
+        $field = new xmldb_field('cool', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'issuedbadges');
+
+        // Conditionally launch add field cool.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('cooldate', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'cool');
+
+        // Conditionally launch add field cooldate.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Hub savepoint reached.
+        upgrade_plugin_savepoint(true, 2014063000, 'local', 'hub');
+    }
+
     return $result;
 }

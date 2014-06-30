@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20140417" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20140630" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -44,6 +44,8 @@
         <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the maximum number of publication a day for this site. If null, the value is taken from the hub setting."/>
         <FIELD NAME="badges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of badges available in the site, -1 if unknown"/>
         <FIELD NAME="issuedbadges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of issued badges, -1 if unknown"/>
+        <FIELD NAME="cool" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="cooldate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
