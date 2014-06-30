@@ -1,12 +1,12 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/graphlib.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/googlecharts.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/graphlib.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/googlecharts.php');
 
-define('STATS_DIR', 'local/moodleorg/top/sites');
+define('STATS_DIR', 'local/hub/publicstats/top/sites');
 
 $countries = get_string_manager()->get_list_of_countries();
 $countryarray = get_combined_country_info();

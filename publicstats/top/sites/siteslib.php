@@ -4,7 +4,7 @@ defined('MOODLE_INTERNAL') || die;
 
 define('MAXVOTES', 3);
 
-require_once($CFG->dirroot.'/local/moodleorg/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
 
 function get_combined_country_info() {
     global $CFG, $DB;
@@ -13,7 +13,7 @@ function get_combined_country_info() {
 
     $countries = get_string_manager()->get_list_of_countries();
     $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM(privacy = 'named' or privacy = 'linked') AS publiccount
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE $confirmedwhere
           GROUP BY r.countrycode
             HAVING (COUNT('x')) > 0

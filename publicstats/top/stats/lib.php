@@ -38,12 +38,11 @@ function local_moodleorg_stats_get_registry_stats() {
                 SUM(r.courses) courses,
                 SUM(r.users) users,
                 SUM(r.enrolments) enrolments,
-                SUM(r.teachers) teachers,
                 SUM(r.posts) posts,
                 SUM(r.resources) resources,
                 SUM(r.questions) questions,
                 COUNT(DISTINCT r.countrycode) countrycount
-            FROM {registry} r
+            FROM {hub_site_directory} r
             WHERE '.$where;
     $stats = $DB->get_record_sql($sql, $params);
 
@@ -58,7 +57,7 @@ function local_moodleorg_stats_top_10_sites_by_users() {
     global $DB;
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
     $sql = 'SELECT r.* 
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE '.$where.' AND r.public IN (1, 2)
           ORDER BY r.users DESC
              LIMIT 10' ;
@@ -73,7 +72,7 @@ function local_moodleorg_stats_top_10_sites_by_courses() {
     global $DB;
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
     $sql = 'SELECT r.*
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE '.$where.' AND r.public IN (1, 2)
           ORDER BY r.courses DESC
              LIMIT 10' ;
@@ -88,7 +87,7 @@ function local_moodleorg_stats_top_10_countries() {
     global $DB;
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
     $sql = 'SELECT r.countrycode, COUNT(DISTINCT r.id) countrycount
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE '.$where.'
           GROUP BY r.countrycode
           ORDER BY countrycount DESC
@@ -104,7 +103,6 @@ function local_moodleorg_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '
     }
     $sql = "{$prefix}timeregistered > 0 AND
             {$prefix}timeregistered < :thismonth{$aliassuffix} AND
-            {$prefix}confirmed = 1 AND
             ({$prefix}unreachable <= :maxunreachable{$aliassuffix} OR {$prefix}override BETWEEN 1 AND 3)";
     $params = array(
         'maxunreachable'.$aliassuffix => STATS_MAX_UNREACHABLE,
@@ -115,8 +113,8 @@ function local_moodleorg_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '
 
 function local_moodleorg_stats_update_moodle_users() {
     global $DB;
-    $moodle = $DB->get_record('registry', array('host' => 'moodle.org'), 'id, users', MUST_EXIST);
+    $moodle = $DB->get_record('hub_site_directory', array('url' => 'https://moodle.org'), 'id, users', MUST_EXIST);
     $moodle->users = $DB->count_records('user', array('deleted' => 0));
-    $DB->update_record('registry',$moodle);
+    $DB->update_record('hub_site_directory',$moodle);
     return $moodle;
 }

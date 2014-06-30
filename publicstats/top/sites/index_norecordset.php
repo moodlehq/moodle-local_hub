@@ -1,7 +1,7 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/moodleorg/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
 
 $country = optional_param('country', '', PARAM_ALPHA);
 $cool = optional_param('cool', 0, PARAM_INT);
@@ -101,7 +101,7 @@ $counthidden = 0;
 
 $usedcountry = array();
 
-$sites = $DB->get_records_select('registry', 'confirmed = 1', null, 'sitename', 'id, country, sitename, public, url, timecreated, timeupdated, lang, cool');
+$sites = $DB->get_records_select('registry', '', null, 'sitename', 'id, country, sitename, public, url, timecreated, timeupdated, lang, cool');
 foreach ($sites as $key => $site) {
     if (empty($list[$site->country]->name)) {    /// Unknown country
         $list[$site->country]->name = $site->country;

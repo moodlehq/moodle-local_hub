@@ -27,9 +27,9 @@
 
 /** Include the nessecary config file :) */
 
-define('STATS_DIR', 'local/moodleorg/top/stats');
+define('STATS_DIR', 'local/hub/publicstats/top/stats');
 
-require('../../../../config.php');
+require('../../../../../config.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/lib.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/graphlib.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/googlecharts.php');
@@ -69,7 +69,6 @@ $table->data = array(
     array(get_string('statscountries', 'local_moodleorg'), "<a href=\"http://moodle.org/sites/\">".number_format($stats->countrycount)."</a>"),
     array(get_string('statscourses', 'local_moodleorg'), number_format($stats->courses)),
     array(get_string('statsusers', 'local_moodleorg'), number_format($stats->users)),
-    array(get_string('statsteachers', 'local_moodleorg'), number_format($stats->teachers)),
     array(get_string('statsenrolments', 'local_moodleorg'), number_format($stats->enrolments)),
     array(get_string('statsposts', 'local_moodleorg'), number_format($stats->posts)),
     array(get_string('statsresources', 'local_moodleorg'), number_format($stats->resources)),

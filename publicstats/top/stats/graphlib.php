@@ -52,7 +52,7 @@ function gather_version_information($years = 1, $months = 0, $days = 0) {
     // score is provided directly by webservice<->linkchecker within moodle.net
     // seriously watch out for cloudflare's really long caching when testing these images. scp them to check!
     $sql = 'SELECT moodlerelease, COUNT(id) AS releasecount 
-              FROM {registry}
+              FROM {hub_site_directory}
              WHERE score>2 AND
                    timeregistered > ?
           GROUP BY moodlerelease';
@@ -215,7 +215,7 @@ function new_registrations_graph() {
               FROM (
                 SELECT id,
                        FROM_UNIXTIME(timeregistered, '%Y%m') AS dateorder
-                  FROM {registry}
+                  FROM {hub_site_directory}
                  WHERE timeregistered > 0 AND
                        timeregistered < :thismonth AND
                        confirmed = 1
@@ -278,7 +278,7 @@ function all_sites_graph() {
             FROM (
                 SELECT FROM_UNIXTIME(r.timeregistered, '%Y%m') AS dateorder,
                        COUNT(r.id) AS created
-                  FROM {registry} r
+                  FROM {hub_site_directory} r
                  WHERE r.timeregistered > 0 AND
                        r.timeregistered < :thismonth1 AND
                        r.confirmed = 1
@@ -287,7 +287,7 @@ function all_sites_graph() {
             LEFT JOIN (
                 SELECT FROM_UNIXTIME(r.timeunreachable, '%Y%m') AS dateorder,
                        COUNT(r.id) AS unreachable
-                  FROM {registry} r
+                  FROM {hub_site_directory} r
                  WHERE r.timeunreachable > 0 AND
                        r.timeunreachable < :thismonth2 AND
                        r.confirmed = 1 AND
@@ -356,7 +356,7 @@ function moodle_implementation_map_graph() {
 
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
     $sql = "SELECT r.countrycode, COUNT(r.id) AS countrycount
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE $where
           GROUP BY r.countrycode
           ORDER BY countrycount DESC";
@@ -428,7 +428,7 @@ function number_of_users_to_site_size($title, $start=0, $end=1000000, $rounder=4
     $sql = "SELECT r.users, COUNT(r.id) as sitecount
               FROM (
                 SELECT r.id, ROUND(r.users, -:rounder) users
-                  FROM {registry} r
+                  FROM {hub_site_directory} r
                  WHERE r.users > :start AND
                        r.users <= :end AND
                        $where
@@ -559,7 +559,7 @@ function moodle_users_per_site() {
     $graph->set_bar_limit(count($range)+1);
     list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
     $sql = "SELECT COUNT(id) sitecount
-              FROM {registry} r
+              FROM {hub_site_directory} r
              WHERE r.users > :start AND
                    r.users <= :end AND
                    $where";

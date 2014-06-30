@@ -102,7 +102,7 @@ $counthidden = 0;
 $usedcountry = array();
 
 
-$sitesrs = $DB->get_recordset_select('registry', 'confirmed = 1', null, 'sitename', "id, country, sitename, public, url, timecreated, timeupdated, lang, cool");
+$sitesrs = $DB->get_recordset_select('registry', '', null, 'sitename', "id, country, sitename, public, url, timecreated, timeupdated, lang, cool");
 foreach ($sitesrs as $site) {
     if (empty($list[$site->country]->name)) {    /// Unknown country
         $list[$site->country]->name = $site->country;
