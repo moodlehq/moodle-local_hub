@@ -1,6 +1,6 @@
 <?php
 
-require('../../../../config.php');
+require('../../../../../config.php');
 require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
 require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
 require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/graphlib.php');
@@ -123,7 +123,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
             $properties .= "&nbsp;<img src='/pix/i/new.gif' height='11' width='28' alt='(new)'>";
         }
 
-        if (isloggedin() && !isguestuser() && ((int)$site->mailme === 1) && (!isset($SESSION->registrycontactmessagesent) || $SESSION->registrycontactmessagesent < 4)) {
+        if (isloggedin() && !isguestuser() && ((int)$site->contactable === 1) && (!isset($SESSION->registrycontactmessagesent) || $SESSION->registrycontactmessagesent < 4)) {
             $properties .= '&nbsp;';
             $properties .= $OUTPUT->action_icon(new moodle_url('/sites/contact.php', array('siteid'=>$site->id, 'sesskey'=>sesskey())), new pix_icon('t/email', 'Send mail', 'moodle', array('style'=>'height:11px;width:11px;border:0;')));
         }

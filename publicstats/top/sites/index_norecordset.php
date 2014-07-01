@@ -46,8 +46,8 @@ if ($cool or $uncool) {
     if (isloggedin() and confirm_sesskey()) {
         if ($site = $DB->get_record('registry', array('id'=>$cool+$uncool))) {  // site exists
             $country = $site->country;
-            if ($DB->record_exists('registry_votes', array('userid'=>$USER->id, 'siteid'=>$site->id))) {
-                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'local_moodleorg', s($site->sitename)));
+            if ($DB->record_exists('hub_site_directory_votes', array('userid'=>$USER->id, 'siteid'=>$site->id))) {
+                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'local_hub', s($site->sitename)));
             } else {
                 if ($cool) {
                     $site->cool = $site->cool + 1;
@@ -101,7 +101,7 @@ $counthidden = 0;
 
 $usedcountry = array();
 
-$sites = $DB->get_records_select('registry', '', null, 'sitename', 'id, country, sitename, public, url, timecreated, timeupdated, lang, cool');
+$sites = $DB->get_records_select('hub_site_directory', '', null, 'sitename', 'id, country, sitename, public, url, timecreated, timeupdated, lang, cool');
 foreach ($sites as $key => $site) {
     if (empty($list[$site->country]->name)) {    /// Unknown country
         $list[$site->country]->name = $site->country;
@@ -122,7 +122,7 @@ foreach ($sites as $key => $site) {
     }
 }
 
-echo "<p align=center>Currently there are ".$DB->count_records("registry")." sites from ".count($usedcountry)." countries who have registered.<br />";
+echo "<p align=center>Currently there are ".$DB->count_records("hub_site_directory")." sites from ".count($usedcountry)." countries who have registered.<br />";
 
 echo "$counthidden of these have requested privacy and are not shown in the lists below.</p>";
 

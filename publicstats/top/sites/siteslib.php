@@ -9,7 +9,7 @@ require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
 function get_combined_country_info() {
     global $CFG, $DB;
 
-    list($confirmedwhere, $confirmedparams) = local_moodleorg_stats_get_confirmed_sql('r', 'pub');
+    list($confirmedwhere, $confirmedparams) = local_hub_stats_get_confirmed_sql('r', 'pub');
 
     $countries = get_string_manager()->get_list_of_countries();
     $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM(privacy = 'named' or privacy = 'linked') AS publiccount
@@ -62,14 +62,14 @@ function get_combined_country_info() {
  */
 function get_sites_for_country($countrycode) {
     global $DB;
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql(null);
+    list($where, $params) = local_hub_stats_get_confirmed_sql(null);
     $params['countrycode'] = $countrycode;
 
     $country = new stdClass;
-    $country->totalsites =   $DB->count_records_select('registry', "countrycode LIKE :countrycode AND $where", $params);
-    $country->privatesites = $DB->count_records_select('registry', "countrycode LIKE :countrycode AND privacy = 'notlinked' AND $where", $params);
+    $country->totalsites =   $DB->count_records_select('hub_site_directory', "countrycode LIKE :countrycode AND $where", $params);
+    $country->privatesites = $DB->count_records_select('hub_site_directory', "countrycode LIKE :countrycode AND privacy = 'notlinked' AND $where", $params);
     $country->publicsites =  $country->totalsites - $country->privatesites;
-    $country->sites =        $DB->get_records_select('registry', "countrycode LIKE :countrycode AND (privacy = 'named' or privacy = 'linked') AND $where", $params, 'name, url', 'id,name,url,countrycode,privacy,timeregistered,cool,mailme');
+    $country->sites =        $DB->get_records_select('hub_site_directory', "countrycode LIKE :countrycode AND (privacy = 'named' or privacy = 'linked') AND $where", $params, 'name, url', 'id,name,url,countrycode,privacy,timeregistered,cool,contactable');
     return $country;
 }
 
@@ -346,7 +346,7 @@ function vote_for_site($siteid, $votemodifier) {
     die('NOT CONVERTED YET!');
     global $USER;
     $message = false;
-    if ($site = get_record('registry', 'id', $siteid)) {  // site exists
+    if ($site = get_record('hub_site_directory', 'id', $siteid)) {  // site exists
         $country = $site->country;
         if (record_exists('registry_votes', 'userid', $USER->id, 'siteid', $site->id)) {
             $message = notify('You have already voted for "'.s($site->name).'"', 'notifyproblem', 'center', true);
@@ -355,7 +355,7 @@ function vote_for_site($siteid, $votemodifier) {
             $coolsite->id = $site->id;
             $coolsite->cool = $site->cool + $votemodifier;
             $coolsite->cooldate = time();
-            if (update_record('registry', $coolsite)) {
+            if (update_record('hub_site_directory', $coolsite)) {
                 $vote = new Object;
                 $vote->userid = $USER->id;
                 $vote->siteid = $site->id;

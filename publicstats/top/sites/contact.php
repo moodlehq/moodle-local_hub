@@ -36,7 +36,7 @@ if (in_array($currentaddress, $exceptions)) {
 
 
 if (isset($SESSION->registrycontactmessagesent) && $SESSION->registrycontactmessagesent >= 3) {
-    print_error('errormaxmessages', 'local_moodleorg');
+    print_error('errormaxmessages', 'local_hub');
 }
 
 // You'll need to build a little fake $userto object to pass to email_to_user()
@@ -46,9 +46,9 @@ if (!$site) {
 
     echo $OUTPUT->box('The site you requested cannot be found or displayed.  Please contact the administrator if you believe this is an error.');
 
-} else if ($site->mailme != 1) {
+} else if ($site->contactable != 1) {
 
-    /* there shouldn't be a link to this script if $site->mailme isn't on.. but just
+    /* there shouldn't be a link to this script if $site->contactable isn't on.. but just
      * in case people fool around with the siteid variable...
      */
 
@@ -83,7 +83,7 @@ if (!$site) {
         }
 
     } else {
-        print_error('errorsendingmail', 'local_moodleorg');
+        print_error('errorsendingmail', 'local_hub');
     }
 
     /* will have to choose the right way to end... */

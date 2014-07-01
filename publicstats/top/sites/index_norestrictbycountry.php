@@ -45,10 +45,10 @@ echo $OUTPUT->header();
 /// Process cool / uncool
 if ($cool or $uncool) {
     if (isloggedin() and confirm_sesskey()) {
-        if ($site = $DB->get_record('registry', array('id'=>$cool+$uncool))) {  // site exists
+        if ($site = $DB->get_record('hub_site_directory', array('id'=>$cool+$uncool))) {  // site exists
             $country = $site->country;
             if ($DB->record_exists('registry_votes', array('userid'=>$USER->id, 'siteid'=>$site->id))) {
-                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'local_moodleorg', s($site->sitename)));
+                echo $OUTPUT->notification(get_string('erroralreadyvoted', 'local_hub', s($site->sitename)));
             } else {
                 if ($cool) {
                     $site->cool = $site->cool + 1;
@@ -59,7 +59,7 @@ if ($cool or $uncool) {
                 $coolsite->id = $site->id;
                 $coolsite->cool = $site->cool;
                 $coolsite->cooldate = time();
-                $DB->update_record('registry', $coolsite);
+                $DB->update_record('hub_site_directory', $coolsite);
 
                 $vote = new stdClass;
                 $vote->userid = $USER->id;
@@ -102,7 +102,7 @@ $counthidden = 0;
 $usedcountry = array();
 
 
-$sitesrs = $DB->get_recordset_select('registry', '', null, 'sitename', "id, country, sitename, public, url, timecreated, timeupdated, lang, cool");
+$sitesrs = $DB->get_recordset_select('hub_site_directory', '', null, 'sitename', "id, country, sitename, public, url, timecreated, timeupdated, lang, cool");
 foreach ($sitesrs as $site) {
     if (empty($list[$site->country]->name)) {    /// Unknown country
         $list[$site->country]->name = $site->country;
@@ -124,7 +124,7 @@ foreach ($sitesrs as $site) {
 }
 $sitesrs->close();
 
-echo "<p align=center>Currently there are ".$DB->count_records("registry")." sites from ".count($usedcountry)." countries who have registered.<br />";
+echo "<p align=center>Currently there are ".$DB->count_records("hub_site_directory")." sites from ".count($usedcountry)." countries who have registered.<br />";
 
 echo "$counthidden of these have requested privacy and are not shown in the lists below.</p>";
 

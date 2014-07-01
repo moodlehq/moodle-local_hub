@@ -217,8 +217,7 @@ function new_registrations_graph() {
                        FROM_UNIXTIME(timeregistered, '%Y%m') AS dateorder
                   FROM {hub_site_directory}
                  WHERE timeregistered > 0 AND
-                       timeregistered < :thismonth AND
-                       confirmed = 1
+                       timeregistered < :thismonth
                    ) r
           GROUP BY r.dateorder
           ORDER BY r.dateorder ASC";
@@ -280,8 +279,7 @@ function all_sites_graph() {
                        COUNT(r.id) AS created
                   FROM {hub_site_directory} r
                  WHERE r.timeregistered > 0 AND
-                       r.timeregistered < :thismonth1 AND
-                       r.confirmed = 1
+                       r.timeregistered < :thismonth1
               GROUP BY dateorder
             ) r1
             LEFT JOIN (
@@ -290,7 +288,6 @@ function all_sites_graph() {
                   FROM {hub_site_directory} r
                  WHERE r.timeunreachable > 0 AND
                        r.timeunreachable < :thismonth2 AND
-                       r.confirmed = 1 AND
                        r.override NOT IN (1, 2, 3) AND
                        r.unreachable > :maxunreachable2
               GROUP BY dateorder
@@ -354,7 +351,7 @@ function moodle_implementation_map_graph() {
         return $graph;
     }
 
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = "SELECT r.countrycode, COUNT(r.id) AS countrycount
               FROM {hub_site_directory} r
              WHERE $where
@@ -423,7 +420,7 @@ function number_of_users_to_site_size($title, $start=0, $end=1000000, $rounder=4
         return $graph;
     }
 
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
 
     $sql = "SELECT r.users, COUNT(r.id) as sitecount
               FROM (
@@ -557,7 +554,7 @@ function moodle_users_per_site() {
     $range[] = array('start'=>1000000, 'end'=>1999999);
 
     $graph->set_bar_limit(count($range)+1);
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = "SELECT COUNT(id) sitecount
               FROM {hub_site_directory} r
              WHERE r.users > :start AND

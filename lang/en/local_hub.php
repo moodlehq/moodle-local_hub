@@ -452,3 +452,35 @@ $string['xmlrpcdisabled'] = 'The XML-RPC extension is not enabled on the server.
 $string['yeswithmoodle'] = 'Yes, with Moodle';
 $string['yeswithoutmoodle'] = 'Yes, without Moodle';
 
+//@todo AMOS CPY commands for local_moodleorg -> local_hub
+$string['aboutstatisticstitle'] = 'Moodle.org: Moodle Statistics';
+$string['aboutstatisticsheading'] = 'Moodle Statistics';
+$string['activeusers24hours'] = 'Registered users accessed in past 24 hours: ';
+$string['activeuserspastmonth'] = 'Registered users accessed in past month:';
+$string['graphusersites'] = 'Moodle users v site comparison';
+$string['graphpopulation'] = 'Moodle population graph';
+$string['graphregistrationmap'] = 'Moodle registration map';
+$string['graphregistrationmapdesc'] = 'Top 10 from registered sites in {$a} countries';
+$string['newregistrations'] = 'New registrations';
+$string['registeredsites'] = 'Institutions are not required to inform anyone when they use Moodle, because Moodle is open source.  However, some Moodle sites have chosen to register with us and we keep a listing of them.';
+$string['registeredsitestitle'] = 'Registered sites';
+$string['registereduserstotal'] = 'Registered users total: ';
+$string['registereduserslastday'] = 'New users in the past 24 hours: ';
+$string['registrationgraphalt'] = 'All Moodle registrations over time';
+$string['registrationgraphdesc'] = 'We perform <a href="http://docs.moodle.org/en/Usage">regular bulk checking of sites</a> to make sure they still exist, so occasionally you may see reductions in the count';
+$string['registrationslast6months'] = 'Registrations in the past 6 months';
+$string['registrationslastmonths'] = 'Registrations in the past {$a} months';
+$string['registrationstotal'] = 'All current registrations';
+$string['statscourses'] = 'Courses';
+$string['statscountries'] = 'Countries';
+$string['statsusers'] = 'Users';
+$string['statsteachers'] = 'Teachers';
+$string['statsenrolments'] = 'Enrolments';
+$string['statsposts'] = 'Forum posts';
+$string['statsresources'] = 'Resources';
+$string['statsquestions'] = 'Quiz questions';
+$string['top10sitesbyusers'] = 'Top 10 sites by users';
+$string['top10sitesbycourses'] = 'Top 10 sites by courses';
+$string['top10countriesbyregistration'] = 'Top 10 countries by registrations';
+$string['versionsused'] = 'Versions used';
+

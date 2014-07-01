@@ -30,9 +30,9 @@ define('STATS_MAX_UNREACHABLE', 2);
  *
  * @global moodle_database $DB
  */
-function local_moodleorg_stats_get_registry_stats() {
+function local_hub_stats_get_registry_stats() {
     global $DB;
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT
                 COUNT(DISTINCT r.id) registrycount,
                 SUM(r.courses) courses,
@@ -53,9 +53,9 @@ function local_moodleorg_stats_get_registry_stats() {
  *
  * @global moodle_database $DB
  */
-function local_moodleorg_stats_top_10_sites_by_users() {
+function local_hub_stats_top_10_sites_by_users() {
     global $DB;
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT r.* 
               FROM {hub_site_directory} r
              WHERE '.$where.' AND r.public IN (1, 2)
@@ -68,9 +68,9 @@ function local_moodleorg_stats_top_10_sites_by_users() {
  *
  * @global moodle_database $DB
  */
-function local_moodleorg_stats_top_10_sites_by_courses() {
+function local_hub_stats_top_10_sites_by_courses() {
     global $DB;
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT r.*
               FROM {hub_site_directory} r
              WHERE '.$where.' AND r.public IN (1, 2)
@@ -83,9 +83,9 @@ function local_moodleorg_stats_top_10_sites_by_courses() {
  *
  * @global moodle_database $DB 
  */
-function local_moodleorg_stats_top_10_countries() {
+function local_hub_stats_top_10_countries() {
     global $DB;
-    list($where, $params) = local_moodleorg_stats_get_confirmed_sql();
+    list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT r.countrycode, COUNT(DISTINCT r.id) countrycount
               FROM {hub_site_directory} r
              WHERE '.$where.'
@@ -95,7 +95,7 @@ function local_moodleorg_stats_top_10_countries() {
     return $DB->get_records_sql($sql, $params);
 }
 
-function local_moodleorg_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '') {
+function local_hub_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '') {
     if (empty($prefix)) {
         $prefix = '';
     } else {
@@ -111,7 +111,7 @@ function local_moodleorg_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '
     return array($sql, $params);
 }
 
-function local_moodleorg_stats_update_moodle_users() {
+function local_hub_stats_update_moodle_users() {
     global $DB;
     $moodle = $DB->get_record('hub_site_directory', array('url' => 'https://moodle.org'), 'id, users', MUST_EXIST);
     $moodle->users = $DB->count_records('user', array('deleted' => 0));
