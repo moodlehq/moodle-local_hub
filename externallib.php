@@ -1060,6 +1060,10 @@ class local_hub_external extends external_api {
                     }
                 }
 
+                // if not the same, merge legacy 'mailme' into 'contactable' for hub.
+                if ($registrysite->mailme != $registrysite->contactable) { //somewhere contactable was brought to registry@moodle.org. only 1.9 site registration uses mailme.
+                    $registrysite->contactable = $registrysite->mailme; // 1.9 changes to mailme brought through to hub. (this is a quick fix to a mess) @todo cleanup
+                }
                 //fix some common data length errors - just truncate (original is stored in moodle.org registry and a 2.x upgrade can fix it at hub)
                 if (strlen($registrysite->moodlerelease) > 50) {
                     $registrysite->moodlerelease = substr($registrysite->moodlerelease, 0, 49);
