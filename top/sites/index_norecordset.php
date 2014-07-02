@@ -1,7 +1,7 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/hub/top/sites/siteslib.php');
 
 $country = optional_param('country', '', PARAM_ALPHA);
 $cool = optional_param('cool', 0, PARAM_INT);
@@ -303,7 +303,7 @@ if (!empty($country)) {
             } else {
                 echo "<ul><li>None of the registered sites have been made public</li></ul>";
             }
-            echo "<p align=\"right\"><font size=1><a href=\"#top\"><img src=\"http://moodle.org/pix/s/yes.gif\" border=0 alt=\"Up to top\"></a></font></p>";
+            echo "<p align=\"right\"><font size=1><a href=\"#top\"><img src=\"/pix/s/yes.gif\" border=0 alt=\"Up to top\"></a></font></p>";
             echo "</td></tr></table><br />\n";
         }
     }

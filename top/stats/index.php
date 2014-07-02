@@ -27,9 +27,9 @@
 
 /** Include the nessecary config file :) */
 
-define('STATS_DIR', 'local/hub/publicstats/top/stats');
+define('STATS_DIR', 'local/hub/top/stats');
 
-require('../../../../../config.php');
+require('../../../../config.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/lib.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/graphlib.php');
 require_once($CFG->dirroot.'/'.STATS_DIR.'/googlecharts.php');
@@ -65,8 +65,8 @@ $table->attributes = array('class'=>'generaltable boxaligncenter');
 $table->width = '400px';
 $table->align = array('left','right');
 $table->data = array(
-    array(get_string('registeredsitestitle','local_hub'), '<a href="http://moodle.org/sites/">'.number_format($stats->registrycount).'</a>'),
-    array(get_string('statscountries', 'local_hub'), "<a href=\"http://moodle.org/sites/\">".number_format($stats->countrycount)."</a>"),
+    array(get_string('registeredsitestitle','local_hub'), '<a href="../sites/">'.number_format($stats->registrycount).'</a>'),
+    array(get_string('statscountries', 'local_hub'), '<a href="../sites/">'.number_format($stats->countrycount)."</a>"),
     array(get_string('statscourses', 'local_hub'), number_format($stats->courses)),
     array(get_string('statsusers', 'local_hub'), number_format($stats->users)),
     array(get_string('statsenrolments', 'local_hub'), number_format($stats->enrolments)),

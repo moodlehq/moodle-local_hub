@@ -4,7 +4,7 @@ defined('MOODLE_INTERNAL') || die;
 
 define('MAXVOTES', 3);
 
-require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/hub/top/stats/lib.php');
 
 function get_combined_country_info() {
     global $CFG, $DB;
@@ -329,7 +329,7 @@ function linkcheck($url) {
 
     } else {
         $dump = "HEAD ".$urlArray['path']." HTTP/1.1\r\n";
-        $dump .= "User-Agent: Moodle.org Link Checker (http://moodle.org/sites/)\r\n";
+        $dump .= "User-Agent: Moodle.net Link Checker (http://moodle.net/sites/)\r\n";
         $dump .= "Host: $urlArray[host]\r\nConnection: close\r\n";
         $dump .= "Connection: close\r\n\r\n";
         fputs($sock, $dump);

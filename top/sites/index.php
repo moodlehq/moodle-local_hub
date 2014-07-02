@@ -1,12 +1,12 @@
 <?php
 
-require('../../../../../config.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/lib.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/graphlib.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/stats/googlecharts.php');
+require('../../../../config.php');
+require_once($CFG->dirroot.'/local/hub/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/hub/top/stats/lib.php');
+require_once($CFG->dirroot.'/local/hub/top/stats/graphlib.php');
+require_once($CFG->dirroot.'/local/hub/top/stats/googlecharts.php');
 
-define('STATS_DIR', 'local/hub/publicstats/top/sites');
+define('STATS_DIR', 'local/hub/top/sites');
 
 $countries = get_string_manager()->get_list_of_countries();
 $countryarray = get_combined_country_info();
@@ -20,7 +20,7 @@ $sitevoting = optional_param('voting', 0, PARAM_INT);
 $edit = optional_param('edit', '', PARAM_ALPHA);
 
 $PAGE->set_context(context_system::instance());
-$PAGE->set_url(new moodle_url('/sites/'));
+$PAGE->set_url(new moodle_url('/local/hub/top/sites'));
 
 $isadmin = ismoodlesiteadmin();
 $USER->siteediting = false;
@@ -184,7 +184,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
 
 
 $PAGE->navbar->add('Registered sites', new moodle_url('/sites/'));
-$PAGE->set_title('Moodle.org: Registered sites');
+$PAGE->set_title('Moodle.net: Registered sites');
 $PAGE->set_heading('Registered moodle sites');
 $PAGE->set_button(edit_button($isadmin, $country));
 
@@ -239,7 +239,7 @@ if (isset($list)) {
     echo "<br /></div>";
 
     print_list($list);
-    echo "<p align=\"right\" style='clear:both'><a href=\"#top\"><img src=\"http://moodle.org/pix/t/up.gif\" border=0 alt=\"Up to top\"></a></p>";
+    echo "<p align=\"right\" style='clear:both'><a href=\"#top\"><img src=\"/pix/t/up.gif\" border=0 alt=\"Up to top\"></a></p>";
     echo html_writer::end_tag('div');
 }
 

@@ -1,7 +1,7 @@
 <?php
 
 require('../../../../config.php');
-require_once($CFG->dirroot.'/local/hub/publicstats/top/sites/siteslib.php');
+require_once($CFG->dirroot.'/local/hub/top/sites/siteslib.php');
 
 require_login();
 
@@ -77,7 +77,7 @@ if (!empty($delete)) {
 }
 $PAGE->set_url($url);
 $PAGE->set_context(context_system::instance());
-$PAGE->set_title('moodle.org: Moodle sites management');
+$PAGE->set_title('moodle.net: Moodle sites management');
 $PAGE->set_heading('Moodle sites management');
 
 $PAGE->navbar->add('Sites', new moodle_url('/sites/'));

@@ -473,9 +473,9 @@ function moodle_population() {
     global $CFG, $DB;
 
     $graph = new google_charts_bar_graph();
-    $graph->set_chart_title("Moodle.org population");
-    $graph->add_legend('Total moodle.org users');
-    $graph->add_legend('New moodle.org users');
+    $graph->set_chart_title("Moodle.net population");
+    $graph->add_legend('Total moodle.net users');
+    $graph->add_legend('New moodle.net users');
     $graph->set_bar_limit(80);
     $graph->use_second_xlabel();
     $graph->use_second_xvalue();

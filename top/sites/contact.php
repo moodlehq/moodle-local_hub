@@ -10,11 +10,11 @@ $siteid = required_param('siteid', PARAM_INT);
  */
 require_login(null, false);
 if (isguestuser()) {
-    redirect('http://moodle.org/sites/', 'Guests cannot contact sites this way.');
+    redirect('../sites/', 'Guests cannot contact sites this way.');
 }
 
 if (!$site = $DB->get_record('hub_site_directory', array('id'=>$siteid))) {
-    redirect('http://moodle.org/sites/', 'You can\'t call this script directly');
+    redirect('../sites/', 'You can\'t call this script directly');
 }
 
 $PAGE->set_context(context_system::instance());
