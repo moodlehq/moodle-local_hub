@@ -97,7 +97,7 @@ if (!$site) {
 
 } else {
     /* print out the form */
-    echo $OUTPUT->heading('Send a private email to the administrator of: '.$site->sitename);
+    echo $OUTPUT->heading('Send a private email to the administrator of: '.$site->name);
     echo $OUTPUT->box('Your name and email address will be automatically included as the sender', 'generalbox', 'notice');
     include('contact.html');
 

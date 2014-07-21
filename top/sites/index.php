@@ -17,6 +17,10 @@ $country = optional_param('country', '', PARAM_ALPHA);
 $cool = optional_param('cool', 0, PARAM_INT);
 $uncool = optional_param('uncool', 0, PARAM_INT);
 $sitevoting = optional_param('voting', 0, PARAM_INT);
+//disable this on live until MDLSITE-2787 gets resolved
+$sitevoting = 0;
+$USER->sitevoting = false;
+
 $edit = optional_param('edit', '', PARAM_ALPHA);
 
 $PAGE->set_context(context_system::instance());
@@ -215,28 +219,29 @@ echo html_writer::end_tag('div');
 
 if (isset($list)) {
     echo html_writer::start_tag('div', array('class'=>'boxwidthwide boxaligncenter', 'style'=>'padding:20px;'));
-
-    echo '<div style="margin-left:20%;margin-right:20%;text-align:center;font-size:0.9em;">';
-    if (!isloggedin() || isguestuser()) {
-        echo 'Sites can be marked "Cool" if three or more people vote for them.  Cool sites are promoted around moodle.org and other places. To vote on sites you need to be <a href="/login/index.php">logged in</a>.';
-        echo "<br />";
-    } else {
-        $options = array();
-        $options['country'] = $country;
-        if ($isadmin && $USER->siteediting) {
-            $options['edit']='on';
-        }
-        if (empty($USER->sitevoting)) {
-            echo 'Sites can be marked "Cool" if three or more people vote for them.  Cool sites are promoted around moodle.org and other places. To see the voting controls, use this button:</p>';
-            $options['voting'] = 1;
-            $button = new single_button(new moodle_url('/sites/index.php', $options), 'Show voting buttons for these sites');
+    if ($sitevoting) {
+        echo '<div style="margin-left:20%;margin-right:20%;text-align:center;font-size:0.9em;">';
+        if (!isloggedin() || isguestuser()) {
+            echo 'Sites can be marked "Cool" if three or more people vote for them.  Cool sites are promoted around moodle.org and other places. To vote on sites you need to be <a href="/login/index.php">logged in</a>.';
+            echo "<br />";
         } else {
-            $options['voting'] = -1;
-            $button = new single_button(new moodle_url('/sites/index.php', $options), 'Hide voting buttons for these sites');
+            $options = array();
+            $options['country'] = $country;
+            if ($isadmin && $USER->siteediting) {
+                $options['edit']='on';
+            }
+            if (empty($USER->sitevoting)) {
+                echo 'Sites can be marked "Cool" if three or more people vote for them.  Cool sites are promoted around moodle.org and other places. To see the voting controls, use this button:</p>';
+                $options['voting'] = 1;
+                $button = new single_button(new moodle_url('/sites/index.php', $options), 'Show voting buttons for these sites');
+            } else {
+                $options['voting'] = -1;
+                $button = new single_button(new moodle_url('/sites/index.php', $options), 'Hide voting buttons for these sites');
+            }
+            $OUTPUT->render($button);
         }
-        $OUTPUT->render($button);
+        echo "<br /></div>";
     }
-    echo "<br /></div>";
 
     print_list($list);
     echo "<p align=\"right\" style='clear:both'><a href=\"#top\"><img src=\"/pix/t/up.gif\" border=0 alt=\"Up to top\"></a></p>";
