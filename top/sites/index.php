@@ -33,7 +33,7 @@ $usercountry = "";
 if (!empty($USER->country)) {
     $usercountry = $USER->country;
 } else {
-    $ip = (array_key_exists($_SERVER,'HTTP_X_FORWARDED_FOR')) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+    $ip = (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
     if ($countryinfo = $DB->get_record_sql("SELECT * FROM {countries} WHERE ipfrom <= inet_aton('$ip') AND inet_aton('$ip') <= ipto ")) {
         $usercountry = $countryinfo->code2;
     }
