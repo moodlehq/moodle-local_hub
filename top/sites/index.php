@@ -25,6 +25,7 @@ $edit = optional_param('edit', '', PARAM_ALPHA);
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_url(new moodle_url('/local/hub/top/sites'));
+$PAGE->requires->css('/local/hub/style/hub.css');
 
 $isadmin = ismoodlesiteadmin();
 $USER->siteediting = false;
@@ -91,7 +92,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
     $graph->set_filename($filename);
     $graph->add_value($country, 100);
 
-    $graph = html_writer::empty_tag('img', array('src'=>new moodle_url($graph), 'alt'=>$countries[$country]." map", 'style'=>'float:right;position:relative;top:20px;right:20px;'));
+    $graph = html_writer::empty_tag('img', array('src'=>new moodle_url($graph), 'alt'=>$countries[$country]." map", 'class'=>'countrymapimg'));
 
     $list = new stdClass;
     $list->printanchors = true;
@@ -206,7 +207,7 @@ echo '<span style="font-size:0.9em;">(Note: we check these sites regularly and <
 echo html_writer::end_tag('p');
 
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo '<a href="moodle-registered-sites-20091103-large.jpg"><img src="'.$CFG->wwwroot.'/sites/moodle-registered-sites-20091103-small.jpg" width=540 height=270 /></a>';
+echo html_writer::empty_tag('img', array('src'=>$CFG->wwwroot.'/sites/moodle-registered-sites-20091103-small.jpg', 'class'=>'activesitesimg'));
 echo html_writer::end_tag('p');
 
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
@@ -244,7 +245,7 @@ if (isset($list)) {
     }
 
     print_list($list);
-    echo "<p align=\"right\" style='clear:both'><a href=\"#top\"><img src=\"/pix/t/up.gif\" border=0 alt=\"Up to top\"></a></p>";
+    echo "<p align=\"right\" style='clear:both'><a href=\"#top\"><img src=\"/pix/t/up.png\" border=0 alt=\"Up to top\"></a></p>";
     echo html_writer::end_tag('div');
 }
 
