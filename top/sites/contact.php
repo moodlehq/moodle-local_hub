@@ -64,8 +64,11 @@ if (!$site) {
 } else if (($frm = data_submitted()) && confirm_sesskey()) {
 
     /* set up a fake user for the destination site */
-    $userto->firstname = $site->adminname;
-    $userto->email = $site->adminemail;
+    $userto = new stdClass();
+    //need an id, can't use id=0. would rather not use id=1, lets fool the api while we're still trying to use a fake user to send to.
+    $userto->id = 0.1;
+    $userto->firstname = $site->contactname;
+    $userto->email = $site->contactemail;
 
     /* following code strongly inspired by message/lib.php */
     $message = clean_text($frm->contacttext, FORMAT_PLAIN);
