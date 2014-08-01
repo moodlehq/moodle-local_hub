@@ -200,6 +200,7 @@ class local_hub {
         global $DB;
         $site->timemodified = time();
         $DB->update_record('hub_site_directory', $site);
+        update_sendy_list($site);
     }
 
     /**
@@ -223,6 +224,7 @@ class local_hub {
             $this->update_site($site);
         } else {
             $site->id = $DB->insert_record('hub_site_directory', $site);
+            update_sendy_list($site);
         }
         return $site;
     }
@@ -2086,4 +2088,90 @@ function local_hub_comment_validate($comment_param) {
         throw new comment_exception('invalidcontext');
     }
     return true;
+}
+
+/**
+ * Just send updates to the sendy list via REST. Really, the list is managed at and by sendy (lists.moodle.org).
+ * An entry at sendy can have more statuses than just {subscribed, unsubscribed} so we're just sending an update thats all.
+ *
+ * @todo tobe in local_hub class or not? its a helper function for now for any functional expansion..
+ *
+ * @global type $CFG
+ * @param type $user
+ * @param type $sendylistid
+ */
+function update_sendy_list($site, $sendylistid='2QQaBL8AHzUfo6btDIMb8w') {
+    global $CFG;
+
+    $sendyurl = 'http://lists.moodle.org';
+    if (isset($CFG->sendylistid)) { //allow override in config.
+         $sendylistid = $CFG->sendylistid;
+    }
+
+    $params = array ('name' => $site->contactname, 'email' => $site->contactemail, 'list' => $sendylistid, 'boolean' => 'true');
+    $query = http_build_query($params);
+
+    //add resturl bit based only on what we know.
+    if ($site->contactable == 1) {
+        $resturl = '/subscribe';
+    } else if ($site->contactable == 0) {
+        $resturl = '/unsubscribe';
+    }
+
+    /// REST CALL
+    $curl = new curl;
+    $result = $curl->post($sendyurl.$resturl, $params);
+
+    if ($result != '1' && $result != 'Already subscribed.') {
+        error_log('Updating sendy @'.$sendyurl.$resturl.' had the following error message for $site('.$site->id.'):'. $result);
+    }
+}
+
+/**
+ * Send, en masse, updates to the sendy list via REST. Really, the list is managed at and by sendy (lists.moodle.org).
+ * An entry at sendy can have more statuses than just {subscribed, unsubscribed} so we're just sending an update thats all.
+ *
+ * @todo tobe in local_hub class or not? its a helper function for now for any functional expansion..
+ *
+ * @global type $CFG
+ * @param type $user
+ * @param type $sendylistid
+ */
+function update_sendy_list_batch($sites, $chunksize=150, $sendylistid='VeFcuzWIUKDSfoQ1FhxXkA') {
+    global $CFG;
+    require_once($CFG->dirroot.'/local/hub/curl.php');
+    $sendyurl = 'http://lists.moodle.org';
+    if (isset($CFG->sendylistid)) { //allow override in config.
+         $sendylistid = $CFG->sendylistid;
+    }
+    mtrace('Processing '. count($sites). ' sites in chunks of '. $chunksize);
+    $siteschunks = array_chunk($sites, $chunksize);
+    foreach ($siteschunks as $siteschunk) {
+        echo '.';
+        $curl = new curl;
+        $requests = array();
+        foreach ($siteschunk as $site) {
+            //add resturl bit based only on what we know.
+            if ($site->contactable == 1) {
+                $resturl = '/subscribe';
+            } else if ($site->contactable == 0) {
+                $resturl = '/unsubscribe';
+            }
+            $params = array ('name' => $site->contactname, 'email' => trim($site->contactemail), 'list' => $sendylistid, 'boolean' => 'true');
+            $paramspost = $curl->format_postdata_for_curlcall($params);
+            $request = array('url' => $sendyurl.$resturl, 'CURLOPT_POST' => 1, 'CURLOPT_POSTFIELDS' => $paramspost);
+            $requests[] = $request;
+            $chunkparams[] = $params;
+        }
+
+        /// REST CALLsss
+        $results = $curl->multi($requests);
+
+        for ($i=0; $i<count($results);$i++) {
+            if ($results[$i] != '1' && $results[$i] != 'Already subscribed.') {
+                mtrace('');
+                mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' had the errors for site id->'. $siteschunk[$i]->id .' email->'.$siteschunk[$i]->contactemail.' :'. $results[$i] );
+            }
+        }
+    }
 }
