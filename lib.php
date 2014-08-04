@@ -2103,6 +2103,7 @@ function local_hub_comment_validate($comment_param) {
 function update_sendy_list($site, $sendylistid='2QQaBL8AHzUfo6btDIMb8w') {
     global $CFG;
 
+    require_once($CFG->dirroot.'/local/hub/curl.php');
     $sendyurl = 'http://lists.moodle.org';
     if (isset($CFG->sendylistid)) { //allow override in config.
          $sendylistid = $CFG->sendylistid;
