@@ -2120,7 +2120,7 @@ function update_sendy_list($site, $sendylistid='2QQaBL8AHzUfo6btDIMb8w') {
     }
 
     /// REST CALL
-    $curl = new curl;
+    $curl = new curly;
     $result = $curl->post($sendyurl.$resturl, $params);
 
     if ($result != '1' && $result != 'Already subscribed.') {
@@ -2149,7 +2149,7 @@ function update_sendy_list_batch($sites, $chunksize=150, $sendylistid='VeFcuzWIU
     $siteschunks = array_chunk($sites, $chunksize);
     foreach ($siteschunks as $siteschunk) {
         echo '.';
-        $curl = new curl;
+        $curl = new curly;
         $requests = array();
         foreach ($siteschunk as $site) {
             //add resturl bit based only on what we know.

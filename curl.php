@@ -24,7 +24,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU Public License
  */
 
-class curl {
+class curly {
     /** @var bool */
     public  $cache    = false;
     public  $proxy    = false;
