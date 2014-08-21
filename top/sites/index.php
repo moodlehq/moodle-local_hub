@@ -134,7 +134,7 @@ if ($country!==null && array_key_exists($country, $countries)) {
         }
 
         if ($site->cool <= - MAXVOTES) {
-            $properties .= '&nbsp;<img title="Uncool site!" src="/pix/s/sad.gif" height="15" width="15" alt="Uncool!" border=0>';
+            $properties .= '&nbsp;<img title="'.get_string('uncoolsite', 'local_hub').'" src="/pix/s/sad.gif" height="15" width="15" alt="Uncool!" border=0>';
         } else if ($site->cool >= MAXVOTES) {
             $properties .= '&nbsp;<img title="Cool site!" src="/pix/s/cool.gif" height="15" width="15" alt="Cool!" border="0">';
         }
@@ -142,8 +142,8 @@ if ($country!==null && array_key_exists($country, $countries)) {
         if (!empty($USER->sitevoting) && $site->privacy) {
             $properties .= '&nbsp;&nbsp;&nbsp;';
             if (!isset($oldvotes[$site->id])) {
-                $properties .= '<a title="I like this site!" href="/sites/index.php?cool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" /></a>';
-                $properties .= '&nbsp;<a title="I don\'t like this site!" href="/sites/index.php?uncool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/no.gif" height="15" width="12" alt="" border="0" /></a>';
+                $properties .= '<a title="'.get_string('ilikesite', 'local_hub').'" href="/sites/index.php?cool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" /></a>';
+                $properties .= '&nbsp;<a title="'.get_string('idontlikesite', 'local_hub').'" href="/sites/index.php?uncool='.$site->id.'&amp;country='.$site->country.'&amp;sesskey='.sesskey().'"><img src="/pix/s/no.gif" height="15" width="12" alt="" border="0" /></a>';
             } else if ($oldvotes[$site->id] >= 0) {
                 $properties .= '<img title="Total score: '.$site->cool.'" src="/pix/s/yes.gif" height="17" width="14" alt="" border="0" />';
             } else {
@@ -189,8 +189,8 @@ if ($country!==null && array_key_exists($country, $countries)) {
 
 
 $PAGE->navbar->add('Registered sites', new moodle_url('/sites/'));
-$PAGE->set_title('Moodle.net: Registered sites');
-$PAGE->set_heading('Registered moodle sites');
+$PAGE->set_title(get_string('registeredmoodlesites_moodlenet', 'local_hub'));
+$PAGE->set_heading(get_string('registeredmoodlesites', 'local_hub'));
 $PAGE->set_button(edit_button($isadmin, $country));
 
 echo $OUTPUT->header();
@@ -201,9 +201,7 @@ echo html_writer::start_tag('div', array('class'=>'boxwidthwide boxaligncenter',
 echo $OUTPUT->heading($PAGE->heading);
 
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo 'Some of the growing community of Moodle users are listed below.<br />';
-echo 'To add or update your site, just use the "Registration" button on your Moodle admin page.<br />';
-echo '<span style="font-size:0.9em;">(Note: we check these sites regularly and <a href="http://docs.moodle.org/en/Usage">remove unreachable or invalid sites</a>)</span>';
+echo get_string('moodlesiteslistintro', 'local_hub');
 echo html_writer::end_tag('p');
 
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
@@ -211,8 +209,7 @@ echo html_writer::empty_tag('img', array('src'=>$CFG->wwwroot.'/sites/moodle-reg
 echo html_writer::end_tag('p');
 
 echo html_writer::start_tag('p', array('class'=>'mdl-align'));
-echo "There are {$totalcountryinfo->total} currently active sites that have registered from {$totalcountryinfo->countries} countries.<br />";
-echo "{$totalcountryinfo->private} of these have requested privacy and are not shown in the lists below.";
+echo get_string('moodlesiteslistnumbers', 'local_hub', $totalcountryinfo);
 echo html_writer::end_tag('p');
 
 echo prepare_country_tag_cloud($countryarray, ($isadmin && $USER->siteediting), 500);

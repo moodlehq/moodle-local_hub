@@ -224,7 +224,7 @@ echo html_writer::end_tag('p');
 echo html_writer::end_tag('div');
 
 /**
- * Display the moodle population graph
+ * Display the moodle (moodle.net users!) population graph
  */
 
 if (is_siteadmin()) {

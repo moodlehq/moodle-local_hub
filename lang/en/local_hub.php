@@ -208,6 +208,8 @@ $string['hub:view'] = 'View courses/sites.';
 $string['hub:viewinfo'] = 'View detailed hub information (contact, stats).';
 $string['hub:viewsmallinfo'] = 'View hub information.';
 $string['image'] = 'Image';
+$string['idontlikesite'] = 'I like this site!';
+$string['ilikesite'] = 'I like this site!';
 $string['information'] = 'Information';
 $string['keepcurrentimage'] = 'Keep current image';
 $string['keepcurrentimage_help'] = 'Keep the current image saved on the disk. Even if you choose an image below, the current image will be kept. If you uncheck this, and do not select an new image, the current image will just be deleted.';
@@ -237,6 +239,12 @@ $string['messageprovider:coursehubmessage'] = 'Hub message';
 $string['messagesentsuccess'] = 'Message sent successfully';
 $string['modulenumberaverage'] = 'Average number of course modules ({$a})';
 $string['moodleorg'] = 'Moodle.org';
+$string['moodlesiteslistintro'] = 'Some of the growing community of Moodle users are listed below.<br />
+To add or update your site, just use the "Registration" button on your Moodle admin page.<br />
+<span style="font-size:0.9em;">(Note: we check these sites regularly and <a href="http://docs.moodle.org/en/Usage">remove unreachable or invalid sites</a>)</span>';
+
+$string['moodlesiteslistnumbers'] = 'There are {$a->total} currently active sites that have registered from {$a->countries} countries.<br />
+{$a->private} of these have requested privacy and are not shown in the lists below.';
 $string['moved'] = 'Update registration url for an existing site';
 $string['movedorcopiedmsg'] = 'you tried to register a Moodle 2.X site which had already been registered on a different url.
 If you didn\'t know that (or if you don\'t know the site in the left column),
@@ -333,6 +341,8 @@ $string['recaptcha'] = 'Recaptcha settings';
 $string['recaptchaenabled'] = 'Recaptcha';
 $string['recaptchaenabled_help'] = 'When recaptcha is enabled, all site administrators are required to enter a recaptcha during the registration. If your hub is public, it is recommended to enable it to avoid spambot registration.';
 $string['registeredcourses'] = 'Registered courses';
+$string['registeredmoodlesites'] = 'Registered Moodle sites';
+$string['registeredmoodlesites_moodlenet'] = 'Moodle.net: Registered sites';
 $string['registeredsites'] = 'Registered sites';
 $string['registrationconfirmed'] = 'Registration successfull';
 $string['registrationinfo'] = 'Registration information';
@@ -430,6 +440,7 @@ $string['trustedyes'] = 'Yes';
 $string['trustme'] = 'Trust';
 $string['typedownloadable'] = 'Downloadable';
 $string['typeenrollable'] = 'Enrollable';
+$string['uncoolsite'] = 'Uncool site!';
 $string['unlistedurl'] = 'Unlisted hub URL';
 $string['unprioritise'] = 'Unprioritise';
 $string['unregistrationofprivate'] = 'The hub has been unregistered from the hub directory.';
