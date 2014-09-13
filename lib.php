@@ -1640,6 +1640,7 @@ class local_hub {
      * @return boolean true if the site is valid
      */
     public function is_remote_site_valid($url) {
+        global $CFG;
 
         //Retrieve some of the site header info by curl
         //Curl is twice faster and more than the get_headers() php function
@@ -1649,6 +1650,30 @@ class local_hub {
         curl_setopt($ch, CURLOPT_NOBODY,         true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT,        15);
+
+        // Add proxy support (code basically taken from lib/filelib.php)
+        if (!empty($CFG->proxyhost)) {
+            if (!empty($CFG->proxytype) and ($CFG->proxytype == 'SOCKS5')) {
+                curl_setopt($ch, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
+            }
+
+            curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, false);
+
+            if (empty($CFG->proxyport)) {
+                curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost);
+            } else {
+                curl_setopt($ch, CURLOPT_PROXY, $CFG->proxyhost.':'.$CFG->proxyport);
+            }
+
+            if (!empty($CFG->proxyuser) and !empty($CFG->proxypassword)) {
+                curl_setopt($ch, CURLOPT_PROXYUSERPWD, $CFG->proxyuser.':'.$CFG->proxypassword);
+                if (defined('CURLOPT_PROXYAUTH')) {
+                    // any proxy authentication if PHP 5.1
+                    curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC | CURLAUTH_NTLM);
+                }
+            }
+        }
+
         $r = curl_exec($ch);
         $curlinfo = curl_getinfo($ch);
         //Note: if not reach, then $siteheaders contains an array with one empty element
