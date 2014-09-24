@@ -1640,26 +1640,18 @@ class local_hub {
      * @return boolean true if the site is valid
      */
     public function is_remote_site_valid($url) {
-
-        //Retrieve some of the site header info by curl
-        //Curl is twice faster and more than the get_headers() php function
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL,            $url);
-        curl_setopt($ch, CURLOPT_HEADER,         true);
-        curl_setopt($ch, CURLOPT_NOBODY,         true);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_TIMEOUT,        15);
-        $r = curl_exec($ch);
-        $curlinfo = curl_getinfo($ch);
-        //Note: if not reach, then $siteheaders contains an array with one empty element
-
         //Check if site is valid
         if ( strpos($url, 'http://localhost') !== false
-                or strpos($url, 'http://127.0.0.1') !== false
-                or empty($curlinfo['header_size'])) {
+                or strpos($url, 'http://127.0.0.1') !== false ) {
             return false;
         }
-        return true;
+
+        $curl = new curl();
+        $curl->setopt(array('CURLOPT_FOLLOWLOCATION' => true, 'CURLOPT_MAXREDIRS' => 3));
+        $curl->head($url);
+        $info = $curl->get_info();
+
+        return ($info['http_code'] === 200);
     }
 
     /**
