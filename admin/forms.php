@@ -754,3 +754,19 @@ class hub_course_settings_form extends moodleform {
     }
 
 }
+
+
+class local_hub_siteconnectivity_form extends moodleform {
+
+    public function definition() {
+        $mform = & $this->_form;
+
+
+        $mform->addElement('text', 'url', get_string('siteurl', 'local_hub'));
+        $mform->setType('url', PARAM_URL);
+        $mform->addRule('url', get_string('required'), 'required');
+
+        $this->add_action_buttons(false, get_string('submit'));
+    }
+
+}
