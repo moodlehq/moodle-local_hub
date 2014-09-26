@@ -1640,6 +1640,9 @@ class local_hub {
      * @return boolean true if the site is valid
      */
     public function is_remote_site_valid($url) {
+        global $CFG;
+        require_once($CFG->libdir.'/filelib.php');
+
         //Check if site is valid
         if ( strpos($url, 'http://localhost') !== false
                 or strpos($url, 'http://127.0.0.1') !== false ) {
