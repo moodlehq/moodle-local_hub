@@ -370,6 +370,7 @@ class site_search_form extends moodleform {
         $mform->addHelpButton('language', 'sitelang', 'local_hub');
 
         $mform->addElement('text', 'search', get_string('keywords', 'local_hub'));
+        $mform->setType('search', PARAM_RAW);
         $mform->addHelpButton('search', 'sitekeywords', 'local_hub');
         $mform->setDefault('search', $search);
 
