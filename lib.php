@@ -1381,6 +1381,7 @@ class local_hub {
         //check and create a user
         $user = $DB->get_record('user', array('username' => $username,
                     'idnumber' => $username));
+
         if (empty($user)) {
             $user = new stdClass();
             $user->username = $username;
@@ -1395,9 +1396,17 @@ class local_hub {
             $user->timecreated = time();
             $user->timemodified = $user->timecreated;
 
+            // Add extra fields to prevent a debug notice.
+            $userfields = get_all_user_name_fields();
+            foreach ($userfields as $key => $field) {
+                if (!isset($user->$key)) {
+                    $user->$key = null;
+                }
+            }
+
             // Insert the "site" user into the database.
             $user->id = $DB->insert_record('user', $user);
-            events_trigger('user_created', $user);
+            \core\event\user_created::create_from_userid($user->id)->trigger();
             add_to_log(SITEID, 'user', get_string('create'), '/view.php?id='.$user->id,
                 fullname($user));
         }
