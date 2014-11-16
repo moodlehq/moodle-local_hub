@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20140630" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20141116" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -29,7 +29,7 @@
         <FIELD NAME="geolocation" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="the geolocation number"/>
         <FIELD NAME="moodleversion" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle version of the site"/>
         <FIELD NAME="moodlerelease" TYPE="char" LENGTH="50" NOTNULL="false" SEQUENCE="false" COMMENT="the current moodle release"/>
-        <FIELD NAME="ip" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="the last IP (updated after a valid validation)"/>
+        <FIELD NAME="ip" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" COMMENT="the last IP (updated after a valid validation)"/>
         <FIELD NAME="courses" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of courses, -1 if unknown"/>
         <FIELD NAME="users" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of users, -1 if unknown"/>
         <FIELD NAME="enrolments" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of enrolment, -1 if unknown"/>
@@ -44,6 +44,14 @@
         <FIELD NAME="publicationmax" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="the maximum number of publication a day for this site. If null, the value is taken from the hub setting."/>
         <FIELD NAME="badges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of badges available in the site, -1 if unknown"/>
         <FIELD NAME="issuedbadges" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="number of issued badges, -1 if unknown"/>
+        <FIELD NAME="unreachable" TYPE="int" LENGTH="11" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timeunreachable" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="score" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="errormsg" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timelinkchecked" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="serverstring" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="override" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="fingerprint" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="cool" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="cooldate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
       </FIELDS>
