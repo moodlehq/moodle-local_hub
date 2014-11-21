@@ -1078,8 +1078,9 @@ class local_hub {
 
     /**
      * Register the site (creation / update)
-     * @param object $siteinfo
+     * @param object $siteinfo Array
      * @param boolean $siteurltoupdate
+     * @return string token
      */
     public function register_site($siteinfo, $siteurltoupdate='') {
         global $CFG;

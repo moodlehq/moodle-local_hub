@@ -166,7 +166,7 @@ $string['enroldownload_help'] = 'Some courses listed in this directory are being
 
 Others are course templates provided for you to download and use on your own Moodle site.';
 $string['errorbadimageheightwidth'] = 'The image should have a maximum size of {$a->width} X {$a->height}';
-$string['errorlangnotrecognized'] = 'Language code is unknown by Moodle. Please contact {$a}';
+$string['errorlangnotrecognized'] = 'Language code is unknown by Moodle. Please see https://docs.moodle.org/en/langpack for information about suppored languages.';
 $string['errormaxpublication'] = 'Sorry your site has published  more than {$a->maxpublication} courses today. You will be able to publish in: {$a->time}.';
 $string['errornopublication'] = 'The hub server is blocking all new publication.';
 $string['errorregistration'] = 'An error occured during registration, please try again later. ({$a})';
