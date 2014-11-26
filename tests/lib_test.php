@@ -93,17 +93,12 @@ class local_hub_lib_testcase extends advanced_testcase
                                                    $url . '_registered_site_user',
                                                    $capabilities);
 
-        // Should this throw an exception?
-        // What if it just returned the existing token if it already exists?
-        try {
-            $tokenusedbysite = $hub->create_hub_token('Registered Hub User',
-                                                       'Registered site',
-                                                       $url . '_registered_site_user',
-                                                       $capabilities);
-            $this->fail('Exception expected due to duplicate token.');
-        } catch (moodle_exception $e) {
-            $this->assertEquals('hiddentokenalreadyexist', $e->errorcode);
-        }
+        // If it already exists, the existing token should be found.
+        $foundtoken = $hub->create_hub_token('Registered Hub User',
+                                             'Registered site',
+                                             $url . '_registered_site_user',
+                                             $capabilities);
+        $this->assertEquals($foundtoken->id, $tokenusedbysite->id);
     }
 
     public function test_register_site() {

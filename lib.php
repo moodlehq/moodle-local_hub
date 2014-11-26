@@ -1479,7 +1479,9 @@ class local_hub {
             $tokenid = $DB->insert_record('external_tokens', $resulttoken);
             $resulttoken->id = $tokenid;
         } else {
-            throw new moodle_exception('hiddentokenalreadyexist');
+            //throw new moodle_exception('hiddentokenalreadyexist');
+            // Just return the found token instead of throwing an error.
+            $resulttoken = $token;
         }
 
         return $resulttoken;
