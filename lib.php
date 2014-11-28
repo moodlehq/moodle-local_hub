@@ -1078,8 +1078,9 @@ class local_hub {
 
     /**
      * Register the site (creation / update)
-     * @param object $siteinfo
+     * @param object $siteinfo Array
      * @param boolean $siteurltoupdate
+     * @return string token
      */
     public function register_site($siteinfo, $siteurltoupdate='') {
         global $CFG;
@@ -1478,7 +1479,9 @@ class local_hub {
             $tokenid = $DB->insert_record('external_tokens', $resulttoken);
             $resulttoken->id = $tokenid;
         } else {
-            throw new moodle_exception('hiddentokenalreadyexist');
+            //throw new moodle_exception('hiddentokenalreadyexist');
+            // Just return the found token instead of throwing an error.
+            $resulttoken = $token;
         }
 
         return $resulttoken;
