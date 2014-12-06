@@ -86,13 +86,6 @@ class hub_registration_form extends moodleform {
         $mform = & $this->_form;
         $mform->addElement('header', 'moodle',
                 get_string('hubdetails', 'local_hub'));
-        $mform->addElement('static', 'comment', '',
-                get_string('hubregistrationcomment', 'local_hub'));
-
-        $mform->addElement('hidden', 'url', $CFG->wwwroot);
-        $mform->setType('url', PARAM_URL);
-
-        $languages = get_string_manager()->get_list_of_languages();
 
         $hubname = get_config('local_hub', 'name');
         $hubdescription = get_config('local_hub', 'description');
@@ -101,6 +94,19 @@ class hub_registration_form extends moodleform {
         $hublogo = get_config('local_hub', 'hublogo');
         $privacy = get_config('local_hub', 'privacy');
         $hublanguage = get_config('local_hub', 'language');
+
+        if (empty($hubname) or empty($privacy) or empty($hubdescription)) {
+            $mform->addElement('static', 'missinghubsetup', '', get_string('settingsinvalid', 'local_hub'));
+            return;
+        }
+
+        $mform->addElement('static', 'comment', '',
+                get_string('hubregistrationcomment', 'local_hub'));
+
+        $mform->addElement('hidden', 'url', $CFG->wwwroot);
+        $mform->setType('url', PARAM_URL);
+
+        $languages = get_string_manager()->get_list_of_languages();
 
         $mform->addElement('static', 'hubnamestring',
                 get_string('name', 'local_hub'), $hubname);

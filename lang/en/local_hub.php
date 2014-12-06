@@ -378,6 +378,7 @@ $string['senttohub'] = '{$a} hub administrator';
 $string['senttopublisher'] = 'Course publisher: {$a}';
 $string['seecreatornotes'] = 'See creator notes';
 $string['settings'] = 'Settings';
+$string['settingsinvalid'] = 'The hub settings are incomplete. Go to the hub settings page.';
 $string['settingsupdated'] = 'Settings have been updated.';
 $string['sharemore'] = 'More...';
 $string['sharetofacebook'] = 'Share to Facebook';
