@@ -69,13 +69,6 @@ if ($country!==null && array_key_exists($country, $countries)) {
 
     $sites = get_sites_for_country($country);
 
-    $file = "flags/".strtolower($country).".png";
-    if (file_exists($file)) {
-        $flag = "<img align=bottom src=\"$file\" height=15 width=25 alt=\"\" />";
-    } else {
-        $flag = "";
-    }
-
     if ($sitevoting) {
         if ($sitevoting == 1) {
             $USER->sitevoting = true;
@@ -98,9 +91,9 @@ if ($country!==null && array_key_exists($country, $countries)) {
     $list->printanchors = true;
     $list->width = '100%';
     if ($sites->privatesites>0) {
-        $list->heading = $countries[$country]." $flag <span style='font-size:0.6em;'>$sites->totalsites sites total ($sites->privatesites are private and are not shown)</span>$graph";
+        $list->heading = $countries[$country]." <span style='font-size:0.6em;'>$sites->totalsites sites total ($sites->privatesites are private and are not shown)</span>$graph";
     } else {
-        $list->heading = $countries[$country]." $flag <span style='font-size:0.6em;'>$sites->totalsites sites total</span>$graph";
+        $list->heading = $countries[$country]." <span style='font-size:0.6em;'>$sites->totalsites sites total</span>$graph";
     }
     $list->data = Array();
 

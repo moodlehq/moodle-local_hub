@@ -218,15 +218,8 @@ if (!empty($country)) {
                 $strsite .= " ($countsites not shown here)";
             }
 
-            $file = "flags/".strtolower($code).".png";
-            if (file_exists($file)) {
-                $flag = "<img align=bottom src=\"$file\" height=15 width=25 alt=\"\">";
-            } else {
-                $flag = "";
-            }
-
             echo "<a name=\"$code\"></a><table width=80% align=center cellspacing=0 cellpadding=5 class=generalbox><tr>";
-            echo "<th align=left class=header>$country->name&nbsp;&nbsp;&nbsp;$flag</th>";
+            echo "<th align=left class=header>$country->name</th>";
             echo "<th align=right class=header><font size=1>$strsite</font></th>";
             echo "</tr><tr><td colspan=2 class=\"generalboxcontent\">\n";
             if (!empty($country->sites)) {
