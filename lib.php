@@ -1640,7 +1640,7 @@ class local_hub {
     /**
      * Check if the remote site is valid (not localhost and available by the hub)
      * Note: it doesn't matter if the site returns a 404 error.
-     * The point here is to check if the site exists. It doesn not matter if the hub can not call the site,
+     * The point here is to check if the site exists. It does not matter if the hub can not call the site,
      * as by security design, a hub should never call a site.
      * However an admin user registering his site should be able to access the site,
      * as people searching on the hub.
@@ -1666,7 +1666,9 @@ class local_hub {
         $curl->head($url);
         $info = $curl->get_info();
 
-        return ($info['http_code'] === 200);
+        // Return true if return code is OK (200) or redirection (302).
+        // Redirection occurs for many reasons including redirection to another site that handles single sign-on.
+        return ($info['http_code'] === 200 || $info['http_code'] === 302);
     }
 
     /**
