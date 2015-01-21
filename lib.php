@@ -618,9 +618,11 @@ class local_hub {
                 $wheresql .= " AND";
             }
             $wheresql .= " (" . $DB->sql_like('name', ':namesearch', false)
-                    . " OR " . $DB->sql_like('description', ':descsearch', false) . " )";
+                    . " OR " . $DB->sql_like('description', ':descsearch', false) . " "
+                    . " OR " . $DB->sql_like('url', ':urlsearch', false) . " )";
             $sqlparams['namesearch'] = '%' . $options['search'] . '%';
             $sqlparams['descsearch'] = '%' . $options['search'] . '%';
+            $sqlparams['urlsearch'] = '%' . $options['search'] . '%';
         }
 
         if (key_exists('language', $options) and !empty($options['language'])) {

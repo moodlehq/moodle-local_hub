@@ -756,7 +756,10 @@ class local_hub_renderer extends plugin_renderer_base {
                 //create site name with link
                 $siteurl = new moodle_url($site->url);
                 $siteatag = html_writer::tag('a', $site->name, array('href' => $siteurl));
-                $sitenamehtml = html_writer::tag('span', $siteatag, array());
+                $sitenamespan = html_writer::span($siteatag);
+                $siteurlspan = html_writer::span($siteurl, 'additionaldesc');
+                $sitenamehtml = $sitenamespan.'<br>'.$siteurlspan;
+
 
                 //create image tag
                 if (!empty($site->imageurl)) {
