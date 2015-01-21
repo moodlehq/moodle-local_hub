@@ -817,7 +817,8 @@ class local_hub_renderer extends plugin_renderer_base {
                 //construct languages array
                 if (!empty($site->language)) {
                     $languages = get_string_manager()->get_list_of_languages();
-                    $language = $languages[$site->language];
+                    $langcode = str_replace('_utf8', '', $site->language);
+                    $language = isset($languages[$langcode]) ? $languages[$langcode] : '';
                 } else {
                     $language = '';
                 }
