@@ -39,7 +39,10 @@ if (!empty($USER->country)) {
     $usercountry = $USER->country;
 } else {
     $ip = (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-    if ($countryinfo = $DB->get_record_sql("SELECT * FROM {countries} WHERE ipfrom <= inet_aton('$ip') AND inet_aton('$ip') <= ipto ")) {
+    // Previously we used the msql function inet_aton() within the below query.
+    // the PHP function ip2long() should be equivalent with the benefit of being database independent.
+    $ip = ip2long($ip);
+    if ($countryinfo = $DB->get_record_sql("SELECT * FROM {countries} WHERE ipfrom <= $ip AND $ip <= ipto ")) {
         $usercountry = $countryinfo->code2;
     }
 }

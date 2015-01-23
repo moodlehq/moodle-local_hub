@@ -12,7 +12,7 @@ function get_combined_country_info() {
     list($confirmedwhere, $confirmedparams) = local_hub_stats_get_confirmed_sql('r', 'pub');
 
     $countries = get_string_manager()->get_list_of_countries();
-    $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM(privacy = 'named' or privacy = 'linked') AS publiccount
+    $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, COUNT( CASE WHEN privacy = 'named' or privacy = 'linked' THEN 1 ELSE 0 END ) AS publiccount
               FROM {hub_site_directory} r
              WHERE $confirmedwhere
           GROUP BY r.countrycode
