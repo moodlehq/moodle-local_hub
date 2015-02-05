@@ -112,10 +112,18 @@ function local_hub_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '') {
     return array($sql, $params);
 }
 
+/**
+ * Update the hub's own count of users in the hub site directory.
+ * @return int The count of users. Zero if this site is not registered with the hub.
+ */
 function local_hub_stats_update_moodle_users() {
-    global $DB;
-    $moodle = $DB->get_record('hub_site_directory', array('url' => 'https://moodle.org'), 'id, users', MUST_EXIST);
-    $moodle->users = $DB->count_records('user', array('deleted' => 0));
-    $DB->update_record('hub_site_directory',$moodle);
-    return $moodle;
+    global $DB, $CFG;
+    $siterecord = $DB->get_record('hub_site_directory', array('url' => $CFG->wwwroot), 'id, users');
+    if ($siterecord) {
+        // This site is registered in its own hub.
+        $siterecord->users = $DB->count_records('user', array('deleted' => 0));
+        $DB->set_field('hub_site_directory', 'users', $siterecord->users, array('url' => $CFG->wwwroot));
+        return $siterecord->users;
+    }
+    return 0;
 }

@@ -37,11 +37,7 @@ require_once($CFG->dirroot.'/'.STATS_DIR.'/googlecharts.php');
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
-// Update the number of users to ensure it is accurate
-$moodle = local_hub_stats_update_moodle_users();
-
 $stats = local_hub_stats_get_registry_stats();
-
 
 $PAGE->set_context(context_system::instance());
 $PAGE->set_title(get_string('aboutstatisticstitle', 'local_hub'));
@@ -98,8 +94,10 @@ $table->align = array('left','right');
 $top10countries = local_hub_stats_top_10_countries();
 $countrynames = get_string_manager()->get_list_of_countries();
 foreach ($top10countries as $row) {
-    $data = Array($countrynames[$row->countrycode], number_format($row->countrycount));
-    $table->data[] = $data;
+    if (!empty($row->countrycode)) {
+        $data = Array($countrynames[$row->countrycode], number_format($row->countrycount));
+        $table->data[] = $data;
+    }
 }
 echo html_writer::table($table);
 if ($stats->countrycount) {
@@ -228,6 +226,9 @@ echo html_writer::end_tag('div');
  */
 
 if (is_siteadmin()) {
+    // Update this site's own number of users.
+    $usercount = local_hub_stats_update_moodle_users();
+
     echo html_writer::start_tag('div', array('class'=>'boxaligncenter', 'style'=>'background-color:#FFF;padding:20px;'));
     echo html_writer::start_tag('p', array('class'=>'mdl-align'));
     echo html_writer::empty_tag('img', array('src'=>moodle_population(), 'alt'=>get_string('graphpopulation', 'local_hub')));
@@ -239,7 +240,7 @@ if (is_siteadmin()) {
     $table->width ='400px';
     $table->align = array('left','right');
     $table->data = array();
-    $table->data[] = array(get_string('registereduserstotal', 'local_hub'), number_format($moodle->users));
+    $table->data[] = array(get_string('registereduserstotal', 'local_hub'), number_format($usercount));
     $table->data[] = array(get_string('registereduserslastday', 'local_hub'), number_format($DB->count_records_select('user', 'firstaccess > ?', array($lastday))));
     $table->data[] = array(get_string('activeusers24hours', 'local_hub'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastday))));
     $table->data[] = array(get_string('activeuserspastmonth', 'local_hub'), number_format($DB->count_records_select('user', 'lastaccess > ?', array($lastmonth))));
