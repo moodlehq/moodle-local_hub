@@ -281,6 +281,21 @@ class hub_settings_form extends moodleform {
             $rsssecret = '';
         }
 
+        $sendyurl = get_config('local_hub', 'sendyurl');
+        if ($sendyurl === false) {
+            $sendyurl = '';
+        }
+
+        $sendylistid = get_config('local_hub', 'sendylistid');
+        if ($sendylistid === false) {
+            $sendylistid = '';
+        }
+
+        $sendyapikey = get_config('local_hub', 'sendyapikey');
+        if ($sendyapikey === false) {
+            $sendyapikey = '';
+        }
+
         $enabled = get_config('local_hub', 'hubenabled');
 
         $recaptcha = get_config('local_hub', 'hubrecaptcha');
@@ -409,6 +424,30 @@ class hub_settings_form extends moodleform {
                 'rsssecret', 'local_hub');
         $mform->setAdvanced('rsssecret');
         $mform->setDefault('rsssecret', $rsssecret);
+
+        $mform->addElement('text', 'sendyurl',
+                get_string('sendyurl', 'local_hub'));
+        $mform->setType('sendyurl', PARAM_URL);
+        $mform->addHelpButton('sendyurl',
+                'sendyurl', 'local_hub');
+        $mform->setAdvanced('sendyurl');
+        $mform->setDefault('sendyurl', $sendyurl);
+
+        $mform->addElement('text', 'sendylistid',
+                get_string('sendylistid', 'local_hub'));
+        $mform->setType('sendylistid', PARAM_RAW);
+        $mform->addHelpButton('sendylistid',
+                'sendylistid', 'local_hub');
+        $mform->setAdvanced('sendylistid');
+        $mform->setDefault('sendylistid', $sendylistid);
+
+        $mform->addElement('text', 'sendyapikey',
+                get_string('sendyapikey', 'local_hub'));
+        $mform->setType('sendyapikey', PARAM_RAW);
+        $mform->addHelpButton('sendyapikey',
+                'sendyapikey', 'local_hub');
+        $mform->setAdvanced('sendyapikey');
+        $mform->setDefault('sendyapikey', $sendyapikey);
 
         $this->add_action_buttons(false, get_string('update'));
     }
