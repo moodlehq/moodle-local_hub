@@ -167,6 +167,75 @@ class local_hub_lib_testcase extends advanced_testcase
         // Should externallib.php unregister_site() be calling lib.php delete_site() instead of lib.php unregister_site()?
     }
 
+    public function test_get_site_by_url() {
+        global $DB;
+        $this->resetAfterTest(true);
+
+        $hub = new local_hub();
+        $url = "http://example.com";
+        $sitevalues = $this->get_sitevalues($url);
+
+        $token = $hub->register_site($sitevalues);
+
+        $this->check_tokens($hub, $sitevalues['url']);
+
+        // Try (and fail) to find a deleted site.
+        $site = $hub->get_site_by_url($url, 1);
+        $this->assertTrue($site == null);
+
+        // Find a not deleted site.
+        $site = $hub->get_site_by_url($url, 0);
+        $this->assertTrue($site != null);
+        // Should work the same with the default second parameter.
+        $site = $hub->get_site_by_url($url);
+        $this->assertTrue($site != null);
+        // Find the not deleted site regardless of deletion status.
+        $site = $hub->get_site_by_url($url, null);
+        $this->assertTrue($site != null);
+
+        // Delete the site.
+        $hub->unregister_site($site);
+
+        // Finding the deleted site should not happen without providing 1 as the second param.
+        $site = $hub->get_site_by_url($url, 0);
+        $this->assertTrue($site == null);
+        $site = $hub->get_site_by_url($url);
+        $this->assertTrue($site == null);
+
+        // Explicitly request a deleted site.
+        $site = $hub->get_site_by_url($url, 1);
+        $this->assertTrue($site != null);
+
+        // Find the deleted site regardless of deletion status.
+        $site = $hub->get_site_by_url($url, null);
+        $this->assertTrue($site != null);
+    }
+
+    public function test_add_site() {
+        global $DB;
+        $this->resetAfterTest(true);
+
+        $hub = new local_hub();
+        $url = "http://example.com";
+        $sitevalues = $this->get_sitevalues($url);
+
+        $token = $hub->register_site($sitevalues);
+
+        $this->check_tokens($hub, $sitevalues['url']);
+
+        // Delete the site then re-add and check the deleted site is found.
+        $site = $hub->get_site_by_url($url);
+        $hub->delete_site($site->id);
+
+        $oldid = $site->id;
+        $site = $hub->add_site($site);
+        $this->assertEquals($site->id, $oldid);
+
+        // Attempt to re-add a not deleted site and check that the old one is found.
+        $site = $hub->add_site($site);
+        $this->assertEquals($site->id, $oldid);
+    }
+
     public function test_delete_site() {
         global $DB;
         $this->resetAfterTest(true);

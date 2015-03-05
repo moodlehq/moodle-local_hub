@@ -216,11 +216,11 @@ class local_hub {
         }
         $site->timemodified = time();
 
-        //check if a deleted site exist
-        $deletedsite = $this->get_site_by_url($site->url, true);
+        // Check if site already exists.
+        $oldsite = $this->get_site_by_url($site->url, null);
         $site->deleted = 0;
-        if (!empty($deletedsite)) {
-            $site->id = $deletedsite->id;
+        if (!empty($oldsite)) {
+            $site->id = $oldsite->id;
             $this->update_site($site);
         } else {
             $site->id = $DB->insert_record('hub_site_directory', $site);
@@ -716,12 +716,16 @@ class local_hub {
     /**
      * Return a site for a given url
      * @param string $url
-     * @param int $deleted
+     * @param int $deleted 0 for not deleted, 1 for deleted, null for either
      * @return object site , false if null
      */
     public function get_site_by_url($url, $deleted = 0) {
         global $DB;
-        return $DB->get_record('hub_site_directory', array('url' => $url, 'deleted' => $deleted));
+        $params = array('url' => $url);
+        if ($deleted !== null) {
+            $params['deleted'] = $deleted;
+        }
+        return $DB->get_record('hub_site_directory', $params);
     }
 
     /**
@@ -1229,6 +1233,12 @@ class local_hub {
         $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
         $contactuser->lastname = '';
         $contactuser->maildisplay = true;
+        foreach (get_all_user_name_fields() as $namefield) {
+            if (!isset($contactuser->$namefield)) {
+                $contactuser->$namefield = '';
+            }
+        }
+
         if (empty($emailinfo)) {
             $emailinfo = new stdClass();
             $emailinfo->name = $siteinfo->name;
@@ -1323,6 +1333,7 @@ class local_hub {
                 $sitetodelete->contactname : get_string('noreplyname');
         $contactuser->lastname = '';
         $contactuser->maildisplay = true;
+
         $emailinfo = new stdClass();
         $hubinfo = $this->get_info();
         $emailinfo->hubname = $hubinfo['name'];
