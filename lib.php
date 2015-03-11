@@ -22,6 +22,7 @@
  * @author    Jerome Mouneyrac
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 define('HUB_COURSE_PER_PAGE', 10);
 
 //NEVER change this value after installation, otherwise you will need to change all rating in the DB
@@ -1104,8 +1105,8 @@ class local_hub {
         //if we create or update a site, it can not be deleted
         $siteinfo->deleted = 0;
 
-        //if update, check if the url changed, if yes it could be a potential hack attempt
-        //=> make the site not visible and alert the administrator
+        // If update, check if the url changed, if yes it could be a potential hack attempt.
+        // Make the site not visible and alert the hub administrator.
         if (!empty($siteurltoupdate)) {
 
             //retrieve current hub info
@@ -1139,13 +1140,8 @@ class local_hub {
                 //make the site not visible (hub admin need to reconfirm it)
                 $siteinfo->visible = 0;
 
-                //alert the administrator
-                $contactuser = new object;
-                $contactuser->email = $siteinfo->contactemail ? $siteinfo->contactemail : $CFG->noreplyaddress;
-                $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
-                $contactuser->lastname = '';
-                $contactuser->maildisplay = true;
-                email_to_user(get_admin(), $contactuser,
+                // Alert the hub administrator.
+                email_to_user(get_admin(), core_user::get_support_user(),
                         get_string('emailtitlesiteurlchanged', 'local_hub', $emailinfo->name),
                         get_string('emailmessagesiteurlchanged', 'local_hub', $emailinfo));
             }
@@ -1227,37 +1223,28 @@ class local_hub {
             $sitetohubcommunication->id = $this->add_communication($sitetohubcommunication);
         }
 
-        //send email to the Moodle administrator
-        $contactuser = new object;
-        $contactuser->email = $siteinfo->contactemail ? $siteinfo->contactemail : $CFG->noreplyaddress;
-        $contactuser->firstname = $siteinfo->contactname ? $siteinfo->contactname : get_string('noreplyname');
-        $contactuser->lastname = '';
-        $contactuser->maildisplay = true;
-        foreach (get_all_user_name_fields() as $namefield) {
-            if (!isset($contactuser->$namefield)) {
-                $contactuser->$namefield = '';
-            }
-        }
-
-        if (empty($emailinfo)) {
-            $emailinfo = new stdClass();
-            $emailinfo->name = $siteinfo->name;
-            $emailinfo->url = $siteinfo->url;
-            $emailinfo->contactname = $siteinfo->contactname;
-            $emailinfo->contactemail = $siteinfo->contactemail;
-            $emailinfo->huburl = $CFG->wwwroot;
-            $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
-            $languages = get_string_manager()->get_list_of_languages();
-            $emailinfo->language = $languages[$siteinfo->language];
-        }
-
         //log the operation
         if (!empty($siteurltoupdate)) {
             //we just log, do not send an email to admin for update
             //(an email was sent previously if the url or name changed)
             add_to_log(SITEID, 'local_hub', 'site update', '', $siteinfo->id);
         } else {
-            email_to_user(get_admin(), $contactuser,
+            // Send email to the hub administrator.
+
+            if (empty($emailinfo)) {
+                $emailinfo = new stdClass();
+                $emailinfo->name = $siteinfo->name;
+                $emailinfo->url = $siteinfo->url;
+                $emailinfo->contactname = $siteinfo->contactname;
+                $emailinfo->contactemail = $siteinfo->contactemail;
+                $emailinfo->huburl = $CFG->wwwroot;
+                $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
+
+                $languages = get_string_manager()->get_list_of_languages();
+                $emailinfo->language = $languages[$siteinfo->language];
+            }
+
+            email_to_user(get_admin(), core_user::get_support_user(),
                     get_string('emailtitlesiteadded', 'local_hub', $emailinfo->name),
                     get_string('emailmessagesiteadded', 'local_hub', $emailinfo));
             add_to_log(SITEID, 'local_hub', 'site registration', '', $site->id);
@@ -1303,6 +1290,7 @@ class local_hub {
 
     function delete_site($id, $unregistercourses = false) {
         global $CFG;
+        require_once($CFG->dirroot.'/local/hub/locallib.php');
 
         $sitetodelete = $this->get_site($id);
 
@@ -1325,14 +1313,9 @@ class local_hub {
             $this->delete_communication($sitetohubcommunication);
         }
 
-        //send email to the site administrator
-        $contactuser = new object;
-        $contactuser->email = $sitetodelete->contactemail ?
-                $sitetodelete->contactemail : $CFG->noreplyaddress;
-        $contactuser->firstname = $sitetodelete->contactname ?
-                $sitetodelete->contactname : get_string('noreplyname');
-        $contactuser->lastname = '';
-        $contactuser->maildisplay = true;
+        // Send email to the site administrator.
+        $contactuser = local_hub_create_contact_user($sitetodelete->contactemail ? $sitetodelete->contactemail : $CFG->noreplyaddress,
+                                                     $sitetodelete->contactname ? $sitetodelete->contactname : get_string('noreplyname'));
 
         $emailinfo = new stdClass();
         $hubinfo = $this->get_info();
@@ -1343,6 +1326,7 @@ class local_hub {
         $emailinfo->unregisterpagelink = $sitetodelete->url .
                 '/admin/registration/index.php?huburl=' .
                 $hubinfo['url'] . '&force=1&unregistration=1';
+
         email_to_user($contactuser, get_admin(),
                 get_string('emailtitlesitedeleted', 'local_hub', $emailinfo),
                 get_string('emailmessagesitedeleted', 'local_hub', $emailinfo));

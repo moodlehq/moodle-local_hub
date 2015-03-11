@@ -289,17 +289,18 @@ if ($secretexists and !$urlexists) { //the site has been moved or the site has b
     }
 
     //alert existing "secret" site administrator
-    $contactuser = new stdClass();
-    $contactuser->email = $sitewithsameurl->contactemail;
-    $contactuser->firstname = $sitewithsameurl->contactname;
-    $contactuser->lastname = '';
-    $contactuser->maildisplay = true;
+    require_once($CFG->dirroot.'/local/hub/locallib.php');
+    $contactuser = local_hub_create_contact_user($sitewithsameurl->contactemail,
+                                                 $sitewithsameurl->contactname);
+
     $emailinfo = new stdClass();
     $emailinfo->existingsite = $sitewithsameurl->name;
     $emailinfo->hubname = get_config('local_hub', 'name');
+
     $freshregistrationurl = new moodle_url('/local/hub/siteregistration.php',
             array('freshmoodletoken' => $freshmoodletoken, 'id' => $sitewithsameurl->id));
     $emailinfo->deletesiteregistration = $freshregistrationurl->out(false);
+
     $emailinfo->url = $sitewithsameurl->url;
     email_to_user($contactuser, get_admin(),
             get_string('emailtitleurlalreadyexists', 'local_hub', $emailinfo),

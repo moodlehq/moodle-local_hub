@@ -53,7 +53,7 @@ if (!$site) {
      */
 
     $error_message = 'This site doesn\'t wish to be contacted directly.';
-    if ($site->public && $site->url) {
+    if (!empty($site->public) && $site->url) {
         $error_message .= 'Please <a href="'.$site->url.'">visit the site</a> : you may find the contact information there.';
     }
     echo $OUTPUT->box($error_message);
@@ -62,13 +62,8 @@ if (!$site) {
      */
 
 } else if (($frm = data_submitted()) && confirm_sesskey()) {
-
-    /* set up a fake user for the destination site */
-    $userto = new stdClass();
-    //need an id, can't use id=0. would rather not use id=1, lets fool the api while we're still trying to use a fake user to send to.
-    $userto->id = 0.1;
-    $userto->firstname = $site->contactname;
-    $userto->email = $site->contactemail;
+    require_once($CFG->dirroot.'/local/hub/locallib.php');
+    $userto = local_hub_create_contact_user($site->contactemail, $site->contactname);
 
     /* following code strongly inspired by message/lib.php */
     $message = clean_text($frm->contacttext, FORMAT_PLAIN);

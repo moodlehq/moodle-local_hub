@@ -97,11 +97,10 @@ if (!empty($data) and confirm_sesskey()) {
             //send email to publisher (message API does not support email as recipient)
             //TODO: if the email exist in user database, send message to the user using message API
             //      => create new kind of message for it: $eventdata->name = 'messageforpublisher';
-            $sentouser = new stdClass();
-            $sentouser->maildisplay = true;
-            $sentouser->email = $hubcourse->publisheremail;
-            $sentouser->firstname = $hubcourse->publishername;
-            $sentouser->lastname = '';
+            require_once($CFG->dirroot.'/local/hub/locallib.php');
+            $contactuser = local_hub_create_contact_user($hubcourse->publisheremail,
+                                                         $hubcourse->publishername);
+
             $hubcourse->hubname = $SITE->fullname;
             $hubcourse->sitename = $hub->get_site($hubcourse->siteid)->name;
             $hubcourse->huburl = new moodle_url('/');
@@ -112,8 +111,10 @@ if (!empty($data) and confirm_sesskey()) {
             $hubcourse->userurl = $hubcourse->userurl->out();
             $hubcourse->userfullname = $fromuser->firstname . ' ' . $fromuser->lastname;
             $hubcourse->message = $data->message;
-            $feedback->senttoemail = $sentouser->email;
-            email_to_user($sentouser, $fromuser, get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname),
+
+            $feedback->senttoemail = $contactuser->email;
+
+            email_to_user($contactuser, $fromuser, get_string('msgforcoursetitle', 'local_hub', $hubcourse->fullname),
                     get_string('msgforcourse', 'local_hub', $hubcourse));
             break;
         case 'hub':
