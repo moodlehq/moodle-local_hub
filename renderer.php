@@ -413,25 +413,27 @@ class local_hub_renderer extends plugin_renderer_base {
                 }
 
                 //create visit link html
+                $courseurl = '';
+                $linktext = '';
                 $visitlinkhtml = '';
                 if (!empty($course->courseurl)) {
                     $courseurl = new moodle_url($course->courseurl);
                     $linktext = get_string('visitsite', 'local_hub');
                 } else if (!empty($course->demourl)) {
-                        $courseurl = new moodle_url($course->demourl);
-                        $linktext = get_string('visitdemo', 'local_hub');
+                    $courseurl = new moodle_url($course->demourl);
+                    $linktext = get_string('visitdemo', 'local_hub');
                 }
 
                 if (!empty($courseurl)) {
                     if (!$withwriteaccess) {
-                    $courseurl = new moodle_url('', array('sesskey' => sesskey(),
-                                    'redirectcourseid' => $course->id));
+                        $courseurl = new moodle_url('', array('sesskey' => sesskey(),
+                                                              'redirectcourseid' => $course->id));
                     }
                     $visitlinkhtml = html_writer::tag('a', $linktext,
                                 array('href' => $courseurl, 'class' => 'hubcoursedownload'));
                 }
                 
-                 //Create rating html
+                // Create rating html.
                 $featuredhtml = "";
                 $rating = "";
                 if (has_capability('moodle/rating:rate', $course->rating->context)) {
@@ -528,6 +530,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
 
                 //Create course content html
+                $blocksandactivities = '';
                 if (!empty($course->contents)) {
                     $activitieshtml = '';
                     $blockhtml = '';
@@ -551,7 +554,7 @@ class local_hub_renderer extends plugin_renderer_base {
                     }
 
                     $blocksandactivities = html_writer::tag('div',
-                                    get_string('activities', 'local_hub') . " : " . $activitieshtml);
+                                                            get_string('activities', 'local_hub') . " : " . $activitieshtml);
 
                     //Uncomment following lines to display blocks information
 //                    $blocksandactivities .= html_writer::tag('span',
