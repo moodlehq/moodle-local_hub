@@ -631,14 +631,16 @@ class hub_course_settings_form extends moodleform {
                 get_string('coursesettingsform', 'local_hub', $course->fullname));
 
         $mform->addElement('hidden', 'id', $course->id);
+        $mform->setType('id', PARAM_INT);
 
         $mform->addElement('checkbox', 'visible', get_string('coursevisibility', 'local_hub'));
         $mform->addHelpButton('visible', 'coursevisibility', 'local_hub');
         $mform->setDefault('visible', $course->privacy);
 
         $mform->addElement('text', 'fullname',
-                get_string('coursename', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
+                           get_string('coursename', 'local_hub'),
+                           array('class' => 'coursesettingstextfield'));
+        $mform->setType('fullname', PARAM_TEXT);
         $mform->addHelpButton('fullname',
                 'coursename', 'local_hub');
         $mform->setDefault('fullname', $course->fullname);
@@ -646,18 +648,18 @@ class hub_course_settings_form extends moodleform {
 
         if (!empty($course->courseurl)) {
             $mform->addElement('text', 'courseurl',
-                    get_string('courseurl', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
-            $mform->addHelpButton('courseurl',
-                    'courseurl', 'local_hub');
+                               get_string('courseurl', 'local_hub'),
+                               array('class' => 'coursesettingstextfield'));
+            $mform->setType('courseurl', PARAM_URL);
+            $mform->addHelpButton('courseurl', 'courseurl', 'local_hub');
             $mform->setDefault('courseurl', $course->courseurl);
             $mform->addRule('courseurl', $strrequired, 'required', null, 'client');
         } else {
             $mform->addElement('text', 'demourl',
-                    get_string('demourl', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
-            $mform->addHelpButton('demourl',
-                    'demourl', 'local_hub');
+                               get_string('demourl', 'local_hub'),
+                               array('class' => 'coursesettingstextfield'));
+            $mform->setType('demourl', PARAM_URL);
+            $mform->addHelpButton('demourl', 'demourl', 'local_hub');
             $mform->setDefault('demourl', $course->demourl);
         }
 
@@ -676,26 +678,29 @@ class hub_course_settings_form extends moodleform {
         $mform->addHelpButton('language', 'courselang', 'local_hub');
 
         $mform->addElement('text', 'publishername', get_string('publishername', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
+                           array('class' => 'coursesettingstextfield'));
+        $mform->setType('publishername', PARAM_TEXT);
         $mform->setDefault('publishername', $course->publishername);
         $mform->addRule('publishername', $strrequired, 'required', null, 'client');
         $mform->addHelpButton('publishername', 'publishername', 'local_hub');
 
         $mform->addElement('text', 'publisheremail', get_string('publisheremail', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
+                           array('class' => 'coursesettingstextfield'));
+        $mform->setType('publisheremail', PARAM_EMAIL);
         $mform->setDefault('publisheremail', $course->publisheremail);
         $mform->addRule('publisheremail', $strrequired, 'required', null, 'client');
         $mform->addHelpButton('publisheremail', 'publisheremail', 'local_hub');
 
         $mform->addElement('text', 'creatorname', get_string('creatorname', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
+                           array('class' => 'coursesettingstextfield'));
         $mform->addRule('creatorname', $strrequired, 'required', null, 'client');
         $mform->setType('creatorname', PARAM_TEXT);
         $mform->setDefault('creatorname', $course->creatorname);
         $mform->addHelpButton('creatorname', 'creatorname', 'local_hub');
 
         $mform->addElement('text', 'contributornames', get_string('contributornames', 'local_hub'),
-                array('class' => 'coursesettingstextfield'));
+                           array('class' => 'coursesettingstextfield'));
+        $mform->setType('contributornames', PARAM_TEXT);
         $mform->setDefault('contributornames', $course->contributornames);
         $mform->addHelpButton('contributornames', 'contributornames', 'local_hub');
 
