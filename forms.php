@@ -268,7 +268,9 @@ class course_search_form extends moodleform {
         $alllanguages = get_string_manager()->get_list_of_languages();
         $languages = array();
         foreach ($courseslanguages as $languagecode => $lang) {
-            $languages[$languagecode] = $alllanguages[$languagecode];
+            if (isset($alllanguages[$languagecode])) {
+                $languages[$languagecode] = $alllanguages[$languagecode];
+            }
         }
         asort($languages, SORT_LOCALE_STRING);
         $languages = array_merge(array('all' => get_string('any')), $languages);
