@@ -161,7 +161,7 @@ class local_hub_external extends external_api {
         $hubmanager = new local_hub();
         if (!$hubmanager->is_remote_site_valid($params['siteinfo']['url'])) {
             throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', 
-                    $params['siteinfo']['url']);
+                    $params['siteinfo']['url'], $params['siteinfo']['url']);
         }
 
         //add ip information

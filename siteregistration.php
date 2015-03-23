@@ -41,7 +41,7 @@ if (!get_config('local_hub', 'hubenabled')) {
     throw new moodle_exception('hubnotenabled');
 }
 
-$PAGE->set_context(get_system_context());
+$PAGE->set_context(context_system::instance());
 $PAGE->set_url('/local/hub/siteregistration.php');
 $PAGE->set_title(get_string('siteregistration', 'local_hub'));
 $PAGE->set_heading(get_string('siteregistration', 'local_hub'));
@@ -187,9 +187,9 @@ if (!empty($freshmoodletoken) and !empty($freshmoodleid)) {
     exit();
 }
 
-//check if the remote site is available
+// Check if the remote site is available.
 if (!$hub->is_remote_site_valid($url)) {
-    throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', $url);
+    throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', $url, $url);
 }
 
 //check if the registration password is correct
