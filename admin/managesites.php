@@ -69,6 +69,7 @@ if ($trust != -1 and confirm_sesskey()) {
 $search = optional_param('search', '', PARAM_TEXT);
 $renderer = $PAGE->get_renderer('local_hub');
 $contenthtml = "";
+$moresiteshtml = "";
 if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $site = $hub->get_site($delete);
     $contenthtml = $renderer->delete_confirmation($site);
@@ -77,7 +78,6 @@ if ($delete != -1 and !$confirm) { //we want to display delete confirmation page
     $sitesearchform = new site_search_form('', array('search' => $search, 'adminform' => 1));
     $fromform = $sitesearchform->get_data();
 
-    $moresiteshtml = '';
     $limitfrom = optional_param('limitfrom', 0, PARAM_INTEGER);
 
     //if the page result from any action from the renderer, set data to the previous search in order to
