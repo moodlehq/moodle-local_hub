@@ -44,10 +44,11 @@ class local_hub_lib_testcase extends advanced_testcase
         }
 
         $validsites = array(
-            'http://download.moodle.org', // NOTE the http redirect
-            'http://learn.moodle.net',  // More tests..
-            'https://learn.gold.ac.uk', // Normal site dan worked with
-            'http://devmooc.net/', // Problem site MDLSITE-3433
+            'http://download.moodle.org', // NOTE the http redirect.
+            'http://learn.moodle.net',  // More tests.
+            'https://learn.gold.ac.uk', // Normal site dan worked with.
+            'http://devmooc.net/', // Problem site MDLSITE-3433.
+            'http://englishwat.com/qvilearn/', // Problem site which doesn't like header requests MDLSITE-3920.
         );
 
         foreach ($validsites as $site) {
