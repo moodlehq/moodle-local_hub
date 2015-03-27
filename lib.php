@@ -1665,7 +1665,20 @@ class local_hub {
 
         // Return true if return code is OK (200) or redirection (302).
         // Redirection occurs for many reasons including redirection to another site that handles single sign-on.
-        return ($info['http_code'] === 200 || $info['http_code'] === 302);
+        if ($info['http_code'] === 200 || $info['http_code'] === 302) {
+            return true;
+        }
+
+        // Some sites respond to head() with a 503.
+        // As a fallback try get().
+        // We don't just always do get() as it is much slower than head().
+        $curl->get($url);
+        $info = $curl->get_info();
+        if ($info['http_code'] === 200 || $info['http_code'] === 302) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
