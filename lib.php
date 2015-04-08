@@ -591,6 +591,7 @@ class local_hub {
      *              onlyvisible - boolean - return only visible sites, otherwise all sites
      *              search - string - search terms (on name and description)
      *              language - string - return sites of this language
+     *              contactemail - string - returns sites associated with this email address
      *              urls - array of strings - return sites for these urls
      *              visible - boolean -  return visible or not visible sites
      *              trusted - boolean - return trusted or not trusted sites
@@ -632,6 +633,14 @@ class local_hub {
             }
             $wheresql .= " language = :language";
             $sqlparams['language'] = $options['language'];
+        }
+
+        if (key_exists('contactemail', $options) and !empty($options['contactemail'])) {
+            if (!empty($wheresql)) {
+                $wheresql .= " AND";
+            }
+            $wheresql .= " contactemail = :contactemail";
+            $sqlparams['contactemail'] = $options['contactemail'];
         }
 
         if (key_exists('urls', $options) and !empty($options['urls'])) {
@@ -2110,73 +2119,111 @@ function local_hub_comment_validate($comment_param) {
 }
 
 /**
- * Just send updates to the sendy list via REST. Really, the list is managed at and by sendy (lists.moodle.org).
- * An entry at sendy can have more statuses than just {subscribed, unsubscribed} so we're just sending an update thats all.
+ * Optionally subscribe/unsubscribe the contactemail to/from a sendy mailing list.
+ * Loads all sites associated with the supplied site contactemail and passes them to update_sendy_list_batch().
+ * This is necessary because the emailalert property may be different on the various sites associated with a given email.
+ * We can't subscribe or unsubscribe them based on a single site's value.
  *
  * @todo tobe in local_hub class or not? its a helper function for now for any functional expansion..
  *
- * @global type $CFG
- * @param type $user
- * @param type $sendylistid
+ * @param $site a row from hub_site_directory
  */
-function update_sendy_list($site, $sendylistid='2QQaBL8AHzUfo6btDIMb8w') {
-    global $CFG;
-
-    require_once($CFG->dirroot.'/local/hub/curl.php');
-    $sendyurl = 'http://lists.moodle.org';
-    if (isset($CFG->sendylistid)) { //allow override in config.
-         $sendylistid = $CFG->sendylistid;
-    }
-
-    $params = array ('name' => $site->contactname, 'email' => $site->contactemail, 'list' => $sendylistid, 'boolean' => 'true');
-    $query = http_build_query($params);
-
-    //add resturl bit based only on what we know.
-    if ($site->contactable == 1) {
-        $resturl = '/subscribe';
-    } else if ($site->contactable == 0) {
-        $resturl = '/unsubscribe';
-    }
-
-    /// REST CALL
-    $curl = new curly;
-    $result = $curl->post($sendyurl.$resturl, $params);
-
-    if ($result != '1' && $result != 'Already subscribed.') {
-        error_log('Updating sendy @'.$sendyurl.$resturl.' had the following error message for $site('.$site->id.'):'. $result);
-    }
+function update_sendy_list($site) {
+    $hub = new local_hub();
+    $sites = $hub->get_sites(array('contactemail' => $site->contactemail));
+    update_sendy_list_batch($sites);
 }
 
 /**
- * Send, en masse, updates to the sendy list via REST. Really, the list is managed at and by sendy (lists.moodle.org).
- * An entry at sendy can have more statuses than just {subscribed, unsubscribed} so we're just sending an update thats all.
+ * Send, en masse, updates to the sendy list via REST. Really, the list is managed at and by sendy.
+ *
+ * An email address will be subscribed if at least one site is associated with it with emailalert and contactable both set to 1.
+ * If all sites for an email address have emailalert or contactable == 0 the email address will be unsubscribed.
  *
  * @todo tobe in local_hub class or not? its a helper function for now for any functional expansion..
  *
- * @global type $CFG
- * @param type $user
- * @param type $sendylistid
+ * @param array $sites Sites to subscribe/unsubscribe to Sendy
+ * @param int $chunksize
  */
-function update_sendy_list_batch($sites, $chunksize=150, $sendylistid='VeFcuzWIUKDSfoQ1FhxXkA') {
+function update_sendy_list_batch($sites, $chunksize=150) {
     global $CFG;
     require_once($CFG->dirroot.'/local/hub/curl.php');
-    $sendyurl = 'http://lists.moodle.org';
-    if (isset($CFG->sendylistid)) { //allow override in config.
+
+    if (PHPUNIT_TEST) {
+        // Don't update Sendy if we are running tests.
+        return;
+    }
+
+    $sendyurl = get_config('local_hub', 'sendyurl');
+    $sendylistid = get_config('local_hub', 'sendylistid');
+    $sendyapikey = get_config('local_hub', 'sendyapikey');
+
+    // Check for config.php overrides.
+    if (isset($CFG->sendyurl)) {
+         $sendyurl = $CFG->sendyurl;
+    }
+    if (isset($CFG->sendylistid)) {
          $sendylistid = $CFG->sendylistid;
     }
-    mtrace('Processing '. count($sites). ' sites in chunks of '. $chunksize);
-    $siteschunks = array_chunk($sites, $chunksize);
-    foreach ($siteschunks as $siteschunk) {
+    if (isset($CFG->sendyapikey)) {
+         $sendyapikey = $CFG->sendyapikey;
+    }
+
+    if (empty($sendyurl) || empty($sendylistid) || empty($sendyapikey)) {
+        print_error('mailinglistnotconfigured', 'local_hub');
+    }
+
+    $subscribers = array();
+    $unsubscribers = array();
+    foreach ($sites as $site) {
+        if (empty($site->contactemail)) {
+            continue;
+        }
+        if ($site->emailalert == 1 && $site->contactable == 1) {
+            $subscribers[$site->contactemail] = $site;
+            unset($unsubscribers[$site->contactemail]);
+        } else if ($site->emailalert == 0 || $site->contactable == 0) {
+            if (!isset($subscribers[$site->contactemail])) {
+                $unsubscribers[$site->contactemail] = $site;
+            }
+        }
+    }
+
+    // Loop through $subscribers.
+    // For each subscriber, check their subscription status.
+    // If the email address is not known to the list server, subscribe them.
+    mtrace('');
+    mtrace('Subscribing '. count($subscribers). ' users in chunks of '. $chunksize);
+    $chunks = array_chunk($subscribers, $chunksize);
+    $resturl = '/subscribe';
+    process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, array('1', 'true', 'Already subscribed.'));
+
+    // Loop through $unsubscribers and unsubscribe them.
+    // The state on list server doesn't matter, just unsubscribe.
+    mtrace('');
+    mtrace('Unsubscribing '. count($unsubscribers). ' users in chunks of '. $chunksize);
+    $chunks = array_chunk($unsubscribers, $chunksize);
+    $resturl = '/unsubscribe';
+    process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, array('1', 'true'));
+}
+
+function process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, $correctresults) {
+    foreach ($chunks as $chunk) {
         echo '.';
         $curl = new curly;
         $requests = array();
-        foreach ($siteschunk as $site) {
-            //add resturl bit based only on what we know.
-            if ($site->contactable == 1) {
-                $resturl = '/subscribe';
-            } else if ($site->contactable == 0) {
-                $resturl = '/unsubscribe';
+        foreach ($chunk as $site) {
+            if ($resturl == '/subscribe') {
+                // Need to check the email address' status before subscribing.
+                $emailstatus = get_sendy_status($sendyurl, $sendyapikey, $sendylistid, trim($site->contactemail));
+                if ($emailstatus != 'Email does not exist in list') {
+                    // They are either already subscribed or have been previously subscribed but unsubscribed so leave them alone.
+                    mtrace('');
+                    mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' skipped site id->'. $site->id .' email->'.$site->contactemail.' as the email status is:'.$emailstatus);
+                    continue;
+                }
             }
+
             $params = array ('name' => $site->contactname, 'email' => trim($site->contactemail), 'list' => $sendylistid, 'boolean' => 'true');
             $paramspost = $curl->format_postdata_for_curlcall($params);
             $request = array('url' => $sendyurl.$resturl, 'CURLOPT_POST' => 1, 'CURLOPT_POSTFIELDS' => $paramspost);
@@ -2184,14 +2231,33 @@ function update_sendy_list_batch($sites, $chunksize=150, $sendylistid='VeFcuzWIU
             $chunkparams[] = $params;
         }
 
-        /// REST CALLsss
+        // REST CALLS.
         $results = $curl->multi($requests);
 
         for ($i=0; $i<count($results);$i++) {
-            if ($results[$i] != '1' && $results[$i] != 'Already subscribed.') {
+            if (!in_array($results[$i], $correctresults)) {
                 mtrace('');
-                mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' had the errors for site id->'. $siteschunk[$i]->id .' email->'.$siteschunk[$i]->contactemail.' :'. $results[$i] );
+                mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' had errors for site id->'. $chunk[$i]->id .' email->'.$chunk[$i]->contactemail.' :'. $results[$i] );
             }
         }
     }
+}
+
+/**
+ * Query a Sendy server for the status of an email address.
+ * @return string See "Subscription status" at http://sendy.co/api for possible values
+ */
+function get_sendy_status($sendyurl, $sendyapikey, $sendylistid, $email) {
+    global $CFG;
+    require_once($CFG->dirroot.'/local/hub/curl.php');
+
+    $params = array ('api_key' => $sendyapikey, 'list_id' => $sendylistid, 'email' => $email);
+    $query = http_build_query($params);
+
+    $resturl = '/api/subscribers/subscription-status.php';
+
+    $curl = new curly;
+    $result = $curl->post($sendyurl.$resturl, $params);
+
+    return $result;
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Unit tests for badges
+ * Unit tests for hub
  *
  * @package    local_hub
  * @copyright  2014 Dan Poltawski <dan@moodle.com>
@@ -210,6 +210,28 @@ class local_hub_lib_testcase extends advanced_testcase
         // Find the deleted site regardless of deletion status.
         $site = $hub->get_site_by_url($url, null);
         $this->assertTrue($site != null);
+    }
+
+    public function test_get_sites() {
+        global $DB;
+        $this->resetAfterTest(true);
+        set_config('noemailever', 1);
+
+        $hub = new local_hub();
+        $url = "http://example.com";
+        $sitevalues = $this->get_sitevalues($url);
+
+        $token = $hub->register_site($sitevalues);
+        $this->check_tokens($hub, $sitevalues['url']);
+
+        $sites = $hub->get_sites(array('urls' => array($url, 'http://doesntexist.com')));
+        $this->assertTrue(count($sites) == 1);
+
+        $sites = $hub->get_sites(array('contactemail' => $sitevalues['contactemail']));
+        $this->assertTrue(count($sites) == 1);
+
+        $sites = $hub->get_sites(array('contactemail' => 'doesntexist' . $sitevalues['contactemail']));
+        $this->assertTrue(count($sites) == 0);
     }
 
     public function test_add_site() {

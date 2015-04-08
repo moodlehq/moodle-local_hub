@@ -49,7 +49,6 @@ if (!extension_loaded('xmlrpc')) {
 }
 
 if (!empty($fromform) and confirm_sesskey()) {
-
     if ($fromform->privacy != HUBPRIVATE and !empty($fromform->password)) {
         $fromform->password = null;
     }
@@ -66,11 +65,14 @@ if (!empty($fromform) and confirm_sesskey()) {
     set_config('maxwscourseresult', $fromform->maxwscourseresult, 'local_hub');
     set_config('maxcoursesperday', $fromform->maxcoursesperday, 'local_hub');
     set_config('searchfornologin', empty($fromform->searchfornologin)?0:1, 'local_hub');
-    set_config('enablerssfeeds', 
-            empty($fromform->enablerssfeeds)?0:$fromform->enablerssfeeds, 'local_hub');
-    set_config('rsssecret',
-            empty($fromform->rsssecret)?'':$fromform->rsssecret, 'local_hub');
-    
+
+    set_config('enablerssfeeds', empty($fromform->enablerssfeeds)?0:$fromform->enablerssfeeds, 'local_hub');
+    set_config('rsssecret', empty($fromform->rsssecret)?'':$fromform->rsssecret, 'local_hub');
+
+    set_config('sendyurl', empty($fromform->sendyurl)?'':$fromform->sendyurl, 'local_hub');
+    set_config('sendylistid', empty($fromform->sendylistid)?'':$fromform->sendylistid, 'local_hub');
+    set_config('sendyapikey', empty($fromform->sendyapikey)?'':$fromform->sendyapikey, 'local_hub');
+
     set_config('language', $fromform->lang, 'local_hub');
 
     set_config('password', 
