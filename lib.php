@@ -2192,16 +2192,14 @@ function update_sendy_list_batch($sites, $chunksize=150) {
     // Loop through $subscribers.
     // For each subscriber, check their subscription status.
     // If the email address is not known to the list server, subscribe them.
-    mtrace('');
-    mtrace('Subscribing '. count($subscribers). ' users in chunks of '. $chunksize);
+    debugging('Subscribing '. count($subscribers). ' users in chunks of '. $chunksize, DEBUG_DEVELOPER);
     $chunks = array_chunk($subscribers, $chunksize);
     $resturl = '/subscribe';
     process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, array('1', 'true', 'Already subscribed.'));
 
     // Loop through $unsubscribers and unsubscribe them.
     // The state on list server doesn't matter, just unsubscribe.
-    mtrace('');
-    mtrace('Unsubscribing '. count($unsubscribers). ' users in chunks of '. $chunksize);
+    debugging('Unsubscribing '. count($unsubscribers). ' users in chunks of '. $chunksize, DEBUG_DEVELOPER);
     $chunks = array_chunk($unsubscribers, $chunksize);
     $resturl = '/unsubscribe';
     process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, array('1', 'true'));
@@ -2218,8 +2216,7 @@ function process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendy
                 $emailstatus = get_sendy_status($sendyurl, $sendyapikey, $sendylistid, trim($site->contactemail));
                 if ($emailstatus != 'Email does not exist in list') {
                     // They are either already subscribed or have been previously subscribed but unsubscribed so leave them alone.
-                    mtrace('');
-                    mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' skipped site id->'. $site->id .' email->'.$site->contactemail.' as the email status is:'.$emailstatus);
+                    debugging('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' skipped site id->'. $site->id .' email->'.$site->contactemail.' as the email status is:'.$emailstatus, DEBUG_DEVELOPER);
                     continue;
                 }
             }
@@ -2236,8 +2233,7 @@ function process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendy
 
         for ($i=0; $i<count($results);$i++) {
             if (!in_array($results[$i], $correctresults)) {
-                mtrace('');
-                mtrace('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' had errors for site id->'. $chunk[$i]->id .' email->'.$chunk[$i]->contactemail.' :'. $results[$i] );
+                debugging('Updating sendy @'.$sendyurl.$resturl.' for list '. $sendylistid .' had errors for site id->'. $chunk[$i]->id .' email->'.$chunk[$i]->contactemail.' :'. $results[$i], DEBUG_DEVELOPER);
             }
         }
     }
