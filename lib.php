@@ -2207,7 +2207,6 @@ function update_sendy_list_batch($sites, $chunksize=150) {
 
 function process_sendy_chunks($chunks, $sendyurl, $resturl, $sendylistid, $sendyapikey, $correctresults) {
     foreach ($chunks as $chunk) {
-        echo '.';
         $curl = new curly;
         $requests = array();
         foreach ($chunk as $site) {
