@@ -2179,8 +2179,8 @@ function update_sendy_list_batch($sites, $chunksize=150) {
         if (empty($site->contactemail)) {
             continue;
         }
-        if ($site->emailalert == 1 && $site->deleted == 0 && $site->unreachable <= 3) {
-            // Only subscribe if user asked to be subscribed, site isn't deleted and site is reachable.
+        if ($site->emailalert == 1 && $site->deleted == 0) {
+            // Only subscribe if user asked to be subscribed and site isn't deleted.
             $subscribers[$site->contactemail] = $site;
             unset($unsubscribers[$site->contactemail]);
         } else if ($site->emailalert == 0) {
