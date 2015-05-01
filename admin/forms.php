@@ -863,3 +863,17 @@ class local_hub_siteconnectivity_form extends moodleform {
     }
 
 }
+
+class local_hub_checkemailsendystatus_form extends moodleform {
+
+    public function definition() {
+        $mform = & $this->_form;
+
+        $mform->addElement('text', 'email', get_string('contactemail', 'local_hub'));
+        $mform->setType('email', PARAM_EMAIL);
+        $mform->addRule('email', get_string('required'), 'required');
+
+        $this->add_action_buttons(false, get_string('submit'));
+    }
+
+}

@@ -48,7 +48,8 @@ $string['bulkvisible'] = 'Make visible';
 $string['cannotregisternotavailablesite'] = 'The hub cannot access your site at {$a}. Your Moodle site and the hub need to be able to communicate with each another. If you are unable to register your site please email support@moodle.org';
 $string['cannotregisterprivatehub'] = 'You cannot register your hub. Change the Privacy setting.';
 $string['cannotsetpasswordforpublichub'] = 'Cannot set a password for public hub. Either delete your password, either set the hub as private.';
-$string['checksiteconnectivity'] = 'Check site acccessible';
+$string['checkemailsendystatus'] = 'Check email status in Sendy';
+$string['checksiteconnectivity'] = 'Check site accessible';
 $string['comments'] = 'Comments';
 $string['community'] = 'Community';
 $string['confirmbulkdelete'] = 'Bulk delete confirmation';
@@ -151,6 +152,7 @@ Admin: {$a->contactname} ({$a->contactemail})
 Language: {$a->language}
 
 To manage registered sites, go to: {$a->managesiteurl}';
+$string['emailsendystatus'] = 'The status of \'{$a->email}\' in Sendy is: {$a->status}';
 $string['emailtitleurlalreadyexists'] = 'Another site try to register with {$a->existingsite} url.';
 $string['emailtitlesiteadded'] = '{$a} site has been added to the hub';
 $string['emailtitlesitedeleted'] = '{$a->sitename} has been deleted from {$a->hubname} hub';
