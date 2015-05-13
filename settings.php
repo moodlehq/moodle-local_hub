@@ -63,6 +63,6 @@ $ADMIN->add('local_hub', new admin_externalpage('checksiteconnectivity', get_str
     'moodle/site:config'));
 
 $ADMIN->add('local_hub', new admin_externalpage('checkemailsendystatus', get_string('checkemailsendystatus', 'local_hub'),
-    "/local/hub/admin/checkemailsendystatus.php",
+    "/local/hub/admin/checksendystatus.php",
     'moodle/site:config'));
 
