@@ -189,6 +189,10 @@ if (!empty($freshmoodletoken) and !empty($freshmoodleid)) {
 
 // Check if the remote site is available.
 if (!$hub->is_remote_site_valid($url)) {
+    $port = parse_url($url, PHP_URL_PORT);
+    if (!empty($port) && $port != 80 && $port != 443) {
+        throw new moodle_exception('cannotregisterbadport', 'local_hub', $url, $url);
+    }
     throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', $url, $url);
 }
 

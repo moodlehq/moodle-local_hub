@@ -45,6 +45,7 @@ $string['bulkoperation'] = 'Select';
 $string['bulkoperationperform'] = 'Perform';
 $string['bulkselectoperation'] = 'With selected courses...';
 $string['bulkvisible'] = 'Make visible';
+$string['cannotregisterbadport'] = 'The hub cannot access your site at {$a}. The URL of your Moodle instance could not be reached by our servers, please ensure your server is running on port 80 for http, or 443 for https. If you are unable to register your site please email support@moodle.org';
 $string['cannotregisternotavailablesite'] = 'The hub cannot access your site at {$a}. Your Moodle site and the hub need to be able to communicate with each another. If you are unable to register your site please email support@moodle.org';
 $string['cannotregisterprivatehub'] = 'You cannot register your hub. Change the Privacy setting.';
 $string['cannotsetpasswordforpublichub'] = 'Cannot set a password for public hub. Either delete your password, either set the hub as private.';
