@@ -12,7 +12,7 @@ function get_combined_country_info() {
     list($confirmedwhere, $confirmedparams) = local_hub_stats_get_confirmed_sql('r', 'pub');
 
     $countries = get_string_manager()->get_list_of_countries();
-    $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, COUNT( CASE WHEN privacy = 'named' or privacy = 'linked' THEN 1 ELSE 0 END ) AS publiccount
+    $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM( CASE WHEN privacy = 'named' or privacy = 'linked' THEN 1 ELSE 0 END ) AS publiccount
               FROM {hub_site_directory} r
              WHERE $confirmedwhere
           GROUP BY r.countrycode
@@ -67,7 +67,7 @@ function get_sites_for_country($countrycode) {
 
     $country = new stdClass;
     $country->totalsites =   $DB->count_records_select('hub_site_directory', "countrycode LIKE :countrycode AND $where", $params);
-    $country->privatesites = $DB->count_records_select('hub_site_directory', "countrycode LIKE :countrycode AND privacy = 'notlinked' AND $where", $params);
+    $country->privatesites = $DB->count_records_select('hub_site_directory', "countrycode LIKE :countrycode AND privacy = 'notdisplayed' AND $where", $params);
     $country->publicsites =  $country->totalsites - $country->privatesites;
     $country->sites =        $DB->get_records_select('hub_site_directory', "countrycode LIKE :countrycode AND (privacy = 'named' or privacy = 'linked') AND $where", $params, 'name, url', 'id,name,url,countrycode,privacy,timeregistered,cool,contactable');
     return $country;
