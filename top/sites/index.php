@@ -33,22 +33,36 @@ if ($isadmin && $edit == "on") {
     $USER->siteediting = true;
 }
 
-/// Try to get the country, from USER, IP or request
-$usercountry = "";
-if (!empty($USER->country)) {
-    $usercountry = $USER->country;
-} else {
-    $ip = (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
-    // Previously we used the msql function inet_aton() within the below query.
-    // the PHP function ip2long() should be equivalent with the benefit of being database independent.
-    $ip = ip2long($ip);
-    if ($countryinfo = $DB->get_record_sql("SELECT * FROM {countries} WHERE ipfrom <= $ip AND $ip <= ipto ")) {
-        $usercountry = $countryinfo->code2;
-    }
-}
+// If no specific country was requested.
+if (empty($country)) {
+    $usercountry = "";
+    if (!empty($USER->country)) {
+        // Logged in user so get their country from their profile.
+        $usercountry = $USER->country;
+    } else {
+        // User is not logged in so try to guess their country based on their IP.
 
-if (empty($country) && $usercountry) {
-    $country = $usercountry;
+        $ip = (array_key_exists('HTTP_X_FORWARDED_FOR', $_SERVER)) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR'];
+
+        if(strpos($ip, ':') !== FALSE) {
+            // IPv6.
+            // MDLSITE-4084 - Implement location guessing in IPv6.
+        } else {
+            // IPv4.
+
+            // Previously we used the msql function inet_aton() within the below query.
+            // the PHP function ip2long() should be equivalent with the benefit of being database independent.
+            $ip = ip2long($ip);
+
+            if ($countryinfo = $DB->get_record_sql("SELECT * FROM {countries} WHERE ipfrom <= $ip AND $ip <= ipto ")) {
+                $usercountry = $countryinfo->code2;
+            }
+        }
+    }
+
+    if ($usercountry) {
+        $country = $usercountry;
+    }
 }
 
 $list = null;
