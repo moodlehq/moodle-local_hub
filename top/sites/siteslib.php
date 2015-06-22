@@ -15,6 +15,7 @@ function get_combined_country_info() {
     $sql = "SELECT r.countrycode as country, COUNT('x') AS totalcount, SUM( CASE WHEN privacy = 'named' or privacy = 'linked' THEN 1 ELSE 0 END ) AS publiccount
               FROM {hub_site_directory} r
              WHERE $confirmedwhere
+                   AND r.countrycode <> ''
           GROUP BY r.countrycode
             HAVING (COUNT('x')) > 0
           ORDER BY (COUNT('x')) DESC";
