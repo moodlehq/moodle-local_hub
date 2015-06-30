@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-define('STATS_MAX_UNREACHABLE', 2);
+define('STATS_MAX_UNREACHABLE', 3);
 
 /**
  *
