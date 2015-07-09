@@ -35,12 +35,12 @@ function local_hub_stats_get_registry_stats() {
     list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT
                 COUNT(DISTINCT r.id) registrycount,
-                SUM(r.courses) courses,
-                SUM(r.users) users,
-                SUM(r.enrolments) enrolments,
-                SUM(r.posts) posts,
-                SUM(r.resources) resources,
-                SUM(r.questions) questions,
+                SUM(case when r.courses > -1 then r.courses else 0 end) courses,
+                SUM(case when r.users > -1 then r.users else 0 end) users,
+                SUM(case when r.enrolments > -1 then r.enrolments else 0 end) enrolments,
+                SUM(case when r.posts > -1 then r.posts else 0 end) posts,
+                SUM(case when r.resources > -1 then r.resources else 0 end) resources,
+                SUM(case when r.questions > -1 then r.questions else 0 end) questions,
                 COUNT(DISTINCT r.countrycode) countrycount
             FROM {hub_site_directory} r
             WHERE '.$where;
