@@ -210,18 +210,16 @@ function new_registrations_graph() {
         return $graph;
     }
 
-    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
     $sql = "SELECT r.dateorder, COUNT(r.id) AS count
               FROM (
                 SELECT id,
                        FROM_UNIXTIME(timeregistered, '%Y%m') AS dateorder
                   FROM {hub_site_directory}
-                 WHERE timeregistered > 0 AND
-                       timeregistered < :thismonth
+                 WHERE timeregistered > 0
                    ) r
           GROUP BY r.dateorder
           ORDER BY r.dateorder ASC";
-    $monthresults = $DB->get_recordset_sql($sql, array('thismonth' => $thismonth));
+    $monthresults = $DB->get_recordset_sql($sql);
     $thismonthstr = date('Ym');
     foreach ($monthresults as $row) {
         if ($row->dateorder == $thismonthstr) {
@@ -272,14 +270,12 @@ function all_sites_graph() {
         return $graph;
     }
 
-    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
     $sql = "SELECT r1.dateorder, r1.created, COALESCE(r2.unreachable, 0) as unreachable
             FROM (
                 SELECT FROM_UNIXTIME(r.timeregistered, '%Y%m') AS dateorder,
                        COUNT(r.id) AS created
                   FROM {hub_site_directory} r
-                 WHERE r.timeregistered > 0 AND
-                       r.timeregistered < :thismonth1
+                 WHERE r.timeregistered > 0
               GROUP BY dateorder
             ) r1
             LEFT JOIN (
@@ -287,7 +283,6 @@ function all_sites_graph() {
                        COUNT(r.id) AS unreachable
                   FROM {hub_site_directory} r
                  WHERE r.timeunreachable > 0 AND
-                       r.timeunreachable < :thismonth2 AND
                        r.override NOT IN (1, 2, 3) AND
                        r.unreachable > :maxunreachable2
               GROUP BY dateorder
@@ -296,8 +291,6 @@ function all_sites_graph() {
     $params = array(
         'maxunreachable1' => STATS_MAX_UNREACHABLE,
         'maxunreachable2' => STATS_MAX_UNREACHABLE,
-        'thismonth1' => $thismonth,
-        'thismonth2' => $thismonth,
     );
     $monthresults = $DB->get_records_sql($sql, $params);
     $runningtotal = 0;
@@ -567,7 +560,6 @@ function moodle_users_per_site() {
     $xlabelcount = count($range);
     $graph->overridelabelposition[] = 0;
     $graph->overridelabelposition[] = 0;
-    $thismonth = mktime(0, 0, 0, date('n'), 1, date('Y'));
     foreach ($range as $key=>$group) {
         $params['start'] = $group['start'];
         $params['end'] = $group['end'];
