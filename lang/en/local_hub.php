@@ -252,8 +252,8 @@ $string['moodlesiteslistnumbers'] = 'There are {$a->total} currently active site
 {$a->private} of these have requested privacy and are not shown in the lists below.';
 $string['moved'] = 'Update registration url for an existing site';
 $string['movedorcopiedmsg'] = 'you tried to register a Moodle 2.X site which had already been registered on a different url.
-If you didn\'t know that (or if you don\'t know the site in the left column),
-then  click  \'Register a new site\'. If you are moving your own already registered site (left column) to new URL (right column) then click "Update registration".';
+If you didn\'t know that or if you don\'t know the site under Previous Registration,
+then  click  \'Register a new site\'. If you are moving your own already registered site to new URL then click "Update registration".';
 $string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
 --------------------------------------------------------------------------------------
