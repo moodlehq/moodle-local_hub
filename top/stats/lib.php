@@ -34,14 +34,14 @@ function local_hub_stats_get_registry_stats() {
     global $DB;
     list($where, $params) = local_hub_stats_get_confirmed_sql();
     $sql = 'SELECT
-                COUNT(DISTINCT r.id) registrycount,
+                COUNT(DISTINCT r.id) AS registrycount,
                 SUM(case when r.courses > -1 then r.courses else 0 end) courses,
                 SUM(case when r.users > -1 then r.users else 0 end) users,
                 SUM(case when r.enrolments > -1 then r.enrolments else 0 end) enrolments,
                 SUM(case when r.posts > -1 then r.posts else 0 end) posts,
                 SUM(case when r.resources > -1 then r.resources else 0 end) resources,
                 SUM(case when r.questions > -1 then r.questions else 0 end) questions,
-                COUNT(DISTINCT r.countrycode) countrycount
+                COUNT(DISTINCT (case when r.countrycode <> \'\' then r.countrycode else \'AU\' end)) AS countrycount
             FROM {hub_site_directory} r
             WHERE '.$where;
     $stats = $DB->get_record_sql($sql, $params);
@@ -86,9 +86,9 @@ function local_hub_stats_top_10_sites_by_courses() {
 function local_hub_stats_top_10_countries() {
     global $DB;
     list($where, $params) = local_hub_stats_get_confirmed_sql();
-    $sql = 'SELECT r.countrycode, COUNT(DISTINCT r.id) countrycount
+    $sql = 'SELECT r.countrycode, COUNT(DISTINCT r.id) AS countrycount
               FROM {hub_site_directory} r
-             WHERE '.$where.'
+             WHERE '.$where.' AND r.countrycode <> \'\'
           GROUP BY r.countrycode
           ORDER BY countrycount DESC
              LIMIT 10';
@@ -104,7 +104,6 @@ function local_hub_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '') {
     // score > 3 allows for a number of rules (or major rules) to be matched at least. When score<1, we include all reached sites that are also not seen as moodle (see linkchecker rules).
     $sql = "{$prefix}timeregistered > 0 AND
             {$prefix}score > 3 AND
-            {$prefix}countrycode <> '' AND 
             ({$prefix}unreachable <= :maxunreachable{$aliassuffix} OR {$prefix}override BETWEEN 1 AND 3)";
     $params = array(
         'maxunreachable'.$aliassuffix => STATS_MAX_UNREACHABLE
