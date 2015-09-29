@@ -28,6 +28,7 @@ function get_combined_country_info() {
     $countryarray['00']->privatecount = 0;
     $totalpublic = 0;
     $totalprivate = 0;
+    $totalcountries = 0;
     foreach ($resultingcountries as $country) {
         if (array_key_exists($country->country, $countries)) {
             $countryarray[$country->country] = new stdClass;
@@ -36,6 +37,7 @@ function get_combined_country_info() {
             $countryarray[$country->country]->totalcount = $country->totalcount;
             $countryarray[$country->country]->publiccount = $country->publiccount;
             $countryarray[$country->country]->privatecount = $country->totalcount - $country->publiccount;
+            $totalcountries++;
         } else {
             $countryarray['00']->totalcount += $country->totalcount;
             $countryarray['00']->publiccount += $country->publiccount;
@@ -50,7 +52,7 @@ function get_combined_country_info() {
     $countryarray['TOTAL']->public = $totalpublic;
     $countryarray['TOTAL']->private = $totalprivate;
     $countryarray['TOTAL']->total = $totalpublic+$totalprivate;
-    $countryarray['TOTAL']->countries = count($resultingcountries);
+    $countryarray['TOTAL']->countries = $totalcountries;
     return $countryarray;
 }
 
