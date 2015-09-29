@@ -37,7 +37,6 @@ function get_combined_country_info() {
             $countryarray[$country->country]->totalcount = $country->totalcount;
             $countryarray[$country->country]->publiccount = $country->publiccount;
             $countryarray[$country->country]->privatecount = $country->totalcount - $country->publiccount;
-            $totalcountries++;
         } else {
             $countryarray['00']->totalcount += $country->totalcount;
             $countryarray['00']->publiccount += $country->publiccount;
@@ -45,6 +44,9 @@ function get_combined_country_info() {
         }
         $totalpublic += $country->publiccount;
         $totalprivate += $country->totalcount - $country->publiccount;
+        if ($country->country != '') {
+            $totalcountries++;
+        }
     }
     //$countryarray[] = array_shift($countryarray);
     array_shift($countryarray);
