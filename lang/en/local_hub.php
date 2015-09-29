@@ -251,9 +251,9 @@ To add or update your site, just use the "Registration" button on your Moodle ad
 $string['moodlesiteslistnumbers'] = 'There are {$a->total} currently active sites that have registered from {$a->countries} countries.<br />
 {$a->private} of these have requested privacy and are not shown in the lists below.';
 $string['moved'] = 'Update registration url for an existing site';
-$string['movedorcopiedmsg'] = 'you tried to register a Moodle 2.X site which had already been registered on a different url.
+$string['movedorcopiedmsg'] = 'You tried to register a Moodle 2.X site which had already been registered on a different url.
 If you didn\'t know that or if you don\'t know the site under Previous Registration,
-then  click  \'Register a new site\'. If you are moving your own already registered site to new URL then click "Update registration".';
+then  click  \'Register a new site\'. If you are moving your own already registered site to a new URL then click "Update registration".';
 $string['msgforcourse'] = 'You have a new message about a course on "{$a->hubname}" ({$a->huburl}):
 
 --------------------------------------------------------------------------------------
