@@ -1668,7 +1668,7 @@ class local_hub {
         }
 
         $curl = new curl();
-        $curl->setopt(array('CURLOPT_FOLLOWLOCATION' => true, 'CURLOPT_MAXREDIRS' => 3));
+        $curl->setopt(array('CURLOPT_FOLLOWLOCATION' => true, 'CURLOPT_MAXREDIRS' => 3, 'CURLOPT_SSL_VERIFYPEER' => 0, 'CURLOPT_SSL_VERIFYHOST' => 0));
         $curl->head($url);
         $info = $curl->get_info();
 
