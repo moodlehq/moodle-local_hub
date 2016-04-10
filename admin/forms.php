@@ -582,15 +582,20 @@ class hub_site_settings_form extends moodleform {
         $mform->addElement('header', 'moodle', get_string('sitesettingsform', 'local_hub', $site->name));
 
         $mform->addElement('hidden', 'id', $site->id);
-
-        $mform->addElement('text', 'name',
+		// Assuming INT.
+		$mform->setType('id', PARAM_INT);
+		$mform->addElement('text', 'name',
                 get_string('sitename', 'local_hub'));
-        $mform->addHelpButton('name',
+		// Assuming RAW.
+		$mform->setType('name', PARAM_RAW);
+		$mform->addHelpButton('name',
                 'sitename', 'local_hub');
         $mform->setDefault('name', $site->name);
 
         $mform->addElement('text', 'url',
                 get_string('siteurl', 'local_hub'));
+		// Assuming RAW.
+		$mform->setType('url', PARAM_RAW);
         $mform->addHelpButton('url',
                 'siteurl', 'local_hub');
         $mform->setDefault('url', $site->url);
@@ -603,12 +608,16 @@ class hub_site_settings_form extends moodleform {
 
         $mform->addElement('text', 'contactname',
                 get_string('siteadmin', 'local_hub'));
+		// Assuming RAW.
+		$mform->setType('contactname', PARAM_RAW);
         $mform->addHelpButton('contactname',
                 'siteadmin', 'local_hub');
         $mform->setDefault('contactname', $site->contactname);
 
         $mform->addElement('text', 'contactemail',
                 get_string('siteadminemail', 'local_hub'));
+		// Assuming RAW.
+		$mform->setType('contactemail', PARAM_RAW);
         $mform->addHelpButton('contactemail',
                 'siteadminemail', 'local_hub');
         $mform->setDefault('contactemail', $site->contactemail);
@@ -626,6 +635,8 @@ class hub_site_settings_form extends moodleform {
 
         $mform->addElement('text', 'publicationmax',
                 get_string('publicationmax', 'local_hub'));
+		// Assuming INT.
+		$mform->setType('publicationmax', PARAM_INT);
         $mform->addHelpButton('publicationmax',
                 'publicationmax', 'local_hub');
         $mform->setDefault('publicationmax', $site->publicationmax);
