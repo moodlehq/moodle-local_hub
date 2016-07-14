@@ -1,0 +1,5 @@
+MDTSITE=moodle.net
+MDTVERSION=3.1
+MDTCOMPONENT=local_hub
+MDTRELPATH=local/hub/
+MDTEXPORT=origin/master
