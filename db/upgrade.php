@@ -583,5 +583,17 @@ function xmldb_local_hub_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2014063000, 'local', 'hub');
     }
 
-    return $result;
+    if ($oldversion < 2016071400) {
+        // Fix the missing email address in accounts representing registered
+        // sites to prevent the "user not fully set up" error.
+        $users = $DB->get_records('user', ['auth' => 'webservice', 'email' => ''], null, 'id,username');
+
+        foreach ($users as $user) {
+            $DB->set_field('user', 'email', sha1($user->username).'@example.com', ['id' => $user->id]);
+        }
+
+        upgrade_plugin_savepoint(true, 2016071400, 'local', 'hub');
+    }
+
+    return true;
 }
