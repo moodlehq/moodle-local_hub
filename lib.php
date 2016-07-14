@@ -1385,23 +1385,21 @@ class local_hub {
             $roleid = $role->id;
         }
 
-        //check and create a user
-        $user = $DB->get_record('user', array('username' => $username,
-                    'idnumber' => $username));
+        // Get the user account representing the registered site.
+        $user = $DB->get_record('user', ['username' => core_text::strtolower($username), 'idnumber' => $username]);
 
         if (empty($user)) {
             $user = new stdClass();
-            $user->username = $username;
+            $user->username = core_text::strtolower($username);
+            $user->email = sha1($user->username).'@example.com';
             $user->firstname = $username;
             $user->lastname = get_string('donotdeleteormodify', 'local_hub');
             $user->password = ''; //login no authorised with webservice authentication
             $user->auth = 'webservice';
             $user->confirmed = 1; //need to be confirmed otherwise got deleted
             $user->idnumber = $username;
-            $user->mnethostid = 1;
+            $user->mnethostid = $CFG->mnet_localhost_id;
             $user->description = get_string('hubwsuserdescription', 'local_hub');
-            $user->timecreated = time();
-            $user->timemodified = $user->timecreated;
 
             // Add extra fields to prevent a debug notice.
             $userfields = get_all_user_name_fields();
@@ -1412,10 +1410,7 @@ class local_hub {
             }
 
             // Insert the "site" user into the database.
-            $user->id = $DB->insert_record('user', $user);
-            \core\event\user_created::create_from_userid($user->id)->trigger();
-            add_to_log(SITEID, 'user', get_string('create'), '/view.php?id='.$user->id,
-                fullname($user));
+            $user->id = user_create_user($user, false, true);
         }
 
         //check and assign the role to user
