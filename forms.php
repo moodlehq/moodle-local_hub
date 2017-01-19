@@ -245,8 +245,6 @@ class course_search_form extends moodleform {
         $mform->setDefault('subject', $subject);
         unset($options);
         $mform->addHelpButton('subject', 'subject', 'local_hub');
-        $this->init_javascript_enhancement('subject', 'smartselect',
-                array('selectablecategories' => true, 'mode' => 'compact'));
 
         require_once($CFG->libdir . "/licenselib.php");
         $licensemanager = new license_manager();
