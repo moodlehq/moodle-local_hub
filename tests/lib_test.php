@@ -342,7 +342,12 @@ class local_hub_lib_testcase extends advanced_testcase
         'moodlerelease' => '',
         'password' => '',
         'badges' => '',
-        'issuedbadges' => '');
+        'issuedbadges' => '',
+        'mobileservicesenabled' => '',
+        'mobilenotificacionsenabled' => '',
+        'registereduserdevices' => '',
+        'registeredactiveuserdevices' => '',
+        );
 
         return $sitevalues;
     }

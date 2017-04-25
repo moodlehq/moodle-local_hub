@@ -197,7 +197,7 @@ function xmldb_local_hub_upgrade($oldversion) {
 
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2010091300, 'local', 'hub');
-   
+
     }
 
     if ($oldversion < 2010092800) {
@@ -248,7 +248,7 @@ function xmldb_local_hub_upgrade($oldversion) {
     }
 
     if ($oldversion < 2010111200) {
-        
+
         //give 'local/hub:viewsmallinfo' capability to registered sites
         //TODO: this is a wrong way to get role, it should be by shortname
         $role = $DB->get_record('role', array('name' => 'Registered Hub User'));
@@ -260,7 +260,7 @@ function xmldb_local_hub_upgrade($oldversion) {
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2010111200, 'local', 'hub');
     }
-    
+
     if ($oldversion < 2011022500) {
 
         // Define table hub_stolen_site_secrets to be created
@@ -307,7 +307,7 @@ function xmldb_local_hub_upgrade($oldversion) {
         // hub savepoint reached
         upgrade_plugin_savepoint(true, 2011030101, 'local', 'hub');
     }
-    
+
     if ($oldversion < 2011042100) {
         //create a new scale called featured
         $scale = new stdClass();
@@ -593,6 +593,41 @@ function xmldb_local_hub_upgrade($oldversion) {
         }
 
         upgrade_plugin_savepoint(true, 2016071400, 'local', 'hub');
+    }
+
+    if ($oldversion < 2017060600) {
+
+        // Add new mobile related information.
+        $table = new xmldb_table('hub_site_directory');
+        $newfield = new xmldb_field('mobileservicesenabled', XMLDB_TYPE_INTEGER, '1', null, null, null, '-1', 'cooldate');
+
+        // Conditionally launch add new field.
+        if (!$dbman->field_exists($table, $newfield)) {
+            $dbman->add_field($table, $newfield);
+        }
+
+        $newfield = new xmldb_field('mobilenotificacionsenabled', XMLDB_TYPE_INTEGER, '1', null, null, null, '-1', 'mobileservicesenabled');
+
+        // Conditionally launch add new field.
+        if (!$dbman->field_exists($table, $newfield)) {
+            $dbman->add_field($table, $newfield);
+        }
+
+        $newfield = new xmldb_field('registereduserdevices', XMLDB_TYPE_INTEGER, '10', null, null, null, '-1', 'mobilenotificacionsenabled');
+
+        // Conditionally launch add new field.
+        if (!$dbman->field_exists($table, $newfield)) {
+            $dbman->add_field($table, $newfield);
+        }
+
+        $newfield = new xmldb_field('registeredactiveuserdevices', XMLDB_TYPE_INTEGER, '10', null, null, null, '-1', 'registereduserdevices');
+
+        // Conditionally launch add new field.
+        if (!$dbman->field_exists($table, $newfield)) {
+            $dbman->add_field($table, $newfield);
+        }
+
+        upgrade_plugin_savepoint(true, 2017060600, 'local', 'hub');
     }
 
     return true;

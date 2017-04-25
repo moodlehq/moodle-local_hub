@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="local/hub/db" VERSION="20141116" COMMENT="XMLDB file for Moodle local/hub"
+<XMLDB PATH="local/hub/db" VERSION="20170606" COMMENT="XMLDB file for Moodle local/hub"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
 >
@@ -54,6 +54,10 @@
         <FIELD NAME="fingerprint" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false"/>
         <FIELD NAME="cool" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
         <FIELD NAME="cooldate" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="mobileservicesenabled" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="Whether mobile services are enabled in the site, -1 if unknown"/>
+        <FIELD NAME="mobilenotificacionsenabled" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="Whether mobile notifications are enabled in the site, -1 if unknown"/>
+        <FIELD NAME="registereduserdevices" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="Number of users registered devices in the site, -1 if unknown"/>
+        <FIELD NAME="registeredactiveuserdevices" TYPE="int" LENGTH="10" NOTNULL="false" DEFAULT="-1" SEQUENCE="false" COMMENT="Number of active users registered devices in the site, -1 if unknown"/>
       </FIELDS>
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
