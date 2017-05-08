@@ -1131,8 +1131,17 @@ class local_hub {
             $emailinfo->contactemail = $siteinfo->contactemail;
             $emailinfo->huburl = $CFG->wwwroot;
             $emailinfo->managesiteurl = $CFG->wwwroot . '/local/hub/admin/managesites.php';
-            $languages = get_string_manager()->get_list_of_languages();
-            $emailinfo->language = $languages[$siteinfo->language];
+
+            if (empty($siteinfo->language)) {
+                $emailinfo->language = '!! empty !!';
+            } else {
+                $languages = get_string_manager()->get_list_of_languages();
+                if (isset($languages[$siteinfo->language])) {
+                    $emailinfo->language = $languages[$siteinfo->language].' ('.$siteinfo->language.')';
+                } else {
+                    $emailinfo->language = '!! unknown ('.$siteinfo->language.') !!';
+                }
+            }
 
             //check if the url or name changed
             if ($siteinfo->url != $emailinfo->oldurl or
