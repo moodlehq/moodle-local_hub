@@ -1058,7 +1058,7 @@ class local_hub {
         //update course tag
         $tags = array();
         if (!empty($course->coverage)) {
-            $tags = split(',', $course->coverage);
+            $tags = explode(',', $course->coverage);
         }
         require_once($CFG->dirroot . '/tag/lib.php');
         tag_set('hub_course_directory', $courseid, $tags);
