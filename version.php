@@ -14,13 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-$plugin->version  = 2016071400;   // The (date) version of this module + 2 extra digital for daily versions
-                                  // This version number is displayed into /admin/forms.php
-                                  // TODO: if ever this plugin get branched, the old branch number
-                                  // will not be updated to the current date but just incremented. We will
-                                  // need then a $plugin->release human friendly date. For the moment, we use
-                                  // display this version number with userdate (dev friendly)
-$plugin->requires = 2011120503;  // Requires this Moodle version - at least 2.2.3  (Build: 20120514)
-$plugin->component = 'local_hub'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity  = MATURITY_STABLE;
-$plugin->cron     = 0;
+$plugin->component = 'local_hub';
+$plugin->release = '3.3.0';
+$plugin->version = 2017052400;
+$plugin->requires = 2017051500;
+$plugin->maturity = MATURITY_STABLE;
+$plugin->cron = 0;
