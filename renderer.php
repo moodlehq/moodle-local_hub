@@ -371,11 +371,11 @@ class local_hub_renderer extends plugin_renderer_base {
 
                     //visible icon html
                     if ($course->privacy) {
-                        $imgparams = array('src' => $this->output->pix_url('i/hide'),
+                        $imgparams = array('src' => $this->output->image_url('i/hide'),
                             'class' => 'siteimage', 'alt' => get_string('disable'));
                         $makevisible = false;
                     } else {
-                        $imgparams = array('src' => $this->output->pix_url('i/show'),
+                        $imgparams = array('src' => $this->output->image_url('i/show'),
                             'class' => 'siteimage', 'alt' => get_string('enable'));
                         $makevisible = true;
                     }
@@ -482,7 +482,7 @@ class local_hub_renderer extends plugin_renderer_base {
 
                 $courseuserinfo .= html_writer::tag('a',
                                 html_writer::empty_tag('img',
-                                        array('src' => $this->output->pix_url('i/email'),
+                                        array('src' => $this->output->image_url('i/email'),
                                             'class' => 'hubcoursemail',
                                             'alt' => get_string('msgtopublisher', 'local_hub', $course->fullname))),
                                 array('href' => new moodle_url('/local/hub/sendmessage.php',
