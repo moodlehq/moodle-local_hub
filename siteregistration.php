@@ -75,6 +75,10 @@ $moodlerelease              = optional_param('moodlerelease', '', PARAM_TEXT);
 $password                   = optional_param('password', '', PARAM_TEXT);
 $badges                     = optional_param('badges', '', PARAM_INT);
 $issuedbadges               = optional_param('issuedbadges','', PARAM_INT);
+$mobileservicesenabled      = optional_param('mobileservicesenabled','', PARAM_INT);
+$mobilenotificacionsenabled = optional_param('mobilenotificacionsenabled','', PARAM_INT);
+$registereduserdevices      = optional_param('registereduserdevices','', PARAM_INT);
+$registeredactiveuserdevices = optional_param('registeredactiveuserdevices','', PARAM_INT);
 
 // Retrieve the current url of MOOCH.
 // We do that because we switched to moodle.net from hub.moodle.org and we need both url to be registrable.
@@ -118,7 +122,12 @@ $sitevalues = array('name' => $name,
         'moodlerelease' => $moodlerelease,
         'password' => $password,
         'badges' => $badges,
-        'issuedbadges' => $issuedbadges);
+        'issuedbadges' => $issuedbadges,
+        'mobileservicesenabled' => $mobileservicesenabled,
+        'mobilenotificacionsenabled' => $mobilenotificacionsenabled,
+        'registereduserdevices' => $registereduserdevices,
+        'registeredactiveuserdevices' => $registeredactiveuserdevices,
+    );
 
 $hub = new local_hub();
 

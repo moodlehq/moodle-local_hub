@@ -57,7 +57,7 @@ class local_hub_external extends external_api {
         self::validate_parameters(self::get_info_parameters(), array());
 
         $hub = new local_hub();
-        $hubinfo = $hub->get_info();      
+        $hubinfo = $hub->get_info();
         $resultinfo = array();
         $resultinfo['name'] = $hubinfo['name'];
         $resultinfo['description'] = clean_param($hubinfo['description'], PARAM_TEXT);
@@ -70,8 +70,8 @@ class local_hub_external extends external_api {
         $resultinfo['downloadablecourses'] = $hubinfo['downloadablecourses'];
         if (has_capability('local/hub:viewinfo', $context)) {
              $resultinfo['contactname'] = $hubinfo['contactname'];
-             $resultinfo['contactemail'] = $hubinfo['contactemail'];           
-             $resultinfo['privacy'] = $hubinfo['privacy'];                       
+             $resultinfo['contactemail'] = $hubinfo['contactemail'];
+             $resultinfo['privacy'] = $hubinfo['privacy'];
         }
 
         return $resultinfo;
@@ -135,7 +135,11 @@ class local_hub_external extends external_api {
                                 'moodleversion' => new external_value(PARAM_FLOAT, 'moodle version'),
                                 'moodlerelease' => new external_value(PARAM_TEXT, 'moodle release'),
                                 'badges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of badges.', VALUE_OPTIONAL),
-                                'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL)
+                                'issuedbadges' => new external_value(PARAM_INT, '-1 if private info, otherwise number of issued badges.', VALUE_OPTIONAL),
+                                'mobileservicesenabled' => new external_value(PARAM_INT, '-1 if private info, otherwise whether mobile services are enabled.', VALUE_OPTIONAL),
+                                'mobilenotificacionsenabled' => new external_value(PARAM_INT, '-1 if private info, otherwise whether mobile notifications are enabled.', VALUE_OPTIONAL),
+                                'registereduserdevices' => new external_value(PARAM_INT, '-1 if private info, number of users registered devices.', VALUE_OPTIONAL),
+                                'registeredactiveuserdevices' => new external_value(PARAM_INT, '-1 if private info, number of active users registered devices.', VALUE_OPTIONAL),
                             ), 'site info')
                 )
         );
@@ -160,7 +164,7 @@ class local_hub_external extends external_api {
         //check that the hub can access the site
         $hubmanager = new local_hub();
         if (!$hubmanager->is_remote_site_valid($params['siteinfo']['url'])) {
-            throw new moodle_exception('cannotregisternotavailablesite', 'local_hub', 
+            throw new moodle_exception('cannotregisternotavailablesite', 'local_hub',
                     $params['siteinfo']['url'], $params['siteinfo']['url']);
         }
 
@@ -868,6 +872,11 @@ class local_hub_external extends external_api {
                 'linked' => 2,
             );
             $siteinfo['public'] = $map[$site->privacy]; //this maintains what moodle.org is doing with its data there.
+            // Mobile related information.
+            $siteinfo['mobileservicesenabled'] = $site->mobileservicesenabled;
+            $siteinfo['mobilenotificacionsenabled'] = $site->mobilenotificacionsenabled;
+            $siteinfo['registereduserdevices'] = $site->registereduserdevices;
+            $siteinfo['registeredactiveuserdevices'] = $site->registeredactiveuserdevices;
 
             // so going by what http://wiki.moodle.com/display/sysadmin/moodle.net+moodle.org+statistics+table+mapping+txt
 
@@ -927,6 +936,10 @@ class local_hub_external extends external_api {
                             'timelinkchecked' => new external_value(PARAM_INT, 'time link was checked'),
                             'serverstring' => new external_value(PARAM_TEXT, 'a http header'),
                             'override' => new external_value(PARAM_INT, 'force avoids linkchecking'),
+                            'mobileservicesenabled' => new external_value(PARAM_INT, '-1 if private info, otherwise whether mobile services are enabled.', VALUE_OPTIONAL),
+                            'mobilenotificacionsenabled' => new external_value(PARAM_INT, '-1 if private info, otherwise whether mobile notifications are enabled.', VALUE_OPTIONAL),
+                            'registereduserdevices' => new external_value(PARAM_INT, '-1 if private info, number of users registered devices.', VALUE_OPTIONAL),
+                            'registeredactiveuserdevices' => new external_value(PARAM_INT, '-1 if private info, number of active users registered devices.', VALUE_OPTIONAL),
                         ), 'site register info')
         );
     }

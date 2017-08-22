@@ -16,7 +16,7 @@
 
 $plugin->component = 'local_hub';
 $plugin->release = '3.3.0';
-$plugin->version = 2017052400;
+$plugin->version = 2017060600;
 $plugin->requires = 2017051500;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->cron = 0;
