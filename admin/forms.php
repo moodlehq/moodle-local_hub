@@ -780,8 +780,6 @@ class hub_course_settings_form extends moodleform {
         $mform->addHelpButton('subject', 'subject', 'local_hub');
         $mform->setDefault('subject', $course->subject);
         $mform->addRule('subject', $strrequired, 'required', null, 'client');
-        $this->init_javascript_enhancement('subject', 'smartselect',
-                array('selectablecategories' => false, 'mode' => 'compact'));
 
         $options = array();
         $options[HUB_AUDIENCE_EDUCATORS] = get_string('audienceeducators', 'local_hub');
