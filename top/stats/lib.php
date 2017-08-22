@@ -104,6 +104,7 @@ function local_hub_stats_get_confirmed_sql($prefix = 'r', $aliassuffix = '') {
     // score > 3 allows for a number of rules (or major rules) to be matched at least. When score<1, we include all reached sites that are also not seen as moodle (see linkchecker rules).
     $sql = "{$prefix}timeregistered > 0 AND
             {$prefix}score > 3 AND
+            {$prefix}deleted = 0 AND
             ({$prefix}unreachable <= :maxunreachable{$aliassuffix} OR {$prefix}override BETWEEN 1 AND 3)";
     $params = array(
         'maxunreachable'.$aliassuffix => STATS_MAX_UNREACHABLE
